@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-export function useMarkdownConverter(markdown: string | undefined): {
+export function useMdConverter(markdown: string | undefined): {
     loading: boolean;
     html: string | null;
 } {
@@ -13,8 +13,8 @@ export function useMarkdownConverter(markdown: string | undefined): {
         if (markdown === undefined) {
             return;
         }
-        import('@/src/utils/markdownConverter')
-            .then(({markdownConverter}) => {
+        import('@website/md-converter')
+            .then(({default: markdownConverter}) => {
                 const html = markdownConverter.makeHtml(markdown);
                 setHtml(html);
             })

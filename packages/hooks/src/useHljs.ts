@@ -1,6 +1,5 @@
+import {yieldMainThread} from '@website/utils';
 import {useCallback, useEffect, useState} from 'react';
-
-import {setImmediatePromise} from '@/src/utils/promisify';
 
 export function useHljs(htmlContainingCode: string | undefined): {
     loading: boolean;
@@ -15,7 +14,7 @@ export function useHljs(htmlContainingCode: string | undefined): {
         const wrapper = document.createElement('div');
         wrapper.innerHTML = htmlContainingCode ?? '';
 
-        const {hljs} = await import('@/src/utils/hljs');
+        const {default: hljs} = await import('@website/hljs');
         const preBlocks = Array.from(wrapper.querySelectorAll('pre'));
         await Promise.all(
             preBlocks.map(async (pre) => {
@@ -23,7 +22,7 @@ export function useHljs(htmlContainingCode: string | undefined): {
                 codeBlocks.forEach((block) => {
                     hljs.highlightElement(block);
                 });
-                await setImmediatePromise();
+                await yieldMainThread();
             })
         );
         return wrapper.innerHTML;

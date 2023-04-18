@@ -1,6 +1,6 @@
 import showdown from 'showdown';
 
-export const markdownConverter = new showdown.Converter({
+export default new showdown.Converter({
     parseImgDimensions: true,
     strikethrough: true,
     tables: true,

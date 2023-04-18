@@ -71,4 +71,4 @@ hljs.registerLanguage('bnf', bnf);
 hljs.registerLanguage('latex', latex);
 hljs.registerLanguage('matlab', matlab);
 
-export {hljs};
+export default hljs;

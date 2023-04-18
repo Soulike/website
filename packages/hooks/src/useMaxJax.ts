@@ -1,6 +1,5 @@
+import {script} from '@website/utils';
 import {type DependencyList, useEffect} from 'react';
-
-import {loadScript} from '@/src/utils/script';
 
 /**
  * @description Load MaxJax to render Math for whole page.
@@ -16,6 +15,6 @@ export function useMaxJax(deps?: Readonly<DependencyList>) {
         if ($typeset !== null) {
             $typeset.remove();
         }
-        loadScript(`MathJax.typesetPromise()`, {id: typesetId});
+        script.loadScript(`MathJax.typesetPromise()`, {id: typesetId});
     }, [deps]);
 }

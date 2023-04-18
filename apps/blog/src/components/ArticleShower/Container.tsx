@@ -1,5 +1,4 @@
-import {useHljs} from '@/src/hooks/useHljs';
-import {useMaxJax} from '@/src/hooks/useMaxJax';
+import {useHljs, useMaxJax} from '@website/hooks';
 
 import {ArticleShowerView} from './View';
 

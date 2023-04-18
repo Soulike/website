@@ -1,0 +1,12 @@
+{
+    "name": "@website/hljs",
+    "main": "dist/index.js",
+    "dependencies": {
+        "highlight.js": "^11.7.0",
+        "typescript": "^5.0.2"
+    },
+    "scripts": {
+        "install": "pnpm build",
+        "build": "tsc"
+    }
+}

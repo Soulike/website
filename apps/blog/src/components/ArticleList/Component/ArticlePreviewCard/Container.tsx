@@ -1,6 +1,5 @@
 import {type Category} from '@website/classes';
-
-import {useMarkdownConverter} from '@/src/hooks/useMarkdownConverter';
+import {useMdConverter} from '@website/hooks';
 
 import {ArticlePreviewCardView} from './View';
 
@@ -16,7 +15,7 @@ export interface IArticlePreviewCardProps {
 export function ArticlePreviewCard(props: IArticlePreviewCardProps) {
     const {articleBriefTextMarkdown, ...restProps} = props;
 
-    const {loading, html: articleBriefTextHtml} = useMarkdownConverter(
+    const {loading, html: articleBriefTextHtml} = useMdConverter(
         articleBriefTextMarkdown
     );
 

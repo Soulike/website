@@ -1,8 +1,8 @@
 import {type Article, type Category} from '@website/classes';
+import {useMaxJax} from '@website/hooks';
 import {useCallback, useMemo, useState} from 'react';
 
 import {useCategories} from '@/src/hooks/useCategories';
-import {useMaxJax} from '@/src/hooks/useMaxJax';
 
 import {ArticleListView} from './View';
 

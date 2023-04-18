@@ -1,11 +1,11 @@
 import {Article as ArticleClass, Category} from '@website/classes';
+import {useMdConverter} from '@website/hooks';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 import {useEffect, useMemo} from 'react';
 
 import {useArticle} from '@/src/hooks/useArticle';
 import {useCategory} from '@/src/hooks/useCategory';
-import {useMarkdownConverter} from '@/src/hooks/useMarkdownConverter';
 import {useSearchParam} from '@/src/hooks/useSearchParam';
 
 import {ArticleView} from './View';
@@ -29,8 +29,9 @@ export function Article() {
         }
     }, [article, articleIsLoading, router]);
 
-    const {loading: htmlIsLoading, html: articleContentHtml} =
-        useMarkdownConverter(article?.content);
+    const {loading: htmlIsLoading, html: articleContentHtml} = useMdConverter(
+        article?.content
+    );
     const {loading: categoryIsLoading, category} = useCategory(
         article?.category ?? NaN
     );

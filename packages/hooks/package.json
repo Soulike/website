@@ -1,0 +1,19 @@
+{
+    "name": "@website/hooks",
+    "main": "dist/index.js",
+    "dependencies": {
+        "@types/node": "^18.15.10",
+        "@types/react": "latest",
+        "@website/hljs": "workspace:^",
+        "@website/md-converter": "workspace:^",
+        "@website/utils": "workspace:^",
+        "typescript": "^5.0.2"
+    },
+    "peerDependencies": {
+        "react": "latest"
+    },
+    "scripts": {
+        "install": "pnpm build",
+        "build": "tsc"
+    }
+}

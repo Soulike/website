@@ -1,14 +1,14 @@
+import {useMdConverter} from '@website/hooks';
 import Head from 'next/head';
 
 import {useAbout} from '@/src/hooks/useAbout';
-import {useMarkdownConverter} from '@/src/hooks/useMarkdownConverter';
 
 import {AboutView} from './View';
 
 export function About() {
     const {loading: aboutIsLoading, about} = useAbout();
 
-    const {loading: converterIsLoading, html} = useMarkdownConverter(
+    const {loading: converterIsLoading, html} = useMdConverter(
         about ?? undefined
     );
 
