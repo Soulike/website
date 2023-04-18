@@ -1,0 +1,11 @@
+{
+    "name": "@servers/classes",
+    "main": "dist/index.js",
+    "dependencies": {
+        "typescript": "^5.0.2"
+    },
+    "scripts": {
+        "install": "pnpm build",
+        "build": "tsc"
+    }
+}
