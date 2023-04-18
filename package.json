@@ -9,19 +9,19 @@
     "devDependencies": {
         "@commitlint/cli": "^17.6.1",
         "@commitlint/config-conventional": "^17.6.1",
-        "@typescript-eslint/eslint-plugin": "^5.43.0",
-        "eslint": "^8.0.1",
+        "@typescript-eslint/eslint-plugin": "^5.59.0",
+        "eslint": "^8.38.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-config-standard-with-typescript": "^34.0.1",
-        "eslint-plugin-import": "^2.25.2",
-        "eslint-plugin-n": "^15.0.0",
-        "eslint-plugin-promise": "^6.0.0",
+        "eslint-plugin-import": "^2.27.5",
+        "eslint-plugin-n": "^15.7.0",
+        "eslint-plugin-promise": "^6.1.1",
         "eslint-plugin-react": "^7.32.2",
         "eslint-plugin-simple-import-sort": "^10.0.0",
         "husky": "^8.0.3",
         "lint-staged": "^13.2.1",
         "prettier": "^2.8.7",
-        "typescript": "*"
+        "typescript": "^5.0.4"
     },
     "prettier": {
         "singleQuote": true,
@@ -41,6 +41,7 @@
         },
         "extends": [
             "plugin:react/recommended",
+            "plugin:react/jsx-runtime",
             "standard-with-typescript",
             "prettier"
         ],
@@ -59,10 +60,15 @@
             "simple-import-sort/exports": "error",
             "@typescript-eslint/explicit-function-return-type": "off",
             "@typescript-eslint/strict-boolean-expressions": "off"
+        },
+        "settings": {
+            "react": {
+                "version": "detect"
+            }
         }
     },
     "lint-staged": {
-        "src/**/*.(j|t)(s|sx)": [
+        "(apps|packages)/**/src/**/*.(j|t)(s|sx)": [
             "eslint --fix",
             "prettier --write --ignore-unknown"
         ]

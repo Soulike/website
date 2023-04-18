@@ -1,0 +1,17 @@
+@media (not (prefers-color-scheme)), (prefers-color-scheme: light) {
+    :root {
+        --BACKGROUND_COLOR: #fff;
+        --BORDER_COLOR: #eee;
+        --COLOR: #000;
+        --LIGHT_COLOR: #666;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --BACKGROUND_COLOR: #222;
+        --BORDER_COLOR: #444;
+        --COLOR: #ddd;
+        --LIGHT_COLOR: #999;
+    }
+}
