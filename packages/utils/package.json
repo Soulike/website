@@ -9,7 +9,7 @@
     },
     "scripts": {
         "install": "pnpm build",
-        "build": "tsc"
+        "build": "rm -rf dist && tsc"
     },
     "devDependencies": {
         "@types/assert": "^1.5.6"

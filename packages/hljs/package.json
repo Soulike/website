@@ -7,6 +7,6 @@
     },
     "scripts": {
         "install": "pnpm build",
-        "build": "tsc"
+        "build": "rm -rf dist && tsc"
     }
 }
