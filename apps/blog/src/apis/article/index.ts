@@ -1,7 +1,6 @@
 import {type Article} from '@website/classes';
-import {appRequestWrapper} from '@website/utils';
+import * as request from '@website/request';
 import {message} from 'antd';
-import axios from 'axios';
 
 import {
     GET_ALL_WITH_ABSTRACT,
@@ -10,37 +9,30 @@ import {
 } from './ROUTE';
 
 export async function getAllWithAbstract(): Promise<Article[] | null> {
-    return await appRequestWrapper(
-        async () => await axios.get(GET_ALL_WITH_ABSTRACT),
-        message.warning,
-        message.error
-    );
+    return await request.getServerResponse(GET_ALL_WITH_ABSTRACT, {
+        onRequestFail: (msg) => message.warning(msg),
+        onRequestError: (msg) => message.error(msg),
+    });
 }
 
 export async function getById(id: number): Promise<Article | null> {
-    return await appRequestWrapper(
-        async () =>
-            await axios.get(GET_BY_ID, {
-                params: {
-                    json: JSON.stringify({id}),
-                },
-            }),
-        message.warning,
-        message.error
-    );
+    return await request.getServerResponse(GET_BY_ID, {
+        urlSearchParams: new URLSearchParams({
+            json: JSON.stringify({id}),
+        }),
+        onRequestFail: (msg) => message.warning(msg),
+        onRequestError: (msg) => message.error(msg),
+    });
 }
 
 export async function getByCategoryWithAbstract(
     category: number
 ): Promise<Article[] | null> {
-    return await appRequestWrapper(
-        async () =>
-            await axios.get(GET_BY_CATEGORY_WITH_ABSTRACT, {
-                params: {
-                    json: JSON.stringify({category}),
-                },
-            }),
-        message.warning,
-        message.error
-    );
+    return await request.getServerResponse(GET_BY_CATEGORY_WITH_ABSTRACT, {
+        urlSearchParams: new URLSearchParams({
+            json: JSON.stringify({category}),
+        }),
+        onRequestFail: (msg) => message.warning(msg),
+        onRequestError: (msg) => message.error(msg),
+    });
 }
