@@ -4,8 +4,8 @@
     "private": true,
     "scripts": {
         "dev": "NODE_ENV=development next dev",
-        "build": "next build && next export",
-        "build:analysis": "ANALYZE_BUNDLE=true next build && next export",
+        "build": "next build",
+        "build:analysis": "ANALYZE_BUNDLE=true next build",
         "start": "next start",
         "lint": "next lint"
     },
@@ -17,6 +17,7 @@
         "@emotion/styled": "^11.10.6",
         "@website/classes": "workspace:^",
         "@website/hooks": "workspace:^",
+        "@website/react-components": "workspace:^",
         "@website/request": "workspace:^",
         "@website/utils": "workspace:^",
         "antd": "^5.4.3",

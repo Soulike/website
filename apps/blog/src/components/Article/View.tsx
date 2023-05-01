@@ -1,14 +1,13 @@
 import {ClockCircleOutlined, TagOutlined} from '@ant-design/icons';
 import {type Category} from '@website/classes';
+import {Markdown} from '@website/react-components';
 import {Alert, Skeleton, Tag} from 'antd';
-
-import {ArticleShower} from '@/src/components/ArticleShower';
 
 import Style from './Style.module.scss';
 
 interface Props {
     title: string;
-    contentHtml: string;
+    contentMarkdown: string;
     publicationTime: string;
     modificationTime: string;
     category: Category;
@@ -18,7 +17,7 @@ interface Props {
 export function ArticleView(props: Props) {
     const {
         title,
-        contentHtml,
+        contentMarkdown,
         publicationTime: publicationTimeString,
         modificationTime: modificationTimeString,
         category,
@@ -72,7 +71,7 @@ export function ArticleView(props: Props) {
                         )} 天前，可能已不具有时效性，请谨慎阅读`}
                     />
                 ) : null}
-                <ArticleShower HTMLContent={contentHtml} />
+                <Markdown>{contentMarkdown}</Markdown>
             </Skeleton>
         </div>
     );

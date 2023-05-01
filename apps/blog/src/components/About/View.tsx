@@ -1,16 +1,15 @@
+import {Markdown} from '@website/react-components';
 import {Skeleton} from 'antd';
-
-import {ArticleShower} from '@/src/components/ArticleShower';
 
 import Style from './Style.module.scss';
 
 interface Props {
     loading: boolean;
-    aboutHtml: string;
+    aboutMarkdown: string;
 }
 
 export function AboutView(props: Props) {
-    const {loading, aboutHtml} = props;
+    const {loading, aboutMarkdown} = props;
     return (
         <div className={Style.About}>
             <Skeleton
@@ -24,7 +23,7 @@ export function AboutView(props: Props) {
                 <header className={Style.header}>
                     <h1 className={Style.title}>关于</h1>
                 </header>
-                <ArticleShower HTMLContent={aboutHtml} />
+                <Markdown>{aboutMarkdown}</Markdown>
             </Skeleton>
         </div>
     );

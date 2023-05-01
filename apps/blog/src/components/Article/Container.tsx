@@ -1,5 +1,4 @@
 import {Article as ArticleClass, Category} from '@website/classes';
-import {useMdConverter} from '@website/hooks';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 import {useEffect, useMemo} from 'react';
@@ -29,16 +28,13 @@ export function Article() {
         }
     }, [article, articleIsLoading, router]);
 
-    const {loading: htmlIsLoading, html: articleContentHtml} = useMdConverter(
-        article?.content
-    );
     const {loading: categoryIsLoading, category} = useCategory(
         article?.category ?? NaN
     );
 
     const loading = useMemo(
-        () => articleIsLoading || categoryIsLoading || htmlIsLoading,
-        [articleIsLoading, categoryIsLoading, htmlIsLoading]
+        () => articleIsLoading || categoryIsLoading,
+        [articleIsLoading, categoryIsLoading]
     );
     const {title, publicationTime, modificationTime} = useMemo(
         () => article ?? emptyArticle,
@@ -51,7 +47,7 @@ export function Article() {
             </Head>
             <ArticleView
                 title={title}
-                contentHtml={articleContentHtml ?? ''}
+                contentMarkdown={article?.content ?? ''}
                 publicationTime={publicationTime}
                 modificationTime={modificationTime}
                 loading={loading}
