@@ -1,0 +1,33 @@
+{
+    "name": "@website/react-components",
+    "main": "dist/index.js",
+    "dependencies": {
+        "@website/hooks": "workspace:^",
+        "@website/md-converter": "workspace:^",
+        "styled-components": "^5.3.10"
+    },
+    "devDependencies": {
+        "@types/react": ">=16.8.0",
+        "@types/react-dom": ">=16.8.0",
+        "@types/sanitize-html": "^2.9.0",
+        "@types/styled-components": "^5.1.26",
+        "eslint-config-next": "13.3.1",
+        "react": ">=16.8.0",
+        "react-dom": ">=16.8.0",
+        "typescript": "^5.0.2"
+    },
+    "peerDependencies": {
+        "react": ">=16.8.0",
+        "react-dom": ">=16.8.0"
+    },
+    "scripts": {
+        "install": "pnpm build",
+        "build": "rm -rf dist && tsc"
+    },
+    "eslintConfig": {
+        "extends": [
+            "../../.eslintrc.json",
+            "next/core-web-vitals"
+        ]
+    }
+}
