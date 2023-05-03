@@ -1,0 +1,19 @@
+.LinkList {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    font-size: 1.125rem;
+
+    .linkItem {
+        margin-right: 20px;
+
+        a {
+            color: rgba(255, 255, 255, 0.5) !important;
+
+            &:hover {
+                color: rgba(255, 255, 255, 1) !important;
+            }
+        }
+    }
+}

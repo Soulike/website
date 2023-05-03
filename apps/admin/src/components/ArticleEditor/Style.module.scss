@@ -1,0 +1,31 @@
+.ArticleEditor {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+
+    .inputGroup {
+        .title {
+            font-weight: bolder;
+            font-family: serif;
+            text-align: center;
+        }
+
+        .content {
+            margin-top: 25px;
+            resize: none;
+            height: 60vh;
+            line-height: 1.5em;
+        }
+    }
+
+    .bottomWrapper {
+        margin-top: 2vh;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .categorySelect {
+            width: 10vw;
+        }
+    }
+}
