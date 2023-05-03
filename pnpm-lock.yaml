@@ -52,6 +52,9 @@ importers:
 
   apps/admin:
     dependencies:
+      '@ant-design/icons':
+        specifier: ^5.0.1
+        version: 5.0.1(react-dom@18.2.0)(react@18.2.0)
       '@types/node':
         specifier: ^18.16.3
         version: 18.16.3
@@ -64,6 +67,9 @@ importers:
       '@website/classes':
         specifier: workspace:^
         version: link:../../packages/classes
+      '@website/react-components':
+        specifier: workspace:^
+        version: link:../../packages/react-components
       '@website/request':
         specifier: workspace:^
         version: link:../../packages/request
@@ -72,7 +78,7 @@ importers:
         version: 5.4.6(react-dom@18.2.0)(react@18.2.0)
       next:
         specifier: ^13.3.4
-        version: 13.3.4(react-dom@18.2.0)(react@18.2.0)
+        version: 13.3.4(react-dom@18.2.0)(react@18.2.0)(sass@1.62.1)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -86,6 +92,9 @@ importers:
       '@next/bundle-analyzer':
         specifier: ^13.3.4
         version: 13.3.4
+      sass:
+        specifier: ^1.62.1
+        version: 1.62.1
 
   apps/blog:
     dependencies:
@@ -3924,7 +3933,7 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /next@13.3.4(react-dom@18.2.0)(react@18.2.0):
+  /next@13.3.4(react-dom@18.2.0)(react@18.2.0)(sass@1.62.1):
     resolution: {integrity: sha512-sod7HeokBSvH5QV0KB+pXeLfcXUlLrGnVUXxHpmhilQ+nQYT3Im2O8DswD5e4uqbR8Pvdu9pcWgb1CbXZQZlmQ==}
     engines: {node: '>=16.8.0'}
     hasBin: true
@@ -3952,6 +3961,7 @@ packages:
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+      sass: 1.62.1
       styled-jsx: 5.1.1(react@18.2.0)
     optionalDependencies:
       '@next/swc-darwin-arm64': 13.3.4
