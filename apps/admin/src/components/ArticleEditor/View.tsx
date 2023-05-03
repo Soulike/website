@@ -30,7 +30,7 @@ interface Props {
     isArticlePreviewModalOpen: boolean;
     onArticlePreviewModalOk: ModalProps['onOk'];
     onArticlePreviewModalCancel: ModalProps['onCancel'];
-    HTMLContent: string;
+    contentMarkdown: string;
 }
 
 export function ArticleEditor(props: Props) {
@@ -52,7 +52,7 @@ export function ArticleEditor(props: Props) {
         isArticlePreviewModalOpen,
         onArticlePreviewModalOk,
         onArticlePreviewModalCancel,
-        HTMLContent,
+        contentMarkdown,
     } = props;
     return (
         <div className={Style.ArticleEditor}>
@@ -134,7 +134,7 @@ export function ArticleEditor(props: Props) {
             </div>
             <ArticlePreviewModal
                 title={title}
-                HTMLContent={HTMLContent}
+                contentMarkdown={contentMarkdown}
                 open={isArticlePreviewModalOpen}
                 onOk={onArticlePreviewModalOk}
                 onCancel={onArticlePreviewModalCancel}

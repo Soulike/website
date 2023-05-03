@@ -8,7 +8,7 @@ import Style from './Style.module.scss';
 export function Loading() {
     return (
         <div className={Style.Loading}>
-            <img src={manager} className={Style.icon} alt={'icon'} />
+            <img src={manager.src} className={Style.icon} alt={'icon'} />
             <Spin size={'large'} indicator={<LoadingOutlined />} />
         </div>
     );
