@@ -2,8 +2,8 @@
     "name": "@website/hljs",
     "main": "dist/index.js",
     "dependencies": {
-        "highlight.js": "^11.7.0",
-        "typescript": "^5.0.2"
+        "highlight.js": "^11.9.0",
+        "typescript": "^5.3.2"
     },
     "scripts": {
         "install": "pnpm build",
