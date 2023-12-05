@@ -2,8 +2,8 @@
     "name": "@website/hooks",
     "main": "dist/index.js",
     "dependencies": {
-        "@types/node": "^18.19.2",
-        "@types/react": "latest",
+        "@types/node": "^20.10.3",
+        "@types/react": "^18.2.42",
         "@website/hljs": "workspace:^",
         "@website/md-converter": "workspace:^",
         "@website/utils": "workspace:^",
