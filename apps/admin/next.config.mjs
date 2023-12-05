@@ -8,6 +8,9 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfigBase = {
     reactStrictMode: true,
     distDir: 'build',
+    images: {
+        unoptimized: true,
+    },
 };
 
 /** @type {import('next').NextConfig} */

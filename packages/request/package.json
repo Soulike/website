@@ -3,14 +3,14 @@
     "main": "dist/index.js",
     "dependencies": {
         "@website/classes": "workspace:^",
-        "assert": "^2.0.0",
-        "typescript": "^5.0.2"
+        "assert": "^2.1.0",
+        "typescript": "^5.3.2"
     },
     "scripts": {
         "install": "pnpm build",
         "build": "rm -rf dist && tsc"
     },
     "devDependencies": {
-        "@types/assert": "^1.5.6"
+        "@types/assert": "^1.5.10"
     }
 }

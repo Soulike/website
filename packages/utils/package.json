@@ -2,13 +2,13 @@
     "name": "@website/utils",
     "main": "dist/index.js",
     "dependencies": {
-        "typescript": "^5.0.2"
+        "typescript": "^5.3.2"
     },
     "scripts": {
         "install": "pnpm build",
         "build": "rm -rf dist && tsc"
     },
     "devDependencies": {
-        "@types/assert": "^1.5.6"
+        "@types/assert": "^1.5.10"
     }
 }
