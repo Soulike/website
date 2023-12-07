@@ -1,20 +1,20 @@
 import {strict as assert} from 'assert';
 
-import {type ServerResponse} from '../../classes/dist';
+import {type ServerResponse} from '../../classes';
 import {fetchJsonWrapper} from './fetchJsonWrapper';
 
 export type ServerResponseRequestFailHandler = (
-    message: string
+    message: string,
 ) => unknown | Promise<unknown>;
 export type ServerResponseRequestErrorHandler = (
     message: string,
-    error: unknown
+    error: unknown,
 ) => unknown | Promise<unknown>;
 
 export async function serverResponseRequestWrapper<DataT>(
     requestFunc: () => Promise<Response>,
     onRequestFail?: ServerResponseRequestFailHandler,
-    onRequestError?: ServerResponseRequestErrorHandler
+    onRequestError?: ServerResponseRequestErrorHandler,
 ): Promise<DataT | null> {
     const noData = Symbol('no data in responseData');
     let responseData: symbol | ServerResponse<DataT> = noData;
@@ -35,7 +35,7 @@ export async function serverResponseRequestWrapper<DataT>(
         (e) => {
             console.error(e);
             if (onRequestError) onRequestError('网络错误', e);
-        }
+        },
     );
 
     if (serverResponse !== null) {
