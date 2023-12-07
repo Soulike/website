@@ -51,7 +51,7 @@ export function ArticleList(props: IProps) {
 
     useEffect(() => {
         setIsArticleLoading(true);
-        Promise.resolve()
+        void Promise.resolve()
             .then(async () => {
                 if (typeof categoryIdFilter === 'undefined') {
                     return await Blog.Article.getAll();
@@ -86,7 +86,7 @@ export function ArticleList(props: IProps) {
     ]);
 
     const onArticleTitleClick: (
-        id: number
+        id: number,
     ) => DOMAttributes<HTMLSpanElement>['onClick'] = useCallback(
         (id: number) => {
             return (e) => {
@@ -101,7 +101,7 @@ export function ArticleList(props: IProps) {
                 }
             };
         },
-        [articleMap]
+        [articleMap],
     );
 
     const onIsVisibleSwitchClick: (id: number) => SwitchProps['onClick'] =
@@ -125,7 +125,7 @@ export function ArticleList(props: IProps) {
                     }
                 };
             },
-            [articleMap]
+            [articleMap],
         );
 
     const onModifyArticleButtonClick: (id: number) => ButtonProps['onClick'] =
@@ -138,11 +138,11 @@ export function ArticleList(props: IProps) {
                     void router.push(
                         `${
                             PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY]
-                        }?${urlSearchParams.toString()}`
+                        }?${urlSearchParams.toString()}`,
                     );
                 };
             },
-            [router]
+            [router],
         );
 
     const onDeleteArticleButtonClick: (id: number) => ButtonProps['onClick'] =

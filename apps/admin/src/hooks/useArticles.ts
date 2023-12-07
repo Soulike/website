@@ -26,7 +26,7 @@ export function useArticles(categoryId?: number): {
                 ? ArticleApi.getAll()
                 : ArticleApi.getByCategory(categoryId);
 
-        promise
+        void promise
             .then((articles) => {
                 setArticles(articles);
             })

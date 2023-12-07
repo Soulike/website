@@ -8,13 +8,17 @@ import Head from 'next/head';
 import {Suspense} from 'react';
 
 import {Loading} from '@/components/Loading';
+import {useLayout} from '@/hooks/useLayout';
 
 export default function App({Component, pageProps}: AppProps) {
+    const Layout = useLayout();
     return (
         <>
             <Suspense fallback={<Loading />}>
                 <ConfigProvider locale={zhCN}>
-                    <Component {...pageProps} />
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
                 </ConfigProvider>
             </Suspense>
             <Head>

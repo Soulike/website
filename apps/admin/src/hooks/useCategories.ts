@@ -15,7 +15,7 @@ export function useCategories(): {
     useEffect(() => {
         setLoading(true);
         setCategories(null);
-        CategoryApi.getAll()
+        void CategoryApi.getAll()
             .then((categories) => {
                 setCategories(categories);
             })

@@ -9,7 +9,7 @@ export function useIsLoggedIn(): {loading: boolean; isLoggedIn: boolean} {
     useEffect(() => {
         setLoading(true);
         setIsLoggedIn(false);
-        Account.checkSession()
+        void Account.checkSession()
             .then((res) => {
                 if (res !== null) {
                     const {isInSession} = res;

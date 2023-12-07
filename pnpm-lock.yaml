@@ -71,6 +71,9 @@ importers:
       '@website/classes':
         specifier: workspace:^
         version: link:../../packages/classes
+      '@website/hooks':
+        specifier: workspace:^
+        version: link:../../packages/hooks
       '@website/react-components':
         specifier: workspace:^
         version: link:../../packages/react-components
