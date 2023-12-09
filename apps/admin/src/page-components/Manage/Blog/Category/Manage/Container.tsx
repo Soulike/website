@@ -13,7 +13,11 @@ import {Blog} from '@/apis';
 import {ManageView} from './View';
 
 export function Manage() {
-    const [loading, setLoading] = useState(false);
+    const [loadingCategories, setLoadingCategories] = useState(true);
+    const [
+        loadingArticleAmountOfCategories,
+        setLoadingArticleAmountOfCategories,
+    ] = useState(true);
     const [categoryMap, setCategoryMap] = useState<Map<number, Category>>(
         new Map(),
     );
@@ -32,7 +36,7 @@ export function Manage() {
     const [idOfCategoryToDelete, setIdOfCategoryToDelete] = useState(0);
 
     useEffect(() => {
-        setLoading(true);
+        setLoadingCategories(true);
         void Blog.Category.getAll()
             .then((categoryList) => {
                 if (categoryList !== null) {
@@ -44,12 +48,12 @@ export function Manage() {
                 }
             })
             .finally(() => {
-                setLoading(false);
+                setLoadingCategories(false);
             });
     }, []);
 
     useEffect(() => {
-        setLoading(true);
+        setLoadingArticleAmountOfCategories(true);
         void Blog.Category.getAllArticleAmountById()
             .then((articleAmountOfCategory) => {
                 if (articleAmountOfCategory !== null) {
@@ -68,7 +72,7 @@ export function Manage() {
                 }
             })
             .finally(() => {
-                setLoading(false);
+                setLoadingArticleAmountOfCategories(false);
             });
     }, []);
 
@@ -91,11 +95,11 @@ export function Manage() {
         e.preventDefault();
         const executor = async () => {
             if (nameOfCategoryToModify !== '') {
-                setLoading(true);
+                setLoadingCategories(true);
                 const result = await Blog.Category.modify(
                     new Category(idOfCategoryToModify, nameOfCategoryToModify),
                 );
-                setLoading(false);
+                setLoadingCategories(false);
                 if (result !== null) {
                     notification.success({message: '文章分类编辑成功'});
                     setCategoryMap((categoryMap) => {
@@ -148,10 +152,10 @@ export function Manage() {
             if (categoryToArticleNumberMap.get(idOfCategoryToDelete) !== 0) {
                 await message.warning('不能删除有文章的分类');
             } else {
-                setLoading(true);
+                setLoadingCategories(true);
                 const result =
                     await Blog.Category.deleteById(idOfCategoryToDelete);
-                setLoading(false);
+                setLoadingCategories(false);
                 if (result !== null) {
                     notification.success({
                         message: '删除文章分类成功',
@@ -178,7 +182,7 @@ export function Manage() {
 
     return (
         <ManageView
-            loading={loading}
+            loading={loadingCategories || loadingArticleAmountOfCategories}
             categoryMap={categoryMap}
             categoryToArticleNumberMap={categoryToArticleNumberMap}
             isArticleListModalVisible={isArticleListModalVisible}

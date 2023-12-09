@@ -1,6 +1,6 @@
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
 import {type Category} from '@website/classes';
-import {Button, List, Popconfirm, Tag, Tooltip} from 'antd';
+import {Button, List, Popconfirm, Spin, Tag, Tooltip} from 'antd';
 import {type ButtonProps} from 'antd/lib/button/button';
 import {type InputProps} from 'antd/lib/input';
 import {type ModalProps} from 'antd/lib/modal';
@@ -75,12 +75,15 @@ export function ManageView(props: Props) {
                     return (
                         <Item>
                             <Meta title={<Tag color={'blue'}>{name}</Tag>} />
-                            <Tag
-                                onClick={onArticleAmountTagClick(id)}
-                                className={Style.articleAmountTag}
-                            >
-                                文章：{categoryToArticleNumberMap.get(id)}
-                            </Tag>
+                            <Spin size={'small'} spinning={loading}>
+                                <Tag
+                                    onClick={onArticleAmountTagClick(id)}
+                                    className={Style.articleAmountTag}
+                                >
+                                    文章：
+                                    {categoryToArticleNumberMap.get(id)}
+                                </Tag>
+                            </Spin>
                             <Group
                                 size={'small'}
                                 className={Style.buttonWrapper}
