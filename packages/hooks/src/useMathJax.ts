@@ -6,10 +6,10 @@ declare global {
 }
 
 /**
- * @description Load MaxJax to render Math for whole page.
- * Due to the design of Mathjax, the hook need to reload MaxJax when the content of the page changes.
+ * @description Load MathJax to render Math for whole page.
+ * Due to the design of MathJax, the hook need to rerun MathJax when the content of the page changes.
  *
- * @param deps When the items in deps changed, MaxJax will be reloaded.
+ * @param deps When the items in deps changed, MathJax will rerun.
  * */
 export function useMathJax(deps?: Readonly<DependencyList>) {
     const MATHJAX_CDN_URL = 'https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js';
