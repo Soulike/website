@@ -43,6 +43,7 @@ function MyApp({Component, pageProps}: AppProps) {
                 <meta name='theme-color' content='#000000' />
                 <meta content='index,follow' name='robots' />
                 <meta content="Soulike's blog" name='description' />
+                <link rel='icon' href='/favicon.ico' sizes='any' />
                 <link href='https://unpkg.com' rel='preconnect' />
                 <link href='https://v1.hitokoto.cn' rel='preconnect' />
                 <link
