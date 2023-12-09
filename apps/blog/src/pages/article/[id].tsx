@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 
-const ArticlePromise = import('@/src/components/Article').then(
-    ({Article}) => Article
+const ArticlePromise = import('@/src/page-components/Article').then(
+    ({Article}) => Article,
 );
 
 const Article = dynamic(async () => await ArticlePromise, {ssr: false});

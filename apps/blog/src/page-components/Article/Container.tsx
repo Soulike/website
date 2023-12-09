@@ -13,7 +13,7 @@ export function Article() {
     const router = useRouter();
     const emptyArticle = useMemo(
         () => new ArticleClass(0, '', '', 0, '', '', 0, true),
-        []
+        [],
     );
     const emptyCategory = useMemo(() => new Category(0, ''), []);
 
@@ -29,16 +29,16 @@ export function Article() {
     }, [article, articleIsLoading, router]);
 
     const {loading: categoryIsLoading, category} = useCategory(
-        article?.category ?? NaN
+        article?.category ?? NaN,
     );
 
     const loading = useMemo(
         () => articleIsLoading || categoryIsLoading,
-        [articleIsLoading, categoryIsLoading]
+        [articleIsLoading, categoryIsLoading],
     );
     const {title, publicationTime, modificationTime} = useMemo(
         () => article ?? emptyArticle,
-        [article, emptyArticle]
+        [article, emptyArticle],
     );
     return (
         <>

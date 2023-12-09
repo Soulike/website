@@ -14,7 +14,7 @@ export function useArticle(id: number): {
         setArticle(null);
         setLoading(true);
         if (!isNaN(id)) {
-            ArticleApi.getById(id)
+            void ArticleApi.getById(id)
                 .then((article) => {
                     setArticle(article);
                 })

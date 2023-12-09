@@ -15,12 +15,12 @@ export function useHitokoto(): string {
                 `https://v1.hitokoto.cn/?${urlSearchParams.toString()}`,
                 {
                     method: 'GET',
-                }
+                },
             );
             return await response.text();
         };
 
-        getHitokoto()
+        void getHitokoto()
             .then((hitokoto) => {
                 if (hitokoto) setHitokoto(hitokoto);
             })

@@ -8,7 +8,7 @@ export function useAbout(): {loading: boolean; about: string | null} {
 
     useEffect(() => {
         setLoading(true);
-        Option.get()
+        void Option.get()
             .then((result) => {
                 if (result !== null) {
                     setAbout(result.about);

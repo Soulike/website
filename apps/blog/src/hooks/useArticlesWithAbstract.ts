@@ -26,7 +26,7 @@ export function useArticlesWithAbstract(categoryId?: number): {
                 ? ArticleApi.getAllWithAbstract()
                 : ArticleApi.getByCategoryWithAbstract(categoryId);
 
-        promise
+        void promise
             .then((articlesWithAbstract) => {
                 setArticlesWithAbstract(articlesWithAbstract);
             })

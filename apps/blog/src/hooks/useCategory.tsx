@@ -14,7 +14,7 @@ export function useCategory(id: number): {
         setCategory(null);
         setLoading(true);
         if (!isNaN(id)) {
-            CategoryApi.getById(id)
+            void CategoryApi.getById(id)
                 .then((category) => {
                     setCategory(category);
                 })

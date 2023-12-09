@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 
-const CategoryPromise = import('@/src/components/Category').then(
-    ({Category}) => Category
+const CategoryPromise = import('@/src/page-components/Category').then(
+    ({Category}) => Category,
 );
 
 const Category = dynamic(async () => await CategoryPromise, {ssr: false});
