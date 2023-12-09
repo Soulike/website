@@ -15,5 +15,10 @@
     "scripts": {
         "install": "pnpm build",
         "build": "rm -rf dist && tsc"
+    },
+    "eslintConfig": {
+        "extends": [
+            "../../.eslintrc.json"
+        ]
     }
 }
