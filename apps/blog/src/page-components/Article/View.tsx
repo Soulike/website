@@ -67,7 +67,7 @@ export function ArticleView(props: Props) {
                         type={'warning'}
                         banner={true}
                         message={`本文最后编辑于 ${Math.floor(
-                            timeDiff / ONE_DAY
+                            timeDiff / ONE_DAY,
                         )} 天前，可能已不具有时效性，请谨慎阅读`}
                     />
                 ) : null}
