@@ -13,7 +13,6 @@
         "react": "latest"
     },
     "scripts": {
-        "install": "pnpm build",
         "build": "rm -rf dist && tsc"
     },
     "eslintConfig": {

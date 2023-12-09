@@ -16,7 +16,6 @@ const nextConfigBase = {
 /** @type {import('next').NextConfig} */
 const nextConfigProduction = {
     ...nextConfigBase,
-    output: 'export',
 };
 
 /** @type {import('next').NextConfig} */

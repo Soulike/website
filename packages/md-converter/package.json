@@ -9,7 +9,6 @@
         "@types/showdown": "^2.0.6"
     },
     "scripts": {
-        "install": "pnpm build",
         "build": "rm -rf dist && tsc"
     }
 }

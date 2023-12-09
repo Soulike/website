@@ -5,7 +5,6 @@
         "typescript": "^5.3.2"
     },
     "scripts": {
-        "install": "pnpm build",
         "build": "tsc"
     }
 }

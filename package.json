@@ -2,7 +2,8 @@
     "name": "website",
     "version": "1.0.0",
     "scripts": {
-        "prepare": "test -d node_modules/husky && husky install || echo \"husky is not installed\""
+        "prepare": "test -d node_modules/husky && husky install || echo \"husky is not installed\"",
+        "install": "pnpm --filter \"./packages/**\" run -r build"
     },
     "author": "Soulike",
     "license": "MIT",

@@ -20,7 +20,6 @@
         "react-dom": ">=16.8.0"
     },
     "scripts": {
-        "install": "pnpm build",
         "build": "rm -rf dist && tsc"
     },
     "eslintConfig": {
