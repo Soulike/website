@@ -1,3 +1,3 @@
 export * from './useHljs';
-export * from './useMaxJax';
+export * from './useMathJax';
 export * from './useMdConverter';

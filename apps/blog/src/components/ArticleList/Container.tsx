@@ -1,5 +1,5 @@
 import {type Article, type Category} from '@website/classes';
-import {useMaxJax} from '@website/hooks';
+import {useMathJax} from '@website/hooks';
 import {useCallback, useMemo, useState} from 'react';
 
 import {useCategories} from '@/src/hooks/useCategories';
@@ -30,11 +30,11 @@ export function ArticleList(props: IProps) {
         setPageNumber(pageNumber);
     }, []);
 
-    useMaxJax([pageNumber]);
+    useMathJax([pageNumber]);
 
     const isLoading = useMemo(
         () => loading || categoriesIsLoading,
-        [categoriesIsLoading, loading]
+        [categoriesIsLoading, loading],
     );
 
     return (

@@ -1,4 +1,4 @@
-import {useHljs, useMaxJax, useMdConverter} from '@website/hooks';
+import {useHljs, useMathJax, useMdConverter} from '@website/hooks';
 import {useEffect} from 'react';
 
 import {MarkdownView} from './View';
@@ -12,7 +12,7 @@ export function Markdown(props: IProps) {
     const {children, onRenderFinish} = props;
     const {loading: converterLoading, html} = useMdConverter(children);
     const {loading: hljsLoading, highlightedHtml} = useHljs(html ?? '');
-    useMaxJax([highlightedHtml]);
+    useMathJax([highlightedHtml]);
 
     useEffect(() => {
         if (!converterLoading && !hljsLoading) {
