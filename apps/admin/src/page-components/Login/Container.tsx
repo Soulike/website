@@ -46,7 +46,7 @@ export function Login() {
                     await router.push(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.INDEX]);
                 }
             },
-            [router, password, username]
+            [router, password, username],
         );
 
     return (
