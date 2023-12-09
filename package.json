@@ -3,7 +3,9 @@
     "version": "1.0.0",
     "scripts": {
         "prepare": "test -d node_modules/husky && husky install || echo \"husky is not installed\"",
-        "install": "pnpm --filter \"./packages/**\" run -r build"
+        "install": "pnpm --filter \"./packages/**\" run -r build",
+        "build:blog": "docker build -t blog . --target blog",
+        "build:admin": "docker build -t admin . --target admin"
     },
     "author": "Soulike",
     "license": "MIT",
