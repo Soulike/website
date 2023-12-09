@@ -5,7 +5,7 @@ import Style from './Style.module.scss';
 export function ManageIndex() {
     return (
         <div className={Style.ManageIndex}>
-            <img className={Style.image} src={svg} alt='manage_index' />
+            <img className={Style.image} src={svg.src} alt='manage_index' />
         </div>
     );
 }

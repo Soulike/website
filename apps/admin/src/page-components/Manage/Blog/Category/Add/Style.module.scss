@@ -1,0 +1,17 @@
+.Add {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 15vw;
+    margin: 0 auto;
+
+    .categoryInput {
+        text-align: center;
+    }
+
+    .submitButton {
+        margin-top: 25px;
+    }
+}

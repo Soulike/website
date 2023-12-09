@@ -14,7 +14,7 @@ export const PAGE_ID_TO_ROUTE = {
 
     [PAGE_ID.MANAGE.BLOG.CATEGORY.INDEX]: '/manage/blog/category',
     [PAGE_ID.MANAGE.BLOG.CATEGORY.ADD]: '/manage/blog/category/add',
-    [PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE]: '/manage/blog/category/modify',
+    [PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE]: '/manage/blog/category/manage',
 
     [PAGE_ID.MANAGE.BLOG.OPTION.INDEX]: '/manage/blog/option',
     [PAGE_ID.MANAGE.BLOG.OPTION.ABOUT]: '/manage/blog/option/about',
