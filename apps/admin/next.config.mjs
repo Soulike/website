@@ -34,7 +34,7 @@ const nextConfigDev = {
 const nextConfig = withBundleAnalyzer(
     process.env.NODE_ENV === 'development'
         ? nextConfigDev
-        : nextConfigProduction
+        : nextConfigProduction,
 );
 
 export default nextConfig;

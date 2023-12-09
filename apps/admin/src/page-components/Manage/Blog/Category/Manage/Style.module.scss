@@ -1,0 +1,14 @@
+.Manage {
+    width: 100%;
+    min-height: 100%;
+    overflow: auto;
+
+    .articleAmountTag {
+        cursor: pointer;
+    }
+}
+
+.articleListModal {
+    max-height: 60vh;
+    overflow: auto;
+}
