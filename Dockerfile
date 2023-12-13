@@ -5,8 +5,8 @@
 # https://docs.docker.com/go/dockerfile-reference/
 
 FROM node:lts-alpine AS base
-RUN corepack enable
-RUN corepack prepare --activate pnpm@latest
+RUN corepack enable \
+    && corepack prepare --activate pnpm@latest
 
 FROM base AS deps
 WORKDIR /website
@@ -29,7 +29,8 @@ CMD pnpm start
 # Build admin
 FROM deps AS admin-builder
 RUN pnpm --filter "./apps/admin" build \
-    && pnpm --filter "./apps/admin" deploy --prod /admin
+    && pnpm --filter "./apps/admin" deploy --prod /admin \
+    && rm -rf /website
 
 FROM admin-builder AS admin
 WORKDIR /admin
