@@ -17,22 +17,22 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 
 # Build blog
 FROM deps AS blog-builder
-RUN pnpm --filter "./apps/blog" build \
-    && pnpm --filter "./apps/blog" deploy --prod /blog \
-    && rm -rf /website
+RUN pnpm --filter "./apps/blog" build && \
+    pnpm --filter "./apps/blog" deploy --prod /blog
 
-FROM blog-builder AS blog
+FROM base AS blog
+COPY --from=blog-builder /blog /blog
 WORKDIR /blog
 EXPOSE 3000
 CMD pnpm start
 
 # Build admin
 FROM deps AS admin-builder
-RUN pnpm --filter "./apps/admin" build \
-    && pnpm --filter "./apps/admin" deploy --prod /admin \
-    && rm -rf /website
+RUN pnpm --filter "./apps/admin" build && \
+    pnpm --filter "./apps/admin" deploy --prod /admin
 
 FROM admin-builder AS admin
+COPY --from=admin-builder /admin /admin
 WORKDIR /admin
 EXPOSE 3000
 CMD pnpm start
