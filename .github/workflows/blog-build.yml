@@ -1,4 +1,4 @@
-name: docker
+name: blog-build
 
 on:
     push:
