@@ -31,7 +31,7 @@ FROM deps AS admin-builder
 RUN pnpm --filter "./apps/admin" build && \
     pnpm --filter "./apps/admin" deploy --prod /admin
 
-FROM admin-builder AS admin
+FROM base AS admin
 COPY --from=admin-builder /admin /admin
 WORKDIR /admin
 EXPOSE 3000
