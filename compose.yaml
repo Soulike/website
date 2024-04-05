@@ -31,7 +31,6 @@ services:
         ports:
             - 80:80
             - 443:443
-            - 4000-4010:4000-4010
         networks:
             - host
             - blog
