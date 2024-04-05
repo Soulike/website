@@ -26,8 +26,8 @@ services:
         restart: always
         image: 'soulike/website-nginx:latest'
         volumes:
-          - /ssl:/home/soulike/ssl:ro
-          - /var/log/nginx:./nginx/logs
+          - /home/soulike/ssl:/ssl:ro
+          - ./nginx/logs:/var/log/nginx
         ports:
           - 80:80
           - 443:443
