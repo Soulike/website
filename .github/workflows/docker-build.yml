@@ -29,7 +29,7 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   context: .
-                  file: ${{ inputs.docker-docker-file-path }}
+                  file: ${{ inputs.docker-file-path }}
                   target: ${{ inputs.docker-build-target }}
                   platforms: linux/amd64,linux/arm64
                   push: true
