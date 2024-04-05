@@ -13,10 +13,7 @@ on:
 
 jobs:
     build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-            - uses: ./.github/workflows/docker-build.yml
-              with:
-                  docker-build-target: blog
+        uses: ./.github/workflows/docker-build.yml
+        secrets: inherit
+        with:
+            docker-build-target: blog
