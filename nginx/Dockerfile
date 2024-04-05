@@ -4,6 +4,8 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/go/dockerfile-reference/
 
-FROM nginx:stable-alpine as website-nginx
+FROM nginx:stable-alpine AS base
+
+FROM base AS website-nginx
 WORKDIR /
 COPY ./configurations /etc/nginx
