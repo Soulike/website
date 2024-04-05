@@ -17,4 +17,3 @@ jobs:
         secrets: inherit
         with:
             docker-build-target: blog
-            docker-file-path: ./Dockerfile
