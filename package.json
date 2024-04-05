@@ -3,7 +3,9 @@
     "version": "1.0.0",
     "scripts": {
         "prepare": "test -d node_modules/husky && husky install || echo \"husky is not installed\"",
-        "install": "pnpm --filter \"./packages/**\" run -r build"
+        "install": "pnpm --filter \"./packages/**\" run -r build",
+        "start": "docker compose pull && docker compose up -d",
+        "stop": "docker compose down"
     },
     "author": "Soulike",
     "license": "MIT",
