@@ -10,20 +10,12 @@
 services:
     blog:
         restart: always
-        build:
-            context: .
-            target: blog
-        networks:
-            - blog-network
+        image: 'soulike/blog:latest'
         ports:
             - 3000:3000
     admin:
         restart: always
-        build:
-            context: .
-            target: admin
-        networks:
-            - admin-network
+        image: 'soulike/admin:latest'
         ports:
             - 3001:3000
 # The commented out section below is an example of how to define a PostgreSQL
