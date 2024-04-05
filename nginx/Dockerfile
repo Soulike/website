@@ -8,4 +8,4 @@ FROM nginx:stable-alpine AS base
 
 FROM base AS website-nginx
 WORKDIR /
-COPY ./configurations /etc/nginx
+COPY ./nginx/configurations /etc/nginx
