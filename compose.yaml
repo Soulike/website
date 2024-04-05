@@ -11,15 +11,11 @@ services:
     blog:
         restart: always
         image: 'soulike/blog:latest'
-        ports:
-            - 3000:3000
         depends_on:
             - nginx
     admin:
         restart: always
         image: 'soulike/admin:latest'
-        ports:
-            - 3001:3000
         depends_on:
             - nginx
     nginx:
@@ -31,6 +27,8 @@ services:
         ports:
           - 80:80
           - 443:443
+          - 4000-4010:4000-4010
+      
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
 # start the database before your application. The `db-data` volume persists the
