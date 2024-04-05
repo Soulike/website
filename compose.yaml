@@ -13,33 +13,22 @@ services:
         image: 'soulike/blog:latest'
         depends_on:
             - nginx
-        networks:
-            - blog
+        ports:
+            - '3000:3000'
     admin:
         restart: always
         image: 'soulike/admin:latest'
         depends_on:
             - nginx
-        networks:
-            - admin
+        ports:
+            - '3001:3000'
     nginx:
         restart: always
         image: 'soulike/website-nginx:latest'
         volumes:
             - /home/soulike/ssl:/ssl:ro
             - ./nginx/logs:/var/log/nginx
-        ports:
-            - 80:80
-            - 443:443
-        networks:
-            - host
-            - blog
-            - admin
-networks:
-    host:
-        external: true
-    blog:
-    admin:
+        network_mode: host # TODO: Add backend into this file and use bridge mode settings
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
 # start the database before your application. The `db-data` volume persists the
