@@ -6,6 +6,7 @@ import {
 } from '@ant-design/icons';
 import {type Category} from '@website/classes';
 import {Layout, Menu} from 'antd';
+import Image from 'next/image';
 import Link from 'next/link';
 import type React from 'react';
 import {useMemo} from 'react';
@@ -79,7 +80,7 @@ export function FrameView(props: Props) {
                 key: PAGE_ID_TO_ROUTE[PAGE_ID.ABOUT],
             },
         ],
-        [categories]
+        [categories],
     );
 
     return (
@@ -91,10 +92,11 @@ export function FrameView(props: Props) {
                     <Sider className={Style.sidebar} theme={theme}>
                         <div className={Style.sidebarInner}>
                             <div className={Style.avatarWrapper}>
-                                <img
-                                    src={avatar.src}
+                                <Image
+                                    src={avatar}
                                     className={Style.avatar}
                                     alt={'avatar'}
+                                    priority={true}
                                 />
                             </div>
                             <Menu
@@ -111,10 +113,11 @@ export function FrameView(props: Props) {
                         <Header className={Style.header}>
                             <div className={Style.headerInner}>
                                 <div className={Style.avatarWrapper}>
-                                    <img
-                                        src={avatar.src}
+                                    <Image
+                                        src={avatar}
                                         className={Style.avatar}
                                         alt={'avatar'}
+                                        priority={true}
                                     />
                                 </div>
                                 <Menu
