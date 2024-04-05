@@ -6,6 +6,9 @@ on:
             docker-build-target:
                 required: true
                 type: string
+            docker-file-path:
+                required: true
+                type: string
 
 jobs:
     build:

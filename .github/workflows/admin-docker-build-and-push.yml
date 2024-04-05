@@ -17,3 +17,4 @@ jobs:
         secrets: inherit
         with:
             docker-build-target: admin
+            docker-file-path: ./Dockerfile
