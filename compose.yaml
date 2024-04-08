@@ -104,7 +104,7 @@ services:
         networks:
             - database
         healthcheck:
-            test: ['CMD', 'pg_isready']
+            test: ['CMD', 'pg_isready -d website -U soulike']
             interval: 10s
             timeout: 5s
             retries: 5
