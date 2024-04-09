@@ -37,8 +37,6 @@ services:
     admin-server:
         restart: always
         image: 'soulike/admin-server:latest'
-        ports:
-            - 4003:4003
         volumes:
             - /home/soulike/.blog-data:/.blog-data
         depends_on:
