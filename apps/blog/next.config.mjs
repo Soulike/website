@@ -15,7 +15,7 @@ export default async (phase, {defaultConfig}) => {
             rewrites: async () => [
                 {
                     source: '/server/:path*',
-                    destination: 'https://admin.soulike.tech/server/:path*'
+                    destination: 'https://soulike.tech/server/:path*'
                 }
             ]
         };
