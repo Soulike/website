@@ -2,11 +2,11 @@
     "name": "@website/md-converter",
     "main": "dist/index.js",
     "dependencies": {
-        "showdown": "^2.1.0",
-        "typescript": "^5.3.2"
+        "showdown": "^2.1.0"
     },
     "devDependencies": {
-        "@types/showdown": "^2.0.6"
+        "@types/showdown": "^2.0.6",
+        "typescript": "^5.4.4"
     },
     "scripts": {
         "build": "rm -rf dist && tsc"

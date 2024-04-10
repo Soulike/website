@@ -1,8 +1,8 @@
 {
     "name": "@website/classes",
     "main": "dist/index.js",
-    "dependencies": {
-        "typescript": "^5.3.2"
+    "devDependencies": {
+        "typescript": "^5.4.4"
     },
     "scripts": {
         "build": "tsc"

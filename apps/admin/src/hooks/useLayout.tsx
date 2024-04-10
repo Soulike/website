@@ -14,5 +14,8 @@ export function useLayout(): IReactFCWithChildren {
             return ROUTE_PREFIX_TO_LAYOUT[urlPrefix];
     }
 
-    return ({children}) => children;
+    const passThroughComponment: IReactFCWithChildren = ({children}) => (
+        <>{children}</>
+    );
+    return passThroughComponment;
 }

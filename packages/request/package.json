@@ -2,14 +2,14 @@
     "name": "@website/request",
     "main": "dist/index.js",
     "dependencies": {
-        "@website/classes": "workspace:^",
-        "assert": "^2.1.0",
-        "typescript": "^5.3.2"
+        "@website/classes": "workspace:^"
     },
     "scripts": {
         "build": "rm -rf dist && tsc"
     },
     "devDependencies": {
-        "@types/assert": "^1.5.10"
+        "@types/assert": "^1.5.10",
+        "assert": "^2.1.0",
+        "typescript": "^5.4.4"
     }
 }
