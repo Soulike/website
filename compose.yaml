@@ -8,108 +8,108 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-    blog:
-        restart: always
-        image: 'soulike/blog:latest'
-        depends_on:
-            - nginx
-            - blog-server
-        networks:
-            - frontend
-    admin:
-        restart: always
-        image: 'soulike/admin:latest'
-        depends_on:
-            - nginx
-            - admin-server
-            - auth-server
-        networks:
-            - frontend
-    auth-server:
-        restart: always
-        image: 'soulike/auth-server:latest'
-        depends_on:
-            - redis
-            - database-server
-        networks:
-            - server
-            - database
-    admin-server:
-        restart: always
-        image: 'soulike/admin-server:latest'
-        volumes:
-            - $HOME/.blog-data:/.blog-data
-        depends_on:
-            - redis
-            - database-server
-        networks:
-            - server
-            - database
-    blog-server:
-        restart: always
-        image: 'soulike/blog-server:latest'
-        volumes:
-            - $HOME/.blog-data:/.blog-data:ro
-        depends_on:
-            - redis
-            - database-server
-        networks:
-            - server
-            - database
-    database-server:
-        restart: always
-        image: 'soulike/database-server:latest'
-        secrets:
-            - db-password
-        environment:
-            - DB_PASSWORD_FILE=/run/secrets/db-password
-        depends_on:
-            - redis
-            - db
-        networks:
-            - server
-            - database
-    nginx:
-        restart: always
-        image: 'soulike/website-nginx:latest'
-        volumes:
-            - $HOME/ssl:/ssl:ro
-            - ./nginx/logs:/var/log/nginx
-        ports:
-            - 80:80
-            - 443:443
-        networks:
-            - frontend
-            - server
-    redis:
-        restart: always
-        image: redis:alpine
-        networks:
-            - server
-    db:
-        image: postgres:16-alpine
-        restart: always
-        secrets:
-            - db-password
-        volumes:
-            - $HOME/website-database/data/16:/var/lib/postgresql/data
-        environment:
-            - POSTGRES_USER=soulike
-            - POSTGRES_DB=website
-            - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-        ports:
-            - 5432:5432
-        networks:
-            - database
-        healthcheck:
-            test: ['CMD', 'pg_isready -d website -U soulike']
-            interval: 10s
-            timeout: 5s
-            retries: 5
+  blog:
+    restart: always
+    image: 'soulike/blog:latest'
+    depends_on:
+      - nginx
+      - blog-server
+    networks:
+      - frontend
+  admin:
+    restart: always
+    image: 'soulike/admin:latest'
+    depends_on:
+      - nginx
+      - admin-server
+      - auth-server
+    networks:
+      - frontend
+  auth-server:
+    restart: always
+    image: 'soulike/auth-server:latest'
+    depends_on:
+      - redis
+      - database-server
+    networks:
+      - server
+      - database
+  admin-server:
+    restart: always
+    image: 'soulike/admin-server:latest'
+    volumes:
+      - $HOME/.blog-data:/.blog-data
+    depends_on:
+      - redis
+      - database-server
+    networks:
+      - server
+      - database
+  blog-server:
+    restart: always
+    image: 'soulike/blog-server:latest'
+    volumes:
+      - $HOME/.blog-data:/.blog-data:ro
+    depends_on:
+      - redis
+      - database-server
+    networks:
+      - server
+      - database
+  database-server:
+    restart: always
+    image: 'soulike/database-server:latest'
+    secrets:
+      - db-password
+    environment:
+      - DB_PASSWORD_FILE=/run/secrets/db-password
+    depends_on:
+      - redis
+      - db
+    networks:
+      - server
+      - database
+  nginx:
+    restart: always
+    image: 'soulike/website-nginx:latest'
+    volumes:
+      - $HOME/ssl:/ssl:ro
+      - ./nginx/logs:/var/log/nginx
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - frontend
+      - server
+  redis:
+    restart: always
+    image: redis:alpine
+    networks:
+      - server
+  db:
+    image: postgres:16-alpine
+    restart: always
+    secrets:
+      - db-password
+    volumes:
+      - $HOME/website-database/data/16:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=soulike
+      - POSTGRES_DB=website
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+    ports:
+      - 5432:5432
+    networks:
+      - database
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready' ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 networks:
-    frontend:
-    server:
-    database:
+  frontend:
+  server:
+  database:
 secrets:
-    db-password:
-        file: $HOME/website-database/db-password
+  db-password:
+    file: $HOME/website-database/db-password
