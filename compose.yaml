@@ -38,7 +38,7 @@ services:
         restart: always
         image: 'soulike/admin-server:latest'
         volumes:
-            - /home/soulike/.blog-data:/.blog-data
+            - $HOME/.blog-data:/.blog-data
         depends_on:
             - redis
             - database-server
@@ -49,7 +49,7 @@ services:
         restart: always
         image: 'soulike/blog-server:latest'
         volumes:
-            - /home/soulike/.blog-data:/.blog-data:ro
+            - $HOME/.blog-data:/.blog-data:ro
         depends_on:
             - redis
             - database-server
@@ -73,7 +73,7 @@ services:
         restart: always
         image: 'soulike/website-nginx:latest'
         volumes:
-            - /home/soulike/ssl:/ssl:ro
+            - $HOME/ssl:/ssl:ro
             - ./nginx/logs:/var/log/nginx
         ports:
             - 80:80
@@ -92,7 +92,7 @@ services:
         secrets:
             - db-password
         volumes:
-            - /home/soulike/website-database/data/16:/var/lib/postgresql/data
+            - $HOME/website-database/data/16:/var/lib/postgresql/data
         environment:
             - POSTGRES_USER=soulike
             - POSTGRES_DB=website
@@ -112,4 +112,4 @@ networks:
     database:
 secrets:
     db-password:
-        file: /home/soulike/website-database/db-password
+        file: $HOME/website-database/db-password
