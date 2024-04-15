@@ -12,9 +12,6 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        platforms: [ linux/amd64, linux/arm64 ]
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
@@ -34,7 +31,7 @@ jobs:
           context: .
           file: ${{ inputs.docker-file-path }}
           target: ${{ inputs.docker-build-target }}
-          platforms: ${{ matrix.platforms }}
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-build-target }}:latest
           cache-from: type=gha
