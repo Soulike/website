@@ -1,6 +1,3 @@
 module.exports = {
-  extends: [
-    '../../.eslintrc.cjs',
-    'next/core-web-vitals'
-  ]
+  extends: ['../../.eslintrc.cjs', 'next/core-web-vitals'],
 };

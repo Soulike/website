@@ -1,3 +1,3 @@
 export function prefix(url: string): string {
-    return `/server${url}`;
+  return `/server${url}`;
 }

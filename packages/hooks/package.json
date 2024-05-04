@@ -1,20 +1,20 @@
 {
-    "name": "@website/hooks",
-    "main": "dist/index.js",
-    "dependencies": {
-        "@website/hljs": "workspace:^",
-        "@website/md-converter": "workspace:^",
-        "@website/utils": "workspace:^"
-    },
-    "devDependencies": {
-        "@types/node": "^20.12.8",
-        "@types/react": "^18.3.1",
-        "typescript": "^5.4.5"
-    },
-    "peerDependencies": {
-        "react": "latest"
-    },
-    "scripts": {
-        "build": "rm -rf dist && tsc"
-    }
+  "name": "@website/hooks",
+  "main": "dist/index.js",
+  "dependencies": {
+    "@website/hljs": "workspace:^",
+    "@website/md-converter": "workspace:^",
+    "@website/utils": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.8",
+    "@types/react": "^18.3.1",
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "react": "latest"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  }
 }

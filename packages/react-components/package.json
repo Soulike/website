@@ -1,23 +1,23 @@
 {
-    "name": "@website/react-components",
-    "main": "dist/index.js",
-    "dependencies": {
-        "@website/hooks": "workspace:^",
-        "@website/md-converter": "workspace:^",
-        "styled-components": "6.1.8"
-    },
-    "devDependencies": {
-        "@types/react": "^18.3.1",
-        "@types/react-dom": "^18.3.0",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "typescript": "^5.4.5"
-    },
-    "peerDependencies": {
-        "react": ">=16.8.0",
-        "react-dom": ">=16.8.0"
-    },
-    "scripts": {
-        "build": "rm -rf dist && tsc"
-    }
+  "name": "@website/react-components",
+  "main": "dist/index.js",
+  "dependencies": {
+    "@website/hooks": "workspace:^",
+    "@website/md-converter": "workspace:^",
+    "styled-components": "6.1.8"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  }
 }

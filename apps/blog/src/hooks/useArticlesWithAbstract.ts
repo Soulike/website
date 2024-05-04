@@ -4,36 +4,36 @@ import {useEffect, useState} from 'react';
 import {Article as ArticleApi} from '@/src/apis';
 
 export function useArticlesWithAbstract(categoryId?: number): {
-    loading: boolean;
-    articlesWithAbstract: Article[] | null;
+  loading: boolean;
+  articlesWithAbstract: Article[] | null;
 } {
-    const [articlesWithAbstract, setArticlesWithAbstract] = useState<
-        Article[] | null
-    >(null);
-    const [loading, setLoading] = useState(true);
+  const [articlesWithAbstract, setArticlesWithAbstract] = useState<
+    Article[] | null
+  >(null);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        setLoading(true);
-        setArticlesWithAbstract(null);
+  useEffect(() => {
+    setLoading(true);
+    setArticlesWithAbstract(null);
 
-        if (categoryId !== undefined && isNaN(categoryId)) {
-            setLoading(false);
-            return;
-        }
+    if (categoryId !== undefined && isNaN(categoryId)) {
+      setLoading(false);
+      return;
+    }
 
-        const promise =
-            categoryId === undefined
-                ? ArticleApi.getAllWithAbstract()
-                : ArticleApi.getByCategoryWithAbstract(categoryId);
+    const promise =
+      categoryId === undefined
+        ? ArticleApi.getAllWithAbstract()
+        : ArticleApi.getByCategoryWithAbstract(categoryId);
 
-        void promise
-            .then((articlesWithAbstract) => {
-                setArticlesWithAbstract(articlesWithAbstract);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, [categoryId]);
+    void promise
+      .then((articlesWithAbstract) => {
+        setArticlesWithAbstract(articlesWithAbstract);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [categoryId]);
 
-    return {loading, articlesWithAbstract};
+  return {loading, articlesWithAbstract};
 }

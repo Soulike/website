@@ -10,49 +10,49 @@ import {useSearchParam} from '@/src/hooks/useSearchParam';
 import {ArticleView} from './View';
 
 export function Article() {
-    const router = useRouter();
-    const emptyArticle = useMemo(
-        () => new ArticleClass(0, '', '', 0, '', '', 0, true),
-        [],
-    );
-    const emptyCategory = useMemo(() => new Category(0, ''), []);
+  const router = useRouter();
+  const emptyArticle = useMemo(
+    () => new ArticleClass(0, '', '', 0, '', '', 0, true),
+    [],
+  );
+  const emptyCategory = useMemo(() => new Category(0, ''), []);
 
-    const [id] = useSearchParam('id');
-    const articleId = Number.parseInt(id ?? '');
+  const [id] = useSearchParam('id');
+  const articleId = Number.parseInt(id ?? '');
 
-    const {loading: articleIsLoading, article} = useArticle(articleId);
+  const {loading: articleIsLoading, article} = useArticle(articleId);
 
-    useEffect(() => {
-        if (!articleIsLoading && article === null) {
-            void router.replace('/404');
-        }
-    }, [article, articleIsLoading, router]);
+  useEffect(() => {
+    if (!articleIsLoading && article === null) {
+      void router.replace('/404');
+    }
+  }, [article, articleIsLoading, router]);
 
-    const {loading: categoryIsLoading, category} = useCategory(
-        article?.category ?? NaN,
-    );
+  const {loading: categoryIsLoading, category} = useCategory(
+    article?.category ?? NaN,
+  );
 
-    const loading = useMemo(
-        () => articleIsLoading || categoryIsLoading,
-        [articleIsLoading, categoryIsLoading],
-    );
-    const {title, publicationTime, modificationTime} = useMemo(
-        () => article ?? emptyArticle,
-        [article, emptyArticle],
-    );
-    return (
-        <>
-            <Head>
-                {loading ? null : <title>{`${title} - Soulike 的博客`}</title>}
-            </Head>
-            <ArticleView
-                title={title}
-                contentMarkdown={article?.content ?? ''}
-                publicationTime={publicationTime}
-                modificationTime={modificationTime}
-                loading={loading}
-                category={category ?? emptyCategory}
-            />
-        </>
-    );
+  const loading = useMemo(
+    () => articleIsLoading || categoryIsLoading,
+    [articleIsLoading, categoryIsLoading],
+  );
+  const {title, publicationTime, modificationTime} = useMemo(
+    () => article ?? emptyArticle,
+    [article, emptyArticle],
+  );
+  return (
+    <>
+      <Head>
+        {loading ? null : <title>{`${title} - Soulike 的博客`}</title>}
+      </Head>
+      <ArticleView
+        title={title}
+        contentMarkdown={article?.content ?? ''}
+        publicationTime={publicationTime}
+        modificationTime={modificationTime}
+        loading={loading}
+        category={category ?? emptyCategory}
+      />
+    </>
+  );
 }

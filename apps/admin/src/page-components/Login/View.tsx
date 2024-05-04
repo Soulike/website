@@ -1,6 +1,5 @@
 import {LockOutlined, UserOutlined} from '@ant-design/icons';
-import {Button, Input} from 'antd';
-import {type InputProps} from 'antd';
+import {Button, Input, type InputProps} from 'antd';
 import Image, {StaticImageData} from 'next/image';
 import {type DOMAttributes} from 'react';
 
@@ -10,67 +9,67 @@ import web_developer from '@/static/Login/web_developer.svg';
 import Style from './Style.module.scss';
 
 interface Props {
-    loading: boolean;
-    username: string;
-    password: string;
-    onUsernameInputChange: InputProps['onChange'];
-    onPasswordInputChange: InputProps['onChange'];
-    onLoginFormSubmit: DOMAttributes<HTMLFormElement>['onSubmit'];
+  loading: boolean;
+  username: string;
+  password: string;
+  onUsernameInputChange: InputProps['onChange'];
+  onPasswordInputChange: InputProps['onChange'];
+  onLoginFormSubmit: DOMAttributes<HTMLFormElement>['onSubmit'];
 }
 
 export function LoginView(props: Props) {
-    const {
-        loading,
-        username,
-        password,
-        onUsernameInputChange,
-        onPasswordInputChange,
-        onLoginFormSubmit,
-    } = props;
-    return (
-        <>
-            {loading && <Loading />}
-            {!loading && (
-                <main className={Style.Login}>
-                    <form
-                        action={'#'}
-                        className={Style.form}
-                        onSubmit={onLoginFormSubmit}
-                    >
-                        <Image
-                            className={Style.logo}
-                            src={web_developer as StaticImageData}
-                            alt='web_developer_logo'
-                        />
-                        <Input
-                            type={'text'}
-                            size={'large'}
-                            onChange={onUsernameInputChange}
-                            autoFocus={true}
-                            value={username}
-                            placeholder={'用户名'}
-                            prefix={<UserOutlined />}
-                        />
-                        <Input
-                            type={'password'}
-                            size={'large'}
-                            onChange={onPasswordInputChange}
-                            value={password}
-                            placeholder={'密码'}
-                            prefix={<LockOutlined />}
-                        />
-                        <Button
-                            htmlType={'submit'}
-                            className={Style.button}
-                            size={'large'}
-                            type={'primary'}
-                            block={true}
-                        >
-                            登录
-                        </Button>
-                    </form>
-                </main>
-            )}
-        </>
-    );
+  const {
+    loading,
+    username,
+    password,
+    onUsernameInputChange,
+    onPasswordInputChange,
+    onLoginFormSubmit,
+  } = props;
+  return (
+    <>
+      {loading && <Loading />}
+      {!loading && (
+        <main className={Style.Login}>
+          <form
+            action={'#'}
+            className={Style.form}
+            onSubmit={onLoginFormSubmit}
+          >
+            <Image
+              className={Style.logo}
+              src={web_developer as StaticImageData}
+              alt='web_developer_logo'
+            />
+            <Input
+              type={'text'}
+              size={'large'}
+              onChange={onUsernameInputChange}
+              autoFocus={true}
+              value={username}
+              placeholder={'用户名'}
+              prefix={<UserOutlined />}
+            />
+            <Input
+              type={'password'}
+              size={'large'}
+              onChange={onPasswordInputChange}
+              value={password}
+              placeholder={'密码'}
+              prefix={<LockOutlined />}
+            />
+            <Button
+              htmlType={'submit'}
+              className={Style.button}
+              size={'large'}
+              type={'primary'}
+              block={true}
+            >
+              登录
+            </Button>
+          </form>
+        </main>
+      )}
+    </>
+  );
 }

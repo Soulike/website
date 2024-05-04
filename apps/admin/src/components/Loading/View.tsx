@@ -7,14 +7,14 @@ import manager from '@/static/manager.svg';
 import Style from './Style.module.scss';
 
 export function Loading() {
-    return (
-        <div className={Style.Loading}>
-            <Image
-                src={manager as StaticImageData}
-                className={Style.icon}
-                alt={'loading icon'}
-            />
-            <Spin size={'large'} indicator={<LoadingOutlined />} />
-        </div>
-    );
+  return (
+    <div className={Style.Loading}>
+      <Image
+        src={manager as StaticImageData}
+        className={Style.icon}
+        alt={'loading icon'}
+      />
+      <Spin size={'large'} indicator={<LoadingOutlined />} />
+    </div>
+  );
 }

@@ -1,10 +1,10 @@
 {
-    "name": "@website/classes",
-    "main": "dist/index.js",
-    "devDependencies": {
-        "typescript": "^5.4.5"
-    },
-    "scripts": {
-        "build": "tsc"
-    }
+  "name": "@website/classes",
+  "main": "dist/index.js",
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
 }
