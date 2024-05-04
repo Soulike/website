@@ -1,10 +1,10 @@
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
 import {type Article, type Category} from '@website/classes';
 import {Button, List, Popconfirm, Skeleton, Switch, Tag, Tooltip} from 'antd';
-import {type ButtonProps} from 'antd/lib/button/button';
-import {type ModalProps} from 'antd/lib/modal';
-import {type PopconfirmProps} from 'antd/lib/popconfirm';
-import {type SwitchProps} from 'antd/lib/switch';
+import {type ButtonProps} from 'antd';
+import {type ModalProps} from 'antd';
+import {type PopconfirmProps} from 'antd';
+import {type SwitchProps} from 'antd';
 import {type DOMAttributes} from 'react';
 
 import {ArticlePreviewModal} from '@/components/ArticlePreviewModal';
@@ -21,7 +21,7 @@ interface Props {
     isLoading: boolean;
 
     onArticleTitleClick: (
-        id: number
+        id: number,
     ) => DOMAttributes<HTMLSpanElement>['onClick'];
     articleInModalTitle: string;
     articleInModalMarkdown: string;
@@ -75,7 +75,7 @@ export function ArticleListView(props: Props) {
                         } = article;
                         const publicationTime = new Date(publicationTimeString);
                         const modificationTime = new Date(
-                            modificationTimeString
+                            modificationTimeString,
                         );
                         return (
                             <Item key={id}>
@@ -91,7 +91,7 @@ export function ArticleListView(props: Props) {
                                 />
                                 <Tag color={'blue'}>
                                     {categoryMap.get(
-                                        articleMap.get(id)?.category ?? 0
+                                        articleMap.get(id)?.category ?? 0,
                                     )?.name ?? '??'}
                                 </Tag>
                                 <Tag color={'geekblue'}>
@@ -116,7 +116,7 @@ export function ArticleListView(props: Props) {
                                             .toString()
                                             .padStart(
                                                 2,
-                                                '0'
+                                                '0',
                                             )}-${modificationTime
                                             .getDate()
                                             .toString()
@@ -143,7 +143,7 @@ export function ArticleListView(props: Props) {
                                             type={'primary'}
                                             ghost={true}
                                             onClick={onModifyArticleButtonClick(
-                                                id
+                                                id,
                                             )}
                                         >
                                             <EditOutlined />
@@ -158,7 +158,7 @@ export function ArticleListView(props: Props) {
                                                 danger={true}
                                                 ghost={true}
                                                 onClick={onDeleteArticleButtonClick(
-                                                    id
+                                                    id,
                                                 )}
                                             >
                                                 <DeleteOutlined />

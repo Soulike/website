@@ -6,7 +6,7 @@
     },
     "devDependencies": {
         "@types/showdown": "^2.0.6",
-        "typescript": "^5.4.4"
+        "typescript": "^5.4.5"
     },
     "scripts": {
         "build": "rm -rf dist && tsc"

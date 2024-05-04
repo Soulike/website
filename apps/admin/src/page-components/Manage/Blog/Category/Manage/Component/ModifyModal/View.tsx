@@ -1,6 +1,6 @@
 import {Input, Modal} from 'antd';
-import {type InputProps} from 'antd/lib/input';
-import {type ModalProps} from 'antd/lib/modal';
+import {type InputProps} from 'antd';
+import {type ModalProps} from 'antd';
 
 import Style from './Style.module.scss';
 

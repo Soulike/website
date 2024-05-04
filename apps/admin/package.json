@@ -10,30 +10,25 @@
         "lint": "next lint"
     },
     "dependencies": {
-        "next": "^13.5.6",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "sharp": "^0.33.3",
         "@ant-design/icons": "^5.3.6",
         "@website/classes": "workspace:^",
         "@website/hooks": "workspace:^",
         "@website/react-components": "workspace:^",
         "@website/request": "workspace:^",
-        "antd": "^5.16.1"
+        "antd": "^5.17.0",
+        "next": "^14.2.3",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "sharp": "^0.33.3"
     },
     "devDependencies": {
-        "sass": "^1.74.1",
-        "@types/node": "^20.10.3",
-        "@types/react": "^18.2.42",
-        "@types/react-dom": "^18.2.17",
-        "@next/bundle-analyzer": "^13.5.6",
-        "typescript": "^5.3.2"
-    },
-    "eslintConfig": {
-        "extends": [
-            "../../.eslintrc.json",
-            "next/core-web-vitals"
-        ]
+        "@next/bundle-analyzer": "^14.2.3",
+        "@types/node": "^20.12.8",
+        "@types/react": "^18.3.1",
+        "@types/react-dom": "^18.3.0",
+        "eslint-config-next": "^14.2.3",
+        "sass": "^1.76.0",
+        "typescript": "^5.4.5"
     },
     "browserslist": [
         "> 0.5%",

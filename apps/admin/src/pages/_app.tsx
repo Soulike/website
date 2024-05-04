@@ -2,7 +2,7 @@ import 'antd/dist/reset.css';
 import '@/pages/_app.scss';
 
 import {ConfigProvider} from 'antd';
-import zhCN from 'antd/lib/locale/zh_CN';
+import zhCN from 'antd/locale/zh_CN';
 import type {AppProps} from 'next/app';
 import Head from 'next/head';
 import {Suspense} from 'react';

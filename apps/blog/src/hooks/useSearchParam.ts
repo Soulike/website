@@ -10,17 +10,16 @@ export function useSearchParam(paramName: string): [string | null, SetterType] {
         typeof rawValue === 'string'
             ? rawValue
             : rawValue === undefined
-            ? null
-            : rawValue[0];
+              ? null
+              : rawValue[0];
 
     const setValue: SetterType = useCallback(
         (value) => {
-            let query: typeof router.query = {...router.query};
+            const query: typeof router.query = {...router.query};
             if (value !== null) {
                 query[paramName] = value;
             } else {
-                const {paramName, ...noParamNameQuery} = query;
-                query = noParamNameQuery;
+                delete query[paramName];
             }
 
             void router.push({
@@ -28,7 +27,7 @@ export function useSearchParam(paramName: string): [string | null, SetterType] {
                 query,
             });
         },
-        [paramName, router]
+        [paramName, router],
     );
 
     return [value, setValue];

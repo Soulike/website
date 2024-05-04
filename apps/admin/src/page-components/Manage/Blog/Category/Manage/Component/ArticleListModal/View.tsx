@@ -1,6 +1,6 @@
 import {type Category} from '@website/classes';
 import {Modal} from 'antd';
-import {type ModalProps} from 'antd/lib/modal';
+import {type ModalProps} from 'antd';
 import React from 'react';
 
 import {ArticleList} from '@/components/ArticleList';

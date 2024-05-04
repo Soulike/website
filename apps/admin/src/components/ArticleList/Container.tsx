@@ -1,9 +1,9 @@
 import {type Article, type Category} from '@website/classes';
 import {message, notification} from 'antd';
-import {type ButtonProps} from 'antd/lib/button/button';
-import {type ModalProps} from 'antd/lib/modal';
-import {type PopconfirmProps} from 'antd/lib/popconfirm';
-import {type SwitchProps} from 'antd/lib/switch';
+import {type ButtonProps} from 'antd';
+import {type ModalProps} from 'antd';
+import {type PopconfirmProps} from 'antd';
+import {type SwitchProps} from 'antd';
 import {useRouter} from 'next/router';
 import {
     type DOMAttributes,
@@ -40,7 +40,7 @@ export function ArticleList(props: IProps) {
 
     const {categories, loading: categoriesIsLoading} = useCategories();
     const categoryMap: Map<number, Category> = useMemo(() => {
-        const map = new Map();
+        const map: Map<number, Category> = new Map();
         if (categories !== null) {
             for (const category of categories) {
                 map.set(category.id, category);

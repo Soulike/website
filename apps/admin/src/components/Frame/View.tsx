@@ -1,6 +1,6 @@
 import {DashboardFilled, PoweroffOutlined} from '@ant-design/icons';
 import {Button, Card, Layout} from 'antd';
-import {type ButtonProps} from 'antd/lib/button/button';
+import {type ButtonProps} from 'antd';
 import Link from 'next/link';
 import {type ReactNode} from 'react';
 

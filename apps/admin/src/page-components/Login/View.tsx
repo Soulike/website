@@ -1,6 +1,7 @@
 import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {Button, Input} from 'antd';
-import {type InputProps} from 'antd/lib/input';
+import {type InputProps} from 'antd';
+import Image, {StaticImageData} from 'next/image';
 import {type DOMAttributes} from 'react';
 
 import {Loading} from '@/components/Loading';
@@ -36,9 +37,9 @@ export function LoginView(props: Props) {
                         className={Style.form}
                         onSubmit={onLoginFormSubmit}
                     >
-                        <img
+                        <Image
                             className={Style.logo}
-                            src={web_developer.src}
+                            src={web_developer as StaticImageData}
                             alt='web_developer_logo'
                         />
                         <Input

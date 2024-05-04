@@ -1,6 +1,6 @@
 import {Button, Input} from 'antd';
-import {type ButtonProps} from 'antd/lib/button/button';
-import {type InputProps} from 'antd/lib/input';
+import {type ButtonProps} from 'antd';
+import {type InputProps} from 'antd';
 
 import Style from './Style.module.scss';
 

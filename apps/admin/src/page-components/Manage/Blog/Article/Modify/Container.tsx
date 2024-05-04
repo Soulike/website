@@ -1,9 +1,10 @@
 import {type Category} from '@website/classes';
 import {type ButtonProps, message, notification} from 'antd';
-import {type CheckboxProps} from 'antd/lib/checkbox';
-import {type InputProps, type TextAreaProps} from 'antd/lib/input';
-import {type ModalProps} from 'antd/lib/modal';
-import {type SelectProps} from 'antd/lib/select';
+import {type CheckboxProps} from 'antd';
+import {type InputProps} from 'antd';
+import {type ModalProps} from 'antd';
+import {type SelectProps} from 'antd';
+import {TextAreaProps} from 'antd/lib/input';
 import {useSearchParams} from 'next/navigation';
 import {useRouter} from 'next/router';
 import {useEffect, useState} from 'react';

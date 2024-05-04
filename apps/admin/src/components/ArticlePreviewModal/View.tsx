@@ -1,6 +1,6 @@
 import {Markdown} from '@website/react-components';
 import {Modal} from 'antd';
-import {type ModalProps} from 'antd/lib/modal';
+import {type ModalProps} from 'antd';
 
 import Style from './Style.module.scss';
 

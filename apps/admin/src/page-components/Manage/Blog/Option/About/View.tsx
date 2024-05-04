@@ -1,7 +1,7 @@
 import {Button, Input} from 'antd';
-import {type ButtonProps} from 'antd/lib/button/button';
+import {type ButtonProps} from 'antd';
+import {type ModalProps} from 'antd';
 import {type TextAreaProps} from 'antd/lib/input';
-import {type ModalProps} from 'antd/lib/modal';
 
 import {ArticlePreviewModal} from '@/components/ArticlePreviewModal';
 

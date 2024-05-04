@@ -1,6 +1,6 @@
 import {Modal, notification} from 'antd';
-import {type ButtonProps} from 'antd/lib/button/button';
-import {type ModalFuncProps} from 'antd/lib/modal';
+import {type ButtonProps} from 'antd';
+import {type ModalFuncProps} from 'antd';
 import {useRouter} from 'next/router';
 import {type ReactNode, useCallback, useEffect} from 'react';
 
@@ -46,7 +46,7 @@ export function Frame(props: IFrameProps) {
                 onOk: onExitModalOkButtonClick,
             });
         },
-        [onExitModalOkButtonClick]
+        [onExitModalOkButtonClick],
     );
 
     return (

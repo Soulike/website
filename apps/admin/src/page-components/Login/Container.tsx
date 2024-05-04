@@ -1,5 +1,5 @@
 import {notification} from 'antd';
-import {type InputProps} from 'antd/lib/input';
+import {type InputProps} from 'antd';
 import {useRouter} from 'next/router';
 import {type DOMAttributes, useCallback, useEffect, useState} from 'react';
 

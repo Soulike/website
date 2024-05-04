@@ -1,11 +1,11 @@
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
 import {type Category} from '@website/classes';
 import {Button, List, Popconfirm, Spin, Tag, Tooltip} from 'antd';
-import {type ButtonProps} from 'antd/lib/button/button';
-import {type InputProps} from 'antd/lib/input';
-import {type ModalProps} from 'antd/lib/modal';
-import {type PopconfirmProps} from 'antd/lib/popconfirm';
-import {type TagProps} from 'antd/lib/tag';
+import {type ButtonProps} from 'antd';
+import {type InputProps} from 'antd';
+import {type ModalProps} from 'antd';
+import {type PopconfirmProps} from 'antd';
+import {type TagProps} from 'antd';
 
 import {ArticleListModal} from './Component/ArticleListModal';
 import {ModifyModal} from './Component/ModifyModal';

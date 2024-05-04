@@ -1,6 +1,6 @@
 import {LoadingOutlined} from '@ant-design/icons';
 import {Spin} from 'antd';
-import Image from 'next/image';
+import Image, {StaticImageData} from 'next/image';
 
 import svg from '@/src/static/book_lover.svg';
 
@@ -10,7 +10,7 @@ export function Loading() {
     return (
         <div className={Style.Loading}>
             <Image
-                src={svg}
+                src={svg as StaticImageData}
                 className={Style.icon}
                 alt={'icon'}
                 width={300}
