@@ -1,5 +1,5 @@
 export async function yieldMainThread(): Promise<void> {
-    await new Promise((resolve) => {
-        setTimeout(resolve, 0);
-    });
+  await new Promise((resolve) => {
+    setTimeout(resolve, 0);
+  });
 }

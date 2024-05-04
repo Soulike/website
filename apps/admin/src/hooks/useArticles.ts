@@ -6,34 +6,34 @@ import {Blog} from '@/apis';
 const {Article: ArticleApi} = Blog;
 
 export function useArticles(categoryId?: number): {
-    loading: boolean;
-    articles: Article[] | null;
+  loading: boolean;
+  articles: Article[] | null;
 } {
-    const [articles, setArticles] = useState<Article[] | null>(null);
-    const [loading, setLoading] = useState(true);
+  const [articles, setArticles] = useState<Article[] | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        setLoading(true);
-        setArticles(null);
+  useEffect(() => {
+    setLoading(true);
+    setArticles(null);
 
-        if (categoryId !== undefined && isNaN(categoryId)) {
-            setLoading(false);
-            return;
-        }
+    if (categoryId !== undefined && isNaN(categoryId)) {
+      setLoading(false);
+      return;
+    }
 
-        const promise =
-            categoryId === undefined
-                ? ArticleApi.getAll()
-                : ArticleApi.getByCategory(categoryId);
+    const promise =
+      categoryId === undefined
+        ? ArticleApi.getAll()
+        : ArticleApi.getByCategory(categoryId);
 
-        void promise
-            .then((articles) => {
-                setArticles(articles);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, [categoryId]);
+    void promise
+      .then((articles) => {
+        setArticles(articles);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [categoryId]);
 
-    return {loading, articles};
+  return {loading, articles};
 }

@@ -1,37 +1,40 @@
 import {type Category} from '@website/classes';
-import {type ButtonProps} from 'antd';
-import {type CheckboxProps} from 'antd/lib/checkbox';
-import {type InputProps, type TextAreaProps} from 'antd/lib/input';
-import {type ModalProps} from 'antd/lib/modal';
-import {type SelectProps} from 'antd/lib/select';
+import {
+  type ButtonProps,
+  type CheckboxProps,
+  type InputProps,
+  type ModalProps,
+  type SelectProps,
+} from 'antd';
+import {TextAreaProps} from 'antd/lib/input';
 
 import {ArticleEditor} from '@/components/ArticleEditor';
 
 import Style from './Style.module.scss';
 
 interface Props {
-    title: string;
-    content: string;
-    category: number | undefined;
-    isVisible: boolean;
-    categoryOption: Category[];
-    onTitleInputChange: InputProps['onChange'];
-    onContentTextAreaChange: TextAreaProps['onChange'];
-    onCategorySelectorChange: SelectProps<number>['onChange'];
-    onIsVisibleCheckboxChange: CheckboxProps['onChange'];
-    onSubmitButtonClick: ButtonProps['onClick'];
-    isLoadingCategory: boolean;
-    isSubmittingArticle: boolean;
-    onArticlePreviewButtonClick: ButtonProps['onClick'];
-    isArticlePreviewModalOpen: boolean;
-    onArticlePreviewModalOk: ModalProps['onOk'];
-    onArticlePreviewModalCancel: ModalProps['onCancel'];
+  title: string;
+  content: string;
+  category: number | undefined;
+  isVisible: boolean;
+  categoryOption: Category[];
+  onTitleInputChange: InputProps['onChange'];
+  onContentTextAreaChange: TextAreaProps['onChange'];
+  onCategorySelectorChange: SelectProps<number>['onChange'];
+  onIsVisibleCheckboxChange: CheckboxProps['onChange'];
+  onSubmitButtonClick: ButtonProps['onClick'];
+  isLoadingCategory: boolean;
+  isSubmittingArticle: boolean;
+  onArticlePreviewButtonClick: ButtonProps['onClick'];
+  isArticlePreviewModalOpen: boolean;
+  onArticlePreviewModalOk: ModalProps['onOk'];
+  onArticlePreviewModalCancel: ModalProps['onCancel'];
 }
 
 export function AddView(props: Props) {
-    return (
-        <div className={Style.Add}>
-            <ArticleEditor {...props} isLoadingArticle={false} />
-        </div>
-    );
+  return (
+    <div className={Style.Add}>
+      <ArticleEditor {...props} isLoadingArticle={false} />
+    </div>
+  );
 }

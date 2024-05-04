@@ -4,12 +4,12 @@ import {type ReactNode} from 'react';
 import {BlogFrameView} from './View';
 
 interface Props {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 export function BlogFrame(props: Props) {
-    const {pathname} = useRouter();
-    const {children} = props;
+  const {pathname} = useRouter();
+  const {children} = props;
 
-    return <BlogFrameView pathname={pathname}>{children}</BlogFrameView>;
+  return <BlogFrameView pathname={pathname}>{children}</BlogFrameView>;
 }

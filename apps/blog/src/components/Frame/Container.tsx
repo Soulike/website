@@ -10,37 +10,37 @@ import {useHitokoto} from '@/src/hooks/useHitokoto';
 import {FrameView} from './View';
 
 export interface IFrameProps {
-    children?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export function Frame(props: IFrameProps) {
-    const {children} = props;
-    const router = useRouter();
-    const [isDarkMode] = useMediaQuery('(prefer-color-scheme: dark)');
+  const {children} = props;
+  const router = useRouter();
+  const [isDarkMode] = useMediaQuery('(prefer-color-scheme: dark)');
 
-    // 设定当前年份
-    const year = useCurrentYear();
+  // 设定当前年份
+  const year = useCurrentYear();
 
-    // 设定 hitokoto
-    const hitokoto = useHitokoto();
+  // 设定 hitokoto
+  const hitokoto = useHitokoto();
 
-    // 获取所有分类
-    const {loading: categoriesIsLoading, categories} = useCategories();
+  // 获取所有分类
+  const {loading: categoriesIsLoading, categories} = useCategories();
 
-    const loading = useMemo(
-        () => categoriesIsLoading || !router.isReady,
-        [categoriesIsLoading, router.isReady]
-    );
+  const loading = useMemo(
+    () => categoriesIsLoading || !router.isReady,
+    [categoriesIsLoading, router.isReady],
+  );
 
-    return (
-        <FrameView
-            isDarkMode={isDarkMode}
-            loading={loading}
-            hitokoto={hitokoto}
-            year={year}
-            categories={categories ?? []}
-        >
-            {children}
-        </FrameView>
-    );
+  return (
+    <FrameView
+      isDarkMode={isDarkMode}
+      loading={loading}
+      hitokoto={hitokoto}
+      year={year}
+      categories={categories ?? []}
+    >
+      {children}
+    </FrameView>
+  );
 }

@@ -1,19 +1,19 @@
 export type RequestSuccessChecker<ResT, DataT> = (
-    response: ResT,
-    data: DataT
+  response: ResT,
+  data: DataT,
 ) => boolean | Promise<boolean>;
 
 export type ResponseTransformer<ResT, DataT> = (
-    response: ResT
+  response: ResT,
 ) => DataT | Promise<DataT>;
 
 type RequestResultHandler<ResT, DataT> = (
-    response: ResT,
-    data: DataT
+  response: ResT,
+  data: DataT,
 ) => unknown | Promise<unknown>;
 export type RequestSuccessHandler<ResT, DataT> = RequestResultHandler<
-    ResT,
-    DataT
+  ResT,
+  DataT
 >;
 export type RequestFailHandler<ResT, DataT> = RequestResultHandler<ResT, DataT>;
 

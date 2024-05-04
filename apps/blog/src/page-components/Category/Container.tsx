@@ -3,15 +3,15 @@ import {useArticlesWithAbstract} from '@/src/hooks/useArticlesWithAbstract';
 import {useSearchParam} from '@/src/hooks/useSearchParam';
 
 export function Category() {
-    const [id] = useSearchParam('id');
-    const categoryId = Number.parseInt(id ?? '');
+  const [id] = useSearchParam('id');
+  const categoryId = Number.parseInt(id ?? '');
 
-    const {loading, articlesWithAbstract} = useArticlesWithAbstract(categoryId);
+  const {loading, articlesWithAbstract} = useArticlesWithAbstract(categoryId);
 
-    return (
-        <IndexArticleList
-            articleList={articlesWithAbstract ?? []}
-            loading={loading}
-        />
-    );
+  return (
+    <IndexArticleList
+      articleList={articlesWithAbstract ?? []}
+      loading={loading}
+    />
+  );
 }

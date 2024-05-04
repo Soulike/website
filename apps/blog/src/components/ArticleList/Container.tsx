@@ -7,42 +7,42 @@ import {useCategories} from '@/src/hooks/useCategories';
 import {ArticleListView} from './View';
 
 interface IProps {
-    articleList: Article[];
-    loading: boolean;
+  articleList: Article[];
+  loading: boolean;
 }
 
 export function ArticleList(props: IProps) {
-    const [pageNumber, setPageNumber] = useState(1);
-    const {categories, loading: categoriesIsLoading} = useCategories();
+  const [pageNumber, setPageNumber] = useState(1);
+  const {categories, loading: categoriesIsLoading} = useCategories();
 
-    const {articleList, loading} = props;
-    const categoryMap: Map<number, Category> = useMemo(() => {
-        const map = new Map();
-        if (categories !== null) {
-            for (const category of categories) {
-                map.set(category.id, category);
-            }
-        }
-        return map;
-    }, [categories]);
+  const {articleList, loading} = props;
+  const categoryMap: Map<number, Category> = useMemo(() => {
+    const map: Map<number, Category> = new Map();
+    if (categories !== null) {
+      for (const category of categories) {
+        map.set(category.id, category);
+      }
+    }
+    return map;
+  }, [categories]);
 
-    const onPageNumberChange = useCallback((pageNumber: number) => {
-        setPageNumber(pageNumber);
-    }, []);
+  const onPageNumberChange = useCallback((pageNumber: number) => {
+    setPageNumber(pageNumber);
+  }, []);
 
-    useMathJax([pageNumber]);
+  useMathJax([pageNumber]);
 
-    const isLoading = useMemo(
-        () => loading || categoriesIsLoading,
-        [categoriesIsLoading, loading],
-    );
+  const isLoading = useMemo(
+    () => loading || categoriesIsLoading,
+    [categoriesIsLoading, loading],
+  );
 
-    return (
-        <ArticleListView
-            onPageNumberChange={onPageNumberChange}
-            articleList={articleList}
-            categoryMap={categoryMap}
-            loading={isLoading}
-        />
-    );
+  return (
+    <ArticleListView
+      onPageNumberChange={onPageNumberChange}
+      articleList={articleList}
+      categoryMap={categoryMap}
+      loading={isLoading}
+    />
+  );
 }

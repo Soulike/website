@@ -1,11 +1,11 @@
 {
-    "name": "@website/utils",
-    "main": "dist/index.js",
-    "scripts": {
-        "build": "rm -rf dist && tsc"
-    },
-    "devDependencies": {
-        "@types/assert": "^1.5.10",
-        "typescript": "^5.4.4"
-    }
+  "name": "@website/utils",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  },
+  "devDependencies": {
+    "@types/assert": "^1.5.10",
+    "typescript": "^5.4.5"
+  }
 }

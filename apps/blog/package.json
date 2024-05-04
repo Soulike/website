@@ -1,52 +1,46 @@
 {
-    "name": "blog",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "dev": "NODE_ENV=development next dev",
-        "build": "next build",
-        "build:analysis": "ANALYZE_BUNDLE=true next build",
-        "start": "next start",
-        "lint": "next lint"
-    },
-    "dependencies": {
-        "@ant-design/icons": "^5.3.6",
-        "@chakra-ui/media-query": "^3.3.0",
-        "@chakra-ui/system": "^2.6.2",
-        "@emotion/react": "^11.11.4",
-        "@emotion/styled": "^11.11.5",
-        "@website/classes": "workspace:^",
-        "@website/hooks": "workspace:^",
-        "@website/react-components": "workspace:^",
-        "@website/request": "workspace:^",
-        "@website/utils": "workspace:^",
-        "antd": "^5.16.1",
-        "next": "^13.5.6",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "sharp": "^0.33.3"
-    },
-    "devDependencies": {
-        "@types/node": "^20.12.7",
-        "@types/react": "^18.2.75",
-        "@types/react-dom": "^18.2.24",
-        "eslint-config-next": "14.0.3",
-        "sass": "^1.74.1",
-        "typescript": "^5.4.4",
-        "@next/bundle-analyzer": "^13.5.6"
-    },
-    "browserslist": [
-        "> 0.5%",
-        "not dead",
-        "last 10 Chrome versions",
-        "last 10 Edge versions",
-        "last 10 Firefox versions",
-        "last 5 Safari versions"
-    ],
-    "eslintConfig": {
-        "extends": [
-            "../../.eslintrc.json",
-            "next/core-web-vitals"
-        ]
-    }
+  "name": "blog",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "NODE_ENV=development next dev",
+    "build": "next build",
+    "build:analysis": "ANALYZE_BUNDLE=true next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.3.6",
+    "@chakra-ui/media-query": "^3.3.0",
+    "@chakra-ui/system": "^2.6.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@website/classes": "workspace:^",
+    "@website/hooks": "workspace:^",
+    "@website/react-components": "workspace:^",
+    "@website/request": "workspace:^",
+    "@website/utils": "workspace:^",
+    "antd": "^5.17.0",
+    "next": "^14.2.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sharp": "^0.33.3"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^14.2.3",
+    "@types/node": "^20.12.8",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "eslint-config-next": "^14.2.3",
+    "sass": "^1.76.0",
+    "typescript": "^5.4.5"
+  },
+  "browserslist": [
+    "> 0.5%",
+    "not dead",
+    "last 10 Chrome versions",
+    "last 10 Edge versions",
+    "last 10 Firefox versions",
+    "last 5 Safari versions"
+  ]
 }

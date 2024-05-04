@@ -15,46 +15,46 @@ import {Frame} from '@/src/components/Frame';
 import {Loading} from '@/src/components/Loading';
 
 function MyApp({Component, pageProps}: AppProps) {
-    const [isDarkMode] = useMediaQuery('(prefers-color-scheme: dark)');
+  const [isDarkMode] = useMediaQuery('(prefers-color-scheme: dark)');
 
-    return (
-        <>
-            <Suspense fallback={<Loading />}>
-                <ConfigProvider
-                    locale={zhCN}
-                    theme={{
-                        algorithm: isDarkMode
-                            ? theme.darkAlgorithm
-                            : theme.defaultAlgorithm,
-                    }}
-                >
-                    <App>
-                        <Frame>
-                            <Component {...pageProps} />
-                        </Frame>
-                    </App>
-                </ConfigProvider>
-            </Suspense>
-            <Head>
-                <meta
-                    content='width=device-width, initial-scale=1, maximum-scale=1'
-                    name='viewport'
-                />
-                <meta name='theme-color' content='#000000' />
-                <meta content='index,follow' name='robots' />
-                <meta content="Soulike's blog" name='description' />
-                <link rel='icon' href='/favicon.ico' sizes='any' />
-                <link href='https://unpkg.com' rel='preconnect' />
-                <link href='https://v1.hitokoto.cn' rel='preconnect' />
-                <link
-                    href='https://www.googletagmanager.com/gtag/js?id=UA-148185792-1'
-                    rel='prefetch'
-                />
-                <title>Soulike 的博客</title>
-            </Head>
-            <Script src='https://www.googletagmanager.com/gtag/js?id=UA-148185792-1' />
-            <Script id={'google-analytics'}>
-                {`
+  return (
+    <>
+      <Suspense fallback={<Loading />}>
+        <ConfigProvider
+          locale={zhCN}
+          theme={{
+            algorithm: isDarkMode
+              ? theme.darkAlgorithm
+              : theme.defaultAlgorithm,
+          }}
+        >
+          <App>
+            <Frame>
+              <Component {...pageProps} />
+            </Frame>
+          </App>
+        </ConfigProvider>
+      </Suspense>
+      <Head>
+        <meta
+          content='width=device-width, initial-scale=1, maximum-scale=1'
+          name='viewport'
+        />
+        <meta name='theme-color' content='#000000' />
+        <meta content='index,follow' name='robots' />
+        <meta content="Soulike's blog" name='description' />
+        <link rel='icon' href='/favicon.ico' sizes='any' />
+        <link href='https://unpkg.com' rel='preconnect' />
+        <link href='https://v1.hitokoto.cn' rel='preconnect' />
+        <link
+          href='https://www.googletagmanager.com/gtag/js?id=UA-148185792-1'
+          rel='prefetch'
+        />
+        <title>Soulike 的博客</title>
+      </Head>
+      <Script src='https://www.googletagmanager.com/gtag/js?id=UA-148185792-1' />
+      <Script id={'google-analytics'}>
+        {`
         window.dataLayer = window.dataLayer || [];
 
         function gtag()
@@ -66,9 +66,9 @@ function MyApp({Component, pageProps}: AppProps) {
 
         gtag('config', 'UA-148185792-1');
     `}
-            </Script>
-        </>
-    );
+      </Script>
+    </>
+  );
 }
 
 export default MyApp;

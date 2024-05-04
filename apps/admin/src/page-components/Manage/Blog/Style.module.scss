@@ -1,10 +1,11 @@
 .BlogIndex {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 
-    .image {
-        width: 40vw;
-    }
+  .image {
+    width: 40vw;
+    height: auto;
+  }
 }
