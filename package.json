@@ -4,7 +4,7 @@
   "scripts": {
     "prepare": "test -d node_modules/husky && husky",
     "install": "pnpm --filter \"./packages/**\" run -r build",
-    "start": "docker compose pull && docker compose up -d",
+    "start": "docker compose pull && docker compose down && docker compose up -d",
     "stop": "docker compose down"
   },
   "author": "Soulike",
