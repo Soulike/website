@@ -6,19 +6,14 @@ import {
 import type {GetJsonRequestOptions, PostJsonRequestOptions} from './types';
 
 export async function getJson<ResT>(
-  url: URL,
+  path: string,
   options: GetJsonRequestOptions = {},
 ): Promise<ResT> {
   const {headers, searchParams} = options;
-  const searchParamsInUrl = url.searchParams;
 
-  if (searchParams) {
-    for (const [name, value] of searchParams) {
-      searchParamsInUrl.append(name, value);
-    }
-  }
+  path = searchParams ? `${path}?${searchParams.toString()}` : path;
 
-  const response = await fetch(url, {
+  const response = await fetch(path, {
     method: 'get',
     headers,
   });
@@ -26,22 +21,17 @@ export async function getJson<ResT>(
 }
 
 export async function postJson<ResT>(
-  url: URL,
+  path: string,
   options: PostJsonRequestOptions = {},
 ): Promise<ResT> {
   const {headers, searchParams, body} = options;
-  const searchParamsInUrl = url.searchParams;
-
-  if (searchParams) {
-    for (const [name, value] of searchParams) {
-      searchParamsInUrl.append(name, value);
-    }
-  }
 
   const finalHeaders = new Headers(headers);
   finalHeaders.set('Content-Type', 'application/json');
 
-  const response = await fetch(url, {
+  path = searchParams ? `${path}?${searchParams.toString()}` : path;
+
+  const response = await fetch(path, {
     method: 'post',
     headers: finalHeaders,
     body: JSON.stringify(body),
