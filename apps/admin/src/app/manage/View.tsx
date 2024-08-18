@@ -11,6 +11,7 @@ export function ManageIndex() {
         className={Style.image}
         src={svg as StaticImageData}
         alt='manage_index'
+        priority={true}
       />
     </div>
   );
