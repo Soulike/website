@@ -13,6 +13,7 @@ export function Loading() {
         src={manager as StaticImageData}
         className={Style.icon}
         alt={'loading icon'}
+        priority={true}
       />
       <Spin size={'large'} indicator={<LoadingOutlined />} />
     </div>

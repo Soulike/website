@@ -1,3 +1,5 @@
+'use client';
+
 import {type Article, type Category} from '@website/classes';
 import {
   type ButtonProps,
@@ -7,7 +9,7 @@ import {
   type PopconfirmProps,
   type SwitchProps,
 } from 'antd';
-import {useRouter} from 'next/router';
+import {useRouter} from 'next/navigation';
 import {
   type DOMAttributes,
   useCallback,

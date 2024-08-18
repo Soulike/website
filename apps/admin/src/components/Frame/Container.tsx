@@ -1,12 +1,14 @@
+'use client';
+
 import {type ButtonProps, Modal, type ModalFuncProps, notification} from 'antd';
-import {useRouter} from 'next/router';
+import {useRouter} from 'next/navigation';
 import {type ReactNode, useCallback, useEffect} from 'react';
 
 import {Account as AccountApi} from '@/apis';
 import {Loading} from '@/components/Loading';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
 import {useIsLoggedIn} from '@/hooks/useIsLoggedIn';
 
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../config/route';
 import {FrameView} from './View';
 
 export interface IFrameProps {

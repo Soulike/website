@@ -41,7 +41,7 @@ export function FrameView(props: Props) {
       </Header>
       <Layout className={Style.contentLayout}>
         <Content className={Style.content}>
-          <Card className={Style.card} bodyStyle={{height: '100%'}}>
+          <Card className={Style.card} styles={{body: {height: '100%'}}}>
             {children}
           </Card>
         </Content>
