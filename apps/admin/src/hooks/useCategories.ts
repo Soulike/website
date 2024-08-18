@@ -1,3 +1,5 @@
+'use client';
+
 import {type Category} from '@website/classes';
 import {useEffect, useState} from 'react';
 

@@ -1,3 +1,5 @@
+'use client';
+
 import {type Article} from '@website/classes';
 import {useEffect, useState} from 'react';
 
