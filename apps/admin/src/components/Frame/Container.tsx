@@ -5,6 +5,7 @@ import {useRouter} from 'next/navigation';
 import {type ReactNode, useCallback, useEffect} from 'react';
 
 import {Account as AccountApi} from '@/apis';
+import {showNetworkError} from '@/apis/utils';
 import {Loading} from '@/components/Loading';
 import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
 import {useIsLoggedIn} from '@/hooks/useIsLoggedIn';
@@ -29,11 +30,22 @@ export function Frame(props: IFrameProps) {
 
   const onExitModalOkButtonClick: ModalFuncProps['onOk'] =
     useCallback(async () => {
-      await AccountApi.logout();
-      notification.success({
-        message: '退出成功',
-      });
-      await router.replace(PAGE_ID_TO_ROUTE[PAGE_ID.LOGIN]);
+      try {
+        const response = await AccountApi.logout();
+        if (response.isSuccessful) {
+          notification.success({
+            message: '退出成功',
+          });
+          router.replace(PAGE_ID_TO_ROUTE[PAGE_ID.LOGIN]);
+        } else {
+          const {message} = response;
+          notification.warning({
+            message,
+          });
+        }
+      } catch {
+        await showNetworkError();
+      }
     }, [router]);
 
   const onExitButtonClick: ButtonProps['onClick'] = useCallback<

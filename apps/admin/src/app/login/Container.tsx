@@ -5,6 +5,7 @@ import {useRouter} from 'next/navigation';
 import {type DOMAttributes, useCallback, useEffect, useState} from 'react';
 
 import {Account} from '@/apis';
+import {showNetworkError} from '@/apis/utils';
 import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
 import {useIsLoggedIn} from '@/hooks/useIsLoggedIn';
 
@@ -39,10 +40,17 @@ export function Login() {
     useCallback<Exclude<DOMAttributes<HTMLFormElement>['onSubmit'], undefined>>(
       async (e) => {
         e.preventDefault();
-        const isSuccessful = await Account.login(username, password);
-        if (isSuccessful) {
-          notification.success({message: '登录成功'});
-          router.push(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.INDEX]);
+        try {
+          const response = await Account.login(username, password);
+          if (response.isSuccessful) {
+            notification.success({message: '登录成功'});
+            router.push(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.INDEX]);
+          } else {
+            const {message} = response;
+            notification.warning({message});
+          }
+        } catch {
+          await showNetworkError();
         }
       },
       [router, password, username],

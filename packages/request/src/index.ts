@@ -3,7 +3,55 @@ import {
   type ServerResponseRequestFailHandler,
   serverResponseRequestWrapper,
 } from './serverResponseRequestWrapper';
+import type {GetJsonRequestOptions, PostJsonRequestOptions} from './types';
 
+export async function getJson<ResT>(
+  url: URL,
+  options: GetJsonRequestOptions = {},
+): Promise<ResT> {
+  const {headers, searchParams} = options;
+  const searchParamsInUrl = url.searchParams;
+
+  if (searchParams) {
+    for (const [name, value] of searchParams) {
+      searchParamsInUrl.append(name, value);
+    }
+  }
+
+  const response = await fetch(url, {
+    method: 'get',
+    headers,
+  });
+  return response.json();
+}
+
+export async function postJson<ResT>(
+  url: URL,
+  options: PostJsonRequestOptions = {},
+): Promise<ResT> {
+  const {headers, searchParams, body} = options;
+  const searchParamsInUrl = url.searchParams;
+
+  if (searchParams) {
+    for (const [name, value] of searchParams) {
+      searchParamsInUrl.append(name, value);
+    }
+  }
+
+  const finalHeaders = new Headers(headers);
+  finalHeaders.set('Content-Type', 'application/json');
+
+  const response = await fetch(url, {
+    method: 'post',
+    headers: finalHeaders,
+    body: JSON.stringify(body),
+  });
+  return response.json();
+}
+
+/**
+ * @deprecated
+ */
 export async function getServerResponse<ResT>(
   url: string,
   options: {
@@ -14,7 +62,9 @@ export async function getServerResponse<ResT>(
   } = {},
 ): Promise<ResT | null> {
   const {urlSearchParams, headers, onRequestFail, onRequestError} = options;
-  if (urlSearchParams) url = `${url}?${urlSearchParams.toString()}`;
+  if (urlSearchParams) {
+    url = `${url}?${urlSearchParams.toString()}`;
+  }
   return await serverResponseRequestWrapper<ResT>(
     async () =>
       await fetch(url, {
@@ -26,6 +76,9 @@ export async function getServerResponse<ResT>(
   );
 }
 
+/**
+ * @deprecated
+ */
 export async function postServerResponse<ResT>(
   url: string,
   body: unknown,
@@ -39,10 +92,14 @@ export async function postServerResponse<ResT>(
   const {urlSearchParams, onRequestFail, onRequestError} = options;
 
   let {headers} = options;
-  if (!headers) headers = new Headers();
+  if (!headers) {
+    headers = new Headers();
+  }
   headers.set('Content-Type', 'application/json');
 
-  if (urlSearchParams) url = `${url}?${urlSearchParams.toString()}`;
+  if (urlSearchParams) {
+    url = `${url}?${urlSearchParams.toString()}`;
+  }
 
   return await serverResponseRequestWrapper<ResT>(
     async () =>
