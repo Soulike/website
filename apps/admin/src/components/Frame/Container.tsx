@@ -43,8 +43,8 @@ export function Frame(props: IFrameProps) {
             message,
           });
         }
-      } catch {
-        await showNetworkError();
+      } catch (err) {
+        await showNetworkError(err);
       }
     }, [router]);
 

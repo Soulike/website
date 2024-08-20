@@ -14,6 +14,7 @@ import {TextAreaProps} from 'antd/lib/input';
 import {useEffect, useState} from 'react';
 
 import {Blog} from '@/apis';
+import {showNetworkError} from '@/apis/utils';
 
 import {AddView} from './View';
 
@@ -90,17 +91,25 @@ export function Add() {
       } else if (content.length === 0) {
         await message.warning('请填写文章内容');
       } else {
-        setIsSubmittingArticle(true);
-        const result = await Blog.Article.add({
-          title,
-          category,
-          content,
-          isVisible,
-        });
-        setIsSubmittingArticle(false);
-        if (result !== null) {
-          notification.success({message: '文章提交成功'});
-          initAfterSubmit();
+        try {
+          setIsSubmittingArticle(true);
+          const response = await Blog.Article.add({
+            title,
+            category,
+            content,
+            isVisible,
+          });
+          if (response.isSuccessful) {
+            notification.success({message: '文章提交成功'});
+            initAfterSubmit();
+          } else {
+            const {message} = response;
+            notification.warning({message});
+          }
+        } catch (err) {
+          await showNetworkError(err);
+        } finally {
+          setIsSubmittingArticle(false);
         }
       }
     };

@@ -1,6 +1,5 @@
-import {type Article} from '@website/classes';
-import * as request from '@website/request';
-import {message} from 'antd';
+import {type Article, ServerResponse} from '@website/classes';
+import {Request} from '@website/request';
 
 import {
   ADD,
@@ -11,51 +10,38 @@ import {
   MODIFY,
 } from './ROUTE';
 
-export async function getById(id: number): Promise<Article | null> {
-  return await request.getServerResponse(GET_BY_ID, {
-    urlSearchParams: new URLSearchParams({json: JSON.stringify({id})}),
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
+export async function getById(id: number): Promise<ServerResponse<Article>> {
+  return Request.JSONToJSON.get(GET_BY_ID, {
+    searchParams: new URLSearchParams({json: JSON.stringify({id})}),
   });
 }
 
-export async function getAll(): Promise<Article[] | null> {
-  return await request.getServerResponse(GET_ALL, {
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
-  });
+export async function getAll(): Promise<ServerResponse<Article[]>> {
+  return Request.JSONToJSON.get(GET_ALL);
 }
 
 export async function getByCategory(
   category: number,
-): Promise<Article[] | null> {
-  return await request.getServerResponse(GET_BY_CATEGORY, {
-    urlSearchParams: new URLSearchParams({
+): Promise<ServerResponse<Article[]>> {
+  return Request.JSONToJSON.get(GET_BY_CATEGORY, {
+    searchParams: new URLSearchParams({
       json: JSON.stringify({category}),
     }),
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
   });
 }
 
 export async function add(
   article: Pick<Article, 'title' | 'content' | 'category' | 'isVisible'>,
-): Promise<true | null> {
-  return await request.postServerResponse(ADD, article, {
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
+): Promise<ServerResponse<void>> {
+  return Request.JSONToJSON.post(ADD, {
+    body: article,
   });
 }
 
-export async function deleteById(id: number): Promise<true | null> {
-  return await request.postServerResponse(
-    DELETE_BY_ID,
-    {id},
-    {
-      onRequestFail: (msg) => message.warning(msg),
-      onRequestError: (msg) => message.error(msg),
-    },
-  );
+export async function deleteById(id: number): Promise<ServerResponse<void>> {
+  return Request.JSONToJSON.post(DELETE_BY_ID, {
+    body: {id},
+  });
 }
 
 export async function modify(
@@ -63,9 +49,8 @@ export async function modify(
     Partial<
       Omit<Article, 'publicationTime' | 'modificationTime' | 'pageViews'>
     >,
-): Promise<true | null> {
-  return await request.postServerResponse(MODIFY, article, {
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
+): Promise<ServerResponse<void>> {
+  return Request.JSONToJSON.post(MODIFY, {
+    body: article,
   });
 }

@@ -19,6 +19,7 @@ import {
 } from 'react';
 
 import {Blog} from '@/apis';
+import {showNetworkError} from '@/apis/utils';
 import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
 import {useCategories} from '@/hooks/useCategories';
 
@@ -64,15 +65,22 @@ export function ArticleList(props: IProps) {
           return await Blog.Article.getByCategory(categoryIdFilter);
         }
       })
-      .then((articleList) => {
-        if (articleList !== null) {
+      .then((response) => {
+        if (response.isSuccessful) {
+          const {data: articles} = response;
           const articleMap: Map<number, Article> = new Map<number, Article>();
-          articleList.forEach((article) => {
+          articles.forEach((article) => {
             articleMap.set(article.id, article);
           });
 
           setArticleMap(articleMap);
+        } else {
+          const {message} = response;
+          notification.warning({message});
         }
+      })
+      .catch((err) => {
+        return showNetworkError(err);
       })
       .finally(() => {
         setIsArticleLoading(false);
@@ -110,20 +118,27 @@ export function ArticleList(props: IProps) {
     useCallback(
       (id: number) => {
         return async (checked) => {
-          setLoadingArticleId(id);
-          const result = await Blog.Article.modify({
-            id,
-            isVisible: checked,
-          });
-          if (result !== null) {
-            const article = articleMap.get(id);
-            if (article === undefined) {
-              void message.warning('文章不存在');
+          try {
+            setLoadingArticleId(id);
+            const response = await Blog.Article.modify({
+              id,
+              isVisible: checked,
+            });
+            if (response.isSuccessful) {
+              const article = articleMap.get(id);
+              if (article === undefined) {
+                void message.warning('文章不存在');
+              } else {
+                article.isVisible = checked;
+                setArticleMap(new Map(articleMap));
+                setLoadingArticleId(0);
+              }
             } else {
-              article.isVisible = checked;
-              setArticleMap(new Map(articleMap));
-              setLoadingArticleId(0);
+              const {message} = response;
+              notification.warning({message});
             }
+          } catch (err) {
+            await showNetworkError(err);
           }
         };
       },
@@ -156,15 +171,22 @@ export function ArticleList(props: IProps) {
 
   const onDeleteArticleConfirm: PopconfirmProps['onConfirm'] =
     useCallback(() => {
-      void Blog.Article.deleteById(idOfArticleToDelete).then((result) => {
-        if (result !== null) {
-          notification.success({
-            message: '文章删除成功',
-          });
-          articleMap.delete(idOfArticleToDelete);
-          setArticleMap(new Map(articleMap));
-        }
-      });
+      void Blog.Article.deleteById(idOfArticleToDelete)
+        .then((response) => {
+          if (response.isSuccessful) {
+            notification.success({
+              message: '文章删除成功',
+            });
+            articleMap.delete(idOfArticleToDelete);
+            setArticleMap(new Map(articleMap));
+          } else {
+            const {message} = response;
+            notification.warning({message});
+          }
+        })
+        .catch((err) => {
+          void showNetworkError(err);
+        });
     }, [articleMap, idOfArticleToDelete]);
 
   return (

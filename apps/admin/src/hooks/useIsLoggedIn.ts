@@ -21,9 +21,9 @@ export function useIsLoggedIn(): {loading: boolean; isLoggedIn: boolean} {
           setIsLoggedIn(isInSession);
         }
       })
-      .catch(() => {
+      .catch((err) => {
         setIsLoggedIn(false);
-        void showNetworkError();
+        void showNetworkError(err);
       })
       .finally(() => {
         setLoading(false);

@@ -49,8 +49,8 @@ export function Login() {
             const {message} = response;
             notification.warning({message});
           }
-        } catch {
-          await showNetworkError();
+        } catch (err) {
+          await showNetworkError(err);
         }
       },
       [router, password, username],

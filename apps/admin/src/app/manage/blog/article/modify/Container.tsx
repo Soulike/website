@@ -15,6 +15,7 @@ import {useRouter, useSearchParams} from 'next/navigation';
 import {useEffect, useState} from 'react';
 
 import {Blog} from '@/apis';
+import {showNetworkError} from '@/apis/utils';
 import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
 
 import {ModifyView} from './View';
@@ -49,14 +50,21 @@ export function Modify() {
         setId(id);
         setIsLoadingArticle(true);
         void Blog.Article.getById(id)
-          .then((article) => {
-            if (article !== null) {
+          .then((response) => {
+            if (response.isSuccessful) {
+              const {data: article} = response;
               const {title, content, category, isVisible} = article;
               setTitle(title);
               setContent(content);
               setCategory(category);
               setIsVisible(isVisible);
+            } else {
+              const {message} = response;
+              notification.warning({message});
             }
+          })
+          .catch((err) => {
+            return showNetworkError(err);
           })
           .finally(() => {
             setIsLoadingArticle(false);
@@ -117,20 +125,28 @@ export function Modify() {
       } else if (content.length === 0) {
         await message.warning('请填写文章内容');
       } else {
-        setIsSubmittingArticle(true);
-        const result = await Blog.Article.modify({
-          id,
-          title,
-          content,
-          category,
-          isVisible,
-        });
-        setIsSubmittingArticle(false);
-        if (result !== null) {
-          notification.success({message: '文章修改成功'});
-          await router.replace(
-            PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE],
-          );
+        try {
+          setIsSubmittingArticle(true);
+          const response = await Blog.Article.modify({
+            id,
+            title,
+            content,
+            category,
+            isVisible,
+          });
+          if (response.isSuccessful) {
+            notification.success({message: '文章修改成功'});
+            router.replace(
+              PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE],
+            );
+          } else {
+            const {message} = response;
+            notification.warning({message});
+          }
+        } catch (err) {
+          await showNetworkError(err);
+        } finally {
+          setIsSubmittingArticle(false);
         }
       }
     };
