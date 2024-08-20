@@ -1,43 +1,10 @@
+export * from './Request';
+
 import {
   type ServerResponseRequestErrorHandler,
   type ServerResponseRequestFailHandler,
   serverResponseRequestWrapper,
 } from './serverResponseRequestWrapper';
-import type {GetJsonRequestOptions, PostJsonRequestOptions} from './types';
-
-export async function getJson<ResT>(
-  path: string,
-  options: GetJsonRequestOptions = {},
-): Promise<ResT> {
-  const {headers, searchParams} = options;
-
-  path = searchParams ? `${path}?${searchParams.toString()}` : path;
-
-  const response = await fetch(path, {
-    method: 'get',
-    headers,
-  });
-  return response.json();
-}
-
-export async function postJson<ResT>(
-  path: string,
-  options: PostJsonRequestOptions = {},
-): Promise<ResT> {
-  const {headers, searchParams, body} = options;
-
-  const finalHeaders = new Headers(headers);
-  finalHeaders.set('Content-Type', 'application/json');
-
-  path = searchParams ? `${path}?${searchParams.toString()}` : path;
-
-  const response = await fetch(path, {
-    method: 'post',
-    headers: finalHeaders,
-    body: JSON.stringify(body),
-  });
-  return response.json();
-}
 
 /**
  * @deprecated

@@ -3,13 +3,6 @@ export interface RequestOptions {
   searchParams?: URLSearchParams;
 }
 
-export type GetJsonRequestOptions = RequestOptions;
-
-export interface PostJsonRequestOptions extends RequestOptions {
-  /** Will be serialized by `JSON.stringify()`. */
-  body?: unknown;
-}
-
 export type RequestSuccessChecker<ResT, DataT> = (
   response: ResT,
   data: DataT,
