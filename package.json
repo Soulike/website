@@ -6,7 +6,7 @@
     "install": "pnpm --filter \"./packages/**\" run -r build",
     "start": "docker compose pull && docker compose down && docker compose up -d",
     "stop": "docker compose down",
-    "update": "docker compose pull && docker compose up -d"
+    "update": "docker compose pull && docker compose up -d && docker compose restart nginx"
   },
   "author": "Soulike",
   "license": "MIT",

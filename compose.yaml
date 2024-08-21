@@ -12,7 +12,6 @@ services:
     restart: always
     image: 'soulike/blog:latest'
     depends_on:
-      - nginx
       - blog-server
     networks:
       - frontend
@@ -20,7 +19,6 @@ services:
     restart: always
     image: 'soulike/admin:latest'
     depends_on:
-      - nginx
       - admin-server
       - auth-server
     networks:
@@ -72,6 +70,11 @@ services:
   nginx:
     restart: always
     image: 'soulike/website-nginx:latest'
+    depends_on:
+      - blog
+      - admin
+      - blog-server
+      - admin-server
     volumes:
       - $HOME/ssl:/ssl:ro
       - ./nginx/logs:/var/log/nginx
