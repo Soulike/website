@@ -1,9 +1,11 @@
 'use client';
 
 import {type Category} from '@website/classes';
+import {notification} from 'antd';
 import {useEffect, useState} from 'react';
 
 import {Blog} from '@/apis';
+import {showNetworkError} from '@/apis/utils';
 
 const {Category: CategoryApi} = Blog;
 
@@ -18,8 +20,17 @@ export function useCategories(): {
     setLoading(true);
     setCategories(null);
     void CategoryApi.getAll()
-      .then((categories) => {
-        setCategories(categories);
+      .then((response) => {
+        if (response.isSuccessful) {
+          const {data: categories} = response;
+          setCategories(categories);
+        } else {
+          const {message} = response;
+          notification.warning({message});
+        }
+      })
+      .catch((e) => {
+        showNetworkError(e);
       })
       .finally(() => {
         setLoading(false);

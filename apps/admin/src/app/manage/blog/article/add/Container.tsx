@@ -1,6 +1,5 @@
 'use client';
 
-import {type Category} from '@website/classes';
 import {
   type ButtonProps,
   type CheckboxProps,
@@ -11,10 +10,11 @@ import {
   type SelectProps,
 } from 'antd';
 import {TextAreaProps} from 'antd/lib/input';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 
 import {Blog} from '@/apis';
 import {showNetworkError} from '@/apis/utils';
+import {useCategories} from '@/hooks/useCategories';
 
 import {AddView} from './View';
 
@@ -23,25 +23,10 @@ export function Add() {
   const [content, setContent] = useState('');
   const [category, setCategory] = useState<number | undefined>(undefined);
   const [isVisible, setIsVisible] = useState(true);
-  const [categoryOption, setCategoryOption] = useState<Category[]>([]);
-  const [isLoadingCategory, setIsLoadingCategory] = useState(false);
+  const {loading: isLoadingCategories, categories} = useCategories();
   const [isSubmittingArticle, setIsSubmittingArticle] = useState(false);
   const [isArticlePreviewModalOpen, setIsArticlePreviewModalOpen] =
     useState(false);
-
-  useEffect(() => {
-    const getCategoryOption = async () => {
-      const category = await Blog.Category.getAll();
-      if (category !== null) {
-        setCategoryOption(category);
-      }
-    };
-
-    setIsLoadingCategory(true);
-    void getCategoryOption().finally(() => {
-      setIsLoadingCategory(false);
-    });
-  }, []);
 
   const onTitleInputChange: InputProps['onChange'] = (e) => {
     setTitle(e.target.value);
@@ -77,7 +62,6 @@ export function Add() {
     setContent('');
     setCategory(undefined);
     setIsVisible(true);
-    setIsLoadingCategory(false);
     setIsSubmittingArticle(false);
   };
 
@@ -123,13 +107,13 @@ export function Add() {
       content={content}
       category={category}
       isVisible={isVisible}
-      categoryOption={categoryOption}
+      categoryOption={categories ?? []}
       onTitleInputChange={onTitleInputChange}
       onContentTextAreaChange={onContentTextAreaChange}
       onCategorySelectorChange={onCategorySelectorChange}
       onIsVisibleCheckboxChange={onIsVisibleCheckboxChange}
       onSubmitButtonClick={onSubmitButtonClick}
-      isLoadingCategory={isLoadingCategory}
+      isLoadingCategory={isLoadingCategories}
       isSubmittingArticle={isSubmittingArticle}
       isArticlePreviewModalOpen={isArticlePreviewModalOpen}
       onArticlePreviewButtonClick={onArticlePreviewButtonClick}

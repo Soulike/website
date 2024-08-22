@@ -1,6 +1,5 @@
 'use client';
 
-import {type Category} from '@website/classes';
 import {
   type ButtonProps,
   type CheckboxProps,
@@ -17,6 +16,7 @@ import {useEffect, useState} from 'react';
 import {Blog} from '@/apis';
 import {showNetworkError} from '@/apis/utils';
 import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
+import {useCategories} from '@/hooks/useCategories';
 
 import {ModifyView} from './View';
 
@@ -26,8 +26,7 @@ export function Modify() {
   const [content, setContent] = useState('');
   const [category, setCategory] = useState<number | undefined>(undefined);
   const [isVisible, setIsVisible] = useState(true);
-  const [categoryOption, setCategoryOption] = useState<Category[]>([]);
-  const [isLoadingCategory, setIsLoadingCategory] = useState(false);
+  const {loading: isLoadingCategories, categories} = useCategories();
   const [isLoadingArticle, setIsLoadingArticle] = useState(false);
   const [isSubmittingArticle, setIsSubmittingArticle] = useState(false);
   const [isArticlePreviewModalOpen, setIsArticlePreviewModalOpen] =
@@ -64,7 +63,7 @@ export function Modify() {
             }
           })
           .catch((err) => {
-            return showNetworkError(err);
+            showNetworkError(err);
           })
           .finally(() => {
             setIsLoadingArticle(false);
@@ -72,19 +71,6 @@ export function Modify() {
       }
     }
   }, [searchParams]);
-
-  useEffect(() => {
-    setIsLoadingCategory(true);
-    void Blog.Category.getAll()
-      .then((categoryList) => {
-        if (categoryList !== null) {
-          setCategoryOption(categoryList);
-        }
-      })
-      .finally(() => {
-        setIsLoadingCategory(false);
-      });
-  }, []);
 
   const onTitleInputChange: InputProps['onChange'] = (e) => {
     setTitle(e.target.value);
@@ -159,8 +145,8 @@ export function Modify() {
       title={title}
       content={content}
       category={category}
-      categoryOption={categoryOption}
-      isLoadingCategory={isLoadingCategory}
+      categoryOption={categories ?? []}
+      isLoadingCategory={isLoadingCategories}
       isLoadingArticle={isLoadingArticle}
       isSubmittingArticle={isSubmittingArticle}
       isVisible={isVisible}

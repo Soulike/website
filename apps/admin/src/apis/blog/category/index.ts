@@ -1,6 +1,5 @@
-import {type Category} from '@website/classes';
-import * as request from '@website/request';
-import {message} from 'antd';
+import {type Category, ServerResponse} from '@website/classes';
+import {Request} from '@website/request';
 
 import {
   ADD,
@@ -11,58 +10,44 @@ import {
   MODIFY,
 } from './ROUTE';
 
-export async function getAll(): Promise<Category[] | null> {
-  return await request.getServerResponse(GET_ALL, {
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
-  });
+export async function getAll(): Promise<ServerResponse<Category[]>> {
+  return Request.JSONToJSON.get(GET_ALL);
 }
 
-export async function getAllArticleAmountById(): Promise<Record<
-  number,
-  number
-> | null> {
-  return await request.getServerResponse(GET_ALL_ARTICLE_AMOUNT_BY_ID, {
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
-  });
+export async function getAllArticleAmountById(): Promise<
+  ServerResponse<Record<number, number>>
+> {
+  return Request.JSONToJSON.get(GET_ALL_ARTICLE_AMOUNT_BY_ID);
 }
 
-export async function getArticleAmountById(id: number): Promise<number | null> {
-  return await request.getServerResponse(GET_ARTICLE_AMOUNT_BY_ID, {
-    urlSearchParams: new URLSearchParams({
+export async function getArticleAmountById(
+  id: number,
+): Promise<ServerResponse<number>> {
+  return Request.JSONToJSON.get(GET_ARTICLE_AMOUNT_BY_ID, {
+    searchParams: new URLSearchParams({
       json: JSON.stringify({id}),
     }),
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
   });
 }
 
 export async function add(
   category: Omit<Category, 'id'>,
-): Promise<true | null> {
-  return await request.postServerResponse(ADD, category, {
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
+): Promise<ServerResponse<void>> {
+  return Request.JSONToJSON.post(ADD, {
+    body: category,
   });
 }
 
-export async function deleteById(id: number): Promise<true | null> {
-  return await request.postServerResponse(
-    DELETE_BY_ID,
-    {id},
-    {
-      onRequestFail: (msg) => message.warning(msg),
-      onRequestError: (msg) => message.error(msg),
-    },
-  );
+export async function deleteById(id: number): Promise<ServerResponse<void>> {
+  return Request.JSONToJSON.post(DELETE_BY_ID, {
+    body: {id},
+  });
 }
 
 export async function modify(
   category: Partial<Category> & Pick<Category, 'id'>,
-): Promise<true | null> {
-  return await request.postServerResponse(MODIFY, category, {
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
+): Promise<ServerResponse<void>> {
+  return Request.JSONToJSON.post(MODIFY, {
+    body: category,
   });
 }
