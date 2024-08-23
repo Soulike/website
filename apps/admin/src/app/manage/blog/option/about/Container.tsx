@@ -4,25 +4,32 @@ import {type ButtonProps, message, type ModalProps, notification} from 'antd';
 import {type TextAreaProps} from 'antd/lib/input';
 import React, {useEffect, useState} from 'react';
 
-import {Blog} from '@/apis';
+import {showNetworkError} from '@/apis/utils';
+import {useAbout} from '@/hooks/useAbout';
 
 import {AboutView} from './View';
 
 export function About() {
   const [aboutMarkdown, setAboutMarkdown] = useState('');
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const {loading: loadingAbout, set: setAbout, get: getAbout} = useAbout();
 
   useEffect(() => {
-    setLoading(true);
-    void Blog.Option.get().then((result) => {
-      if (result !== null) {
-        const {about: aboutMarkdown} = result;
-        setAboutMarkdown(aboutMarkdown);
-        setLoading(false);
-      }
-    });
-  }, []);
+    void getAbout()
+      .then((response) => {
+        if (response.isSuccessful) {
+          const {
+            data: {about: aboutMarkdown},
+          } = response;
+          setAboutMarkdown(aboutMarkdown);
+        } else {
+          notification.warning({message: response.message});
+        }
+      })
+      .catch((e) => {
+        showNetworkError(e);
+      });
+  }, [getAbout]);
 
   const onAboutTextareaChange: TextAreaProps['onChange'] = (e) => {
     setAboutMarkdown(e.target.value);
@@ -35,11 +42,15 @@ export function About() {
   const onSubmitButtonClick: ButtonProps['onClick'] = () => {
     const executor = async () => {
       if (aboutMarkdown.length !== 0) {
-        setLoading(true);
-        const result = await Blog.Option.set(aboutMarkdown);
-        setLoading(false);
-        if (result !== null) {
-          notification.success({message: '修改关于成功'});
+        try {
+          const response = await setAbout(aboutMarkdown);
+          if (response.isSuccessful) {
+            notification.success({message: '修改关于成功'});
+          } else {
+            notification.warning({message: response.message});
+          }
+        } catch (e) {
+          showNetworkError(e);
         }
       } else {
         void message.warning('关于内容不能为空');
@@ -64,7 +75,7 @@ export function About() {
       onPreviewButtonClick={onPreviewButtonClick}
       onPreviewModalCancel={onPreviewModalCancel}
       onPreviewModalOk={onPreviewModalOk}
-      loading={loading}
+      loading={loadingAbout}
     />
   );
 }
