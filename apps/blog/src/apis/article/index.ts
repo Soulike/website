@@ -1,6 +1,5 @@
-import {type Article} from '@website/classes';
-import * as request from '@website/request';
-import {message} from 'antd';
+import {type Article, ServerResponse} from '@website/classes';
+import {Request} from '@website/request';
 
 import {
   GET_ALL_WITH_ABSTRACT,
@@ -8,31 +7,24 @@ import {
   GET_BY_ID,
 } from './ROUTE';
 
-export async function getAllWithAbstract(): Promise<Article[] | null> {
-  return await request.getServerResponse(GET_ALL_WITH_ABSTRACT, {
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
-  });
+export async function getAllWithAbstract(): Promise<ServerResponse<Article[]>> {
+  return Request.JSONToJSON.get(GET_ALL_WITH_ABSTRACT);
 }
 
-export async function getById(id: number): Promise<Article | null> {
-  return await request.getServerResponse(GET_BY_ID, {
-    urlSearchParams: new URLSearchParams({
+export async function getById(id: number): Promise<ServerResponse<Article>> {
+  return Request.JSONToJSON.get(GET_BY_ID, {
+    searchParams: new URLSearchParams({
       json: JSON.stringify({id}),
     }),
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
   });
 }
 
 export async function getByCategoryWithAbstract(
   category: number,
-): Promise<Article[] | null> {
-  return await request.getServerResponse(GET_BY_CATEGORY_WITH_ABSTRACT, {
-    urlSearchParams: new URLSearchParams({
+): Promise<ServerResponse<Article[]>> {
+  return Request.JSONToJSON.get(GET_BY_CATEGORY_WITH_ABSTRACT, {
+    searchParams: new URLSearchParams({
       json: JSON.stringify({category}),
     }),
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
   });
 }
