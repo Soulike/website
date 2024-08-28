@@ -1,7 +1,9 @@
 import {type Category} from '@website/classes';
+import {notification} from 'antd';
 import {useEffect, useState} from 'react';
 
 import {Category as CategoryApi} from '@/src/apis';
+import {showNetworkError} from '@/src/apis/utils';
 
 export function useCategory(id: number): {
   loading: boolean;
@@ -15,8 +17,16 @@ export function useCategory(id: number): {
     setLoading(true);
     if (!isNaN(id)) {
       void CategoryApi.getById(id)
-        .then((category) => {
-          setCategory(category);
+        .then((response) => {
+          if (response.isSuccessful) {
+            const {data: category} = response;
+            setCategory(category);
+          } else {
+            notification.warning({message: response.message});
+          }
+        })
+        .catch((e) => {
+          showNetworkError(e);
         })
         .finally(() => {
           setLoading(false);

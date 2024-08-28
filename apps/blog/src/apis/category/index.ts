@@ -1,22 +1,16 @@
-import {type Category} from '@website/classes';
-import * as request from '@website/request';
-import {message} from 'antd';
+import {type Category, ServerResponse} from '@website/classes';
+import {Request} from '@website/request';
 
 import {GET_ALL, GET_BY_ID} from './ROUTE';
 
-export async function getAll(): Promise<Category[] | null> {
-  return await request.getServerResponse(GET_ALL, {
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
-  });
+export async function getAll(): Promise<ServerResponse<Category[]>> {
+  return Request.JSONToJSON.get(GET_ALL);
 }
 
-export async function getById(id: number): Promise<Category | null> {
-  return await request.getServerResponse(GET_BY_ID, {
-    urlSearchParams: new URLSearchParams({
+export async function getById(id: number): Promise<ServerResponse<Category>> {
+  return Request.JSONToJSON.get(GET_BY_ID, {
+    searchParams: new URLSearchParams({
       json: JSON.stringify({id}),
     }),
-    onRequestFail: (msg) => message.warning(msg),
-    onRequestError: (msg) => message.error(msg),
   });
 }
