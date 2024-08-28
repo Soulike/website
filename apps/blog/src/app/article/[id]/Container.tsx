@@ -1,15 +1,23 @@
+'use client';
+
 import {Article as ArticleClass, Category} from '@website/classes';
-import Head from 'next/head';
-import {useRouter} from 'next/router';
+import {useRouter} from 'next/navigation';
 import {useEffect, useMemo} from 'react';
 
 import {useArticle} from '@/src/hooks/useArticle';
 import {useCategory} from '@/src/hooks/useCategory';
-import {useSearchParam} from '@/src/hooks/useSearchParam';
 
 import {ArticleView} from './View';
 
-export function Article() {
+interface ArticleProps {
+  params: ArticleDynamicParams;
+}
+
+interface ArticleDynamicParams {
+  id: string;
+}
+
+export function Article({params}: ArticleProps) {
   const router = useRouter();
   const emptyArticle = useMemo(
     () => new ArticleClass(0, '', '', 0, '', '', 0, true),
@@ -17,14 +25,14 @@ export function Article() {
   );
   const emptyCategory = useMemo(() => new Category(0, ''), []);
 
-  const [id] = useSearchParam('id');
+  const {id} = params;
   const articleId = Number.parseInt(id ?? '');
 
   const {loading: articleIsLoading, article} = useArticle(articleId);
 
   useEffect(() => {
     if (!articleIsLoading && article === null) {
-      void router.replace('/404');
+      void router.replace('/');
     }
   }, [article, articleIsLoading, router]);
 
@@ -40,19 +48,21 @@ export function Article() {
     () => article ?? emptyArticle,
     [article, emptyArticle],
   );
+
+  useEffect(() => {
+    if (!loading) {
+      document.title = `${title} - Soulike 的博客`;
+    }
+  }, [loading, title]);
+
   return (
-    <>
-      <Head>
-        {loading ? null : <title>{`${title} - Soulike 的博客`}</title>}
-      </Head>
-      <ArticleView
-        title={title}
-        contentMarkdown={article?.content ?? ''}
-        publicationTime={publicationTime}
-        modificationTime={modificationTime}
-        loading={loading}
-        category={category ?? emptyCategory}
-      />
-    </>
+    <ArticleView
+      title={title}
+      contentMarkdown={article?.content ?? ''}
+      publicationTime={publicationTime}
+      modificationTime={modificationTime}
+      loading={loading}
+      category={category ?? emptyCategory}
+    />
   );
 }

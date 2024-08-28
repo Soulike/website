@@ -10,6 +10,7 @@
   top: 0;
   bottom: 0;
   z-index: 2;
+  background-color: var(--BACKGROUND_COLOR);
 
   @keyframes fadeIn {
     0% {
@@ -20,7 +21,7 @@
     }
   }
 
-  animation: fadeIn 1s;
+  animation: fadeIn 0.25s;
 
   .icon {
     margin-bottom: 48px;

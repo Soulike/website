@@ -1,10 +1,21 @@
+'use client';
+
 import {IndexArticleList} from '@/src/components/IndexArticleList';
 import {useArticlesWithAbstract} from '@/src/hooks/useArticlesWithAbstract';
-import {useSearchParam} from '@/src/hooks/useSearchParam';
 
-export function Category() {
-  const [id] = useSearchParam('id');
+interface CategoryProps {
+  params: CategoryDynamicParams;
+}
+
+interface CategoryDynamicParams {
+  id: string;
+}
+
+export function Category({params}: CategoryProps) {
+  const {id} = params;
   const categoryId = Number.parseInt(id ?? '');
+
+  document.title = 'Soulike 的博客';
 
   const {loading, articlesWithAbstract} = useArticlesWithAbstract(categoryId);
 
