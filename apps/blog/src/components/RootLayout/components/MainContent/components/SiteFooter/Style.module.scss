@@ -1,0 +1,13 @@
+.SiteFooter {
+  text-align: center;
+
+  // Override antd
+  background: none !important;
+  color: inherit !important;
+
+  .hitokotoWrapper {
+    @media (orientation: portrait) {
+      display: none;
+    }
+  }
+}

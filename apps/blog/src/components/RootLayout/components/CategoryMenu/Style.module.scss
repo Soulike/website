@@ -1,0 +1,15 @@
+.CategoryMenu {
+  border: none !important; // override antd
+}
+
+.CategoryMenuMobile {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+// .icon is here because the popup menu is not inside .CategoryMenu
+.icon {
+  display: inline-block;
+  margin: 0 5px 0 0 !important;
+}

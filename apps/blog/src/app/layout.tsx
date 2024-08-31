@@ -38,7 +38,6 @@ export const viewport: Viewport = {
 };
 
 const RootLayoutContainer = ({children}: {children: ReactNode}) => {
-  // TODO: use SSR metadata
   return (
     <html lang='zh-cn'>
       <head>
