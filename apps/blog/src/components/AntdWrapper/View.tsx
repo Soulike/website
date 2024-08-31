@@ -10,6 +10,10 @@ interface IAntdWrapperProps {
   children?: React.ReactNode;
 }
 
+/**
+ * ConfigProvider can not provide config across CSR and SSR boundaries.
+ * So wrap it around CSR components which are children of SSR components.
+ */
 export function AntdWrapper({children}: IAntdWrapperProps) {
   const [isDarkMode] = useMediaQuery('(prefers-color-scheme: dark)');
   return (

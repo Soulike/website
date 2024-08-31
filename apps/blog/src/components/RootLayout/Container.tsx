@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import {AntdWrapper} from '@/src/components/RootLayout/components/AntdWrapper';
+import {AntdWrapper} from '@/src/components/AntdWrapper';
 
 import {RootLayoutView} from './View';
 

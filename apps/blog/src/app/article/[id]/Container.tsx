@@ -4,6 +4,7 @@ import {Article as ArticleClass, Category} from '@website/classes';
 import {useRouter} from 'next/navigation';
 import {useEffect, useMemo} from 'react';
 
+import {AntdWrapper} from '@/src/components/AntdWrapper';
 import {useArticle} from '@/src/hooks/useArticle';
 import {useCategory} from '@/src/hooks/useCategory';
 
@@ -56,13 +57,15 @@ export function Article({params}: ArticleProps) {
   }, [loading, title]);
 
   return (
-    <ArticleView
-      title={title}
-      contentMarkdown={article?.content ?? ''}
-      publicationTime={publicationTime}
-      modificationTime={modificationTime}
-      loading={loading}
-      category={category ?? emptyCategory}
-    />
+    <AntdWrapper>
+      <ArticleView
+        title={title}
+        contentMarkdown={article?.content ?? ''}
+        publicationTime={publicationTime}
+        modificationTime={modificationTime}
+        loading={loading}
+        category={category ?? emptyCategory}
+      />
+    </AntdWrapper>
   );
 }

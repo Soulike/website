@@ -1,5 +1,6 @@
 'use client';
 
+import {AntdWrapper} from '@/src/components/AntdWrapper';
 import {useAbout} from '@/src/hooks/useAbout';
 
 import {AboutView} from './View';
@@ -9,5 +10,9 @@ export function About() {
 
   document.title = '关于 - Soulike 的博客';
 
-  return <AboutView aboutMarkdown={about ?? ''} loading={aboutIsLoading} />;
+  return (
+    <AntdWrapper>
+      <AboutView aboutMarkdown={about ?? ''} loading={aboutIsLoading} />
+    </AntdWrapper>
+  );
 }
