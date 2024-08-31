@@ -3,7 +3,6 @@
 import 'antd/dist/reset.css';
 import '@/src/globalStyle/color.scss';
 import '@/src/globalStyle/globalStyle.scss';
-import '@/src/globalStyle/highlight.scss';
 
 import {AntdRegistry} from '@ant-design/nextjs-registry';
 import {useMediaQuery} from '@chakra-ui/media-query';
