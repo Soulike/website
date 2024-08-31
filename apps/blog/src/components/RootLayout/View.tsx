@@ -28,7 +28,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export function FrameView(props: Props) {
+export function RootLayoutView(props: Props) {
   const {hitokoto, year, categories, children, loading} = props;
   const menuItems = useMemo(
     () => [
@@ -82,7 +82,7 @@ export function FrameView(props: Props) {
   );
 
   return (
-    <Layout className={Style.Frame}>
+    <Layout className={Style.RootLayout}>
       {loading && <Loading />}
       {!loading && (
         <>

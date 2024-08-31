@@ -1,33 +1,47 @@
-'use client';
-
 import 'antd/dist/reset.css';
 import '@/src/globalStyle/color.scss';
 import '@/src/globalStyle/globalStyle.scss';
 
-import {AntdRegistry} from '@ant-design/nextjs-registry';
-import {useMediaQuery} from '@chakra-ui/media-query';
-import {App, ConfigProvider, theme} from 'antd';
-import zhCN from 'antd/locale/zh_CN';
+import type {Metadata, Viewport} from 'next';
 import Script from 'next/script';
 import {ReactNode} from 'react';
 
-import {Frame} from '@/src/components/Frame';
+import {RootLayout} from '@/src/components/RootLayout';
 
-const RootLayout = ({children}: {children: ReactNode}) => {
-  const [isDarkMode] = useMediaQuery('(prefers-color-scheme: dark)');
+export const metadata: Metadata = {
+  title: 'Soulike 的博客',
+  description: 'Soulike 的博客.',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/avatar.png',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    noarchive: false,
+    nosnippet: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      nocache: false,
+      noarchive: false,
+      nosnippet: false,
+    },
+  },
+};
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
+
+const RootLayoutContainer = ({children}: {children: ReactNode}) => {
   // TODO: use SSR metadata
   return (
     <html lang='zh-cn'>
       <head>
-        <meta
-          content='width=device-width, initial-scale=1, maximum-scale=1'
-          name='viewport'
-        />
-        <meta name='theme-color' content='#000000' />
-        <meta content='index,follow' name='robots' />
-        <meta content="Soulike's blog" name='description' />
-        <link rel='icon' href='/favicon.ico' sizes='any' />
         <link href='https://unpkg.com' rel='preconnect' />
         <link href='https://v1.hitokoto.cn' rel='preconnect' />
         <link
@@ -54,23 +68,10 @@ const RootLayout = ({children}: {children: ReactNode}) => {
         </Script>
       </head>
       <body>
-        <AntdRegistry>
-          <ConfigProvider
-            locale={zhCN}
-            theme={{
-              algorithm: isDarkMode
-                ? theme.darkAlgorithm
-                : theme.defaultAlgorithm,
-            }}
-          >
-            <App>
-              <Frame>{children}</Frame>
-            </App>
-          </ConfigProvider>
-        </AntdRegistry>
+        <RootLayout>{children}</RootLayout>
       </body>
     </html>
   );
 };
 
-export default RootLayout;
+export default RootLayoutContainer;
