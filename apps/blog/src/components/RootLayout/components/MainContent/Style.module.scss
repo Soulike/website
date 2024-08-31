@@ -14,6 +14,7 @@
   .content {
     padding: 2vh 2vw;
     height: 100%;
+    overflow: auto;
     flex-grow: 1;
     flex-shrink: 1;
   }
