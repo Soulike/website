@@ -1,14 +1,22 @@
 {
   "name": "@website/react-components",
-  "main": "dist/index.js",
+  "exports": {
+    ".": "./dist",
+    "./csr": "./dist/csr/index.js",
+    "./ssr": "./dist/ssr/index.js",
+    "./style.css": "./dist/style.css"
+  },
   "dependencies": {
     "@website/hooks": "workspace:^",
-    "@website/md-converter": "workspace:^",
-    "styled-components": "^6.1.12"
+    "@website/hljs": "workspace:^",
+    "@website/mathjax-converter": "workspace:^",
+    "@website/md-converter": "workspace:^"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "esbuild": "^0.23.1",
+    "esbuild-css-modules-plugin": "^3.1.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -17,6 +25,6 @@
     "react-dom": ">=16.8.0"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "build": "rm -rf dist && tsc && node esbuild.config.mjs"
   }
 }

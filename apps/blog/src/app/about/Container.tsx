@@ -1,18 +1,15 @@
-'use client';
+import type {Metadata} from 'next';
 
-import {AntdWrapper} from '@/src/components/AntdWrapper';
-import {useAbout} from '@/src/hooks/useAbout';
+import {getAboutMarkdown} from '@/src/app/about/AboutViewModel';
 
 import {AboutView} from './View';
 
-export function About() {
-  const {loading: aboutIsLoading, about} = useAbout();
+export const metadata: Metadata = {
+  title: '关于 - Soulike 的博客',
+};
 
-  document.title = '关于 - Soulike 的博客';
+export async function About() {
+  const aboutMarkdown = await getAboutMarkdown();
 
-  return (
-    <AntdWrapper>
-      <AboutView aboutMarkdown={about ?? ''} loading={aboutIsLoading} />
-    </AntdWrapper>
-  );
+  return <AboutView aboutMarkdown={aboutMarkdown} />;
 }

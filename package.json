@@ -40,7 +40,9 @@
   },
   "lint-staged": {
     "(apps|packages)/**/src/**/*.(j|t)(s|sx)": [
-      "eslint --fix",
+      "eslint --fix"
+    ],
+    "./**/*": [
       "prettier --write --ignore-unknown"
     ]
   }

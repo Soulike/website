@@ -1,5 +1,6 @@
+'use client';
+
 import {type Article, type Category} from '@website/classes';
-import {useMathJax} from '@website/hooks';
 import {useCallback, useMemo, useState} from 'react';
 
 import {useCategories} from '@/src/hooks/useCategories';
@@ -12,7 +13,7 @@ interface IProps {
 }
 
 export function ArticleList(props: IProps) {
-  const [pageNumber, setPageNumber] = useState(1);
+  const [, setPageNumber] = useState(1);
   const {categories, loading: categoriesIsLoading} = useCategories();
 
   const {articleList, loading} = props;
@@ -29,8 +30,6 @@ export function ArticleList(props: IProps) {
   const onPageNumberChange = useCallback((pageNumber: number) => {
     setPageNumber(pageNumber);
   }, []);
-
-  useMathJax([pageNumber]);
 
   const isLoading = useMemo(
     () => loading || categoriesIsLoading,

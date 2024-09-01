@@ -1,9 +1,8 @@
-import styled from 'styled-components';
-
-export const HTMLContainer = styled.article`
+article.Markdown {
   font-size: 1rem;
 
   /*覆盖 <article> 中 <h1> 尺寸*/
+
   h1 {
     font-size: 2em;
   }
@@ -57,4 +56,4 @@ export const HTMLContainer = styled.article`
       line-height: 2em;
     }
   }
-`;
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@website/mathjax-converter",
+  "main": "dist/index.js",
+  "dependencies": {
+    "mathjax-full": "^3.2.2"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  }
+}

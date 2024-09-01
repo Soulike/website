@@ -1,3 +1,5 @@
+'use client';
+
 import {useHljs, useMathJax, useMdConverter} from '@website/hooks';
 import {useEffect} from 'react';
 

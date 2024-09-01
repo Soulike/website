@@ -1,5 +1,5 @@
-import {yieldMainThread} from '@website/utils';
-import {useCallback, useEffect, useState} from 'react';
+import {highlightAll} from '@website/hljs/csr';
+import {useEffect, useState} from 'react';
 
 export function useHljs(htmlContainingCode: string | undefined): {
   loading: boolean;
@@ -10,24 +10,6 @@ export function useHljs(htmlContainingCode: string | undefined): {
     null,
   );
 
-  const doHighlight = useCallback(async () => {
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = htmlContainingCode ?? '';
-
-    const {default: hljs} = await import('@website/hljs');
-    const preBlocks = Array.from(wrapper.querySelectorAll('pre'));
-    await Promise.all(
-      preBlocks.map(async (pre) => {
-        const codeBlocks = pre.querySelectorAll('code');
-        codeBlocks.forEach((block) => {
-          hljs.highlightElement(block);
-        });
-        await yieldMainThread();
-      }),
-    );
-    return wrapper.innerHTML;
-  }, [htmlContainingCode]);
-
   useEffect(() => {
     setLoading(true);
     setHighlightedHtmlHtml(null);
@@ -35,14 +17,14 @@ export function useHljs(htmlContainingCode: string | undefined): {
       return;
     }
 
-    doHighlight()
+    highlightAll(htmlContainingCode)
       .then((html) => {
         setHighlightedHtmlHtml(html);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [doHighlight, htmlContainingCode]);
+  }, [htmlContainingCode]);
 
   return {loading, highlightedHtml};
 }

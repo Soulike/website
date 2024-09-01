@@ -14,8 +14,8 @@ export function useMdConverter(markdown: string | undefined): {
       return;
     }
     import('@website/md-converter')
-      .then(({default: markdownConverter}) => {
-        const html = markdownConverter.makeHtml(markdown);
+      .then(({converter}) => {
+        const html = converter.makeHtml(markdown);
         setHtml(html);
       })
       .finally(() => {

@@ -1,4 +1,4 @@
-import {Markdown} from '@website/react-components';
+import {Markdown} from '@website/react-components/csr';
 import {Modal, type ModalProps} from 'antd';
 
 import Style from './Style.module.scss';

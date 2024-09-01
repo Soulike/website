@@ -1,6 +1,8 @@
+import '@website/react-components/style.css';
+
 import {ClockCircleOutlined, TagOutlined} from '@ant-design/icons';
 import {type Category} from '@website/classes';
-import {Markdown} from '@website/react-components';
+import {Markdown} from '@website/react-components/csr';
 import {Alert, Skeleton, Tag} from 'antd';
 
 import Style from './Style.module.scss';

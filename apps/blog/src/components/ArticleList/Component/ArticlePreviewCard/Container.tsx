@@ -1,5 +1,5 @@
 import {type Category} from '@website/classes';
-import {useMdConverter} from '@website/hooks';
+import {useMathJax, useMdConverter} from '@website/hooks';
 
 import {ArticlePreviewCardView} from './View';
 
@@ -18,6 +18,8 @@ export function ArticlePreviewCard(props: IArticlePreviewCardProps) {
   const {loading, html: articleBriefTextHtml} = useMdConverter(
     articleBriefTextMarkdown,
   );
+
+  useMathJax([loading]);
 
   return (
     <ArticlePreviewCardView

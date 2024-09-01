@@ -1,4 +1,6 @@
-import {script} from '@website/utils';
+'use client';
+
+import {loadExternalScript} from '@website/utils/csr';
 import {type DependencyList, useCallback, useEffect, useMemo} from 'react';
 
 declare global {
@@ -28,9 +30,12 @@ export function useMathJax(deps?: Readonly<DependencyList>) {
   );
 
   const loadMathJaxScript = useCallback(async () => {
+    if (!document) {
+      return;
+    }
     const $mathjaxScriptTag = document.querySelector(`#${MATHJAX_SCRIPT_ID}`);
     if ($mathjaxScriptTag === null) {
-      await script.loadExternalScript(MATHJAX_CDN_URL, {
+      await loadExternalScript(MATHJAX_CDN_URL, {
         id: MATHJAX_SCRIPT_ID,
       });
     }
@@ -43,15 +48,16 @@ export function useMathJax(deps?: Readonly<DependencyList>) {
   }, []);
 
   const runMathJax = useCallback(async () => {
-    if (!globalThis?.MathJax?.startup?.promise) return; // Waiting for MathJax ready
+    if (!globalThis?.MathJax?.startup?.promise) {
+      return;
+    } // Waiting for MathJax ready
     await globalThis.MathJax.startup.promise;
     await globalThis.MathJax.typesetPromise();
   }, []);
 
-  loadMathJaxConfig();
-  void loadMathJaxScript();
-
   useEffect(() => {
+    loadMathJaxConfig();
+    void loadMathJaxScript();
     void runMathJax();
-  }, [deps]);
+  }, [deps, globalThis.window?.document]);
 }
