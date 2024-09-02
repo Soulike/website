@@ -274,9 +274,6 @@ importers:
       '@website/utils':
         specifier: workspace:^
         version: link:../utils
-      mathjax:
-        specifier: ^3.2.2
-        version: 3.2.2
     devDependencies:
       '@types/jsdom':
         specifier: ^21.1.7
@@ -3961,12 +3958,6 @@ packages:
     resolution:
       {
         integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==,
-      }
-
-  mathjax@3.2.2:
-    resolution:
-      {
-        integrity: sha512-Bt+SSVU8eBG27zChVewOicYs7Xsdt40qm4+UpHyX7k0/O9NliPc+x77k1/FEsPsjKPZGJvtRZM1vO+geW0OhGw==,
       }
 
   meow@12.1.1:
@@ -8086,8 +8077,6 @@ snapshots:
       js-tokens: 4.0.0
 
   lru-cache@10.4.3: {}
-
-  mathjax@3.2.2: {}
 
   meow@12.1.1: {}
 
