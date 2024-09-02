@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "scripts": {
     "prepare": "test -d node_modules/husky && husky",
-    "install": "pnpm --filter \"./packages/**\" run -r build",
+    "build:packages": "pnpm --filter \"./packages/**\" run -r build",
     "start": "docker compose pull && docker compose down && docker compose up -d",
     "stop": "docker compose down",
-    "update": "docker compose pull && docker compose up -d && docker compose restart nginx"
+    "update": "docker compose pull && docker compose up -d"
   },
   "author": "Soulike",
   "license": "MIT",
