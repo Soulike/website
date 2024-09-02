@@ -1,6 +1,7 @@
 'use client';
 
 import {useMathJax} from '@website/hooks';
+import {useRef} from 'react';
 
 export interface IMarkdownViewProps {
   HTMLContent: string;
@@ -8,11 +9,13 @@ export interface IMarkdownViewProps {
 
 export function MarkdownView(props: IMarkdownViewProps) {
   const {HTMLContent} = props;
+  const ref = useRef(null);
 
-  useMathJax([HTMLContent]);
+  useMathJax([ref.current]);
 
   return (
     <article
+      ref={ref}
       className={'Markdown'}
       dangerouslySetInnerHTML={{__html: HTMLContent}}
     />

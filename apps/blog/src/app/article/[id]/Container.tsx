@@ -1,16 +1,9 @@
-'use client';
-
-import {Article as ArticleClass, Category} from '@website/classes';
-import {useRouter} from 'next/navigation';
-import {useEffect, useMemo} from 'react';
-
+import {ArticleViewModel} from '@/src/app/article/[id]/ArticleViewModel';
 import {AntdWrapper} from '@/src/components/AntdWrapper';
-import {useArticle} from '@/src/hooks/useArticle';
-import {useCategory} from '@/src/hooks/useCategory';
 
 import {ArticleView} from './View';
 
-interface ArticleProps {
+export interface ArticleProps {
   params: ArticleDynamicParams;
 }
 
@@ -18,53 +11,20 @@ interface ArticleDynamicParams {
   id: string;
 }
 
-export function Article({params}: ArticleProps) {
-  const router = useRouter();
-  const emptyArticle = useMemo(
-    () => new ArticleClass(0, '', '', 0, '', '', 0, true),
-    [],
-  );
-  const emptyCategory = useMemo(() => new Category(0, ''), []);
+export async function Article({params}: ArticleProps) {
+  const article = await ArticleViewModel.getArticle(Number.parseInt(params.id));
+  const category = await ArticleViewModel.getCategory(article.category);
 
-  const {id} = params;
-  const articleId = Number.parseInt(id ?? '');
-
-  const {loading: articleIsLoading, article} = useArticle(articleId);
-
-  useEffect(() => {
-    if (!articleIsLoading && article === null) {
-      void router.replace('/');
-    }
-  }, [article, articleIsLoading, router]);
-
-  const {loading: categoryIsLoading, category} = useCategory(
-    article?.category ?? NaN,
-  );
-
-  const loading = useMemo(
-    () => articleIsLoading || categoryIsLoading,
-    [articleIsLoading, categoryIsLoading],
-  );
-  const {title, publicationTime, modificationTime} = useMemo(
-    () => article ?? emptyArticle,
-    [article, emptyArticle],
-  );
-
-  useEffect(() => {
-    if (!loading) {
-      document.title = `${title} - Soulike 的博客`;
-    }
-  }, [loading, title]);
+  const {title, publicationTime, modificationTime} = article;
 
   return (
     <AntdWrapper>
       <ArticleView
         title={title}
-        contentMarkdown={article?.content ?? ''}
+        contentMarkdown={article.content}
         publicationTime={publicationTime}
         modificationTime={modificationTime}
-        loading={loading}
-        category={category ?? emptyCategory}
+        category={category}
       />
     </AntdWrapper>
   );

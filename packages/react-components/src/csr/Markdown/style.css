@@ -29,7 +29,6 @@ article.Markdown {
   }
 
   p {
-    overflow: auto;
     max-width: 100%;
     text-align: justify;
   }
