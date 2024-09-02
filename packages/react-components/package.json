@@ -9,7 +9,7 @@
   "dependencies": {
     "@website/hooks": "workspace:^",
     "@website/hljs": "workspace:^",
-    "@website/mathjax-converter": "workspace:^",
+    "@website/tex-renderer": "workspace:^",
     "@website/md-converter": "workspace:^"
   },
   "devDependencies": {

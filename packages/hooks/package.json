@@ -4,6 +4,7 @@
   "dependencies": {
     "@website/hljs": "workspace:^",
     "@website/md-converter": "workspace:^",
+    "@website/tex-renderer": "workspace:^",
     "@website/utils": "workspace:^"
   },
   "devDependencies": {

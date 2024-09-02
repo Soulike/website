@@ -14,10 +14,11 @@ export function Markdown(props: IProps) {
   const {children, onRenderFinish} = props;
   const {loading: converterLoading, html} = useMdConverter(children);
   const {loading: hljsLoading, highlightedHtml} = useHljs(html ?? '');
-  useMathJax([highlightedHtml]);
+
+  const {loading: mathJaxLoading} = useMathJax([highlightedHtml]);
 
   useEffect(() => {
-    if (!converterLoading && !hljsLoading) {
+    if (!converterLoading && !hljsLoading && !mathJaxLoading) {
       if (onRenderFinish) onRenderFinish();
     }
   }, [converterLoading, hljsLoading, onRenderFinish]);

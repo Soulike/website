@@ -1,0 +1,18 @@
+{
+  "name": "@website/tex-renderer",
+  "main": "dist/index.js",
+  "exports": {
+    ".": "./dist",
+    "./csr": "./dist/csr/index.js",
+    "./ssr": "./dist/ssr/index.js"
+  },
+  "dependencies": {
+    "@website/utils": "workspace:^"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.7"
+  }
+}

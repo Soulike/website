@@ -1,7 +1,7 @@
 import * as csr from '../csr';
 import {getDocumentOnSSR} from './utils';
 
-async function ensureDocument() {
+export async function ensureDocument() {
   if (!globalThis.document) {
     globalThis.document = await getDocumentOnSSR();
   }

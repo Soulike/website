@@ -15,15 +15,14 @@ export interface IArticlePreviewCardProps {
 export function ArticlePreviewCard(props: IArticlePreviewCardProps) {
   const {articleBriefTextMarkdown, ...restProps} = props;
 
-  const {loading, html: articleBriefTextHtml} = useMdConverter(
-    articleBriefTextMarkdown,
-  );
+  const {loading: mdConverterLoading, html: articleBriefTextHtml} =
+    useMdConverter(articleBriefTextMarkdown);
 
-  useMathJax([loading]);
+  const {loading: mathJaxLoading} = useMathJax([articleBriefTextHtml]);
 
   return (
     <ArticlePreviewCardView
-      loading={loading}
+      loading={mdConverterLoading || mathJaxLoading}
       articleBriefTextHtml={articleBriefTextHtml ?? ''}
       {...restProps}
     />

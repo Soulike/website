@@ -1,4 +1,3 @@
-// import {MathJaxConverter} from '@website/mathjax-converter';
 import {highlightAll} from '@website/hljs/ssr';
 import {converter} from '@website/md-converter';
 
@@ -10,8 +9,8 @@ interface IProps {
 
 export async function Markdown(props: IProps) {
   const {children} = props;
-  const markdownHtml = converter.makeHtml(children);
-  const highlightedHtml = await highlightAll(markdownHtml);
+  let html = converter.makeHtml(children);
+  html = await highlightAll(html);
 
-  return <MarkdownView HTMLContent={highlightedHtml} />;
+  return <MarkdownView HTMLContent={html} />;
 }
