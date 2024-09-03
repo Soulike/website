@@ -9,6 +9,10 @@ on:
       - 'nginx/Dockerfile'
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     uses: ./.github/workflows/docker-build.yml
