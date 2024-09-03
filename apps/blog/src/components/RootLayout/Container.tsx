@@ -1,7 +1,6 @@
 import type React from 'react';
 
-import {AntdWrapper} from '@/src/components/AntdWrapper';
-
+import {ThemeProvider} from './components/ThemeProvider';
 import {RootLayoutView} from './View';
 
 export interface IRootLayoutProps {
@@ -12,8 +11,10 @@ export async function RootLayout(props: IRootLayoutProps) {
   const {children} = props;
 
   return (
-    <AntdWrapper>
-      <RootLayoutView>{children}</RootLayoutView>
-    </AntdWrapper>
+    <ThemeProvider>
+      <RootLayoutView>
+        <ThemeProvider>{children}</ThemeProvider>
+      </RootLayoutView>
+    </ThemeProvider>
   );
 }

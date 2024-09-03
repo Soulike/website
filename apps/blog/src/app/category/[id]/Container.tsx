@@ -1,6 +1,5 @@
 'use client';
 
-import {AntdWrapper} from '@/src/components/AntdWrapper';
 import {IndexArticleList} from '@/src/components/IndexArticleList';
 import {useArticlesWithAbstract} from '@/src/hooks/useArticlesWithAbstract';
 
@@ -21,11 +20,9 @@ export function Category({params}: CategoryProps) {
   const {loading, articlesWithAbstract} = useArticlesWithAbstract(categoryId);
 
   return (
-    <AntdWrapper>
-      <IndexArticleList
-        articleList={articlesWithAbstract ?? []}
-        loading={loading}
-      />
-    </AntdWrapper>
+    <IndexArticleList
+      articleList={articlesWithAbstract ?? []}
+      loading={loading}
+    />
   );
 }

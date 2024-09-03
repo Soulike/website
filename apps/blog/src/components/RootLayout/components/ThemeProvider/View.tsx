@@ -1,21 +1,28 @@
 'use client';
 
+import './theme/default.css';
+import './theme/dark.css';
+
 import {AntdRegistry} from '@ant-design/nextjs-registry';
 import {useMediaQuery} from '@chakra-ui/media-query';
 import {App, ConfigProvider, theme} from 'antd';
 import zhCN from 'antd/locale/zh_CN';
-import type React from 'react';
+import React, {useEffect, useState} from 'react';
 
-interface IAntdWrapperProps {
+import style from './style.module.css';
+
+interface IThemeProviderProps {
   children?: React.ReactNode;
 }
 
-/**
- * ConfigProvider can not provide config across CSR and SSR boundaries.
- * So wrap it around CSR components which are children of SSR components.
- */
-export function AntdWrapper({children}: IAntdWrapperProps) {
+export function ThemeProvider({children}: IThemeProviderProps) {
   const [isDarkMode] = useMediaQuery('(prefers-color-scheme: dark)');
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   return (
     <AntdRegistry>
       <ConfigProvider
@@ -25,7 +32,16 @@ export function AntdWrapper({children}: IAntdWrapperProps) {
           cssVar: true,
         }}
       >
-        <App>{children}</App>
+        <App>
+          <div
+            className={`
+          ${style.container}
+          ${isVisible ? style.visible : ''}
+          `}
+          >
+            {children}
+          </div>
+        </App>
       </ConfigProvider>
     </AntdRegistry>
   );

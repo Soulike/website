@@ -1,6 +1,5 @@
 import 'antd/dist/reset.css';
-import '@/src/globalStyle/color.scss';
-import '@/src/globalStyle/globalStyle.scss';
+import '@/src/styles/global.css';
 
 import type {Metadata, Viewport} from 'next';
 import Script from 'next/script';
@@ -35,6 +34,14 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
+  colorScheme: 'light dark',
+  themeColor: [
+    {color: '#FFF'},
+    {
+      color: '#000',
+      media: '(prefers-color-scheme: dark)',
+    },
+  ],
 };
 
 const RootLayoutContainer = ({children}: {children: ReactNode}) => {

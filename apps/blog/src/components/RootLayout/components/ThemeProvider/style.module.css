@@ -1,0 +1,9 @@
+.container {
+  /* We initially hide contents to avoid theme flickering */
+  opacity: 0;
+  transition: opacity 250ms;
+
+  &.visible {
+    opacity: 1;
+  }
+}

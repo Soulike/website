@@ -1,5 +1,4 @@
 import {ArticleViewModel} from '@/src/app/article/[id]/ArticleViewModel';
-import {AntdWrapper} from '@/src/components/AntdWrapper';
 
 import {ArticleView} from './View';
 
@@ -18,14 +17,12 @@ export async function Article({params}: ArticleProps) {
   const {title, publicationTime, modificationTime} = article;
 
   return (
-    <AntdWrapper>
-      <ArticleView
-        title={title}
-        contentMarkdown={article.content}
-        publicationTime={publicationTime}
-        modificationTime={modificationTime}
-        category={category}
-      />
-    </AntdWrapper>
+    <ArticleView
+      title={title}
+      contentMarkdown={article.content}
+      publicationTime={publicationTime}
+      modificationTime={modificationTime}
+      category={category}
+    />
   );
 }

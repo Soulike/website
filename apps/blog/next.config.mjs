@@ -1,14 +1,17 @@
 import {env} from 'node:process';
-import {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_BUILD} from 'next/constants.js';
+
+import {
+  PHASE_DEVELOPMENT_SERVER,
+  PHASE_PRODUCTION_BUILD,
+} from 'next/constants.js';
 
 /** @type {import('next').NextConfig} */
 const nextConfigProduction = {
   reactStrictMode: true,
   distDir: 'build',
-  transpilePackages: ['@ant-design/icons'], // Fix SyntaxError: Cannot use import statement outside a module
 };
 
-export default async (phase, {defaultConfig}) => {
+export default async (phase) => {
   if (phase === PHASE_DEVELOPMENT_SERVER) {
     /** @type {import('next').NextConfig} */
     const nextConfigDev = {
