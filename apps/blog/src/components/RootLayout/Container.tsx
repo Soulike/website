@@ -13,9 +13,7 @@ export async function RootLayout(props: IRootLayoutProps) {
 
   return (
     <AntdWrapper>
-      <RootLayoutView>
-        <AntdWrapper>{children}</AntdWrapper>
-      </RootLayoutView>
+      <RootLayoutView>{children}</RootLayoutView>
     </AntdWrapper>
   );
 }

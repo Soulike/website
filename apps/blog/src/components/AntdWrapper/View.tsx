@@ -22,6 +22,7 @@ export function AntdWrapper({children}: IAntdWrapperProps) {
         locale={zhCN}
         theme={{
           algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
+          cssVar: true,
         }}
       >
         <App>{children}</App>
