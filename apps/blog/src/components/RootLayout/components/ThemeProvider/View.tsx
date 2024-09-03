@@ -9,7 +9,7 @@ import {App, ConfigProvider, theme} from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import React, {useEffect, useState} from 'react';
 
-import style from './style.module.css';
+import style from './style.module.scss';
 
 interface IThemeProviderProps {
   children?: React.ReactNode;
@@ -34,10 +34,7 @@ export function ThemeProvider({children}: IThemeProviderProps) {
       >
         <App>
           <div
-            className={`
-          ${style.container}
-          ${isVisible ? style.visible : ''}
-          `}
+            className={`${style.container} ${isVisible ? style.visible : ''}`}
           >
             {children}
           </div>
