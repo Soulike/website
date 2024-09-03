@@ -1,6 +1,8 @@
 import {Article} from '@website/classes';
 
-import {IndexArticleList} from '@/src/components/IndexArticleList';
+import {ArticleList} from '@/src/components/ArticleList';
+
+import style from './style.module.scss';
 
 export interface IndexViewProps {
   articlesWithAbstract: Article[];
@@ -11,6 +13,8 @@ export function IndexView(props: IndexViewProps) {
   const {loading, articlesWithAbstract} = props;
 
   return (
-    <IndexArticleList articleList={articlesWithAbstract} loading={loading} />
+    <div className={style.Index}>
+      <ArticleList articleList={articlesWithAbstract} loading={loading} />
+    </div>
   );
 }

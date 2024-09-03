@@ -1,7 +1,8 @@
 'use client';
 
 import {type Article, type Category} from '@website/classes';
-import {useCallback, useMemo, useState} from 'react';
+import type {PaginationConfig} from 'antd/lib/pagination';
+import {useCallback, useMemo, useRef, useState} from 'react';
 
 import {useCategories} from '@/src/hooks/useCategories';
 
@@ -13,6 +14,7 @@ interface IProps {
 }
 
 export function ArticleList(props: IProps) {
+  const viewRef = useRef<HTMLDivElement>(null);
   const [, setPageNumber] = useState(1);
   const {categories, loading: categoriesIsLoading} = useCategories();
 
@@ -27,9 +29,17 @@ export function ArticleList(props: IProps) {
     return map;
   }, [categories]);
 
-  const onPageNumberChange = useCallback((pageNumber: number) => {
-    setPageNumber(pageNumber);
-  }, []);
+  const onPageNumberChange: PaginationConfig['onChange'] = useCallback(
+    (pageNumber: number) => {
+      setPageNumber(pageNumber);
+      if (!viewRef.current) {
+        return;
+      }
+
+      viewRef.current.scrollIntoView(true);
+    },
+    [viewRef.current],
+  );
 
   const isLoading = useMemo(
     () => loading || categoriesIsLoading,
@@ -38,6 +48,7 @@ export function ArticleList(props: IProps) {
 
   return (
     <ArticleListView
+      viewRef={viewRef}
       onPageNumberChange={onPageNumberChange}
       articleList={articleList}
       categoryMap={categoryMap}

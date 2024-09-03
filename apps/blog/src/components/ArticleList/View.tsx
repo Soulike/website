@@ -1,6 +1,7 @@
 import {type Article, type Category} from '@website/classes';
 import {Empty, List} from 'antd';
-import React from 'react';
+import type {PaginationConfig} from 'antd/lib/pagination';
+import React, {RefObject} from 'react';
 
 import {ArticlePreviewCard} from './Component/ArticlePreviewCard';
 import {getFirstSentenceFromMarkdown} from './Function';
@@ -9,17 +10,18 @@ import Style from './Style.module.scss';
 const {Item} = List;
 
 interface Props {
-  onPageNumberChange: (_page: number) => void;
+  viewRef: RefObject<HTMLDivElement>;
+  onPageNumberChange: PaginationConfig['onChange'];
   articleList: Article[];
   categoryMap: Map<number, Category>;
   loading: boolean;
 }
 
 export function ArticleListView(props: Props) {
-  const {onPageNumberChange, articleList, categoryMap, loading} = props;
-  const ref = React.createRef<HTMLDivElement>();
+  const {onPageNumberChange, articleList, categoryMap, loading, viewRef} =
+    props;
   return (
-    <div className={Style.ArticleList} ref={ref}>
+    <div className={Style.ArticleList} ref={viewRef}>
       <List
         loading={loading}
         dataSource={articleList}
@@ -32,14 +34,7 @@ export function ArticleListView(props: Props) {
           showSizeChanger: false,
           position: 'bottom',
           hideOnSinglePage: true,
-          onChange: (page) => {
-            onPageNumberChange(page);
-            if (ref.current !== null) {
-              ref.current.scrollTo({
-                top: 0,
-              });
-            }
-          },
+          onChange: onPageNumberChange,
         }}
         renderItem={(article) => {
           const {
