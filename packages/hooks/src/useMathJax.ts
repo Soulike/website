@@ -13,14 +13,11 @@ export function useMathJax(deps: Readonly<DependencyList>) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!document) {
-      return;
-    }
     setLoading(true);
     TexRenderer.renderAllTex().finally(() => {
       setLoading(false);
     });
-  }, [...deps, document]);
+  }, [...deps]);
 
   return {loading};
 }

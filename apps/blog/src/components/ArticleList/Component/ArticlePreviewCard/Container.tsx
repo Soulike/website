@@ -1,5 +1,7 @@
+'use client';
+
 import {type Category} from '@website/classes';
-import {useMathJax, useMdConverter} from '@website/hooks';
+import {useMdConverter} from '@website/hooks';
 
 import {ArticlePreviewCardView} from './View';
 
@@ -18,11 +20,9 @@ export function ArticlePreviewCard(props: IArticlePreviewCardProps) {
   const {loading: mdConverterLoading, html: articleBriefTextHtml} =
     useMdConverter(articleBriefTextMarkdown);
 
-  const {loading: mathJaxLoading} = useMathJax([articleBriefTextHtml]);
-
   return (
     <ArticlePreviewCardView
-      loading={mdConverterLoading || mathJaxLoading}
+      loading={mdConverterLoading}
       articleBriefTextHtml={articleBriefTextHtml ?? ''}
       {...restProps}
     />

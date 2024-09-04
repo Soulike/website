@@ -1,6 +1,7 @@
 'use client';
 
 import {type Article, type Category} from '@website/classes';
+import {useMathJax} from '@website/hooks';
 import type {PaginationConfig} from 'antd/lib/pagination';
 import {useCallback, useMemo, useRef, useState} from 'react';
 
@@ -15,7 +16,7 @@ interface IProps {
 
 export function ArticleList(props: IProps) {
   const viewRef = useRef<HTMLDivElement>(null);
-  const [, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
   const {categories, loading: categoriesIsLoading} = useCategories();
 
   const {articleList, loading} = props;
@@ -38,12 +39,19 @@ export function ArticleList(props: IProps) {
 
       viewRef.current.scrollIntoView(true);
     },
-    [viewRef.current],
+    [],
   );
 
+  // TODO: bug: math render when page changes
+  const {loading: mathJaxLoading} = useMathJax([
+    articleList,
+    categoryMap,
+    pageNumber,
+  ]);
+
   const isLoading = useMemo(
-    () => loading || categoriesIsLoading,
-    [categoriesIsLoading, loading],
+    () => loading || categoriesIsLoading || mathJaxLoading,
+    [categoriesIsLoading, loading, mathJaxLoading],
   );
 
   return (
