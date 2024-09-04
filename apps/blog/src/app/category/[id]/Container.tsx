@@ -1,6 +1,8 @@
 'use client';
 
-import {IndexArticleList} from '@/src/components/IndexArticleList';
+import {useEffect} from 'react';
+
+import {ArticleList} from '@/src/components/ArticleList';
 import {useArticlesWithAbstract} from '@/src/hooks/useArticlesWithAbstract';
 
 interface CategoryProps {
@@ -15,14 +17,13 @@ export function Category({params}: CategoryProps) {
   const {id} = params;
   const categoryId = Number.parseInt(id ?? '');
 
-  document.title = 'Soulike 的博客';
+  useEffect(() => {
+    document.title = 'Soulike 的博客';
+  }, []);
 
   const {loading, articlesWithAbstract} = useArticlesWithAbstract(categoryId);
 
   return (
-    <IndexArticleList
-      articleList={articlesWithAbstract ?? []}
-      loading={loading}
-    />
+    <ArticleList articleList={articlesWithAbstract ?? []} loading={loading} />
   );
 }
