@@ -1,9 +1,14 @@
 .SiteFooter {
   text-align: center;
+  height: 100%;
 
   // Override antd
   background: none !important;
   color: inherit !important;
+  @media (orientation: portrait) {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+  }
 
   .hitokotoWrapper {
     @media (orientation: portrait) {

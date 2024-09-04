@@ -4,8 +4,9 @@
 
   .header {
     padding: 16px 0;
+
     .title {
-      width: 50vw;
+      width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: 1.5rem;
@@ -13,9 +14,8 @@
       font-weight: 100;
       color: var(--COLOR);
 
-      @media (max-width: 500px) {
-        width: 80vw;
-        font-size: 1rem;
+      @media (orientation: portrait) {
+        font-size: 1.1rem;
       }
     }
 
@@ -24,9 +24,20 @@
     }
   }
 
-  .brief {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    color: var(--LIGHT_COLOR);
+  .briefContainer {
+    position: relative;
+
+    .brief {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      color: var(--LIGHT_COLOR);
+      max-height: 3lh;
+      overflow: hidden;
+      mask-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 1) 1.5lh,
+        rgba(0, 0, 0, 0) 3lh
+      );
+    }
   }
 }

@@ -55,4 +55,14 @@ article.Markdown {
       line-height: 2em;
     }
   }
+
+  /* MathJax formula */
+  mjx-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  li {
+    word-break: break-all;
+  }
 }

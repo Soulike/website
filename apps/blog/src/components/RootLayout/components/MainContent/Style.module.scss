@@ -12,7 +12,7 @@
   }
 
   .content {
-    padding: 2vh 2vw;
+    padding: 10px 20px;
     height: 100%;
     overflow: auto;
     flex-grow: 1;
@@ -21,5 +21,9 @@
 
   .siteFooterWrapper {
     background-color: inherit;
+
+    @media (max-height: 500px) {
+      display: none;
+    }
   }
 }

@@ -36,7 +36,9 @@ export function ArticlePreviewCardView(props: IProps) {
       title={
         <div className={Style.header}>
           <ArticleLink articleId={articleId}>
-            <header className={Style.title}>{articleTitle}</header>
+            <header className={Style.title} title={articleTitle}>
+              {articleTitle}
+            </header>
           </ArticleLink>
           <div className={Style.info}>
             <Tag color={'purple'}>
@@ -63,10 +65,12 @@ export function ArticlePreviewCardView(props: IProps) {
       }
       bordered={false}
     >
-      <div
-        className={Style.brief}
-        dangerouslySetInnerHTML={{__html: articleBriefTextHtml}}
-      />
+      <div className={Style.briefContainer}>
+        <div
+          className={Style.brief}
+          dangerouslySetInnerHTML={{__html: articleBriefTextHtml}}
+        />
+      </div>
       <ArticleLink articleId={articleId}>
         <>继续阅读 {'>'}</>
       </ArticleLink>
