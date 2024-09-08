@@ -1,9 +1,8 @@
-'use client';
-
-import {useEffect} from 'react';
+import {notFound} from 'next/navigation';
 
 import {ArticleList} from '@/src/components/ArticleList';
-import {useArticlesWithAbstract} from '@/src/hooks/useArticlesWithAbstract';
+
+import {CategoryViewModel} from './CategoryViewModel';
 
 interface CategoryProps {
   params: CategoryDynamicParams;
@@ -13,17 +12,19 @@ interface CategoryDynamicParams {
   id: string;
 }
 
-export function Category({params}: CategoryProps) {
+export async function Category({params}: CategoryProps) {
   const {id} = params;
-  const categoryId = Number.parseInt(id ?? '');
+  const categoryId = Number.parseInt(id);
+  if (Number.isNaN(categoryId)) {
+    notFound();
+  }
 
-  useEffect(() => {
-    document.title = 'Soulike 的博客';
-  }, []);
-
-  const {loading, articlesWithAbstract} = useArticlesWithAbstract(categoryId);
-
-  return (
-    <ArticleList articleList={articlesWithAbstract ?? []} loading={loading} />
-  );
+  try {
+    const articlesWithAbstract =
+      await CategoryViewModel.getArticlesWithAbstractByCategory(categoryId);
+    return <ArticleList articleList={articlesWithAbstract} loading={false} />;
+  } catch (e) {
+    console.error(e);
+    notFound();
+  }
 }
