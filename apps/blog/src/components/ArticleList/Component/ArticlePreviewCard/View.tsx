@@ -1,9 +1,12 @@
+'use client';
+
 import {
   ClockCircleOutlined,
   EyeOutlined,
   TagsOutlined,
 } from '@ant-design/icons';
 import {type Category} from '@website/classes';
+import {Markdown} from '@website/react-components/csr';
 import {Card, Tag} from 'antd';
 
 import {ArticleLink} from './Component/ArticleLink';
@@ -16,10 +19,10 @@ interface IProps {
   articleTime: Readonly<Date>;
   articleCategory: Readonly<Category> | undefined;
   articleViewAmount: number;
-  articleBriefTextHtml: string;
+  articleBriefTextMarkdown: string;
 }
 
-export function ArticlePreviewCardView(props: IProps) {
+export function ArticlePreviewCard(props: IProps) {
   const {
     loading,
     articleId,
@@ -27,7 +30,7 @@ export function ArticlePreviewCardView(props: IProps) {
     articleTime,
     articleCategory,
     articleViewAmount,
-    articleBriefTextHtml,
+    articleBriefTextMarkdown,
   } = props;
   return (
     <Card
@@ -66,10 +69,9 @@ export function ArticlePreviewCardView(props: IProps) {
       bordered={false}
     >
       <div className={Style.briefContainer}>
-        <div
-          className={Style.brief}
-          dangerouslySetInnerHTML={{__html: articleBriefTextHtml}}
-        />
+        <div className={Style.brief}>
+          <Markdown>{articleBriefTextMarkdown}</Markdown>
+        </div>
       </div>
       <ArticleLink articleId={articleId}>
         <>继续阅读 {'>'}</>

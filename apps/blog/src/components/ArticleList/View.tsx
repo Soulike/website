@@ -52,6 +52,7 @@ export function ArticleListView(props: Props) {
           return (
             <Item key={id}>
               <ArticlePreviewCard
+                loading={false}
                 articleId={id}
                 articleTitle={title}
                 articleTime={time}
