@@ -11,6 +11,7 @@ body {
 
 :root {
   background-color: #fff;
+  overflow-y: hidden;
 }
 
 @media (prefers-color-scheme: dark) {

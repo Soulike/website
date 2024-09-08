@@ -1,3 +1,3 @@
 export * from './useHljs';
-export * from './useMathJax';
 export * from './useMdConverter';
+export * from './useTeXRenderer';

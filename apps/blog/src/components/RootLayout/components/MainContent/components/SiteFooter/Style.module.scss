@@ -3,8 +3,8 @@
   height: 100%;
 
   // Override antd
-  background: none !important;
-  color: inherit !important;
+  background: var(--BACKGROUND_COLOR) !important;
+  color: var(--COLOR) !important;
   @media (orientation: portrait) {
     padding-top: 20px !important;
     padding-bottom: 20px !important;

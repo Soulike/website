@@ -1,1 +1,1 @@
-export * from './TeXRenderer';
+export * from '../ssr/TeXRenderer';

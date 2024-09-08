@@ -1,6 +1,6 @@
 'use client';
 
-import {useHljs, useMathJax, useMdConverter} from '@website/hooks';
+import {useHljs, useMdConverter, useTeXRenderer} from '@website/hooks';
 import {useEffect} from 'react';
 
 import {MarkdownView} from './View';
@@ -15,13 +15,13 @@ export function Markdown(props: IProps) {
   const {loading: converterLoading, html} = useMdConverter(children);
   const {loading: hljsLoading, highlightedHtml} = useHljs(html ?? '');
 
-  const {loading: mathJaxLoading} = useMathJax([highlightedHtml]);
+  const {renderedHTML} = useTeXRenderer(highlightedHtml ?? '', []);
 
   useEffect(() => {
-    if (!converterLoading && !hljsLoading && !mathJaxLoading) {
+    if (!converterLoading && !hljsLoading) {
       if (onRenderFinish) onRenderFinish();
     }
   }, [converterLoading, hljsLoading, onRenderFinish]);
 
-  return <MarkdownView HTMLContent={highlightedHtml ?? ''} />;
+  return <MarkdownView HTMLContent={renderedHTML ?? ''} />;
 }
