@@ -15,3 +15,5 @@ export async function generateMetadata({
     title: `${title} - Soulike 的博客`,
   };
 }
+
+export const revalidate = 3600;
