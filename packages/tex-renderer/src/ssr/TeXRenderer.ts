@@ -7,6 +7,7 @@ export class TeXRenderer {
   private static KaTeXOptions: katex.KatexOptions = {
     throwOnError: false,
     strict: false,
+    output: 'mathml',
   };
 
   public static renderAllTexInHTML(html: string): string {

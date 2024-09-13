@@ -19,6 +19,19 @@ article.Markdown {
     }
   }
 
+  math {
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    &[display='block'] {
+      margin: 1lh 0;
+    }
+
+    mtd {
+      text-align: start;
+    }
+  }
+
   img,
   table {
     margin: 1em auto;
