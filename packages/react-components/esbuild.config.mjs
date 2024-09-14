@@ -5,4 +5,5 @@ esbuild.buildSync({
   bundle: true,
   minify: true,
   outdir: 'dist',
+  target: ['safari16', 'chrome100', 'firefox100'],
 });
