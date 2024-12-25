@@ -10,29 +10,29 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.4.0",
-    "@ant-design/nextjs-registry": "^1.0.1",
+    "@ant-design/icons": "^5.5.2",
+    "@ant-design/nextjs-registry": "^1.0.2",
     "@chakra-ui/media-query": "^3.3.0",
     "@chakra-ui/system": "^2.6.2",
-    "@emotion/react": "^11.13.0",
-    "@emotion/styled": "^11.13.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@website/classes": "workspace:^",
     "@website/hooks": "workspace:^",
     "@website/react-components": "workspace:^",
     "@website/request": "workspace:^",
     "@website/utils": "workspace:^",
-    "antd": "^5.20.1",
-    "next": "^14.2.5",
+    "antd": "^5.22.6",
+    "next": "^14.2.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "sharp": "^0.33.4"
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^14.2.5",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "eslint-config-next": "^14.2.5",
-    "sass": "^1.77.8"
+    "@next/bundle-analyzer": "^14.2.21",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "eslint-config-next": "^14.2.21",
+    "sass": "^1.83.0"
   },
   "browserslist": [
     "> 0.5%",

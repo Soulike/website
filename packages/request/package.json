@@ -8,8 +8,8 @@
     "build": "rm -rf dist && tsc"
   },
   "devDependencies": {
-    "@types/assert": "^1.5.10",
+    "@types/assert": "^1.5.11",
     "assert": "^2.1.0",
-    "typescript": "^5.5.4"
+    "typescript": "^5.7.2"
   }
 }

@@ -11,10 +11,10 @@
     "build": "rm -rf dist && tsc"
   },
   "dependencies": {
-    "jsdom": "^25.0.0"
+    "jsdom": "^25.0.1"
   },
   "devDependencies": {
-    "@types/assert": "^1.5.10",
+    "@types/assert": "^1.5.11",
     "@types/jsdom": "^21.1.7"
   }
 }
