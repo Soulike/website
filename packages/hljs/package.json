@@ -7,10 +7,10 @@
   },
   "dependencies": {
     "@website/utils": "workspace:^",
-    "highlight.js": "^11.10.0"
+    "highlight.js": "^11.11.0"
   },
   "devDependencies": {
-    "esbuild": "^0.23.1"
+    "esbuild": "^0.24.2"
   },
   "scripts": {
     "build": "rm -rf dist && tsc && node esbuild.config.mjs"
