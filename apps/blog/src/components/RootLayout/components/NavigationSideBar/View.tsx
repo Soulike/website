@@ -9,7 +9,7 @@ import Style from './Style.module.scss';
 
 export function NavigationSideBar() {
   return (
-    <Sider className={Style.NavigationSideBar} theme={'light'}>
+    <Sider className={Style.NavigationSideBar}>
       <div className={Style.sidebarInner}>
         <div className={Style.avatarWrapper}>
           <Image
