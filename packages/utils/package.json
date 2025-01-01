@@ -15,12 +15,6 @@
   },
   "devDependencies": {
     "@types/assert": "^1.5.11",
-    "@types/jsdom": "^21.1.7",
-    "eslint": "^9.17.0"
-  },
-  "lint-staged": {
-    "./src/**/*.(j|t)(s|sx)": [
-      "eslint --fix"
-    ]
+    "@types/jsdom": "^21.1.7"
   }
 }

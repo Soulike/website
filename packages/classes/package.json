@@ -1,15 +1,7 @@
 {
   "name": "@website/classes",
   "main": "dist/index.js",
-  "devDependencies": {
-    "eslint": "^9.17.0"
-  },
   "scripts": {
     "build": "rm -rf dist && tsc"
-  },
-  "lint-staged": {
-    "./src/**/*.(j|t)(s|sx)": [
-      "eslint --fix"
-    ]
   }
 }
