@@ -23,5 +23,5 @@ export function Markdown(props: IProps) {
     }
   }, [converterLoading, hljsLoading, onRenderFinish]);
 
-  return <MarkdownView HTMLContent={renderedHTML ?? ''} />;
+  return <MarkdownView HTMLContent={renderedHTML} />;
 }

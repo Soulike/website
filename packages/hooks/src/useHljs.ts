@@ -17,7 +17,7 @@ export function useHljs(htmlContainingCode: string | undefined): {
       return;
     }
 
-    highlightAll(htmlContainingCode)
+    void highlightAll(htmlContainingCode)
       .then((html) => {
         setHighlightedHtmlHtml(html);
       })

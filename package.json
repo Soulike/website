@@ -4,6 +4,8 @@
   "scripts": {
     "prepare": "test -d node_modules/husky && husky",
     "build:packages": "pnpm --filter \"./packages/**\" run -r build",
+    "prebuild:all": "pnpm build:packages",
+    "build:all": "pnpm --filter \"./apps/**\" run -r build",
     "start": "docker compose pull && docker compose down && docker compose up -d",
     "stop": "docker compose down",
     "update": "docker compose pull && docker compose up -d"
@@ -13,19 +15,11 @@
   "devDependencies": {
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
-    "@eslint/js": "^9.17.0",
     "@types/node": "^22.10.3",
-    "@typescript-eslint/eslint-plugin": "^8.19.0",
-    "@typescript-eslint/parser": "^8.19.0",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "globals": "^15.14.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.3.0",
     "prettier": "^3.4.2",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.19.0"
+    "typescript": "^5.7.2"
   },
   "prettier": {
     "singleQuote": true,
@@ -39,9 +33,6 @@
     ]
   },
   "lint-staged": {
-    "(apps|packages)/**/src/**/*.(j|t)(s|sx)": [
-      "eslint --fix"
-    ],
     "./**/*": [
       "prettier --write --ignore-unknown"
     ]

@@ -9,14 +9,6 @@ export interface JSONRequestPostOptions extends RequestOptions {
 
 export class JSONToJSONRequest {
   public static async get<ResT>(
-    url: URL,
-    options?: JSONRequestGetOptions,
-  ): Promise<ResT>;
-  public static async get<ResT>(
-    path: string,
-    options?: JSONRequestGetOptions,
-  ): Promise<ResT>;
-  public static async get<ResT>(
     pathOrUrl: string | URL,
     options: JSONRequestGetOptions = {},
   ): Promise<ResT> {
@@ -28,9 +20,7 @@ export class JSONToJSONRequest {
           pathOrUrl.searchParams.append(name, value);
         }
       } else {
-        pathOrUrl = searchParams
-          ? `${pathOrUrl}?${searchParams.toString()}`
-          : pathOrUrl;
+        pathOrUrl = `${pathOrUrl}?${searchParams.toString()}`;
       }
     }
 
@@ -38,17 +28,9 @@ export class JSONToJSONRequest {
       method: 'get',
       headers,
     });
-    return response.json();
+    return response.json() as Promise<ResT>;
   }
 
-  public static async post<ResT>(
-    Url: URL,
-    options?: JSONRequestPostOptions,
-  ): Promise<ResT>;
-  public static async post<ResT>(
-    path: string,
-    options?: JSONRequestPostOptions,
-  ): Promise<ResT>;
   public static async post<ResT>(
     pathOrUrl: string | URL,
     options: JSONRequestPostOptions = {},
@@ -65,9 +47,7 @@ export class JSONToJSONRequest {
           pathOrUrl.searchParams.append(name, value);
         }
       } else {
-        pathOrUrl = searchParams
-          ? `${pathOrUrl}?${searchParams.toString()}`
-          : pathOrUrl;
+        pathOrUrl = `${pathOrUrl}?${searchParams.toString()}`;
       }
     }
 
@@ -76,6 +56,6 @@ export class JSONToJSONRequest {
       headers: finalHeaders,
       body: JSON.stringify(body),
     });
-    return response.json();
+    return response.json() as Promise<ResT>;
   }
 }

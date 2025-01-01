@@ -21,7 +21,7 @@ export function useAbout(): {loading: boolean; about: string | null} {
           notification.warning({message: response.message});
         }
       })
-      .catch((e) => {
+      .catch((e: unknown) => {
         showNetworkError(e);
       })
       .finally(() => {

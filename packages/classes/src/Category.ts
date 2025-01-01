@@ -7,7 +7,7 @@ export class Category {
     this.name = name;
   }
 
-  static from(obj: any): Category {
+  static from(obj: Category): Category {
     return new Category(obj.id, obj.name);
   }
 }

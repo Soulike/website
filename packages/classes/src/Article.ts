@@ -28,7 +28,7 @@ export class Article {
     this.isVisible = isVisible;
   }
 
-  static from(obj: any): Article {
+  static from(obj: Article): Article {
     return new Article(
       obj.id,
       obj.title,

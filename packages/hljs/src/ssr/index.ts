@@ -7,7 +7,7 @@ export async function highlightAll(html: string): Promise<string> {
 
   const preBlocks = Array.from(dom.querySelectorAll('pre'));
   await Promise.all(
-    preBlocks.map(async (pre) => {
+    preBlocks.map((pre) => {
       const codeBlocks = pre.querySelectorAll('code');
       codeBlocks.forEach((block) => {
         hljs.highlightElement(block);

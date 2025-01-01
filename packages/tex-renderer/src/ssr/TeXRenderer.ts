@@ -10,17 +10,22 @@ export class TeXRenderer {
     output: 'mathml',
   };
 
+  // $$...$$
+  private static readonly BlockMathRegex = /\$\$(.*?)\$\$/gs;
+  // $...$
+  private static readonly InlineMathRegex = /\$(.*?)\$/g;
+
   public static renderAllTexInHTML(html: string): string {
     const processedHtml = html
       // Replace block math $$...$$
-      .replace(/\$\$(.*?)\$\$/gs, (_, tex) => {
+      .replace(TeXRenderer.BlockMathRegex, (_, tex: string) => {
         return katex.renderToString(htmlEntities.decode(tex), {
           displayMode: true,
           ...TeXRenderer.KaTeXOptions,
         });
       })
       // Replace inline math $...$
-      .replace(/\$(.*?)\$/g, (_, tex) => {
+      .replace(TeXRenderer.InlineMathRegex, (_, tex: string) => {
         return katex.renderToString(htmlEntities.decode(tex), {
           displayMode: false,
           ...TeXRenderer.KaTeXOptions,

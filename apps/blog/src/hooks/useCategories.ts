@@ -24,7 +24,7 @@ export function useCategories(): {
           notification.warning({message: response.message});
         }
       })
-      .catch((e) => {
+      .catch((e: unknown) => {
         showNetworkError(e);
       })
       .finally(() => {

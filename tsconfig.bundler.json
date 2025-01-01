@@ -1,0 +1,12 @@
+/* The config is created for packages used by bundlers. We almost keep the code intact, which should be further handled by bundler. */
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "target": "esnext",
+    /* Specify what module code is generated. */
+    "module": "esnext",
+    /* Specify how TypeScript looks up a file from a given module specifier. */
+    "moduleResolution": "bundler"
+  }
+}

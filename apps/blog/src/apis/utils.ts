@@ -13,5 +13,5 @@ export function prefix(url: string): string {
 
 export function showNetworkError(error: unknown) {
   console.error(error);
-  return notification.error({message: '网络错误'});
+  notification.error({message: '网络错误'});
 }

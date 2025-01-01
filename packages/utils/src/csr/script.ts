@@ -29,8 +29,8 @@ export async function loadExternalScript(
     tag.onload = () => {
       resolve();
     };
-    tag.onerror = (e) => {
-      reject(e);
+    tag.onerror = () => {
+      reject(new Error(`External script load failed: ${src}`));
     };
 
     document.body.appendChild(tag);

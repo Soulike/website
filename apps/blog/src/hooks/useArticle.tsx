@@ -25,7 +25,7 @@ export function useArticle(id: number): {
             notification.warning({message: response.message});
           }
         })
-        .catch((e) => {
+        .catch((e: unknown) => {
           showNetworkError(e);
         })
         .finally(() => {

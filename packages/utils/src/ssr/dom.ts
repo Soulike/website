@@ -2,6 +2,7 @@ import * as csr from '../csr';
 import {getDocumentOnSSR} from './utils';
 
 export async function ensureDocument() {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!globalThis.document) {
     globalThis.document = await getDocumentOnSSR();
   }
