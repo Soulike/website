@@ -12,7 +12,7 @@ export function useHitokoto(): string {
           setHitokoto(hitokoto);
         }
       })
-      .catch((e) => {
+      .catch((e: unknown) => {
         console.error(e);
       });
   }, []);

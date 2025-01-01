@@ -5,9 +5,15 @@
     "showdown": "^2.1.0"
   },
   "devDependencies": {
-    "@types/showdown": "^2.0.6"
+    "@types/showdown": "^2.0.6",
+    "eslint": "^9.17.0"
   },
   "scripts": {
     "build": "rm -rf dist && tsc"
+  },
+  "lint-staged": {
+    "./src/**/*.(j|t)(s|sx)": [
+      "eslint --fix"
+    ]
   }
 }

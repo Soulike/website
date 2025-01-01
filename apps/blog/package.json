@@ -28,15 +28,22 @@
     "sharp": "^0.33.5"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
     "@next/bundle-analyzer": "^14.2.22",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
-    "eslint-config-next": "^14.2.22",
+    "eslint": "^9.17.0",
+    "eslint-config-next": "^15.1.3",
     "sass": "^1.83.0"
   },
   "browserslist": [
     "> 0.5%",
     "not dead",
     "last 20 versions"
-  ]
+  ],
+  "lint-staged": {
+    "./src/**/*.(j|t)(s|sx)": [
+      "eslint --fix"
+    ]
+  }
 }

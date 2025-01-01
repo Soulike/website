@@ -13,7 +13,7 @@ export function useMdConverter(markdown: string | undefined): {
     if (markdown === undefined) {
       return;
     }
-    import('@website/md-converter')
+    void import('@website/md-converter')
       .then(({converter}) => {
         const html = converter.makeHtml(markdown);
         setHtml(html);

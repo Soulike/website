@@ -8,12 +8,19 @@
     "@website/utils": "workspace:^"
   },
   "devDependencies": {
-    "@types/react": "^18.3.18"
+    "@types/react": "^18.3.18",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint": "^9.17.0"
   },
   "peerDependencies": {
     "react": "latest"
   },
   "scripts": {
     "build": "rm -rf dist && tsc"
+  },
+  "lint-staged": {
+    "./src/**/*.(j|t)(s|sx)": [
+      "eslint --fix"
+    ]
   }
 }
