@@ -16,7 +16,7 @@
   "scripts": {
     "build": "rm -rf dist && tsc && node esbuild.config.mjs"
   },
-    "lint-staged": {
+  "lint-staged": {
     "./src/**/*.(j|t)(s|sx)": [
       "eslint --fix"
     ]

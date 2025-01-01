@@ -18,7 +18,7 @@
     "@types/jsdom": "^21.1.7",
     "eslint": "^9.17.0"
   },
-    "lint-staged": {
+  "lint-staged": {
     "./src/**/*.(j|t)(s|sx)": [
       "eslint --fix"
     ]

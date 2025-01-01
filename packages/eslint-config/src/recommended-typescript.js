@@ -12,11 +12,11 @@ export default [
     languageOptions: {
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: path.resolve('./')
-      }
+        tsconfigRootDir: path.resolve('./'),
+      },
     },
     rules: {
       '@typescript-eslint/no-extraneous-class': 'off',
-    }
+    },
   },
 ];

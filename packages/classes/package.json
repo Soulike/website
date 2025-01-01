@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf dist && tsc"
   },
-    "lint-staged": {
+  "lint-staged": {
     "./src/**/*.(j|t)(s|sx)": [
       "eslint --fix"
     ]

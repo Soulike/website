@@ -9,6 +9,6 @@ export default [
     },
     rules: {
       ...hooksPlugin.configs.recommended.rules,
-    }
-  }
+    },
+  },
 ];

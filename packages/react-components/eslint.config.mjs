@@ -9,7 +9,7 @@ export default [
   {
     settings: {
       react: {
-        version: "detect",
+        version: 'detect',
       },
     },
   },
@@ -19,6 +19,6 @@ export default [
     },
     rules: {
       ...hooksPlugin.configs.recommended.rules,
-    }
+    },
   },
 ];

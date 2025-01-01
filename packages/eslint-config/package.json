@@ -15,7 +15,7 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "typescript-eslint": "^8.19.0"
   },
-    "lint-staged": {
+  "lint-staged": {
     "./src/**/*.(j|t)(s|sx)": [
       "eslint --fix"
     ]

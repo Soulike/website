@@ -7,11 +7,11 @@ export default [
   eslintConfigPrettier,
   {
     plugins: {
-      'simple-import-sort': simpleImportSort
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
       'simple-import-sort/imports': 'error',
-      'simple-import-sort/exports': 'error'
-    }
-  }
+      'simple-import-sort/exports': 'error',
+    },
+  },
 ];
