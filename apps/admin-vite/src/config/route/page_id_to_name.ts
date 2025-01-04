@@ -1,6 +1,6 @@
-import {PAGE_ID} from './page_id.ts';
+import {PAGE_ID, type PageIdType} from './page_id.ts';
 
-export const PAGE_ID_TO_NAME = Object.freeze({
+export const PAGE_ID_TO_NAME: Record<PageIdType, string> = Object.freeze({
   [PAGE_ID.LOGIN]: 'Login',
 
   [PAGE_ID.MANAGE.INDEX]: 'Website Management',
