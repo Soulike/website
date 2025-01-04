@@ -1,9 +1,8 @@
+import {showNetworkError} from '@/helpers/error_notification_helper.js';
 import {type Category} from '@website/classes';
+import {Blog} from '@website/server-api';
 import {notification} from 'antd';
 import {useEffect, useState} from 'react';
-
-import {Blog} from '@/apis';
-import {showNetworkError} from '@/apis/utils';
 
 const {Category: CategoryApi} = Blog;
 

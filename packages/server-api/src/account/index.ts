@@ -1,7 +1,7 @@
 import {ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
 
-import {CHECK_SESSION, LOGIN, LOGOUT} from './paths.ts';
+import {CHECK_SESSION, LOGIN, LOGOUT} from './paths.js';
 
 export async function login(
   username: string,

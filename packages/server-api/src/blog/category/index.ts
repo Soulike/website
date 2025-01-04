@@ -8,7 +8,7 @@ import {
   GET_ALL_ARTICLE_AMOUNT_BY_ID,
   GET_ARTICLE_AMOUNT_BY_ID,
   MODIFY,
-} from './paths.ts';
+} from './paths.js';
 
 export async function getAll(): Promise<ServerResponse<Category[]>> {
   return Request.JSONToJSON.get(GET_ALL);

@@ -1,0 +1,15 @@
+{
+  "name": "@website/server-api",
+  "private": "true",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  },
+  "dependencies": {
+    "@website/classes": "workspace:^",
+    "@website/request": "workspace:^"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

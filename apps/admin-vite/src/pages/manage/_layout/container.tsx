@@ -1,14 +1,13 @@
+import {Loading} from '@/components/loading';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
+import {showNetworkError} from '@/helpers/error_notification_helper.js';
+import {useIsLoggedIn} from '@/hooks/useIsLoggedIn.js';
+import {Account as AccountApi} from '@website/server-api';
 import {type ButtonProps, Modal, type ModalFuncProps, notification} from 'antd';
 import {useCallback, useEffect} from 'react';
 import {Outlet, useNavigate} from 'react-router';
 
-import {Account as AccountApi} from '@/apis';
-import {showNetworkError} from '@/apis/utils.ts';
-import {Loading} from '@/components/loading';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
-import {useIsLoggedIn} from '@/hooks/useIsLoggedIn.ts';
-
-import {LayoutView} from './view.tsx';
+import {LayoutView} from './view.js';
 
 export function Layout() {
   const navigate = useNavigate();

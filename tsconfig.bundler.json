@@ -7,6 +7,7 @@
     /* Specify what module code is generated. */
     "module": "esnext",
     /* Specify how TypeScript looks up a file from a given module specifier. */
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "declaration": true
   }
 }

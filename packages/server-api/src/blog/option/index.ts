@@ -1,7 +1,7 @@
 import {ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
 
-import {GET_ABOUT, SET_ABOUT} from './paths.ts';
+import {GET_ABOUT, SET_ABOUT} from './paths.js';
 
 export async function getAbout(): Promise<ServerResponse<{about: string}>> {
   return Request.JSONToJSON.get(GET_ABOUT);

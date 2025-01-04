@@ -8,7 +8,7 @@ import {
   GET_BY_CATEGORY,
   GET_BY_ID,
   MODIFY,
-} from './paths.ts';
+} from './paths.js';
 
 export async function getById(id: number): Promise<ServerResponse<Article>> {
   return Request.JSONToJSON.get(GET_BY_ID, {

@@ -1,13 +1,13 @@
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
+import {showNetworkError} from '@/helpers/error_notification_helper.js';
+import {useIsLoggedIn} from '@/hooks/useIsLoggedIn';
+
+import {Account} from '@website/server-api';
 import {type InputProps, notification} from 'antd';
 import {type DOMAttributes, useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
 
-import {Account} from '@/apis';
-import {showNetworkError} from '@/apis/utils';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
-import {useIsLoggedIn} from '@/hooks/useIsLoggedIn';
-
-import {LoginView} from './view.tsx';
+import {LoginView} from './view.js';
 
 export function Login() {
   const [username, setUsername] = useState('');

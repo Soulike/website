@@ -1,7 +1,6 @@
+import {showNetworkError} from '@/helpers/error_notification_helper.js';
+import {Account} from '@website/server-api';
 import {useEffect, useState} from 'react';
-
-import {Account} from '@/apis';
-import {showNetworkError} from '@/apis/utils.ts';
 
 export function useIsLoggedIn(): {loading: boolean; isLoggedIn: boolean} {
   const [loading, setLoading] = useState(true);
