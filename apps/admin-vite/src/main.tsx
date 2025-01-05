@@ -3,6 +3,8 @@ import './main.css';
 
 import assert from 'node:assert';
 
+import {ConfigProvider} from 'antd';
+import enUS from 'antd/locale/en_US.js';
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 
@@ -15,6 +17,8 @@ const reactRoot = createRoot(rootHTMLElement);
 
 reactRoot.render(
   <StrictMode>
-    <Router />
+    <ConfigProvider locale={enUS}>
+      <Router />
+    </ConfigProvider>
   </StrictMode>,
 );
