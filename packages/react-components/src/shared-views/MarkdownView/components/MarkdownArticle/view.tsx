@@ -1,7 +1,9 @@
-article.Markdown {
-  font-size: 1rem;
+'use client';
 
-  /*覆盖 <article> 中 <h1> 尺寸*/
+import styled from 'styled-components';
+
+export const MarkdownArticle = styled.article`
+  font-size: 1rem;
 
   h1 {
     font-size: 2em;
@@ -72,4 +74,4 @@ article.Markdown {
   li {
     word-break: break-all;
   }
-}
+`;

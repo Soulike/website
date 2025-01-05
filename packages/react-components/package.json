@@ -1,16 +1,17 @@
 {
   "name": "@website/react-components",
   "exports": {
-    ".": "./dist/index.js",
     "./csr": "./dist/csr/index.js",
     "./ssr": "./dist/ssr/index.js",
-    "./style.css": "./dist/style.css"
+    "./next-js": "./dist/next-js/index.js",
+    ".": "./dist/universal/index.js"
   },
   "dependencies": {
     "@website/hljs": "workspace:^",
     "@website/hooks": "workspace:^",
     "@website/md-converter": "workspace:^",
-    "@website/tex-renderer": "workspace:^"
+    "@website/tex-renderer": "workspace:^",
+    "styled-components": "^6.1.14"
   },
   "devDependencies": {
     "@types/react": "^18.3.18",
@@ -23,9 +24,10 @@
   },
   "peerDependencies": {
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react-dom": ">=16.8.0",
+    "next": "^14.2.22"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc && node esbuild.config.mjs"
+    "build": "rm -rf dist && tsc"
   }
 }

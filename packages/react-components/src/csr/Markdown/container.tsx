@@ -1,9 +1,7 @@
-'use client';
-
 import {useHljs, useMdConverter, useTeXRenderer} from '@website/hooks';
 import {useEffect} from 'react';
 
-import {MarkdownView} from './View';
+import {MarkdownView} from '../../shared-views/MarkdownView';
 
 interface IProps {
   children: string;

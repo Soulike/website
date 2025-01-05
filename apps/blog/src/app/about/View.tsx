@@ -1,5 +1,3 @@
-import '@website/react-components/style.css';
-
 import {Markdown} from '@website/react-components/ssr';
 
 import Style from './Style.module.scss';

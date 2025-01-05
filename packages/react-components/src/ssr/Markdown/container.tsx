@@ -2,7 +2,7 @@ import {highlightAll} from '@website/hljs/ssr';
 import {converter} from '@website/md-converter';
 import {TeXRenderer} from '@website/tex-renderer/ssr';
 
-import {MarkdownView} from '../../csr/Markdown/View';
+import {MarkdownView} from '../../shared-views/MarkdownView';
 
 interface IProps {
   children: string;
