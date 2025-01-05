@@ -133,7 +133,7 @@ export function LayoutView(props: Props) {
                       About
                     </Link>
                   ),
-                  key: PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT],
+                  key: PAGE_ID.MANAGE.BLOG.OPTION.ABOUT,
                 },
               ],
             },

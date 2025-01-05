@@ -10,6 +10,8 @@ import {Index} from '@/pages/_index';
 import {Login} from '@/pages/login';
 import {Index as ManageIndex} from '@/pages/manage/_index';
 import {Layout as ManageLayout} from '@/pages/manage/_layout';
+import {Index as ManageBlogIndex} from '@/pages/manage/blog/_index';
+import {Layout as ManageBlogLayout} from '@/pages/manage/blog/_layout';
 
 import {PAGE_ID, PAGE_ID_TO_PATH, type PageIdType} from './page-config';
 
@@ -72,8 +74,12 @@ routeConfig[PAGE_ID.MANAGE.BLOG.OPTION.INDEX] = {
 
 routeConfig[PAGE_ID.MANAGE.BLOG.INDEX] = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.INDEX]),
-  element: null,
+  element: <ManageBlogLayout />,
   children: [
+    {
+      index: true,
+      element: <ManageBlogIndex />,
+    },
     routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.INDEX],
     routeConfig[PAGE_ID.MANAGE.BLOG.CATEGORY.INDEX],
     routeConfig[PAGE_ID.MANAGE.BLOG.OPTION.INDEX],

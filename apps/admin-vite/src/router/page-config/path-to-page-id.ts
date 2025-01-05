@@ -3,7 +3,7 @@ import {PAGE_ID_TO_PATH} from './page-id-to-path.js';
 
 const pathToPageId: Record<string, PageIdType> = {};
 
-Object.values(PAGE_ID_TO_PATH).forEach((pageId) => {
+Object.keys(PAGE_ID_TO_PATH).forEach((pageId) => {
   pathToPageId[PAGE_ID_TO_PATH[pageId]] = pageId;
 });
 
