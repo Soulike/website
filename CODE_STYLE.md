@@ -31,7 +31,7 @@ We don't use default export, since it makes renaming difficult.
 In most cases,
 
 ```typescript
-export {Conmponent} from './container.js';
+export {Component} from './container.js';
 ```
 
 is sufficient.
