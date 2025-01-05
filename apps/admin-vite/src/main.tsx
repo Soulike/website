@@ -1,4 +1,3 @@
-import 'reset-css/reset.css';
 import './main.css';
 
 import assert from 'node:assert';

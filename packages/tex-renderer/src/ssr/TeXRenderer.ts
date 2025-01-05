@@ -1,10 +1,10 @@
 import 'katex/dist/katex.css';
 
-import * as htmlEntities from 'html-entities';
-import katex from 'katex';
+import {decode} from 'html-entities';
+import {type KatexOptions, renderToString} from 'katex';
 
 export class TeXRenderer {
-  private static KaTeXOptions: katex.KatexOptions = {
+  private static KaTeXOptions: KatexOptions = {
     throwOnError: false,
     strict: false,
     output: 'mathml',
@@ -19,14 +19,14 @@ export class TeXRenderer {
     const processedHtml = html
       // Replace block math $$...$$
       .replace(TeXRenderer.BlockMathRegex, (_, tex: string) => {
-        return katex.renderToString(htmlEntities.decode(tex), {
+        return renderToString(decode(tex), {
           displayMode: true,
           ...TeXRenderer.KaTeXOptions,
         });
       })
       // Replace inline math $...$
       .replace(TeXRenderer.InlineMathRegex, (_, tex: string) => {
-        return katex.renderToString(htmlEntities.decode(tex), {
+        return renderToString(decode(tex), {
           displayMode: false,
           ...TeXRenderer.KaTeXOptions,
         });

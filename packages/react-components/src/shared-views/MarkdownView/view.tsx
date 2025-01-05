@@ -1,4 +1,4 @@
-import {MarkdownArticle} from './components/MarkdownArticle/index.js';
+import {MarkdownArticle} from './components/MarkdownArticle';
 
 export interface IMarkdownViewProps {
   HTMLContent: string;

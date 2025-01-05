@@ -30,15 +30,13 @@ Component/
 
 We don't use default export, since it makes renaming difficult.
 
-In most cases,
+If the component is not for a page, use
 
 ```typescript
 export {Component} from './container.js';
 ```
 
-is sufficient.
-
-but if the component has heavy dependencies, consider using `React.lazy()` to export for better code-splitting.
+if not, consider using `React.lazy()` to export for better code-splitting.
 
 ```typescript
 export const Component = React.lazy(async () => {

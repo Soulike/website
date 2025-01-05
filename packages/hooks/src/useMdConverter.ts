@@ -1,3 +1,4 @@
+import {converter} from '@website/md-converter';
 import {useEffect, useState} from 'react';
 
 export function useMdConverter(markdown: string | undefined): {
@@ -13,14 +14,9 @@ export function useMdConverter(markdown: string | undefined): {
     if (markdown === undefined) {
       return;
     }
-    void import('@website/md-converter')
-      .then(({converter}) => {
-        const html = converter.makeHtml(markdown);
-        setHtml(html);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    const html = converter.makeHtml(markdown);
+    setHtml(html);
+    setLoading(false);
   }, [markdown]);
 
   return {loading, html};

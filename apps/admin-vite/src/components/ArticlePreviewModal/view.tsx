@@ -1,18 +1,19 @@
-import {Markdown} from '@website/react-components/csr';
 import {Modal, type ModalProps} from 'antd';
+import {ReactNode} from 'react';
 
 import styles from './styles.module.css';
 
-interface Props {
+export interface ArticlePreviewModalViewProps {
   title: string;
-  contentMarkdown: string;
   open: ModalProps['open'];
   onOk: ModalProps['onOk'];
   onCancel: ModalProps['onCancel'];
+  loading: boolean;
+  children: ReactNode;
 }
 
-export function ArticlePreviewModal(props: Props) {
-  const {title, contentMarkdown, open, onOk, onCancel} = props;
+export function ArticlePreviewModalView(props: ArticlePreviewModalViewProps) {
+  const {title, children, open, onOk, onCancel, loading} = props;
   return (
     <Modal
       title={title}
@@ -21,10 +22,9 @@ export function ArticlePreviewModal(props: Props) {
       onOk={onOk}
       onCancel={onCancel}
       destroyOnClose={true}
+      loading={loading}
     >
-      <div className={styles.ArticlePreviewModal}>
-        <Markdown>{contentMarkdown}</Markdown>
-      </div>
+      <div className={styles.ArticlePreviewModal}>{children}</div>
     </Modal>
   );
 }

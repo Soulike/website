@@ -1,5 +1,3 @@
-'use client';
-
 import {TeXRenderer} from '@website/tex-renderer/csr';
 import {type DependencyList, useEffect, useState} from 'react';
 
