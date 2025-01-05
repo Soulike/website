@@ -1,11 +1,11 @@
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
-import {showNetworkError} from '@/helpers/error_notification_helper.js';
-import {useIsLoggedIn} from '@/hooks/useIsLoggedIn';
-
 import {Account} from '@website/server-api';
 import {type InputProps, notification} from 'antd';
 import {type DOMAttributes, useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
+
+import {showNetworkError} from '@/helpers/error-notification-helper.js';
+import {useIsLoggedIn} from '@/hooks/useIsLoggedIn';
+import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config';
 
 import {LoginView} from './view.js';
 
@@ -17,7 +17,7 @@ export function Login() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      void navigate(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.INDEX], {replace: true});
+      void navigate(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.INDEX], {replace: true});
     }
   }, [isLoggedIn, navigate]);
 
@@ -47,7 +47,7 @@ export function Login() {
             const response = await Account.login(username, password);
             if (response.isSuccessful) {
               notification.success({message: 'Successfully Logged In'});
-              await navigate(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.INDEX]);
+              await navigate(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.INDEX]);
             } else {
               const {message} = response;
               notification.warning({message});

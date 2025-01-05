@@ -3,7 +3,7 @@ import {Button, type ButtonProps, Card, Layout} from 'antd';
 import {type ReactNode} from 'react';
 import {Link} from 'react-router';
 
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
+import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config/index.js';
 
 import {NavigationMenu} from './components/navigation-menu';
 import styles from './styles.module.css';
@@ -20,7 +20,7 @@ export function LayoutView(props: Props) {
   return (
     <Layout className={styles.layout}>
       <Header className={styles.header}>
-        <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.INDEX]}>
+        <Link to={PAGE_ID_TO_PATH[PAGE_ID.MANAGE.INDEX]}>
           <div className={styles.iconContainer}>
             <DashboardFilled className={styles.icon} />
             <span className={styles.text}>Website Admin</span>

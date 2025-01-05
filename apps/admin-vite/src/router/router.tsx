@@ -1,6 +1,6 @@
 import {BrowserRouter, useRoutes} from 'react-router';
 
-import {CONFIG} from './config.tsx';
+import {CONFIG} from './route-config.js';
 
 function Routes() {
   return useRoutes(CONFIG);

@@ -10,7 +10,11 @@ import {Layout, Menu} from 'antd';
 import {type ReactNode} from 'react';
 import {Link} from 'react-router';
 
-import {PAGE_ID, PAGE_ID_TO_ROUTE, ROUTE_TO_PAGE_ID} from '@/config/route';
+import {
+  PAGE_ID,
+  PAGE_ID_TO_PATH,
+  PATH_TO_PAGE_ID,
+} from '@/router/page-config/index.js';
 
 import styles from './styles.module.css';
 
@@ -29,7 +33,7 @@ export function LayoutView(props: Props) {
         <Menu
           theme={'light'}
           mode={'inline'}
-          selectedKeys={[ROUTE_TO_PAGE_ID[pathname]]}
+          selectedKeys={[PATH_TO_PAGE_ID[pathname]]}
           items={[
             {
               label: (
@@ -44,9 +48,7 @@ export function LayoutView(props: Props) {
               children: [
                 {
                   label: (
-                    <Link
-                      to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.ADD]}
-                    >
+                    <Link to={PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.ADD]}>
                       <span className={styles.icon}>
                         <PlusCircleOutlined />
                       </span>
@@ -58,7 +60,7 @@ export function LayoutView(props: Props) {
                 {
                   label: (
                     <Link
-                      to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE]}
+                      to={PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE]}
                     >
                       <span className={styles.icon}>
                         <InfoCircleOutlined />
@@ -84,7 +86,7 @@ export function LayoutView(props: Props) {
                 {
                   label: (
                     <Link
-                      to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.ADD]}
+                      to={PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.CATEGORY.ADD]}
                     >
                       <span className={styles.icon}>
                         <PlusCircleOutlined />
@@ -97,7 +99,7 @@ export function LayoutView(props: Props) {
                 {
                   label: (
                     <Link
-                      to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE]}
+                      to={PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE]}
                     >
                       <span className={styles.icon}>
                         <InfoCircleOutlined />
@@ -123,7 +125,7 @@ export function LayoutView(props: Props) {
                 {
                   label: (
                     <Link
-                      to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT]}
+                      to={PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT]}
                     >
                       <span className={styles.icon}>
                         <ProfileOutlined />
@@ -131,7 +133,7 @@ export function LayoutView(props: Props) {
                       About
                     </Link>
                   ),
-                  key: PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT],
+                  key: PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT],
                 },
               ],
             },

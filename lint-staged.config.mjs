@@ -11,7 +11,9 @@ export const prettierConfig = Object.freeze({
 });
 
 export const eslintConfig = Object.freeze({
-  './**/src/**/*.?(m)(j|t)(s|sx)': ['eslint --fix'],
+  './**/src/**/*.?(m)(j|t)(s|sx)': [
+    'eslint --flag unstable_config_lookup_from_file --fix',
+  ],
 });
 
 export default {

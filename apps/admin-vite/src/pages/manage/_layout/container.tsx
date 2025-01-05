@@ -1,11 +1,12 @@
-import {Loading} from '@/components/loading';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '@/config/route';
-import {showNetworkError} from '@/helpers/error_notification_helper.js';
-import {useIsLoggedIn} from '@/hooks/useIsLoggedIn.js';
 import {Account as AccountApi} from '@website/server-api';
 import {type ButtonProps, Modal, type ModalFuncProps, notification} from 'antd';
 import {useCallback, useEffect} from 'react';
 import {Outlet, useNavigate} from 'react-router';
+
+import {Loading} from '@/components/Loading';
+import {showNetworkError} from '@/helpers/error-notification-helper.js';
+import {useIsLoggedIn} from '@/hooks/useIsLoggedIn.js';
+import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config/index.js';
 
 import {LayoutView} from './view.js';
 
@@ -16,7 +17,7 @@ export function Layout() {
 
   useEffect(() => {
     if (!loading && !isLoggedIn) {
-      void navigate(PAGE_ID_TO_ROUTE[PAGE_ID.LOGIN], {replace: true});
+      void navigate(PAGE_ID_TO_PATH[PAGE_ID.LOGIN], {replace: true});
     }
   }, [isLoggedIn, loading, navigate]);
 
@@ -28,7 +29,7 @@ export function Layout() {
           notification.success({
             message: 'Logged out',
           });
-          void navigate(PAGE_ID_TO_ROUTE[PAGE_ID.LOGIN], {replace: true});
+          void navigate(PAGE_ID_TO_PATH[PAGE_ID.LOGIN], {replace: true});
         } else {
           const {message} = response;
           notification.warning({

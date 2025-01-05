@@ -2,7 +2,7 @@ import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {Button, Input, type InputProps} from 'antd';
 import {type DOMAttributes} from 'react';
 
-import {Loading} from '@/components/loading';
+import {Loading} from '@/components/Loading';
 
 import web_developer from './assets/web_developer.svg';
 import styles from './styles.module.css';
