@@ -6,7 +6,9 @@ import {Outlet, RouteObject} from 'react-router';
 
 import {Loading} from '@/components/Loading';
 import {NotFound} from '@/components/NotFound';
+import {Index} from '@/pages/_index';
 import {Login} from '@/pages/login';
+import {Index as ManageIndex} from '@/pages/manage/_index';
 import {Layout as ManageLayout} from '@/pages/manage/_layout';
 
 import {PAGE_ID, PAGE_ID_TO_PATH, type PageIdType} from './page-config';
@@ -87,7 +89,13 @@ routeConfig[PAGE_ID.MANAGE.INDEX] = {
       </Suspense>
     </ErrorBoundary>
   ),
-  children: [routeConfig[PAGE_ID.MANAGE.BLOG.INDEX]],
+  children: [
+    {
+      index: true,
+      element: <ManageIndex />,
+    },
+    routeConfig[PAGE_ID.MANAGE.BLOG.INDEX],
+  ],
 };
 
 routeConfig[PAGE_ID.LOGIN] = {
@@ -107,7 +115,7 @@ routeConfig[PAGE_ID.INDEX] = {
   children: [
     {
       index: true,
-      element: routeConfig[PAGE_ID.LOGIN].element,
+      element: <Index />,
     },
     routeConfig[PAGE_ID.LOGIN],
     routeConfig[PAGE_ID.MANAGE.INDEX],

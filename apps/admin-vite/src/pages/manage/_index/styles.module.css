@@ -1,0 +1,13 @@
+.Index {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: fit-content;
+
+  .image {
+    width: 50vw;
+    height: auto;
+    padding-block: 30px;
+  }
+}
