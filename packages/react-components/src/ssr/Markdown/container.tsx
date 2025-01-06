@@ -12,7 +12,7 @@ export async function Markdown(props: IProps) {
   const {children} = props;
   let html = converter.makeHtml(children);
   html = await highlightAll(html);
-  html = TeXRenderer.renderAllTexInHTML(html);
+  html = await TeXRenderer.renderAllTexInHTML(html);
 
-  return <MarkdownView HTMLContent={html} />;
+  return <MarkdownView htmlContent={html} />;
 }

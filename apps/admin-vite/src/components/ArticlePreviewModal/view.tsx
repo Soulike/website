@@ -1,5 +1,5 @@
-import {Modal, type ModalProps} from 'antd';
-import {ReactNode} from 'react';
+import {Markdown} from '@website/react-components/csr';
+import {Modal, type ModalProps, Skeleton} from 'antd';
 
 import styles from './styles.module.css';
 
@@ -9,11 +9,20 @@ export interface ArticlePreviewModalViewProps {
   onOk: ModalProps['onOk'];
   onCancel: ModalProps['onCancel'];
   loading: boolean;
-  children: ReactNode;
+  onMarkdownRenderFinish: () => unknown;
+  contentMarkdown: string;
 }
 
 export function ArticlePreviewModalView(props: ArticlePreviewModalViewProps) {
-  const {title, children, open, onOk, onCancel, loading} = props;
+  const {
+    title,
+    loading,
+    open,
+    onOk,
+    onCancel,
+    contentMarkdown,
+    onMarkdownRenderFinish,
+  } = props;
   return (
     <Modal
       title={title}
@@ -22,9 +31,22 @@ export function ArticlePreviewModalView(props: ArticlePreviewModalViewProps) {
       onOk={onOk}
       onCancel={onCancel}
       destroyOnClose={true}
-      loading={loading}
     >
-      <div className={styles.ArticlePreviewModal}>{children}</div>
+      <div className={styles.ArticlePreviewModal}>
+        {loading && (
+          <Skeleton
+            loading={true}
+            active={true}
+            paragraph={true}
+            title={true}
+          />
+        )}
+        <div className={loading ? styles.hide : ''}>
+          <Markdown onRenderFinish={onMarkdownRenderFinish}>
+            {contentMarkdown}
+          </Markdown>
+        </div>
+      </div>
     </Modal>
   );
 }

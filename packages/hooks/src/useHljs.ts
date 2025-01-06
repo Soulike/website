@@ -1,29 +1,20 @@
 import {highlightAll} from '@website/hljs/csr';
 import {useEffect, useState} from 'react';
 
-export function useHljs(htmlContainingCode: string | undefined): {
+export function useHljs(htmlContainingCode: string): {
   loading: boolean;
-  highlightedHtml: string | null;
+  highlightedHtml: string;
 } {
   const [loading, setLoading] = useState(true);
-  const [highlightedHtml, setHighlightedHtmlHtml] = useState<string | null>(
-    null,
-  );
+  const [highlightedHtml, setHighlightedHtml] = useState<string>('');
 
   useEffect(() => {
     setLoading(true);
-    setHighlightedHtmlHtml(null);
-    if (typeof htmlContainingCode !== 'string') {
-      return;
-    }
-
-    void highlightAll(htmlContainingCode)
-      .then((html) => {
-        setHighlightedHtmlHtml(html);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    setHighlightedHtml('');
+    void highlightAll(htmlContainingCode).then((html) => {
+      setHighlightedHtml(html);
+      setLoading(false);
+    });
   }, [htmlContainingCode]);
 
   return {loading, highlightedHtml};

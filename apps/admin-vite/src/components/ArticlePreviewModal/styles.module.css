@@ -1,4 +1,8 @@
 .ArticlePreviewModal {
   height: 60vh;
   overflow: auto;
+
+  .hide {
+    display: none;
+  }
 }

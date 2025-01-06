@@ -11,15 +11,17 @@ interface IProps {
 export function Markdown(props: IProps) {
   const {children, onRenderFinish} = props;
   const {loading: converterLoading, html} = useMdConverter(children);
-  const {loading: hljsLoading, highlightedHtml} = useHljs(html ?? '');
-
-  const {renderedHTML} = useTeXRenderer(highlightedHtml ?? '', []);
+  const {loading: hljsLoading, highlightedHtml} = useHljs(html);
+  const {loading: texRendererLoading, renderedHtml} = useTeXRenderer(
+    highlightedHtml,
+    [],
+  );
 
   useEffect(() => {
-    if (!converterLoading && !hljsLoading) {
+    if (!converterLoading && !hljsLoading && !texRendererLoading) {
       if (onRenderFinish) onRenderFinish();
     }
-  }, [converterLoading, hljsLoading, onRenderFinish]);
+  }, [converterLoading, hljsLoading, texRendererLoading, onRenderFinish]);
 
-  return <MarkdownView HTMLContent={renderedHTML} />;
+  return <MarkdownView htmlContent={renderedHtml} />;
 }

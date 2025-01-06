@@ -1,11 +1,11 @@
 import {MarkdownArticle} from './components/MarkdownArticle';
 
 export interface IMarkdownViewProps {
-  HTMLContent: string;
+  htmlContent: string;
 }
 
 export function MarkdownView(props: IMarkdownViewProps) {
-  const {HTMLContent} = props;
+  const {htmlContent} = props;
 
-  return <MarkdownArticle dangerouslySetInnerHTML={{__html: HTMLContent}} />;
+  return <MarkdownArticle dangerouslySetInnerHTML={{__html: htmlContent}} />;
 }
