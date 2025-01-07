@@ -15,6 +15,8 @@ import {Layout as ManageBlogLayout} from '@/pages/manage/blog/_layout';
 import {Add as ManageBlogArticleAdd} from '@/pages/manage/blog/article/add';
 import {Manage as ManageBlogArticleManage} from '@/pages/manage/blog/article/manage';
 import {Modify as ManageBlogArticleModify} from '@/pages/manage/blog/article/modify';
+import {Add as ManageBlogCategoryAdd} from '@/pages/manage/blog/category/add';
+import {Manage as ManageBlogCategoryManage} from '@/pages/manage/blog/category/manage';
 import {About as ManageBlogOptionAbout} from '@/pages/manage/blog/option/about';
 
 import {PAGE_ID, PAGE_ID_TO_PATH, type PageIdType} from './page-config';
@@ -48,12 +50,12 @@ routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.INDEX] = {
 
 routeConfig[PAGE_ID.MANAGE.BLOG.CATEGORY.ADD] = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.CATEGORY.ADD]),
-  element: null,
+  element: <ManageBlogCategoryAdd />,
 };
 
 routeConfig[PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE] = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE]),
-  element: null,
+  element: <ManageBlogCategoryManage />,
 };
 
 routeConfig[PAGE_ID.MANAGE.BLOG.CATEGORY.INDEX] = {
