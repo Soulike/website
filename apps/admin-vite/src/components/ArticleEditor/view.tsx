@@ -78,7 +78,7 @@ export function ArticleEditor(props: Props) {
           value={content}
           onChange={onContentTextAreaChange}
           className={Style.content}
-          placeholder={'Content（Markdown）'}
+          placeholder={'Content (Markdown)'}
         />
       </Group>
       <div className={Style.bottomWrapper}>
