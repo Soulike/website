@@ -1,5 +1,3 @@
-import '@website/react-components/style.css';
-
 import {ClockCircleOutlined, TagOutlined} from '@ant-design/icons';
 import {type Category} from '@website/classes';
 import {Markdown} from '@website/react-components/ssr';
@@ -37,7 +35,7 @@ export function ArticleView(props: Props) {
           <Tag color={'purple'}>
             <ClockCircleOutlined className={Style.icon} />
             <span>
-              {`${publicationTime.getFullYear()}-${(
+              {`${publicationTime.getFullYear().toString()}-${(
                 publicationTime.getMonth() + 1
               )
                 .toString()
@@ -49,7 +47,7 @@ export function ArticleView(props: Props) {
           </Tag>
           <Tag color={'blue'}>
             <TagOutlined className={Style.icon} />
-            <span>{category ? category.name : ''}</span>
+            <span>{category.name}</span>
           </Tag>
         </div>
       </header>
@@ -60,7 +58,7 @@ export function ArticleView(props: Props) {
           banner={true}
           message={`本文最后编辑于 ${Math.floor(
             timeDiff / ONE_DAY,
-          )} 天前，可能已不具有时效性，请谨慎阅读`}
+          ).toString()} 天前，可能已不具有时效性，请谨慎阅读`}
         />
       ) : null}
       <Markdown>{contentMarkdown}</Markdown>

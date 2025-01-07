@@ -1,26 +1,20 @@
 import {useEffect, useState} from 'react';
 
-export function useMdConverter(markdown: string | undefined): {
+export function useMdConverter(markdown: string): {
   loading: boolean;
-  html: string | null;
+  html: string;
 } {
   const [loading, setLoading] = useState(true);
-  const [html, setHtml] = useState<string | null>(null);
+  const [html, setHtml] = useState<string>('');
 
   useEffect(() => {
     setLoading(true);
-    setHtml(null);
-    if (markdown === undefined) {
-      return;
-    }
-    void import('@website/md-converter')
-      .then(({converter}) => {
-        const html = converter.makeHtml(markdown);
-        setHtml(html);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    setHtml('');
+    void import('@website/md-converter').then(({converter}) => {
+      const html = converter.makeHtml(markdown);
+      setHtml(html);
+      setLoading(false);
+    });
   }, [markdown]);
 
   return {loading, html};

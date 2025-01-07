@@ -9,6 +9,9 @@ import {
 const nextConfigProduction = {
   reactStrictMode: true,
   distDir: 'build',
+  compiler: {
+    styledComponents: true,
+  },
 };
 
 export default async (phase) => {

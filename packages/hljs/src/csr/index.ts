@@ -4,9 +4,9 @@ import {
   yieldMainThread,
 } from '@website/utils/csr';
 
-import {hljs} from '../hljs';
-
 export async function highlightAll(html: string): Promise<string> {
+  const {hljs} = await import('../hljs.js');
+
   const dom = convertHTMLStringToDOM(html);
 
   const preBlocks = Array.from(dom.querySelectorAll('pre'));

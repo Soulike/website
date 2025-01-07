@@ -1,6 +1,6 @@
-import showdown from 'showdown';
+import {Converter} from 'showdown';
 
-export const converter = new showdown.Converter({
+export const converter = new Converter({
   parseImgDimensions: true,
   strikethrough: true,
   tables: true,
