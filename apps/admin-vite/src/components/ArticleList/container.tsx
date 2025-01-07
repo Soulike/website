@@ -177,6 +177,7 @@ export function ArticleList(props: IProps) {
             });
             articleMap.delete(idOfArticleToDelete);
             setArticleMap(new Map(articleMap));
+            setIdOfArticleToDelete(0);
           } else {
             const {message} = response;
             notification.warning({message});

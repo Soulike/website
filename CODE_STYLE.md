@@ -19,7 +19,7 @@ Typical structure for a React component:
 
 ```text
 Component/
-  | index.tsx               // For export the component.
+  | index.tsx               // For exporting the component.
   | container.tsx           // Optional
   | view.tsx
   | styles.module.css       // Part of view.tsx
