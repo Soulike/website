@@ -14,7 +14,7 @@ import type {TextAreaProps} from 'antd/lib/input';
 
 import {ArticlePreviewModal} from '@/components/ArticlePreviewModal';
 
-import Style from './styles.module.css';
+import styles from './styles.module.css';
 
 const {Group, TextArea} = Input;
 const {Option} = Select;
@@ -60,15 +60,15 @@ export function ArticleEditor(props: Props) {
     onArticlePreviewModalCancel,
   } = props;
   return (
-    <div className={Style.ArticleEditor}>
-      <Group size={'large'} className={Style.inputGroup}>
+    <div className={styles.ArticleEditor}>
+      <Group size={'large'} className={styles.inputGroup}>
         <Input
           disabled={
             isLoadingCategory || isSubmittingArticle || isLoadingArticle
           }
           value={title}
           onChange={onTitleInputChange}
-          className={Style.title}
+          className={styles.title}
           placeholder={'Title'}
         />
         <TextArea
@@ -77,17 +77,17 @@ export function ArticleEditor(props: Props) {
           }
           value={content}
           onChange={onContentTextAreaChange}
-          className={Style.content}
+          className={styles.content}
           placeholder={'Content (Markdown)'}
         />
       </Group>
-      <div className={Style.bottomWrapper}>
+      <div className={styles.bottomWrapper}>
         <Select
           size={'large'}
           onChange={onCategorySelectorChange}
           value={category}
           loading={isLoadingCategory}
-          className={Style.categorySelect}
+          className={styles.categorySelect}
           disabled={isLoadingCategory}
           placeholder={'Category'}
         >
