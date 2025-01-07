@@ -12,7 +12,10 @@ import {Index as ManageIndex} from '@/pages/manage/_index';
 import {Layout as ManageLayout} from '@/pages/manage/_layout';
 import {Index as ManageBlogIndex} from '@/pages/manage/blog/_index';
 import {Layout as ManageBlogLayout} from '@/pages/manage/blog/_layout';
-import {About} from '@/pages/manage/blog/option/about';
+import {Add as ManageBlogArticleAdd} from '@/pages/manage/blog/article/add';
+import {Manage as ManageBlogArticleManage} from '@/pages/manage/blog/article/manage';
+import {Modify as ManageBlogArticleModify} from '@/pages/manage/blog/article/modify';
+import {About as ManageBlogOptionAbout} from '@/pages/manage/blog/option/about';
 
 import {PAGE_ID, PAGE_ID_TO_PATH, type PageIdType} from './page-config';
 
@@ -20,17 +23,17 @@ const routeConfig: Record<PageIdType, Readonly<RouteObject>> = {};
 
 routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.ADD] = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.ADD]),
-  element: null,
+  element: <ManageBlogArticleAdd />,
 };
 
 routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE] = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE]),
-  element: null,
+  element: <ManageBlogArticleManage />,
 };
 
 routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY] = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY]),
-  element: null,
+  element: <ManageBlogArticleModify />,
 };
 
 routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.INDEX] = {
@@ -64,7 +67,7 @@ routeConfig[PAGE_ID.MANAGE.BLOG.CATEGORY.INDEX] = {
 
 routeConfig[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT] = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT]),
-  element: <About />,
+  element: <ManageBlogOptionAbout />,
 };
 
 routeConfig[PAGE_ID.MANAGE.BLOG.OPTION.INDEX] = {
@@ -75,7 +78,13 @@ routeConfig[PAGE_ID.MANAGE.BLOG.OPTION.INDEX] = {
 
 routeConfig[PAGE_ID.MANAGE.BLOG.INDEX] = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.INDEX]),
-  element: <ManageBlogLayout />,
+  element: (
+    <ErrorBoundary fallback={<NotFound />}>
+      <Suspense fallback={<Loading />}>
+        <ManageBlogLayout />
+      </Suspense>
+    </ErrorBoundary>
+  ),
   children: [
     {
       index: true,

@@ -10,11 +10,7 @@ import {Layout, Menu} from 'antd';
 import {type ReactNode} from 'react';
 import {Link} from 'react-router';
 
-import {
-  PAGE_ID,
-  PAGE_ID_TO_PATH,
-  PATH_TO_PAGE_ID,
-} from '@/router/page-config/index.js';
+import {PAGE_ID, PAGE_ID_TO_PATH, PATH_TO_PAGE_ID} from '@/router/page-config';
 
 import styles from './styles.module.css';
 
