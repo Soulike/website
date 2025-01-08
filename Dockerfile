@@ -29,11 +29,11 @@ CMD pnpm start
 
 # Build admin
 FROM deps AS admin-builder
-RUN pnpm --filter "./apps/admin" build && \
-    pnpm --filter "./apps/admin" deploy --prod /admin
+RUN pnpm --filter "./apps/admin-vite" build
 
-FROM base AS admin
-COPY --from=admin-builder /admin /admin
-WORKDIR /admin
+# Setup admin static server
+FROM nginx:stable-alpine AS admin
+COPY --from=admin-builder /website/apps/admin-vite/dist /admin-dist
+COPY --from=admin-builder /website/apps/admin-vite/nginx.conf /etc/nginx/conf.d/admin.conf
+WORKDIR /
 EXPOSE 3000
-CMD pnpm start
