@@ -10,6 +10,8 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
         with:
@@ -20,8 +22,6 @@ jobs:
           node-version: lts/*
           check-latest: true
           cache: 'pnpm'
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Install Dependencies
         run: pnpm install
       - name: Build
