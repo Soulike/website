@@ -10,6 +10,7 @@ export interface ArticlePreviewModalViewProps {
   onCancel: ModalProps['onCancel'];
   loading: boolean;
   onMarkdownRenderFinish: () => unknown;
+  onMarkdownRenderStart: () => unknown;
   contentMarkdown: string;
 }
 
@@ -21,6 +22,7 @@ export function ArticlePreviewModalView(props: ArticlePreviewModalViewProps) {
     onOk,
     onCancel,
     contentMarkdown,
+    onMarkdownRenderStart,
     onMarkdownRenderFinish,
   } = props;
   return (
@@ -42,7 +44,10 @@ export function ArticlePreviewModalView(props: ArticlePreviewModalViewProps) {
           />
         )}
         <div className={loading ? styles.hide : ''}>
-          <Markdown onRenderFinish={onMarkdownRenderFinish}>
+          <Markdown
+            onRenderStart={onMarkdownRenderStart}
+            onRenderFinish={onMarkdownRenderFinish}
+          >
             {contentMarkdown}
           </Markdown>
         </div>
