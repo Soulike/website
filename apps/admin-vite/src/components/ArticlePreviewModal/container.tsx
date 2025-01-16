@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 
 import {
   ArticlePreviewModalView,
@@ -7,16 +7,15 @@ import {
 
 type Props = Omit<
   ArticlePreviewModalViewProps,
-  'loading' | 'onMarkdownRenderFinish'
+  'loading' | 'onMarkdownRenderStart' | 'onMarkdownRenderFinish'
 >;
 
 export function ArticlePreviewModal(props: Props) {
   const [isMarkdownRendering, setIsMarkdownRendering] = useState(true);
-  const {contentMarkdown} = props;
 
-  useEffect(() => {
+  const onMarkdownRenderStart = useCallback(() => {
     setIsMarkdownRendering(true);
-  }, [contentMarkdown]);
+  }, []);
 
   const onMarkdownRenderFinish = useCallback(() => {
     setIsMarkdownRendering(false);
@@ -26,6 +25,7 @@ export function ArticlePreviewModal(props: Props) {
     <ArticlePreviewModalView
       {...props}
       loading={isMarkdownRendering}
+      onMarkdownRenderStart={onMarkdownRenderStart}
       onMarkdownRenderFinish={onMarkdownRenderFinish}
     />
   );
