@@ -4,7 +4,6 @@ import './theme/default.css';
 import './theme/dark.css';
 
 import {useMediaQuery} from '@chakra-ui/media-query';
-import {StyledComponentsRegistry} from '@website/react-components/next-js';
 import {App, ConfigProvider, theme} from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import React, {useEffect, useState} from 'react';
@@ -32,7 +31,7 @@ export function ThemeProvider({children}: IThemeProviderProps) {
     >
       <App>
         <div className={`${style.container} ${isVisible ? style.visible : ''}`}>
-          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+          {children}
         </div>
       </App>
     </ConfigProvider>
