@@ -3,7 +3,6 @@
 import './theme/default.css';
 import './theme/dark.css';
 
-import {AntdRegistry} from '@ant-design/nextjs-registry';
 import {useMediaQuery} from '@chakra-ui/media-query';
 import {StyledComponentsRegistry} from '@website/react-components/next-js';
 import {App, ConfigProvider, theme} from 'antd';
@@ -25,26 +24,17 @@ export function ThemeProvider({children}: IThemeProviderProps) {
   }, []);
 
   return (
-    <StyledComponentsRegistry>
-      <AntdRegistry>
-        <ConfigProvider
-          locale={zhCN}
-          theme={{
-            algorithm: isDarkMode
-              ? theme.darkAlgorithm
-              : theme.defaultAlgorithm,
-            cssVar: true,
-          }}
-        >
-          <App>
-            <div
-              className={`${style.container} ${isVisible ? style.visible : ''}`}
-            >
-              {children}
-            </div>
-          </App>
-        </ConfigProvider>
-      </AntdRegistry>
-    </StyledComponentsRegistry>
+    <ConfigProvider
+      locale={zhCN}
+      theme={{
+        algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
+      }}
+    >
+      <App>
+        <div className={`${style.container} ${isVisible ? style.visible : ''}`}>
+          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        </div>
+      </App>
+    </ConfigProvider>
   );
 }

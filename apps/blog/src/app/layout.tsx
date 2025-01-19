@@ -1,6 +1,7 @@
 import 'antd/dist/reset.css';
 import '@/src/styles/global.css';
 
+import {AntdRegistry} from '@ant-design/nextjs-registry';
 import type {Metadata, Viewport} from 'next';
 import Script from 'next/script';
 import React, {ReactNode} from 'react';
@@ -74,7 +75,9 @@ const RootLayoutContainer = ({children}: {children: ReactNode}) => {
         </Script>
       </head>
       <body>
-        <RootLayout>{children}</RootLayout>
+        <AntdRegistry>
+          <RootLayout>{children}</RootLayout>
+        </AntdRegistry>
       </body>
     </html>
   );
