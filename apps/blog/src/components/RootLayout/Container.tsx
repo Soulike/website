@@ -1,3 +1,4 @@
+import {StyledComponentsRegistry} from '@website/react-components/next-js';
 import type React from 'react';
 
 import {ThemeProvider} from './components/ThemeProvider';
@@ -12,9 +13,11 @@ export function RootLayout(props: IRootLayoutProps) {
 
   return (
     <ThemeProvider>
-      <RootLayoutView>
-        <ThemeProvider>{children}</ThemeProvider>
-      </RootLayoutView>
+      <StyledComponentsRegistry>
+        <RootLayoutView>
+          <ThemeProvider>{children}</ThemeProvider>
+        </RootLayoutView>
+      </StyledComponentsRegistry>
     </ThemeProvider>
   );
 }

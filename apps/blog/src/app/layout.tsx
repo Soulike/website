@@ -1,10 +1,9 @@
 import 'antd/dist/reset.css';
 import '@/src/styles/global.css';
 
-import {StyledComponentsRegistry} from '@website/react-components/next-js';
 import type {Metadata, Viewport} from 'next';
 import Script from 'next/script';
-import {ReactNode} from 'react';
+import React, {ReactNode} from 'react';
 
 import {RootLayout} from '@/src/components/RootLayout';
 
@@ -75,9 +74,7 @@ const RootLayoutContainer = ({children}: {children: ReactNode}) => {
         </Script>
       </head>
       <body>
-        <StyledComponentsRegistry>
-          <RootLayout>{children}</RootLayout>
-        </StyledComponentsRegistry>
+        <RootLayout>{children}</RootLayout>
       </body>
     </html>
   );
