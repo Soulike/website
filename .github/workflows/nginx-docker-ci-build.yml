@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build:
-    uses: docker-build-and-push.yml
+    uses: ./.github/workflows/docker-build-and-push.yml
     secrets: inherit
     with:
       docker-file-path: ./nginx/Dockerfile
