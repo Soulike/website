@@ -1,9 +1,9 @@
-name: Build and Push NGINX Docker Image
+name: CI Build Docker Image
 
 on:
-  push:
+  pull_request:
     branches:
-      - 'main'
+      - main
     paths:
       - 'nginx/configurations/**'
       - 'nginx/Dockerfile'
@@ -20,4 +20,4 @@ jobs:
     with:
       docker-file-path: ./nginx/Dockerfile
       docker-build-target: website-nginx
-      push: true
+      push: false

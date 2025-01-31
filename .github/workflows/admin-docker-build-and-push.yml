@@ -17,8 +17,9 @@ concurrency:
 
 jobs:
   build:
-    uses: ./.github/workflows/docker-build.yml
+    uses: docker-build-and-push.yml
     secrets: inherit
     with:
       docker-file-path: ./Dockerfile
       docker-build-target: admin
+      push: true

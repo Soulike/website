@@ -1,11 +1,11 @@
-name: Build and Push Blog Docker Image
+name: CI Build Admin Docker Image
 
 on:
-  push:
+  pull_request:
     branches:
-      - 'main'
+      - main
     paths:
-      - 'apps/blog/**'
+      - 'apps/admin-vite/**'
       - 'packages/**'
       - 'pnpm-lock.yaml'
       - 'Dockerfile'
@@ -21,5 +21,5 @@ jobs:
     secrets: inherit
     with:
       docker-file-path: ./Dockerfile
-      docker-build-target: blog
+      docker-build-target: admin
       push: true
