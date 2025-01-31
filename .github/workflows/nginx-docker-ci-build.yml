@@ -1,4 +1,4 @@
-name: CI Build Docker Image
+name: CI Build NGINX Docker Image
 
 on:
   pull_request:
