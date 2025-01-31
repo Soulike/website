@@ -1,4 +1,4 @@
-name: Docker Build
+name: Docker Build and Push
 
 on:
   workflow_call:
@@ -9,6 +9,9 @@ on:
       docker-file-path:
         required: true
         type: string
+      push:
+        required: true
+        type: boolean
 
 jobs:
   build:
@@ -31,8 +34,8 @@ jobs:
           context: .
           file: ${{ inputs.docker-file-path }}
           target: ${{ inputs.docker-build-target }}
-          platforms: linux/amd64
-          push: true
+          platforms: linux/amd64,linux/arm64
+          push: ${{ inputs.push }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-build-target }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -1,9 +1,9 @@
-name: Build and Push Blog Docker Image
+name: CI Build Blog Docker Image
 
 on:
-  push:
+  pull_request:
     branches:
-      - 'main'
+      - main
     paths:
       - 'apps/blog/**'
       - 'packages/**'
@@ -22,4 +22,4 @@ jobs:
     with:
       docker-file-path: ./Dockerfile
       docker-build-target: blog
-      push: true
+      push: false
