@@ -22,4 +22,3 @@ jobs:
     with:
       docker-file-path: ./Dockerfile
       docker-build-target: admin
-      push: true

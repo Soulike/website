@@ -20,4 +20,3 @@ jobs:
     with:
       docker-file-path: ./nginx/Dockerfile
       docker-build-target: website-nginx
-      push: true
