@@ -29,7 +29,7 @@
     "**/*.ts",
     "**/*.tsx",
     "../../packages/hooks/src/useHljs.tsx",
-    "../../packages/hljs/src/index.ts",
+    "../../packages/html-code-highlighter/src/index.ts",
     "../../packages/utils/src/script/index.ts",
     "build/types/**/*.ts"
   ],

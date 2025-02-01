@@ -1,3 +1,5 @@
+import '@website/markdown-article-renderer/style.css';
+
 import {MarkdownArticle} from './components/MarkdownArticle';
 
 export interface IMarkdownViewProps {

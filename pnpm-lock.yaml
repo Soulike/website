@@ -207,7 +207,20 @@ importers:
         specifier: ^8.19.0
         version: 8.19.0(eslint@9.17.0(jiti@2.4.2))(typescript@5.7.2)
 
-  packages/hljs:
+  packages/hooks:
+    dependencies:
+      react:
+        specifier: '>=18.0.0'
+        version: 18.3.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.18
+        version: 18.3.18
+      eslint-plugin-react-hooks:
+        specifier: ^5.1.0
+        version: 5.1.0(eslint@9.17.0(jiti@2.4.2))
+
+  packages/html-code-highlighter:
     dependencies:
       '@website/utils':
         specifier: workspace:^
@@ -220,32 +233,29 @@ importers:
         specifier: ^0.24.2
         version: 0.24.2
 
-  packages/hooks:
+  packages/markdown-article-renderer:
     dependencies:
-      '@website/hljs':
+      '@website/html-code-highlighter':
         specifier: workspace:^
-        version: link:../hljs
-      '@website/md-converter':
+        version: link:../html-code-highlighter
+      '@website/markdown-html-converter':
         specifier: workspace:^
-        version: link:../md-converter
+        version: link:../markdown-html-converter
       '@website/tex-renderer':
         specifier: workspace:^
         version: link:../tex-renderer
-      '@website/utils':
-        specifier: workspace:^
-        version: link:../utils
-      react:
-        specifier: '>=18.0.0'
-        version: 18.3.1
     devDependencies:
-      '@types/react':
-        specifier: ^18.3.18
-        version: 18.3.18
-      eslint-plugin-react-hooks:
-        specifier: ^5.1.0
-        version: 5.1.0(eslint@9.17.0(jiti@2.4.2))
+      '@types/showdown':
+        specifier: ^2.0.6
+        version: 2.0.6
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      esbuild:
+        specifier: ^0.24.2
+        version: 0.24.2
 
-  packages/md-converter:
+  packages/markdown-html-converter:
     dependencies:
       showdown:
         specifier: ^2.1.0
@@ -257,18 +267,12 @@ importers:
 
   packages/react-components:
     dependencies:
-      '@website/hljs':
-        specifier: workspace:^
-        version: link:../hljs
       '@website/hooks':
         specifier: workspace:^
         version: link:../hooks
-      '@website/md-converter':
+      '@website/markdown-article-renderer':
         specifier: workspace:^
-        version: link:../md-converter
-      '@website/tex-renderer':
-        specifier: workspace:^
-        version: link:../tex-renderer
+        version: link:../markdown-article-renderer
       next:
         specifier: ^14.2.22
         version: 14.2.22(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.83.4)
@@ -339,6 +343,9 @@ importers:
       '@types/jsdom':
         specifier: ^21.1.7
         version: 21.1.7
+      esbuild:
+        specifier: ^0.24.2
+        version: 0.24.2
 
   packages/utils:
     dependencies:

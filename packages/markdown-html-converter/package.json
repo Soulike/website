@@ -1,5 +1,5 @@
 {
-  "name": "@website/md-converter",
+  "name": "@website/markdown-html-converter",
   "main": "dist/index.js",
   "dependencies": {
     "showdown": "^2.1.0"

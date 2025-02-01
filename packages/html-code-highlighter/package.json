@@ -1,9 +1,9 @@
 {
-  "name": "@website/hljs",
+  "name": "@website/html-code-highlighter",
   "exports": {
-    ".": "./dist/index.js",
-    "./csr": "./dist/csr/index.js",
-    "./ssr": "./dist/ssr/index.js"
+    "./csr": "./dist/csr.js",
+    "./ssr": "./dist/ssr.js",
+    "./style.css": "./dist/style.css"
   },
   "dependencies": {
     "@website/utils": "workspace:^",
