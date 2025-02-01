@@ -9,7 +9,7 @@
   "dependencies": {
     "@website/html-code-highlighter": "workspace:^",
     "@website/hooks": "workspace:^",
-    "@website/md-converter": "workspace:^",
+    "@website/markdown-html-converter": "workspace:^",
     "@website/tex-renderer": "workspace:^",
     "styled-components": "^6.1.14"
   },

@@ -233,7 +233,7 @@ importers:
         specifier: ^0.24.2
         version: 0.24.2
 
-  packages/md-converter:
+  packages/markdown-html-converter:
     dependencies:
       showdown:
         specifier: ^2.1.0
@@ -251,9 +251,9 @@ importers:
       '@website/html-code-highlighter':
         specifier: workspace:^
         version: link:../html-code-highlighter
-      '@website/md-converter':
+      '@website/markdown-html-converter':
         specifier: workspace:^
-        version: link:../md-converter
+        version: link:../markdown-html-converter
       '@website/tex-renderer':
         specifier: workspace:^
         version: link:../tex-renderer

@@ -1,5 +1,5 @@
 import {HtmlCodeHighlighter} from '@website/html-code-highlighter/ssr';
-import {converter} from '@website/md-converter';
+import {MarkdownHtmlConverter} from '@website/markdown-html-converter';
 import {TeXRenderer} from '@website/tex-renderer/ssr';
 
 import {MarkdownView} from '../../shared-views/MarkdownView';
@@ -10,7 +10,7 @@ interface IProps {
 
 export async function Markdown(props: IProps) {
   const {children} = props;
-  let html = converter.makeHtml(children);
+  let html = MarkdownHtmlConverter.toHtml(children);
   html = await HtmlCodeHighlighter.highlightAll(html);
   html = await TeXRenderer.renderAllTexInHTML(html);
 
