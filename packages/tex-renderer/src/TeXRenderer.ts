@@ -1,4 +1,4 @@
-import htmlEntities from 'html-entities';
+import * as htmlEntities from 'html-entities';
 import type {KatexOptions} from 'katex';
 import katex from 'katex';
 
