@@ -1,25 +1,17 @@
-import {
-  convertDOMToString,
-  convertHTMLStringToDOM,
-  yieldMainThread,
-} from '@website/utils/csr';
+import {convertDOMToString, convertHTMLStringToDOM} from '@website/utils/csr';
 
 import {hljs} from './hljs.js';
 
 export class HtmlCodeHighlighter {
-  public static async highlightAll(html: string): Promise<string> {
+  public static highlightAll(html: string): string {
     const dom = convertHTMLStringToDOM(html);
-
     const preBlocks = Array.from(dom.querySelectorAll('pre'));
-    await Promise.all(
-      preBlocks.map(async (pre) => {
-        const codeBlocks = pre.querySelectorAll('code');
-        codeBlocks.forEach((block) => {
-          hljs.highlightElement(block);
-        });
-        await yieldMainThread();
-      }),
-    );
+    preBlocks.map((pre) => {
+      const codeBlocks = pre.querySelectorAll('code');
+      codeBlocks.forEach((block) => {
+        hljs.highlightElement(block);
+      });
+    });
     return convertDOMToString(dom);
   }
 }

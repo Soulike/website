@@ -1,4 +1,6 @@
+import htmlEntities from 'html-entities';
 import type {KatexOptions} from 'katex';
+import katex from 'katex';
 
 export class TeXRenderer {
   private static KaTeXOptions: KatexOptions = {
@@ -12,12 +14,7 @@ export class TeXRenderer {
   // $...$
   private static readonly InlineMathRegex = /\$(.*?)\$/g;
 
-  public static async renderAllTexInHTML(html: string): Promise<string> {
-    const [htmlEntities, katex] = await Promise.all([
-      import('html-entities'),
-      import('katex'),
-    ]);
-
+  public static renderAllTexInHTML(html: string): string {
     const processedHtml = html
       // Replace block math $$...$$
       .replace(TeXRenderer.BlockMathRegex, (_, tex: string) => {

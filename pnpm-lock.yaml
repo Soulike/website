@@ -233,6 +233,28 @@ importers:
         specifier: ^0.24.2
         version: 0.24.2
 
+  packages/markdown-article-renderer:
+    dependencies:
+      '@website/html-code-highlighter':
+        specifier: workspace:^
+        version: link:../html-code-highlighter
+      '@website/markdown-html-converter':
+        specifier: workspace:^
+        version: link:../markdown-html-converter
+      '@website/tex-renderer':
+        specifier: workspace:^
+        version: link:../tex-renderer
+    devDependencies:
+      '@types/showdown':
+        specifier: ^2.0.6
+        version: 2.0.6
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      esbuild:
+        specifier: ^0.24.2
+        version: 0.24.2
+
   packages/markdown-html-converter:
     dependencies:
       showdown:

@@ -1,6 +1,5 @@
 {
   "name": "@website/tex-renderer",
-  "main": "dist/index.js",
   "exports": {
     ".": "./dist/TexRenderer.js",
     "./style.css": "./dist/style.css"
