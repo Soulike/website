@@ -17,7 +17,7 @@ export function Markdown(props: IProps) {
       await Promise.all([
         import('@website/html-code-highlighter/csr'),
         import('@website/markdown-html-converter'),
-        import('@website/tex-renderer/csr'),
+        import('@website/tex-renderer'),
       ]);
 
     const rawHtml = MarkdownHtmlConverter.toHtml(children);

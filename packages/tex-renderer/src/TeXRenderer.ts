@@ -1,5 +1,3 @@
-import 'katex/dist/katex.css';
-
 import type {KatexOptions} from 'katex';
 
 export class TeXRenderer {

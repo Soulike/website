@@ -2,9 +2,8 @@
   "name": "@website/tex-renderer",
   "main": "dist/index.js",
   "exports": {
-    ".": "./dist",
-    "./csr": "./dist/csr/index.js",
-    "./ssr": "./dist/ssr/index.js"
+    ".": "./dist/TexRenderer.js",
+    "./style.css": "./dist/style.css"
   },
   "dependencies": {
     "@types/katex": "^0.16.7",
@@ -13,9 +12,10 @@
     "katex": "^0.16.19"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "build": "rm -rf dist && tsc && node esbuild.config.mjs"
   },
   "devDependencies": {
-    "@types/jsdom": "^21.1.7"
+    "@types/jsdom": "^21.1.7",
+    "esbuild": "^0.24.2"
   }
 }

@@ -1,6 +1,6 @@
 import {HtmlCodeHighlighter} from '@website/html-code-highlighter/ssr';
 import {MarkdownHtmlConverter} from '@website/markdown-html-converter';
-import {TeXRenderer} from '@website/tex-renderer/ssr';
+import {TeXRenderer} from '@website/tex-renderer';
 
 import {MarkdownView} from '../../shared-views/MarkdownView';
 
