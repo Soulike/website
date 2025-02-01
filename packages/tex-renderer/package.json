@@ -1,7 +1,7 @@
 {
   "name": "@website/tex-renderer",
   "exports": {
-    ".": "./dist/TexRenderer.js",
+    ".": "./dist/TeXRenderer.js",
     "./style.css": "./dist/style.css"
   },
   "dependencies": {
