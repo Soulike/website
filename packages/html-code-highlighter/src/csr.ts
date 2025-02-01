@@ -6,7 +6,7 @@ export class HtmlCodeHighlighter {
   public static highlightAll(html: string): string {
     const dom = convertHTMLStringToDOM(html);
     const preBlocks = Array.from(dom.querySelectorAll('pre'));
-    preBlocks.map((pre) => {
+    preBlocks.forEach((pre) => {
       const codeBlocks = pre.querySelectorAll('code');
       codeBlocks.forEach((block) => {
         hljs.highlightElement(block);
