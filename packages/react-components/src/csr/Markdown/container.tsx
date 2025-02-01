@@ -13,18 +13,10 @@ export function Markdown(props: IProps) {
   const [renderedHtml, setRenderedHtml] = useState('');
 
   const renderChildrenToHtml = useCallback(async () => {
-    const [{HtmlCodeHighlighter}, {MarkdownHtmlConverter}, {TeXRenderer}] =
-      await Promise.all([
-        import('@website/html-code-highlighter/csr'),
-        import('@website/markdown-html-converter'),
-        import('@website/tex-renderer'),
-      ]);
-
-    const rawHtml = MarkdownHtmlConverter.toHtml(children);
-    const codeHighlightedHtml = await HtmlCodeHighlighter.highlightAll(rawHtml);
-    const texRenderedHtml =
-      await TeXRenderer.renderAllTexInHTML(codeHighlightedHtml);
-    return texRenderedHtml;
+    const {MarkdownArticleRenderer} = await import(
+      '@website/markdown-article-renderer/csr'
+    );
+    return MarkdownArticleRenderer.renderToHtml(children);
   }, [children]);
 
   useEffect(() => {

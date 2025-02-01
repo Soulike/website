@@ -7,10 +7,8 @@
     ".": "./dist/universal/index.js"
   },
   "dependencies": {
-    "@website/html-code-highlighter": "workspace:^",
+    "@website/markdown-article-renderer": "workspace:^",
     "@website/hooks": "workspace:^",
-    "@website/markdown-html-converter": "workspace:^",
-    "@website/tex-renderer": "workspace:^",
     "styled-components": "^6.1.14"
   },
   "devDependencies": {

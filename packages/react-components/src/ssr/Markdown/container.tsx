@@ -1,6 +1,4 @@
-import {HtmlCodeHighlighter} from '@website/html-code-highlighter/ssr';
-import {MarkdownHtmlConverter} from '@website/markdown-html-converter';
-import {TeXRenderer} from '@website/tex-renderer';
+import {MarkdownArticleRenderer} from '@website/markdown-article-renderer/ssr';
 
 import {MarkdownView} from '../../shared-views/MarkdownView';
 
@@ -10,9 +8,7 @@ interface IProps {
 
 export async function Markdown(props: IProps) {
   const {children} = props;
-  let html = MarkdownHtmlConverter.toHtml(children);
-  html = await HtmlCodeHighlighter.highlightAll(html);
-  html = await TeXRenderer.renderAllTexInHTML(html);
+  const html = await MarkdownArticleRenderer.renderToHtml(children);
 
   return <MarkdownView htmlContent={html} />;
 }

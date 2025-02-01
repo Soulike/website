@@ -1,5 +1,4 @@
-import '@website/html-code-highlighter/style.css';
-import '@website/tex-renderer/style.css';
+import '@website/markdown-article-renderer/style.css';
 
 import {MarkdownArticle} from './components/MarkdownArticle';
 

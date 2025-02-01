@@ -2,6 +2,7 @@
   "name": "@website/markdown-article-renderer",
   "exports": {
     "./csr": "./dist/csr.js",
+    "./ssr": "./dist/ssr.js",
     "./style.css": "./dist/style.css"
   },
   "dependencies": {
