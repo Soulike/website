@@ -7,7 +7,7 @@
     ".": "./dist/universal/index.js"
   },
   "dependencies": {
-    "@website/hljs": "workspace:^",
+    "@website/html-code-highlighter": "workspace:^",
     "@website/hooks": "workspace:^",
     "@website/md-converter": "workspace:^",
     "@website/tex-renderer": "workspace:^",

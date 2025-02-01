@@ -207,7 +207,20 @@ importers:
         specifier: ^8.19.0
         version: 8.19.0(eslint@9.17.0(jiti@2.4.2))(typescript@5.7.2)
 
-  packages/hljs:
+  packages/hooks:
+    dependencies:
+      react:
+        specifier: '>=18.0.0'
+        version: 18.3.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.18
+        version: 18.3.18
+      eslint-plugin-react-hooks:
+        specifier: ^5.1.0
+        version: 5.1.0(eslint@9.17.0(jiti@2.4.2))
+
+  packages/html-code-highlighter:
     dependencies:
       '@website/utils':
         specifier: workspace:^
@@ -219,31 +232,6 @@ importers:
       esbuild:
         specifier: ^0.24.2
         version: 0.24.2
-
-  packages/hooks:
-    dependencies:
-      '@website/hljs':
-        specifier: workspace:^
-        version: link:../hljs
-      '@website/md-converter':
-        specifier: workspace:^
-        version: link:../md-converter
-      '@website/tex-renderer':
-        specifier: workspace:^
-        version: link:../tex-renderer
-      '@website/utils':
-        specifier: workspace:^
-        version: link:../utils
-      react:
-        specifier: '>=18.0.0'
-        version: 18.3.1
-    devDependencies:
-      '@types/react':
-        specifier: ^18.3.18
-        version: 18.3.18
-      eslint-plugin-react-hooks:
-        specifier: ^5.1.0
-        version: 5.1.0(eslint@9.17.0(jiti@2.4.2))
 
   packages/md-converter:
     dependencies:
@@ -257,12 +245,12 @@ importers:
 
   packages/react-components:
     dependencies:
-      '@website/hljs':
-        specifier: workspace:^
-        version: link:../hljs
       '@website/hooks':
         specifier: workspace:^
         version: link:../hooks
+      '@website/html-code-highlighter':
+        specifier: workspace:^
+        version: link:../html-code-highlighter
       '@website/md-converter':
         specifier: workspace:^
         version: link:../md-converter
