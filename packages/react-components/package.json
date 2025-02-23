@@ -7,21 +7,21 @@
     ".": "./dist/universal/index.js"
   },
   "dependencies": {
-    "@website/markdown-article-renderer": "workspace:^",
     "@website/hooks": "workspace:^",
-    "styled-components": "^6.1.14"
+    "@website/markdown-article-renderer": "workspace:^",
+    "styled-components": "^6.1.15"
   },
   "devDependencies": {
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
-    "esbuild": "^0.24.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "esbuild": "^0.25.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "peerDependencies": {
+    "next": "^14.2.22",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "next": "^14.2.22"
+    "react-dom": ">=16.8.0"
   },
   "scripts": {
     "build": "rm -rf dist && tsc"

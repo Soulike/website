@@ -10,7 +10,7 @@
     "highlight.js": "^11.11.1"
   },
   "devDependencies": {
-    "esbuild": "^0.24.2"
+    "esbuild": "^0.25.0"
   },
   "scripts": {
     "build": "rm -rf dist && tsc && node esbuild.config.mjs"

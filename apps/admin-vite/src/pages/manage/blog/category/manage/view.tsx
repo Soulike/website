@@ -8,6 +8,7 @@ import {
   type ModalProps,
   Popconfirm,
   type PopconfirmProps,
+  Space,
   Spin,
   Tag,
   type TagProps,
@@ -20,7 +21,6 @@ import Style from './styles.module.css';
 
 const {Item} = List;
 const {Meta} = Item;
-const {Group} = Button;
 
 interface Props {
   loading: boolean;
@@ -91,7 +91,7 @@ export function ManageView(props: Props) {
                   {categoryToArticleNumberMap.get(id)}
                 </Tag>
               </Spin>
-              <Group size={'small'} className={Style.buttonWrapper}>
+              <Space.Compact size={'small'} className={Style.buttonWrapper}>
                 <Tooltip title={'Modify category'}>
                   <Button
                     type={'primary'}
@@ -115,7 +115,7 @@ export function ManageView(props: Props) {
                     </Button>
                   </Popconfirm>
                 </Tooltip>
-              </Group>
+              </Space.Compact>
             </Item>
           );
         }}

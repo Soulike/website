@@ -11,7 +11,7 @@
     "build": "rm -rf dist && tsc"
   },
   "dependencies": {
-    "jsdom": "^25.0.1"
+    "jsdom": "^26.0.0"
   },
   "devDependencies": {
     "@types/assert": "^1.5.11",
