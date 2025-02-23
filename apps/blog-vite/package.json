@@ -6,15 +6,25 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "lint": "eslint ./src",
+    "preview": "vite preview",
+    "analyze": "vite-bundle-visualizer"
   },
   "dependencies": {
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "@ant-design/icons": "^5.5.2",
+    "@ant-design/nextjs-registry": "^1.0.2",
+    "@website/classes": "workspace:^",
+    "@website/hooks": "workspace:^",
+    "@website/react-components": "workspace:^",
+    "@website/request": "workspace:^",
+    "@website/utils": "workspace:^",
+    "antd": "^5.23.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "@website/eslint-config": "workspace:^",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react-swc": "^3.5.0",
@@ -30,5 +40,10 @@
     "vite-plugin-image-optimizer": "^1.1.8",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vite-tsconfig-paths": "^5.1.4"
-  }
+  },
+  "browserslist": [
+    "> 0.5%",
+    "not dead",
+    "last 5 versions"
+  ]
 }
