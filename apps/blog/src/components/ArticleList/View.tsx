@@ -10,7 +10,7 @@ import Style from './Style.module.scss';
 const {Item} = List;
 
 interface Props {
-  viewRef: RefObject<HTMLDivElement>;
+  viewRef: RefObject<HTMLDivElement | null>;
   onPageNumberChange: PaginationConfig['onChange'];
   articleList: Article[];
   categoryMap: Map<number, Category>;

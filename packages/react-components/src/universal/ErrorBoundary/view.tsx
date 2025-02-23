@@ -1,4 +1,4 @@
-import type {ReactNode} from 'react';
+import {ReactNode} from 'react';
 
 export interface IErrorBoundaryProps {
   children: ReactNode;
@@ -7,9 +7,9 @@ export interface IErrorBoundaryProps {
 
 export function ErrorBoundary({children, fallback}: IErrorBoundaryProps) {
   try {
-    return children;
+    return <>{children}</>;
   } catch (error) {
     console.error(error);
-    return fallback;
+    return <>{fallback}</>;
   }
 }
