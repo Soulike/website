@@ -9,6 +9,7 @@ import {
   type ModalProps,
   Select,
   type SelectProps,
+  Space,
 } from 'antd';
 import type {TextAreaProps} from 'antd/lib/input';
 
@@ -16,7 +17,7 @@ import {ArticlePreviewModal} from '@/components/ArticlePreviewModal';
 
 import styles from './styles.module.css';
 
-const {Group, TextArea} = Input;
+const {TextArea} = Input;
 const {Option} = Select;
 
 interface Props {
@@ -61,7 +62,11 @@ export function ArticleEditor(props: Props) {
   } = props;
   return (
     <div className={styles.ArticleEditor}>
-      <Group size={'large'} className={styles.inputGroup}>
+      <Space.Compact
+        direction={'vertical'}
+        size={'large'}
+        className={styles.inputGroup}
+      >
         <Input
           disabled={
             isLoadingCategory || isSubmittingArticle || isLoadingArticle
@@ -80,7 +85,7 @@ export function ArticleEditor(props: Props) {
           className={styles.content}
           placeholder={'Content (Markdown)'}
         />
-      </Group>
+      </Space.Compact>
       <div className={styles.bottomWrapper}>
         <Select
           size={'large'}
@@ -109,7 +114,7 @@ export function ArticleEditor(props: Props) {
         >
           Is Public
         </Checkbox>
-        <Button.Group>
+        <Space.Compact>
           <Button size={'large'} onClick={onArticlePreviewButtonClick}>
             Preview
           </Button>
@@ -124,7 +129,7 @@ export function ArticleEditor(props: Props) {
           >
             Submit
           </Button>
-        </Button.Group>
+        </Space.Compact>
       </div>
       <ArticlePreviewModal
         title={title}

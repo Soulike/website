@@ -8,13 +8,13 @@
     "@types/katex": "^0.16.7",
     "@website/utils": "workspace:^",
     "html-entities": "^2.5.2",
-    "katex": "^0.16.19"
+    "katex": "^0.16.21"
   },
   "scripts": {
     "build": "rm -rf dist && tsc && node esbuild.config.mjs"
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
-    "esbuild": "^0.24.2"
+    "esbuild": "^0.25.0"
   }
 }

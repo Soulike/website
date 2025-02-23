@@ -8,6 +8,7 @@ import {
   Popconfirm,
   type PopconfirmProps,
   Skeleton,
+  Space,
   Switch,
   type SwitchProps,
   Tag,
@@ -21,7 +22,6 @@ import styles from './styles.module.css';
 
 const {Item} = List;
 const {Meta} = Item;
-const {Group} = Button;
 
 interface Props {
   articleMap: Map<number, Article>;
@@ -136,7 +136,7 @@ export function ArticleListView(props: Props) {
                     unCheckedChildren={'Private'}
                   />
                 </Tooltip>
-                <Group size={'small'} className={styles.buttonWrapper}>
+                <Space.Compact size={'small'} className={styles.buttonWrapper}>
                   <Tooltip title={'Modify'}>
                     <Button
                       type={'primary'}
@@ -160,7 +160,7 @@ export function ArticleListView(props: Props) {
                       </Button>
                     </Popconfirm>
                   </Tooltip>
-                </Group>
+                </Space.Compact>
               </Item>
             );
           }}

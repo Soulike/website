@@ -1,4 +1,4 @@
-import {Button, type ButtonProps, Input, type ModalProps} from 'antd';
+import {Button, type ButtonProps, Input, type ModalProps, Space} from 'antd';
 import {type TextAreaProps} from 'antd/lib/input';
 
 import {ArticlePreviewModal} from '@/components/ArticlePreviewModal';
@@ -41,7 +41,7 @@ export function AboutView(props: Props) {
         disabled={loading}
       />
       <div className={styles.buttonWrapper}>
-        <Button.Group size={'large'}>
+        <Space.Compact size={'large'}>
           <Button disabled={loading} onClick={onPreviewButtonClick}>
             Preview
           </Button>
@@ -52,7 +52,7 @@ export function AboutView(props: Props) {
           >
             Submit
           </Button>
-        </Button.Group>
+        </Space.Compact>
       </div>
       <ArticlePreviewModal
         title={'About'}

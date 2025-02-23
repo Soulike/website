@@ -20,7 +20,7 @@ export function ArticleList(props: IProps) {
 
   const {articleList, loading} = props;
   const categoryMap: Map<number, Category> = useMemo(() => {
-    const map: Map<number, Category> = new Map();
+    const map = new Map<number, Category>();
     if (categories !== null) {
       for (const category of categories) {
         map.set(category.id, category);
