@@ -199,6 +199,9 @@ importers:
       '@website/request':
         specifier: workspace:^
         version: link:../../packages/request
+      '@website/server-api':
+        specifier: workspace:^
+        version: link:../../packages/server-api
       '@website/utils':
         specifier: workspace:^
         version: link:../../packages/utils
@@ -211,6 +214,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
+      react-router:
+        specifier: ^7.2.0
+        version: 7.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
     devDependencies:
       '@eslint/js':
         specifier: ^9.19.0
