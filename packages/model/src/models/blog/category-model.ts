@@ -8,6 +8,7 @@ import {
 } from '@website/classes';
 import {Request} from '@website/request';
 
+import {ModelAccessDeniedError} from '../model-access-error.js';
 import {prependBlogPrefix} from './path-helper.js';
 
 export class CategoryModel {
@@ -34,7 +35,7 @@ export class CategoryModel {
       CategoryModel.PATH.GET_ALL,
     );
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     } else {
       return response.data;
     }
@@ -45,7 +46,7 @@ export class CategoryModel {
       ServerResponse<CategoryIdToArticleAmount>
     >(CategoryModel.PATH.GET_ALL_ARTICLE_AMOUNT_BY_ID);
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     } else {
       return response.data;
     }
@@ -61,7 +62,7 @@ export class CategoryModel {
       },
     );
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     } else {
       return response.data;
     }
@@ -75,7 +76,7 @@ export class CategoryModel {
       },
     );
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     }
   }
 
@@ -87,7 +88,7 @@ export class CategoryModel {
       },
     );
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     }
   }
 
@@ -102,7 +103,7 @@ export class CategoryModel {
       },
     );
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     }
   }
 }

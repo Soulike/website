@@ -3,6 +3,7 @@ import path from 'node:path/posix';
 import {ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
 
+import {ModelAccessDeniedError} from './model-access-error.js';
 import {prependServerPrefix} from './path-helper.js';
 
 export class AccountModel {
@@ -25,7 +26,7 @@ export class AccountModel {
     );
 
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     }
   }
 
@@ -35,7 +36,7 @@ export class AccountModel {
     );
 
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     }
   }
 
@@ -45,7 +46,7 @@ export class AccountModel {
     >(AccountModel.PATH.CHECK_SESSION);
 
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     } else {
       return response.data.isInSession;
     }

@@ -3,6 +3,7 @@ import path from 'node:path/posix';
 import {Article, NewArticle, ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
 
+import {ModelAccessDeniedError} from '../model-access-error.js';
 import {prependBlogPrefix} from './path-helper.js';
 
 export class ArticleModel {
@@ -27,7 +28,7 @@ export class ArticleModel {
       },
     );
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     } else {
       return response.data;
     }
@@ -38,7 +39,7 @@ export class ArticleModel {
       ArticleModel.PATH.GET_ALL,
     );
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     } else {
       return response.data;
     }
@@ -56,7 +57,7 @@ export class ArticleModel {
       },
     );
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     } else {
       return response.data;
     }
@@ -71,7 +72,7 @@ export class ArticleModel {
     );
 
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     }
   }
 
@@ -84,7 +85,7 @@ export class ArticleModel {
     );
 
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     }
   }
 
@@ -99,7 +100,7 @@ export class ArticleModel {
       },
     );
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     }
   }
 }

@@ -3,6 +3,7 @@ import path from 'node:path/posix';
 import {ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
 
+import {ModelAccessDeniedError} from '../model-access-error.js';
 import {prependBlogPrefix} from './path-helper.js';
 
 export class OptionModel {
@@ -21,7 +22,7 @@ export class OptionModel {
       ServerResponse<{about: string}>
     >(OptionModel.PATH.GET_ABOUT);
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     } else {
       return response.data.about;
     }
@@ -35,7 +36,7 @@ export class OptionModel {
       },
     );
     if (!response.isSuccessful) {
-      throw new Error(response.message);
+      throw new ModelAccessDeniedError(response.message);
     }
   }
 }
