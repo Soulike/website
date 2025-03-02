@@ -1,45 +1,63 @@
-import {Account as AccountApi} from '@website/server-api';
+import {ModelAccessDeniedError} from '@website/model';
 import {type ButtonProps, Modal, type ModalFuncProps, notification} from 'antd';
 import {useCallback, useEffect} from 'react';
 import {Outlet, useNavigate} from 'react-router';
 
 import {Loading} from '@/components/Loading';
 import {showNetworkError} from '@/helpers/error-notification-helper.js';
-import {useIsLoggedIn} from '@/hooks/useIsLoggedIn.js';
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config/index.js';
 
 import {LayoutView} from './view.js';
+import {useViewModel} from './view-model.js';
 
 export function Layout() {
+  const {
+    logout,
+    loggedOut,
+    logoutLoading,
+    logoutError,
+    isLoggedIn,
+    isLoggedInLoading,
+    isLoggedInError,
+  } = useViewModel();
   const navigate = useNavigate();
 
-  const {loading, isLoggedIn} = useIsLoggedIn();
-
   useEffect(() => {
-    if (!loading && !isLoggedIn) {
+    if (!isLoggedInLoading && !isLoggedIn) {
       void navigate(PAGE_ID_TO_PATH[PAGE_ID.LOGIN], {replace: true});
     }
-  }, [isLoggedIn, loading, navigate]);
+  }, [isLoggedIn, isLoggedInLoading, navigate]);
 
-  const onExitModalOkButtonClick: ModalFuncProps['onOk'] =
-    useCallback(async () => {
-      try {
-        const response = await AccountApi.logout();
-        if (response.isSuccessful) {
-          notification.success({
-            message: 'Logged out',
-          });
-          void navigate(PAGE_ID_TO_PATH[PAGE_ID.LOGIN], {replace: true});
-        } else {
-          const {message} = response;
-          notification.warning({
-            message,
-          });
-        }
-      } catch (err) {
-        showNetworkError(err);
+  useEffect(() => {
+    if (!logoutLoading && loggedOut) {
+      notification.success({
+        message: 'Logged out',
+      });
+      void navigate(PAGE_ID_TO_PATH[PAGE_ID.LOGIN], {replace: true});
+    }
+  }, [loggedOut, logoutLoading, navigate]);
+
+  useEffect(() => {
+    if (isLoggedInError) {
+      if (isLoggedInError instanceof ModelAccessDeniedError) {
+        notification.error({message: isLoggedInError.message});
+      } else {
+        showNetworkError(isLoggedInError);
       }
-    }, [navigate]);
+    }
+
+    if (logoutError) {
+      if (logoutError instanceof ModelAccessDeniedError) {
+        notification.error({message: logoutError.message});
+      } else {
+        showNetworkError(logoutError);
+      }
+    }
+  }, [isLoggedInError, logoutError]);
+
+  const onExitModalOkButtonClick: ModalFuncProps['onOk'] = useCallback(() => {
+    logout();
+  }, [logout]);
 
   const onExitButtonClick: ButtonProps['onClick'] = useCallback<
     Exclude<ButtonProps['onClick'], undefined>
@@ -56,8 +74,8 @@ export function Layout() {
 
   return (
     <>
-      {loading && <Loading />}
-      {!loading && (
+      {isLoggedInLoading && <Loading />}
+      {!isLoggedInLoading && (
         <LayoutView onExitButtonClick={onExitButtonClick}>
           <Outlet />
         </LayoutView>
