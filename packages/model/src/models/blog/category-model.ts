@@ -14,7 +14,7 @@ import {prependBlogPrefix} from './path-helper.js';
 export class CategoryModel {
   private static readonly PATH = Object.freeze({
     GET_ALL: CategoryModel.prependCategoryPrefix('/getAll'),
-    // TODO: Review the name of the API. `getAllArticleAmountGroupedById` should be better.
+    // TODO: Review the name of the API. `getArticleAmountGroupedById` should be better.
     GET_ALL_ARTICLE_AMOUNT_BY_ID: CategoryModel.prependCategoryPrefix(
       '/getAllArticleAmountById',
     ),
@@ -41,7 +41,7 @@ export class CategoryModel {
     }
   }
 
-  public async getAllArticleAmountGroupedById(): Promise<CategoryIdToArticleAmount> {
+  public async getArticleAmountGroupedById(): Promise<CategoryIdToArticleAmount> {
     const response = await Request.JSONToJSON.get<
       ServerResponse<CategoryIdToArticleAmount>
     >(CategoryModel.PATH.GET_ALL_ARTICLE_AMOUNT_BY_ID);
