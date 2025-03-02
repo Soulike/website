@@ -13,9 +13,7 @@ import {useViewModel} from './view-model.js';
 export function Layout() {
   const {
     logout,
-    loggedOut,
     logoutLoading,
-    logoutError,
     isLoggedIn,
     isLoggedInLoading,
     isLoggedInError,
@@ -29,15 +27,6 @@ export function Layout() {
   }, [isLoggedIn, isLoggedInLoading, navigate]);
 
   useEffect(() => {
-    if (!logoutLoading && loggedOut) {
-      notification.success({
-        message: 'Logged out',
-      });
-      void navigate(PAGE_ID_TO_PATH[PAGE_ID.LOGIN], {replace: true});
-    }
-  }, [loggedOut, logoutLoading, navigate]);
-
-  useEffect(() => {
     if (isLoggedInError) {
       if (isLoggedInError instanceof ModelAccessDeniedError) {
         notification.error({message: isLoggedInError.message});
@@ -45,19 +34,25 @@ export function Layout() {
         showNetworkError(isLoggedInError);
       }
     }
-
-    if (logoutError) {
-      if (logoutError instanceof ModelAccessDeniedError) {
-        notification.error({message: logoutError.message});
-      } else {
-        showNetworkError(logoutError);
-      }
-    }
-  }, [isLoggedInError, logoutError]);
+  }, [isLoggedInError]);
 
   const onExitModalOkButtonClick: ModalFuncProps['onOk'] = useCallback(() => {
-    logout();
-  }, [logout]);
+    logout(
+      () => {
+        notification.success({
+          message: 'Logged out',
+        });
+        void navigate(PAGE_ID_TO_PATH[PAGE_ID.LOGIN], {replace: true});
+      },
+      (e) => {
+        if (e instanceof ModelAccessDeniedError) {
+          notification.error({message: e.message});
+        } else {
+          showNetworkError(e);
+        }
+      },
+    );
+  }, [logout, navigate]);
 
   const onExitButtonClick: ButtonProps['onClick'] = useCallback<
     Exclude<ButtonProps['onClick'], undefined>
@@ -74,7 +69,7 @@ export function Layout() {
 
   return (
     <>
-      {isLoggedInLoading && <Loading />}
+      {isLoggedInLoading && logoutLoading && <Loading />}
       {!isLoggedInLoading && (
         <LayoutView onExitButtonClick={onExitButtonClick}>
           <Outlet />
