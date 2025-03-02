@@ -44,15 +44,18 @@ importers:
       '@website/classes':
         specifier: workspace:^
         version: link:../../packages/classes
+      '@website/hooks':
+        specifier: workspace:^
+        version: link:../../packages/hooks
+      '@website/model':
+        specifier: workspace:^
+        version: link:../../packages/model
       '@website/react-components':
         specifier: workspace:^
         version: link:../../packages/react-components
       '@website/request':
         specifier: workspace:^
         version: link:../../packages/request
-      '@website/server-api':
-        specifier: workspace:^
-        version: link:../../packages/server-api
       antd:
         specifier: ^5.24.1
         version: 5.24.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
