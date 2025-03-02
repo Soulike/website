@@ -1,6 +1,6 @@
 import path from 'node:path/posix';
 
-import {Article, ArticleBase, ServerResponse} from '@website/classes';
+import {Article, NewArticle, ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
 
 import {prependBlogPrefix} from './path-helper.js';
@@ -62,7 +62,7 @@ export class ArticleModel {
     }
   }
 
-  public async add(article: ArticleBase): Promise<void> {
+  public async add(article: NewArticle): Promise<void> {
     const response = await Request.JSONToJSON.post<ServerResponse<void>>(
       ArticleModel.PATH.ADD,
       {
@@ -90,7 +90,7 @@ export class ArticleModel {
 
   public async modify(
     id: Article['id'],
-    modifiedParts: Partial<ArticleBase>,
+    modifiedParts: Partial<NewArticle>,
   ): Promise<void> {
     const response = await Request.JSONToJSON.post<ServerResponse<void>>(
       ArticleModel.PATH.MODIFY,
