@@ -8,9 +8,9 @@ export function useTextInputViewModel(initialValue = '') {
       setValue(e.target.value);
     }, []);
 
-  const reset = useCallback(() => {
+  const resetValue = useCallback(() => {
     setValue(initialValue);
   }, [initialValue]);
 
-  return {value, onChange, reset};
+  return {value, setValue, onChange, resetValue};
 }
