@@ -266,6 +266,28 @@ importers:
         specifier: ^2.0.6
         version: 2.0.6
 
+  packages/model:
+    dependencies:
+      '@website/classes':
+        specifier: workspace:^
+        version: link:../classes
+      '@website/request':
+        specifier: workspace:^
+        version: link:../request
+      react:
+        specifier: '>=16.8.0'
+        version: 19.0.0
+      react-dom:
+        specifier: '>=16.8.0'
+        version: 19.0.0(react@19.0.0)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.0.10
+        version: 19.0.10
+      typescript:
+        specifier: ^5.7.3
+        version: 5.7.3
+
   packages/react-components:
     dependencies:
       '@website/hooks':
