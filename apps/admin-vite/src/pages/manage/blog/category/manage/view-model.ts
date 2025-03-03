@@ -2,10 +2,8 @@ import assert from 'node:assert';
 
 import {Category} from '@website/classes';
 import {BlogModels} from '@website/model';
+import {BlogModelHooks} from '@website/model/react';
 import {useCallback, useEffect, useMemo, useState} from 'react';
-
-import {useCategories} from '@/hooks/useCategories.js';
-import {useArticleAmountGroupedById} from '@/hooks/useCategoryToArticleAmount.js';
 
 type CategoryModelType = InstanceType<typeof BlogModels.CategoryModel>;
 type CategoryModelModifyParameters = Parameters<CategoryModelType['modify']>;
@@ -15,7 +13,7 @@ export function useViewModel() {
     loading: categoriesLoading,
     error: categoriesError,
     categories,
-  } = useCategories();
+  } = BlogModelHooks.CategoryModelHooks.useAllCategories();
 
   const [idToCategory, setIdToCategory] = useState<Map<
     Category['id'],
@@ -38,7 +36,7 @@ export function useViewModel() {
     loading: articleAmountGroupedByIdLoading,
     error: articleAmountGroupedByIdError,
     articleAmountGroupedById,
-  } = useArticleAmountGroupedById();
+  } = BlogModelHooks.CategoryModelHooks.useArticleAmountGroupedById();
 
   useEffect(() => {
     if (articleAmountGroupedById) {

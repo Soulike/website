@@ -2,7 +2,7 @@ import type {RejectCallback, ResolveCallback} from '@website/hooks';
 import {usePromise} from '@website/hooks';
 import {AccountModel as RawAccountModel} from '@website/model';
 
-export class AccountModel {
+export class AccountModelHooks {
   private static readonly accountModel = new RawAccountModel();
 
   public static useIsLoggedIn(
