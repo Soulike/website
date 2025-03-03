@@ -29,13 +29,13 @@ export function ArticleList(props: IProps) {
     articlePreviewModalVisible,
     hideArticlePreviewModal,
     articlePreviewModalTitle,
-    articlePreviewModalContent,
+    articlePreviewModalContentInMarkdown,
     processingArticleId,
-    handleIsVisibleSwitchClick,
-    handleArticleTitleClick,
-    deleteArticleLoading,
+    isVisibleSwitchClickHandlerFactory,
+    articleTitleClickHandlerFactory,
+    deleteArticlePending,
     handleDeleteArticleConfirm,
-    handleDeleteArticleButtonClick,
+    deleteArticleButtonClickHandlerFactory,
   } = useViewModel(category);
 
   useEffect(() => {
@@ -58,14 +58,14 @@ export function ArticleList(props: IProps) {
 
   const onIsVisibleSwitchClick = useCallback(
     (id: Article['id']) =>
-      handleIsVisibleSwitchClick(id, undefined, (error) => {
+      isVisibleSwitchClickHandlerFactory(id, undefined, (error) => {
         if (error instanceof ModelAccessDeniedError) {
           notification.error({message: error.message});
         } else {
           showNetworkError(error);
         }
       }),
-    [handleIsVisibleSwitchClick],
+    [isVisibleSwitchClickHandlerFactory],
   );
 
   const onModifyArticleButtonClick: (id: number) => ButtonProps['onClick'] =
@@ -106,20 +106,22 @@ export function ArticleList(props: IProps) {
   return (
     <ArticleListView
       isLoading={
-        idToCategoryLoading || idToArticleLoading || deleteArticleLoading
+        idToCategoryLoading || idToArticleLoading || deleteArticlePending
       }
       idToArticle={idToArticle}
       idToCategory={idToCategory}
       modalIsOpen={articlePreviewModalVisible}
       articlePreviewModalTitle={articlePreviewModalTitle}
-      articlePreviewModalContent={articlePreviewModalContent}
+      articlePreviewModalContent={articlePreviewModalContentInMarkdown}
       modalOnOk={hideArticlePreviewModal}
       modalOnCancel={hideArticlePreviewModal}
       processingArticleId={processingArticleId}
-      onArticleTitleClick={handleArticleTitleClick}
+      articleTitleClickHandlerFactory={articleTitleClickHandlerFactory}
       onIsVisibleSwitchClick={onIsVisibleSwitchClick}
       onModifyArticleButtonClick={onModifyArticleButtonClick}
-      onDeleteArticleButtonClick={handleDeleteArticleButtonClick}
+      deleteArticleButtonClickHandlerFactory={
+        deleteArticleButtonClickHandlerFactory
+      }
       onDeleteArticleConfirm={onDeleteArticleConfirm}
     />
   );

@@ -30,7 +30,7 @@ interface Props {
   idToCategory: Map<number, Category> | null;
   isLoading: boolean;
 
-  onArticleTitleClick: (
+  articleTitleClickHandlerFactory: (
     id: number,
   ) => DOMAttributes<HTMLSpanElement>['onClick'];
   articlePreviewModalTitle: string;
@@ -42,7 +42,9 @@ interface Props {
 
   onIsVisibleSwitchClick: (id: number) => SwitchProps['onClick'];
   onModifyArticleButtonClick: (id: number) => ButtonProps['onClick'];
-  onDeleteArticleButtonClick: (id: number) => ButtonProps['onClick'];
+  deleteArticleButtonClickHandlerFactory: (
+    id: number,
+  ) => ButtonProps['onClick'];
   onDeleteArticleConfirm: PopconfirmProps['onConfirm'];
 }
 
@@ -57,10 +59,10 @@ export function ArticleListView(props: Props) {
     modalIsOpen,
     modalOnCancel,
     modalOnOk,
-    onArticleTitleClick,
+    articleTitleClickHandlerFactory,
     onIsVisibleSwitchClick,
     onModifyArticleButtonClick,
-    onDeleteArticleButtonClick,
+    deleteArticleButtonClickHandlerFactory,
     onDeleteArticleConfirm,
   } = props;
 
@@ -95,7 +97,7 @@ export function ArticleListView(props: Props) {
                   title={
                     <span
                       className={styles.title}
-                      onClick={onArticleTitleClick(id)}
+                      onClick={articleTitleClickHandlerFactory(id)}
                     >
                       {title}
                     </span>
@@ -157,7 +159,7 @@ export function ArticleListView(props: Props) {
                       <Button
                         danger={true}
                         ghost={true}
-                        onClick={onDeleteArticleButtonClick(id)}
+                        onClick={deleteArticleButtonClickHandlerFactory(id)}
                       >
                         <DeleteOutlined />
                       </Button>

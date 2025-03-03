@@ -14,13 +14,83 @@ import {
 } from 'react';
 
 export function useViewModel(category?: Article['category']) {
-  const articleModel = useMemo(() => new BlogModels.ArticleModel(), []);
   const {
     loading: idToCategoryLoading,
     idToCategory,
     error: idToCategoryError,
   } = BlogModelHooks.CategoryModelHooks.useIdToCategory();
 
+  const {
+    idToArticleCache,
+    idToArticleLoading,
+    idToArticleError,
+    setIdToArticleCache,
+  } = useIdToArticleCache(category);
+
+  const {
+    show: showArticlePreviewModal,
+    hide: hideArticlePreviewModal,
+    visible: articlePreviewModalVisible,
+    title: articlePreviewModalTitle,
+    setTitle: setArticlePreviewModalTitle,
+    contentInMarkdown: articlePreviewModalContentInMarkdown,
+    setContentInMarkdown: setArticlePreviewModalContentInMarkdown,
+  } = useArticlePreviewModalViewModel();
+
+  const articleTitleClickHandlerFactory: (
+    id: Article['id'],
+  ) => DOMAttributes<HTMLSpanElement>['onClick'] = useCallback(
+    (id: Article['id']) => {
+      return (e) => {
+        e.preventDefault();
+        const article = idToArticleCache?.get(id);
+        if (typeof article === 'undefined') {
+          void message.warning('Article not found');
+        } else {
+          setArticlePreviewModalTitle(article.title);
+          setArticlePreviewModalContentInMarkdown(article.content);
+          showArticlePreviewModal();
+        }
+      };
+    },
+    [
+      idToArticleCache,
+      setArticlePreviewModalTitle,
+      setArticlePreviewModalContentInMarkdown,
+      showArticlePreviewModal,
+    ],
+  );
+
+  const {processingArticleId, isVisibleSwitchClickHandlerFactory} =
+    useArticleIsVisibleSwitchViewModel();
+
+  const {
+    deletePending: deleteArticlePending,
+    deleteArticleButtonClickHandlerFactory,
+    handleDeleteArticleConfirm,
+  } = useArticleDeleteButtonViewModel(idToArticleCache, setIdToArticleCache);
+
+  return {
+    idToCategory,
+    idToCategoryLoading,
+    idToCategoryError,
+    idToArticle: idToArticleCache,
+    idToArticleLoading,
+    idToArticleError,
+    articlePreviewModalVisible,
+    hideArticlePreviewModal,
+    articlePreviewModalTitle,
+    articlePreviewModalContentInMarkdown,
+    processingArticleId,
+    articleTitleClickHandlerFactory,
+    isVisibleSwitchClickHandlerFactory,
+    deleteArticlePending,
+    deleteArticleButtonClickHandlerFactory,
+    handleDeleteArticleConfirm,
+  };
+}
+
+function useIdToArticleCache(category?: Article['category']) {
   // Maintain a cached version for quick refresh
   const [idToArticleCache, setIdToArticleCache] = useState<Map<
     Article['id'],
@@ -37,45 +107,38 @@ export function useViewModel(category?: Article['category']) {
     }
   }, [idToArticle, idToArticleError, idToArticleLoading]);
 
-  const {
-    show: showArticlePreviewModal,
-    hide: hideArticlePreviewModal,
-    visible: articlePreviewModalVisible,
-  } = useModalViewModel();
+  return {
+    idToArticleCache,
+    setIdToArticleCache,
+    idToArticleLoading,
+    idToArticleError,
+  };
+}
 
-  const [articlePreviewModalTitle, setArticlePreviewModalTitle] = useState('');
-  const [articlePreviewModalContent, setArticlePreviewModalContent] =
-    useState('');
+function useArticlePreviewModalViewModel() {
+  const {show, hide, visible} = useModalViewModel();
 
-  const handleArticleTitleClick: (
-    id: Article['id'],
-  ) => DOMAttributes<HTMLSpanElement>['onClick'] = useCallback(
-    (id: Article['id']) => {
-      return (e) => {
-        e.preventDefault();
-        const article = idToArticle?.get(id);
-        if (typeof article === 'undefined') {
-          void message.warning('Article not found');
-        } else {
-          setArticlePreviewModalTitle(article.title);
-          setArticlePreviewModalContent(article.content);
-          showArticlePreviewModal();
-        }
-      };
-    },
-    [
-      idToArticle,
-      setArticlePreviewModalContent,
-      setArticlePreviewModalTitle,
-      showArticlePreviewModal,
-    ],
-  );
+  const [title, setTitle] = useState('');
+  const [contentInMarkdown, setContentInMarkdown] = useState('');
 
+  return {
+    show,
+    hide,
+    visible,
+    title,
+    setTitle,
+    contentInMarkdown,
+    setContentInMarkdown,
+  };
+}
+
+function useArticleIsVisibleSwitchViewModel() {
+  const articleModel = useMemo(() => new BlogModels.ArticleModel(), []);
   const [processingArticleId, setProcessingArticleId] = useState<
     Article['id'] | null
   >(null);
 
-  const handleIsVisibleSwitchClick: (
+  const isVisibleSwitchClickHandlerFactory: (
     id: Article['id'],
     onSuccess?: () => void,
     onError?: (error: Error) => void,
@@ -106,27 +169,43 @@ export function useViewModel(category?: Article['category']) {
     [articleModel],
   );
 
-  const handleDeleteArticleButtonClick: (
+  return {
+    processingArticleId,
+    isVisibleSwitchClickHandlerFactory,
+  };
+}
+
+function useArticleDeleteButtonViewModel(
+  idToArticleCache: Map<Article['id'], Article> | null,
+  setIdToArticleCache: (idToArticleCache: Map<Article['id'], Article>) => void,
+) {
+  const articleModel = useMemo(() => new BlogModels.ArticleModel(), []);
+  const [deletingArticleId, setDeletingArticleId] = useState<
+    Article['id'] | null
+  >(null);
+  const [deletePending, setDeletePending] = useState(false);
+
+  const deleteArticleButtonClickHandlerFactory: (
     id: Article['id'],
   ) => ButtonProps['onClick'] = useCallback((id: Article['id']) => {
     return () => {
-      setProcessingArticleId(id);
+      setDeletingArticleId(id);
     };
   }, []);
 
-  const [deleteArticleLoading, setDeleteArticleLoading] = useState(false);
   const handleDeleteArticleConfirm = useCallback(
     (onSuccess?: () => void, onError?: (error: Error) => void) => {
-      if (processingArticleId === null) {
+      if (deletingArticleId === null) {
         return;
       }
-      setDeleteArticleLoading(true);
+      setDeletePending(true);
       articleModel
-        .deleteById(processingArticleId)
+        .deleteById(deletingArticleId)
         .then(() => {
-          assert(idToArticleCache);
-          idToArticleCache.delete(processingArticleId);
-          setIdToArticleCache(idToArticleCache);
+          if (idToArticleCache) {
+            idToArticleCache.delete(deletingArticleId);
+            setIdToArticleCache(idToArticleCache);
+          }
           if (onSuccess) {
             onSuccess();
           }
@@ -138,29 +217,17 @@ export function useViewModel(category?: Article['category']) {
           }
         })
         .finally(() => {
-          setDeleteArticleLoading(false);
-          setProcessingArticleId(null);
+          setDeletePending(false);
+          setDeletingArticleId(null);
         });
     },
-    [articleModel, idToArticleCache, processingArticleId],
+    [articleModel, idToArticleCache, deletingArticleId, setIdToArticleCache],
   );
 
   return {
-    idToCategory,
-    idToCategoryLoading,
-    idToCategoryError,
-    idToArticle: idToArticleCache,
-    idToArticleLoading,
-    idToArticleError,
-    articlePreviewModalVisible,
-    hideArticlePreviewModal,
-    articlePreviewModalTitle,
-    articlePreviewModalContent,
-    processingArticleId,
-    handleArticleTitleClick,
-    handleIsVisibleSwitchClick,
-    deleteArticleLoading,
-    handleDeleteArticleButtonClick,
+    deletePending,
+    deletingArticleId,
+    deleteArticleButtonClickHandlerFactory,
     handleDeleteArticleConfirm,
   };
 }
