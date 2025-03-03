@@ -25,7 +25,7 @@ export function ArticleListModal(props: Props) {
     >
       <div className={styles.ArticleListModal}>
         <ArticleList
-          categoryIdFilter={categoryInModal ? categoryInModal.id : undefined}
+          category={categoryInModal ? categoryInModal.id : undefined}
         />
       </div>
     </Modal>

@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
 import {type Article, type Category} from '@website/classes';
 import {
@@ -24,19 +26,19 @@ const {Item} = List;
 const {Meta} = Item;
 
 interface Props {
-  articleMap: Map<number, Article>;
-  categoryMap: Map<number, Category>;
+  idToArticle: Map<number, Article> | null;
+  idToCategory: Map<number, Category> | null;
   isLoading: boolean;
 
   onArticleTitleClick: (
     id: number,
   ) => DOMAttributes<HTMLSpanElement>['onClick'];
-  articleInModalTitle: string;
-  articleInModalMarkdown: string;
+  articlePreviewModalTitle: string;
+  articlePreviewModalContent: string;
   modalIsOpen: boolean;
   modalOnOk: ModalProps['onOk'];
   modalOnCancel: ModalProps['onCancel'];
-  loadingArticleId: number;
+  processingArticleId: number | null;
 
   onIsVisibleSwitchClick: (id: number) => SwitchProps['onClick'];
   onModifyArticleButtonClick: (id: number) => ButtonProps['onClick'];
@@ -46,12 +48,12 @@ interface Props {
 
 export function ArticleListView(props: Props) {
   const {
-    articleMap,
-    categoryMap,
+    idToArticle,
+    idToCategory,
     isLoading,
-    loadingArticleId,
-    articleInModalMarkdown,
-    articleInModalTitle,
+    processingArticleId,
+    articlePreviewModalContent,
+    articlePreviewModalTitle,
     modalIsOpen,
     modalOnCancel,
     modalOnOk,
@@ -61,11 +63,12 @@ export function ArticleListView(props: Props) {
     onDeleteArticleButtonClick,
     onDeleteArticleConfirm,
   } = props;
+
   return (
     <div className={styles.ArticleList}>
       <Skeleton loading={isLoading} active={true} paragraph={{rows: 15}}>
         <List
-          dataSource={Array.from(articleMap.values())}
+          dataSource={Array.from(idToArticle?.values() ?? [])}
           bordered={true}
           pagination={{
             position: 'bottom',
@@ -78,11 +81,14 @@ export function ArticleListView(props: Props) {
               id,
               title,
               isVisible,
+              category: categoryId,
               publicationTime: publicationTimeString,
               modificationTime: modificationTimeString,
             } = article;
             const publicationTime = new Date(publicationTimeString);
             const modificationTime = new Date(modificationTimeString);
+            const category = idToCategory?.get(categoryId);
+            assert(category);
             return (
               <Item key={id}>
                 <Meta
@@ -95,10 +101,7 @@ export function ArticleListView(props: Props) {
                     </span>
                   }
                 />
-                <Tag color={'blue'}>
-                  {categoryMap.get(articleMap.get(id)?.category ?? 0)?.name ??
-                    '??'}
-                </Tag>
+                <Tag color={'blue'}>{category.name}</Tag>
                 <Tag color={'geekblue'}>
                   Published at：
                   <time>
@@ -130,8 +133,8 @@ export function ArticleListView(props: Props) {
                     className={styles.switch}
                     onClick={onIsVisibleSwitchClick(id)}
                     checked={isVisible}
-                    disabled={loadingArticleId === id}
-                    loading={loadingArticleId === id}
+                    disabled={processingArticleId === id}
+                    loading={processingArticleId === id}
                     checkedChildren={'Public'}
                     unCheckedChildren={'Private'}
                   />
@@ -167,8 +170,8 @@ export function ArticleListView(props: Props) {
         />
       </Skeleton>
       <ArticlePreviewModal
-        title={articleInModalTitle}
-        contentMarkdown={articleInModalMarkdown}
+        title={articlePreviewModalTitle}
+        contentMarkdown={articlePreviewModalContent}
         open={modalIsOpen}
         onOk={modalOnOk}
         onCancel={modalOnCancel}
