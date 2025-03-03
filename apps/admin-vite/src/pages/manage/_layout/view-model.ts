@@ -1,7 +1,6 @@
 import {AccountModel} from '@website/model';
+import {AccountModel as AccountModelReact} from '@website/model/react';
 import {useCallback, useMemo, useState} from 'react';
-
-import {useIsLoggedIn} from '@/hooks/useIsLoggedIn.js';
 
 export function useViewModel() {
   const [logoutLoading, setLogoutLoading] = useState(false);
@@ -26,7 +25,7 @@ export function useViewModel() {
     loading: isLoggedInLoading,
     isLoggedIn,
     error: isLoggedInError,
-  } = useIsLoggedIn();
+  } = AccountModelReact.useIsLoggedIn();
 
   return {
     isLoggedIn,

@@ -274,6 +274,9 @@ importers:
       '@website/classes':
         specifier: workspace:^
         version: link:../classes
+      '@website/hooks':
+        specifier: workspace:^
+        version: link:../hooks
       '@website/request':
         specifier: workspace:^
         version: link:../request
