@@ -4,6 +4,7 @@ import {type ButtonProps, notification, type PopconfirmProps} from 'antd';
 import {useCallback, useEffect} from 'react';
 import {useNavigate} from 'react-router';
 
+import {ArticlePreviewModal} from '@/components/ArticlePreviewModal/index.js';
 import {showNetworkError} from '@/helpers/error-notification-helper.js';
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config';
 
@@ -26,16 +27,16 @@ export function ArticleList(props: IProps) {
     idToArticle,
     idToArticleLoading,
     idToArticleError,
-    articlePreviewModalVisible,
-    hideArticlePreviewModal,
-    articlePreviewModalTitle,
-    articlePreviewModalContentInMarkdown,
     processingArticleId,
     isVisibleSwitchClickHandlerFactory,
     articleTitleClickHandlerFactory,
     deleteArticlePending,
     handleDeleteArticleConfirm,
     deleteArticleButtonClickHandlerFactory,
+    articlePreviewModalTitle,
+    articlePreviewModalVisible,
+    articlePreviewModalContentInMarkdown,
+    hideArticlePreviewModal,
   } = useViewModel(category);
 
   useEffect(() => {
@@ -104,25 +105,29 @@ export function ArticleList(props: IProps) {
     }, [handleDeleteArticleConfirm]);
 
   return (
-    <ArticleListView
-      isLoading={
-        idToCategoryLoading || idToArticleLoading || deleteArticlePending
-      }
-      idToArticle={idToArticle}
-      idToCategory={idToCategory}
-      modalIsOpen={articlePreviewModalVisible}
-      articlePreviewModalTitle={articlePreviewModalTitle}
-      articlePreviewModalContent={articlePreviewModalContentInMarkdown}
-      modalOnOk={hideArticlePreviewModal}
-      modalOnCancel={hideArticlePreviewModal}
-      processingArticleId={processingArticleId}
-      articleTitleClickHandlerFactory={articleTitleClickHandlerFactory}
-      onIsVisibleSwitchClick={onIsVisibleSwitchClick}
-      onModifyArticleButtonClick={onModifyArticleButtonClick}
-      deleteArticleButtonClickHandlerFactory={
-        deleteArticleButtonClickHandlerFactory
-      }
-      onDeleteArticleConfirm={onDeleteArticleConfirm}
-    />
+    <>
+      <ArticleListView
+        isLoading={
+          idToCategoryLoading || idToArticleLoading || deleteArticlePending
+        }
+        idToArticle={idToArticle}
+        idToCategory={idToCategory}
+        processingArticleId={processingArticleId}
+        articleTitleClickHandlerFactory={articleTitleClickHandlerFactory}
+        onIsVisibleSwitchClick={onIsVisibleSwitchClick}
+        onModifyArticleButtonClick={onModifyArticleButtonClick}
+        deleteArticleButtonClickHandlerFactory={
+          deleteArticleButtonClickHandlerFactory
+        }
+        onDeleteArticleConfirm={onDeleteArticleConfirm}
+      />
+      <ArticlePreviewModal
+        title={articlePreviewModalTitle}
+        contentMarkdown={articlePreviewModalContentInMarkdown}
+        open={articlePreviewModalVisible}
+        onOk={hideArticlePreviewModal}
+        onCancel={hideArticlePreviewModal}
+      />
+    </>
   );
 }

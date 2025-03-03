@@ -6,7 +6,6 @@ import {
   Button,
   type ButtonProps,
   List,
-  type ModalProps,
   Popconfirm,
   type PopconfirmProps,
   Skeleton,
@@ -17,8 +16,6 @@ import {
   Tooltip,
 } from 'antd';
 import {type DOMAttributes} from 'react';
-
-import {ArticlePreviewModal} from '@/components/ArticlePreviewModal';
 
 import styles from './styles.module.css';
 
@@ -33,11 +30,6 @@ interface Props {
   articleTitleClickHandlerFactory: (
     id: number,
   ) => DOMAttributes<HTMLSpanElement>['onClick'];
-  articlePreviewModalTitle: string;
-  articlePreviewModalContent: string;
-  modalIsOpen: boolean;
-  modalOnOk: ModalProps['onOk'];
-  modalOnCancel: ModalProps['onCancel'];
   processingArticleId: number | null;
 
   onIsVisibleSwitchClick: (id: number) => SwitchProps['onClick'];
@@ -54,11 +46,6 @@ export function ArticleListView(props: Props) {
     idToCategory,
     isLoading,
     processingArticleId,
-    articlePreviewModalContent,
-    articlePreviewModalTitle,
-    modalIsOpen,
-    modalOnCancel,
-    modalOnOk,
     articleTitleClickHandlerFactory,
     onIsVisibleSwitchClick,
     onModifyArticleButtonClick,
@@ -171,13 +158,6 @@ export function ArticleListView(props: Props) {
           }}
         />
       </Skeleton>
-      <ArticlePreviewModal
-        title={articlePreviewModalTitle}
-        contentMarkdown={articlePreviewModalContent}
-        open={modalIsOpen}
-        onOk={modalOnOk}
-        onCancel={modalOnCancel}
-      />
     </div>
   );
 }
