@@ -1,24 +1,27 @@
 import assert from 'node:assert';
 
-import type {Article} from '@website/classes';
+import {Article} from '@website/classes';
 import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
 import {useEffect, useState} from 'react';
 
 import {ArticleModel} from '../../models/blog/article-model.js';
 
 export const ArticleModelHooks = {
-  useAllArticles,
+  useArticles,
   useIdToArticle,
 };
 
 const articleModel = new ArticleModel();
 
-function useAllArticles(
+function useArticles(
+  category?: Article['category'],
   onSuccess?: ResolveCallback<Article[]>,
   onReject?: RejectCallback,
 ) {
   const {pending, resolvedValue, rejectedError} = usePromise(
-    articleModel.getAll(),
+    category === undefined
+      ? articleModel.getAll()
+      : articleModel.getByCategory(category),
     onSuccess,
     onReject,
   );
@@ -31,10 +34,11 @@ function useAllArticles(
 }
 
 function useIdToArticle(
+  category?: Article['category'],
   onSuccess?: ResolveCallback<Map<Article['id'], Article>>,
   onReject?: RejectCallback,
 ) {
-  const {loading, error, articles} = useAllArticles();
+  const {loading, error, articles} = useArticles(category);
   const [idToArticle, setIdToArticle] = useState<Map<
     Article['id'],
     Article
