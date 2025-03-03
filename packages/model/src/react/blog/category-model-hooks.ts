@@ -1,42 +1,86 @@
+import assert from 'node:assert';
+
 import {Category, CategoryIdToArticleAmount} from '@website/classes';
 import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
+import {useEffect, useState} from 'react';
 
 import {CategoryModel} from '../../models/blog/category-model.js';
 
-export class CategoryModelHooks {
-  private static readonly categoryModel = new CategoryModel();
+const categoryModel = new CategoryModel();
 
-  public static useAllCategories(
-    onSuccess?: ResolveCallback<Category[]>,
-    onReject?: RejectCallback,
-  ) {
-    const {pending, resolvedValue, rejectedError} = usePromise(
-      this.categoryModel.getAll(),
-      onSuccess,
-      onReject,
-    );
+export const CategoryModelHooks = Object.freeze({
+  useAllCategories,
+  useIdToCategory,
+  useArticleAmountGroupedById,
+});
 
-    return {
-      loading: pending,
-      error: rejectedError,
-      categories: resolvedValue,
-    };
-  }
+function useAllCategories(
+  onSuccess?: ResolveCallback<Category[]>,
+  onReject?: RejectCallback,
+) {
+  const {pending, resolvedValue, rejectedError} = usePromise(
+    categoryModel.getAll(),
+    onSuccess,
+    onReject,
+  );
 
-  public static useArticleAmountGroupedById(
-    onSuccess?: ResolveCallback<CategoryIdToArticleAmount>,
-    onReject?: RejectCallback,
-  ) {
-    const {pending, resolvedValue, rejectedError} = usePromise(
-      this.categoryModel.getArticleAmountGroupedById(),
-      onSuccess,
-      onReject,
-    );
+  return {
+    loading: pending,
+    error: rejectedError,
+    categories: resolvedValue,
+  };
+}
 
-    return {
-      loading: pending,
-      error: rejectedError,
-      articleAmountGroupedById: resolvedValue,
-    };
-  }
+function useIdToCategory(
+  onSuccess?: ResolveCallback<Map<Category['id'], Category>>,
+  onReject?: RejectCallback,
+) {
+  const {loading, error, categories} = useAllCategories();
+  const [idToCategory, setIdToCategory] = useState<Map<
+    Category['id'],
+    Category
+  > | null>(null);
+
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    if (error) {
+      if (onReject) {
+        void onReject(error);
+      }
+      return;
+    }
+
+    assert(categories);
+    const idToCategory = new Map<Category['id'], Category>();
+    for (const category of categories) {
+      idToCategory.set(category.id, category);
+    }
+    setIdToCategory(idToCategory);
+  }, [loading, error, onReject, categories]);
+
+  return {
+    loading,
+    error,
+    idToCategory,
+  };
+}
+
+function useArticleAmountGroupedById(
+  onSuccess?: ResolveCallback<CategoryIdToArticleAmount>,
+  onReject?: RejectCallback,
+) {
+  const {pending, resolvedValue, rejectedError} = usePromise(
+    categoryModel.getArticleAmountGroupedById(),
+    onSuccess,
+    onReject,
+  );
+
+  return {
+    loading: pending,
+    error: rejectedError,
+    articleAmountGroupedById: resolvedValue,
+  };
 }

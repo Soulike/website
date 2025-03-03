@@ -2,23 +2,25 @@ import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
 
 import {OptionModel} from '../../models/blog/option-model.js';
 
-export class OptionModelHooks {
-  private static readonly optionModel = new OptionModel();
+export const OptionModelHooks = {
+  useAbout,
+};
 
-  public static useAbout(
-    onSuccess?: ResolveCallback<string>,
-    onReject?: RejectCallback,
-  ) {
-    const {pending, resolvedValue, rejectedError} = usePromise(
-      this.optionModel.getAbout(),
-      onSuccess,
-      onReject,
-    );
+const optionModel = new OptionModel();
 
-    return {
-      loading: pending,
-      error: rejectedError,
-      about: resolvedValue,
-    };
-  }
+function useAbout(
+  onSuccess?: ResolveCallback<string>,
+  onReject?: RejectCallback,
+) {
+  const {pending, resolvedValue, rejectedError} = usePromise(
+    optionModel.getAbout(),
+    onSuccess,
+    onReject,
+  );
+
+  return {
+    loading: pending,
+    error: rejectedError,
+    about: resolvedValue,
+  };
 }

@@ -34,7 +34,7 @@ export class ArticleModel {
     }
   }
 
-  public async getByAll(): Promise<Article[]> {
+  public async getAll(): Promise<Article[]> {
     const response = await Request.JSONToJSON.get<ServerResponse<Article[]>>(
       ArticleModel.PATH.GET_ALL,
     );

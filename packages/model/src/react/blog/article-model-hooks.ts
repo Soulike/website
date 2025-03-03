@@ -1,0 +1,71 @@
+import assert from 'node:assert';
+
+import type {Article} from '@website/classes';
+import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
+import {useEffect, useState} from 'react';
+
+import {ArticleModel} from '../../models/blog/article-model.js';
+
+export const ArticleModelHooks = {
+  useAllArticles,
+  useIdToArticle,
+};
+
+const articleModel = new ArticleModel();
+
+function useAllArticles(
+  onSuccess?: ResolveCallback<Article[]>,
+  onReject?: RejectCallback,
+) {
+  const {pending, resolvedValue, rejectedError} = usePromise(
+    articleModel.getAll(),
+    onSuccess,
+    onReject,
+  );
+
+  return {
+    loading: pending,
+    error: rejectedError,
+    articles: resolvedValue,
+  };
+}
+
+function useIdToArticle(
+  onSuccess?: ResolveCallback<Map<Article['id'], Article>>,
+  onReject?: RejectCallback,
+) {
+  const {loading, error, articles} = useAllArticles();
+  const [idToArticle, setIdToArticle] = useState<Map<
+    Article['id'],
+    Article
+  > | null>(null);
+
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    if (error) {
+      if (onReject) {
+        void onReject(error);
+      }
+      return;
+    }
+
+    assert(articles);
+    const idToCategory = new Map<Article['id'], Article>();
+    for (const article of articles) {
+      idToCategory.set(article.id, article);
+    }
+    setIdToArticle(idToCategory);
+    if (onSuccess) {
+      void onSuccess(idToCategory);
+    }
+  }, [loading, error, onReject, articles, onSuccess]);
+
+  return {
+    loading,
+    error,
+    idToArticle,
+  };
+}
