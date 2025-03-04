@@ -2,40 +2,33 @@ import {Markdown} from '@website/react-components/csr';
 import {Modal, type ModalProps, Skeleton} from 'antd';
 
 import styles from './styles.module.css';
+import {useViewModel} from './view-model.js';
 
-export interface ArticlePreviewModalViewProps {
+export interface ArticlePreviewModalProps {
   title: string;
-  open: ModalProps['open'];
+  contentMarkdown: string;
+  visible: ModalProps['open'];
   onOk: ModalProps['onOk'];
   onCancel: ModalProps['onCancel'];
-  loading: boolean;
-  onMarkdownRenderFinish: () => unknown;
-  onMarkdownRenderStart: () => unknown;
-  contentMarkdown: string;
 }
 
-export function ArticlePreviewModalView(props: ArticlePreviewModalViewProps) {
-  const {
-    title,
-    loading,
-    open,
-    onOk,
-    onCancel,
-    contentMarkdown,
-    onMarkdownRenderStart,
-    onMarkdownRenderFinish,
-  } = props;
+export function ArticlePreviewModal(props: ArticlePreviewModalProps) {
+  const {title, visible, onOk, onCancel, contentMarkdown} = props;
+
+  const {isMarkdownRendering, onMarkdownRenderFinish, onMarkdownRenderStart} =
+    useViewModel();
+
   return (
     <Modal
       title={title}
       width={'80vw'}
-      open={open}
+      open={visible}
       onOk={onOk}
       onCancel={onCancel}
       destroyOnClose={true}
     >
       <div className={styles.ArticlePreviewModal}>
-        {loading && (
+        {isMarkdownRendering && (
           <Skeleton
             loading={true}
             active={true}
@@ -43,7 +36,7 @@ export function ArticlePreviewModalView(props: ArticlePreviewModalViewProps) {
             title={true}
           />
         )}
-        <div className={loading ? styles.hide : ''}>
+        <div className={isMarkdownRendering ? styles.hide : ''}>
           <Markdown
             onRenderStart={onMarkdownRenderStart}
             onRenderFinish={onMarkdownRenderFinish}

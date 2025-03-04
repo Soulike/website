@@ -124,7 +124,7 @@ export function ArticleList(props: IProps) {
       <ArticlePreviewModal
         title={articlePreviewModalTitle}
         contentMarkdown={articlePreviewModalContentInMarkdown}
-        open={articlePreviewModalVisible}
+        visible={articlePreviewModalVisible}
         onOk={hideArticlePreviewModal}
         onCancel={hideArticlePreviewModal}
       />

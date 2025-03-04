@@ -1,1 +1,1 @@
-export {ArticlePreviewModal} from './container.js';
+export {ArticlePreviewModal} from './view.js';

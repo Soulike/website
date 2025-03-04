@@ -134,7 +134,7 @@ export function ArticleEditor(props: Props) {
       <ArticlePreviewModal
         title={title}
         contentMarkdown={content}
-        open={isArticlePreviewModalOpen}
+        visible={isArticlePreviewModalOpen}
         onOk={onArticlePreviewModalOk}
         onCancel={onArticlePreviewModalCancel}
       />
