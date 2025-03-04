@@ -3,6 +3,24 @@ import {AccountModelHooks} from '@website/model/react';
 import {useCallback, useMemo, useState} from 'react';
 
 export function useViewModel() {
+  const {logout, logoutLoading} = useLogoutViewModel();
+
+  const {
+    loading: isLoggedInLoading,
+    isLoggedIn,
+    error: isLoggedInError,
+  } = AccountModelHooks.useIsLoggedIn();
+
+  return {
+    isLoggedIn,
+    isLoggedInLoading,
+    isLoggedInError,
+    logout,
+    logoutLoading,
+  };
+}
+
+function useLogoutViewModel() {
   const [logoutLoading, setLogoutLoading] = useState(false);
 
   const accountModel = useMemo(() => new AccountModel(), []);
@@ -21,16 +39,7 @@ export function useViewModel() {
     [accountModel],
   );
 
-  const {
-    loading: isLoggedInLoading,
-    isLoggedIn,
-    error: isLoggedInError,
-  } = AccountModelHooks.useIsLoggedIn();
-
   return {
-    isLoggedIn,
-    isLoggedInLoading,
-    isLoggedInError,
     logout,
     logoutLoading,
   };

@@ -1,4 +1,3 @@
-import {useTextInputViewModel} from '@website/hooks';
 import {ModelAccessDeniedError} from '@website/model';
 import {notification} from 'antd';
 import {type DOMAttributes, useCallback, useEffect} from 'react';
@@ -11,48 +10,53 @@ import {LoginView} from './view.js';
 import {useViewModel} from './view-model.js';
 
 export function Login() {
-  const {value: username, onChange: onUsernameInputChange} =
-    useTextInputViewModel();
-  const {value: password, onChange: onPasswordInputChange} =
-    useTextInputViewModel();
   const {
     login,
     loginLoading,
-    loginError,
     isLoggedIn,
     isLoggedInLoading,
     isLoggedInError,
+    username,
+    onUsernameInputChange,
+    password,
+    onPasswordInputChange,
   } = useViewModel();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (!isLoggedInLoading && isLoggedIn) {
       void navigate(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.INDEX], {replace: true});
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, isLoggedInLoading, navigate]);
 
   useEffect(() => {
-    if (loginError) {
-      if (loginError instanceof ModelAccessDeniedError) {
-        notification.warning({message: loginError.message});
-      } else {
-        showNetworkError(loginError);
-      }
-    }
     if (isLoggedInError) {
-      if (loginError instanceof ModelAccessDeniedError) {
+      if (isLoggedInError instanceof ModelAccessDeniedError) {
         notification.warning({message: isLoggedInError.message});
       } else {
-        showNetworkError(loginError);
+        showNetworkError(isLoggedInError);
       }
     }
-  }, [isLoggedInError, loginError]);
+  }, [isLoggedInError]);
 
   const onLoginFormSubmit: DOMAttributes<HTMLFormElement>['onSubmit'] =
     useCallback<Exclude<DOMAttributes<HTMLFormElement>['onSubmit'], undefined>>(
       (e) => {
         e.preventDefault();
-        login(username, password);
+        login(
+          username,
+          password,
+          () => {
+            notification.success({message: 'Successfully logged in'});
+          },
+          (error) => {
+            if (error instanceof ModelAccessDeniedError) {
+              notification.error({message: error.message});
+            } else {
+              showNetworkError(error);
+            }
+          },
+        );
       },
       [login, password, username],
     );
