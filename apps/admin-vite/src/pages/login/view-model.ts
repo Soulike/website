@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 
-import {useTextInputViewModel} from '@website/hooks';
+import {useTextInput} from '@website/hooks';
 import {AccountModel} from '@website/model';
 import {AccountModelHooks} from '@website/model/react';
 import {useCallback, useMemo, useState} from 'react';
@@ -14,10 +14,8 @@ export function useViewModel() {
 
   const {login, loginLoading} = useLoginViewModel();
 
-  const {value: username, onChange: onUsernameInputChange} =
-    useTextInputViewModel();
-  const {value: password, onChange: onPasswordInputChange} =
-    useTextInputViewModel();
+  const {value: username, onChange: onUsernameInputChange} = useTextInput();
+  const {value: password, onChange: onPasswordInputChange} = useTextInput();
 
   return {
     login,

@@ -1,6 +1,6 @@
 import {ChangeEventHandler, useCallback, useState} from 'react';
 
-export function useTextInputViewModel(initialValue = '') {
+export function useTextInput(initialValue = '') {
   const [value, setValue] = useState(initialValue);
 
   const onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> =

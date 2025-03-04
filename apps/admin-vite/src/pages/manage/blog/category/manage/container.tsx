@@ -1,4 +1,4 @@
-import {useTextInputViewModel} from '@website/hooks';
+import {useTextInput} from '@website/hooks';
 import {ModelAccessDeniedError} from '@website/model';
 import {
   type ButtonProps,
@@ -30,7 +30,7 @@ export function Manage() {
     value: nameOfCategoryToModify,
     setValue: setNameOfCategoryToModify,
     onChange: onCategoryNameInputChange,
-  } = useTextInputViewModel();
+  } = useTextInput();
 
   const [idOfCategoryToDelete, setIdOfCategoryToDelete] = useState(0);
 

@@ -5,7 +5,7 @@ export enum ModalState {
   VISIBLE = 'visible',
 }
 
-export function useModalViewModel(initState: ModalState = ModalState.HIDDEN) {
+export function useModal(initState: ModalState = ModalState.HIDDEN) {
   const [state, setState] = useState(initState);
 
   const show = useCallback(() => {
