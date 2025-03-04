@@ -63,7 +63,8 @@ export function Login() {
 
   return (
     <LoginView
-      loading={isLoggedInLoading || loginLoading}
+      loading={isLoggedInLoading}
+      isLoggingIn={loginLoading}
       username={username}
       password={password}
       onLoginFormSubmit={onLoginFormSubmit}
