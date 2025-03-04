@@ -15,7 +15,7 @@ import styles from './styles.module.css';
 interface Props {
   title: string;
   content: string;
-  category: number | undefined;
+  selectedCategory: number | null;
   isVisible: boolean;
   categoryOption: Category[];
   onTitleInputChange: InputProps['onChange'];

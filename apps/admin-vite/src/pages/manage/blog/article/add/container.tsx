@@ -1,122 +1,83 @@
-import {Blog} from '@website/server-api';
-import {
-  type ButtonProps,
-  type CheckboxProps,
-  type InputProps,
-  message,
-  type ModalProps,
-  notification,
-  type SelectProps,
-} from 'antd';
-import {TextAreaProps} from 'antd/lib/input';
-import {useState} from 'react';
+import {ModelAccessDeniedError} from '@website/model';
+import {type ButtonProps, notification} from 'antd';
+import {useEffect} from 'react';
 
 import {showNetworkError} from '@/helpers/error-notification-helper.js';
-import {useCategories} from '@/hooks/useCategories';
 
 import {AddView} from './view.js';
+import {useViewModel} from './view-model.js';
 
 export function Add() {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [category, setCategory] = useState<number | undefined>(undefined);
-  const [isVisible, setIsVisible] = useState(true);
-  const {loading: isLoadingCategories, categories} = useCategories();
-  const [isSubmittingArticle, setIsSubmittingArticle] = useState(false);
-  const [isArticlePreviewModalOpen, setIsArticlePreviewModalOpen] =
-    useState(false);
+  const {
+    categories,
+    categoriesLoading,
+    categoriesLoadError,
+    title,
+    onTitleInputChange,
+    content,
+    onContentTextAreaChange,
+    selectedCategory,
+    onCategorySelectChange,
+    isVisibleChecked,
+    onIsVisibleCheckboxChange,
+    articlePreviewModalVisible,
+    showArticlePreviewModal,
+    hideArticlePreviewModal,
+    handleArticleSubmit,
+    isSubmittingArticle,
+  } = useViewModel();
 
-  const onTitleInputChange: InputProps['onChange'] = (e) => {
-    setTitle(e.target.value);
-  };
-
-  const onContentTextAreaChange: TextAreaProps['onChange'] = (e) => {
-    setContent(e.target.value);
-  };
-
-  const onCategorySelectorChange: SelectProps<number>['onChange'] = (value) => {
-    setCategory(value); // 在 View 中设置的是 number
-  };
-
-  const onIsVisibleCheckboxChange: CheckboxProps['onChange'] = (e) => {
-    setIsVisible(e.target.checked);
-  };
-
-  const onArticlePreviewButtonClick: ButtonProps['onClick'] = (e) => {
-    e.preventDefault();
-    setIsArticlePreviewModalOpen(true);
-  };
-
-  const onArticlePreviewModalOk: ModalProps['onOk'] = (e) => {
-    e.preventDefault();
-    setIsArticlePreviewModalOpen(false);
-  };
-
-  const onArticlePreviewModalCancel: ModalProps['onCancel'] =
-    onArticlePreviewModalOk;
-
-  const initAfterSubmit = () => {
-    setTitle('');
-    setContent('');
-    setCategory(undefined);
-    setIsVisible(true);
-    setIsSubmittingArticle(false);
-  };
+  useEffect(() => {
+    if (!categoriesLoading && categoriesLoadError) {
+      if (categoriesLoadError instanceof ModelAccessDeniedError) {
+        notification.error({message: categoriesLoadError.message});
+      } else {
+        showNetworkError(categoriesLoadError);
+      }
+    }
+  }, [categoriesLoadError, categoriesLoading]);
 
   const onSubmitButtonClick: ButtonProps['onClick'] = (e) => {
     e.preventDefault();
-    const executor = async () => {
-      if (typeof category === 'undefined') {
-        await message.warning('No category is selected');
-      } else if (title.length === 0) {
-        await message.warning('Please input title');
-      } else if (content.length === 0) {
-        await message.warning('Please input content');
-      } else {
-        try {
-          setIsSubmittingArticle(true);
-          const response = await Blog.Article.add({
-            title,
-            category,
-            content,
-            isVisible,
-          });
-          if (response.isSuccessful) {
-            notification.success({message: 'Submitted'});
-            initAfterSubmit();
-          } else {
-            const {message} = response;
-            notification.warning({message});
-          }
-        } catch (err) {
-          showNetworkError(err);
-        } finally {
-          setIsSubmittingArticle(false);
+    handleArticleSubmit(
+      title,
+      content,
+      selectedCategory,
+      isVisibleChecked,
+      (message) => {
+        notification.error({message});
+      },
+      () => {
+        notification.success({message: 'Submitted'});
+      },
+      (error) => {
+        if (error instanceof ModelAccessDeniedError) {
+          notification.error({message: error.message});
+        } else {
+          showNetworkError(error);
         }
-      }
-    };
-
-    void executor();
+      },
+    );
   };
 
   return (
     <AddView
       title={title}
       content={content}
-      category={category}
-      isVisible={isVisible}
+      selectedCategory={selectedCategory}
+      isVisible={isVisibleChecked}
       categoryOption={categories ?? []}
       onTitleInputChange={onTitleInputChange}
       onContentTextAreaChange={onContentTextAreaChange}
-      onCategorySelectorChange={onCategorySelectorChange}
+      onCategorySelectorChange={onCategorySelectChange}
       onIsVisibleCheckboxChange={onIsVisibleCheckboxChange}
       onSubmitButtonClick={onSubmitButtonClick}
-      isLoadingCategory={isLoadingCategories}
+      isLoadingCategory={categoriesLoading}
       isSubmittingArticle={isSubmittingArticle}
-      isArticlePreviewModalOpen={isArticlePreviewModalOpen}
-      onArticlePreviewButtonClick={onArticlePreviewButtonClick}
-      onArticlePreviewModalOk={onArticlePreviewModalOk}
-      onArticlePreviewModalCancel={onArticlePreviewModalCancel}
+      isArticlePreviewModalOpen={articlePreviewModalVisible}
+      onArticlePreviewButtonClick={showArticlePreviewModal}
+      onArticlePreviewModalOk={hideArticlePreviewModal}
+      onArticlePreviewModalCancel={hideArticlePreviewModal}
     />
   );
 }

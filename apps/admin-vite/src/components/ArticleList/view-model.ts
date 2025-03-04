@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 
 import {Article} from '@website/classes';
-import {useModalViewModel} from '@website/hooks/dist/useModalViewModel.js';
+import {useModal} from '@website/hooks';
 import {BlogModels} from '@website/model';
 import {BlogModelHooks} from '@website/model/react';
 import {type ButtonProps, message, type SwitchProps} from 'antd';
@@ -116,7 +116,7 @@ function useIdToArticleCache(category?: Article['category']) {
 }
 
 function useArticlePreviewModalViewModel() {
-  const {show, hide, visible} = useModalViewModel();
+  const {show, hide, visible} = useModal();
 
   const [title, setTitle] = useState('');
   const [contentInMarkdown, setContentInMarkdown] = useState('');
