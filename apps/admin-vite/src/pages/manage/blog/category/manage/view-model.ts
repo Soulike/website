@@ -10,105 +10,131 @@ type CategoryModelModifyParameters = Parameters<CategoryModelType['modify']>;
 
 export function useViewModel() {
   const {
-    loading: categoriesLoading,
-    error: categoriesError,
-    categories,
-  } = BlogModelHooks.CategoryModelHooks.useAllCategories();
+    idToCategoryCache,
+    setIdToCategoryCache,
+    loading: idToCategoryLoading,
+    error: idToCategoryLoadError,
+  } = useIdToCategoryCache();
 
-  const [idToCategory, setIdToCategory] = useState<Map<
-    Category['id'],
-    Category
-  > | null>(null);
-
-  useEffect(() => {
-    if (categories) {
-      const idToCategory = new Map<number, Category>();
-      idToCategory.forEach((category) => {
-        idToCategory.set(category.id, category);
-      });
-      setIdToCategory(idToCategory);
-    }
-  }, [categories]);
-
-  const [categoryIdToArticleAmount, setCategoryIdToArticleAmount] =
-    useState<Map<Category['id'], number> | null>(null);
   const {
-    loading: articleAmountGroupedByIdLoading,
-    error: articleAmountGroupedByIdError,
-    articleAmountGroupedById,
-  } = BlogModelHooks.CategoryModelHooks.useArticleAmountGroupedById();
+    idToArticleAmount,
+    loading: idToArticleAmountLoading,
+    error: idToArticleAmountLoadError,
+  } = BlogModelHooks.CategoryModelHooks.useIdToArticleAmount();
+
+  const {
+    submitting: categoryModificationSubmitting,
+    handleCategoryModificationSubmit,
+  } = useSubmitCategoryModification((id, modifiedParts) => {
+    // Modify local record instead of request again.
+    assert(idToCategoryCache);
+    const modifiedCategory = idToCategoryCache.get(id);
+    assert(modifiedCategory);
+    Object.assign(modifiedCategory, modifiedParts);
+    setIdToCategoryCache(idToCategoryCache);
+  });
+
+  const {submitting: categoryDeletionSubmitting, handleCategoryDeletion} =
+    useSubmitCategoryDeletion((id) => {
+      assert(idToCategoryCache);
+      idToCategoryCache.delete(id);
+      setIdToCategoryCache(idToCategoryCache);
+    });
+
+  return {
+    idToCategory: idToCategoryCache,
+    idToCategoryLoading,
+    idToCategoryLoadError,
+    idToArticleAmountLoading,
+    idToArticleAmountLoadError,
+    idToArticleAmount,
+    handleCategoryModificationSubmit,
+    categoryModificationSubmitting,
+    handleCategoryDeletion,
+    categoryDeletionSubmitting,
+  };
+}
+
+function useIdToCategoryCache() {
+  const {idToCategory, loading, error} =
+    BlogModelHooks.CategoryModelHooks.useIdToCategory();
+  const [idToCategoryCache, setIdToCategoryCache] = useState<
+    typeof idToCategory | null
+  >(null);
 
   useEffect(() => {
-    if (articleAmountGroupedById) {
-      const categoryIdToArticleAmount = new Map<Category['id'], number>();
-      const entries = Object.entries(articleAmountGroupedById);
-      for (const entry of entries) {
-        categoryIdToArticleAmount.set(Number.parseInt(entry[0]), entry[1]);
-      }
-      setCategoryIdToArticleAmount(categoryIdToArticleAmount);
+    if (!loading && !error) {
+      setIdToCategoryCache(idToCategory);
     }
-  }, [articleAmountGroupedById]);
+  }, [error, idToCategory, loading]);
 
+  return {
+    idToCategoryCache,
+    setIdToCategoryCache,
+    loading,
+    error,
+  };
+}
+
+function useSubmitCategoryModification(
+  afterSubmitSuccess: (
+    id: Category['id'],
+    modifiedParts: CategoryModelModifyParameters[1],
+  ) => void,
+) {
   const categoryModel = useMemo(() => new BlogModels.CategoryModel(), []);
-  const [modifyCategoryLoading, setModifyCategoryLoading] = useState(false);
-  const modifyCategory = useCallback(
+  const [submitting, setSubmitting] = useState(false);
+  const handleCategoryModificationSubmit = useCallback(
     (
       id: CategoryModelModifyParameters[0],
       modifiedParts: CategoryModelModifyParameters[1],
-      onSuccess: () => void,
+      onSuccess: typeof afterSubmitSuccess,
       onError: (e: unknown) => void,
     ) => {
-      setModifyCategoryLoading(true);
+      setSubmitting(true);
       categoryModel
         .modify(id, modifiedParts)
         .then(() => {
-          // Modify local record instead of request again.
-          assert(idToCategory);
-          const modifiedCategory = idToCategory.get(id);
-          assert(modifiedCategory);
-          Object.assign(modifiedCategory, modifiedParts);
-          setIdToCategory(idToCategory);
-
-          onSuccess();
+          onSuccess(id, modifiedParts);
+          afterSubmitSuccess(id, modifiedParts);
         })
         .catch(onError)
         .finally(() => {
-          setModifyCategoryLoading(false);
+          setSubmitting(false);
         });
     },
-    [categoryModel, idToCategory],
-  );
-
-  const [deleteCategoryByIdLoading, setDeleteCategoryByIdLoading] =
-    useState(false);
-  const deleteCategoryById = useCallback(
-    (id: Category['id'], onError: (e: unknown) => void) => {
-      setDeleteCategoryByIdLoading(true);
-      categoryModel
-        .deleteById(id)
-        .then(() => {
-          assert(idToCategory);
-          idToCategory.delete(id);
-          setIdToCategory(idToCategory);
-        })
-        .catch(onError)
-        .finally(() => {
-          setDeleteCategoryByIdLoading(false);
-        });
-    },
-    [categoryModel, idToCategory],
+    [afterSubmitSuccess, categoryModel],
   );
 
   return {
-    idToCategory,
-    idToCategoryLoading: categoriesLoading,
-    idToCategoryError: categoriesError,
-    categoryIdToArticleAmountLoading: articleAmountGroupedByIdLoading,
-    categoryIdToArticleAmountError: articleAmountGroupedByIdError,
-    categoryIdToArticleAmount,
-    modifyCategory,
-    modifyCategoryLoading,
-    deleteCategoryById,
-    deleteCategoryByIdLoading,
+    submitting,
+    handleCategoryModificationSubmit,
+  };
+}
+
+function useSubmitCategoryDeletion(
+  afterSubmitSuccess: (id: Category['id']) => void,
+) {
+  const categoryModel = useMemo(() => new BlogModels.CategoryModel(), []);
+  const [submitting, setSubmitting] = useState(false);
+  const handleCategoryDeletion = useCallback(
+    (id: Category['id'], onError: (e: unknown) => void) => {
+      setSubmitting(true);
+      categoryModel
+        .deleteById(id)
+        .then(() => {
+          afterSubmitSuccess(id);
+        })
+        .catch(onError)
+        .finally(() => {
+          setSubmitting(false);
+        });
+    },
+    [afterSubmitSuccess, categoryModel],
+  );
+
+  return {
+    submitting,
+    handleCategoryDeletion,
   };
 }

@@ -36,34 +36,34 @@ export function Manage() {
 
   const {
     idToCategory,
-    idToCategoryError,
+    idToCategoryLoadError,
     idToCategoryLoading,
-    categoryIdToArticleAmount,
-    categoryIdToArticleAmountLoading,
-    categoryIdToArticleAmountError,
-    modifyCategory,
-    modifyCategoryLoading,
-    deleteCategoryById,
-    deleteCategoryByIdLoading,
+    idToArticleAmountLoading,
+    idToArticleAmountLoadError,
+    idToArticleAmount,
+    handleCategoryModificationSubmit,
+    categoryModificationSubmitting,
+    handleCategoryDeletion,
+    categoryDeletionSubmitting,
   } = useViewModel();
 
   useEffect(() => {
-    if (idToCategoryError) {
-      if (idToCategoryError instanceof ModelAccessDeniedError) {
-        notification.error({message: idToCategoryError.message});
+    if (idToCategoryLoadError) {
+      if (idToCategoryLoadError instanceof ModelAccessDeniedError) {
+        notification.error({message: idToCategoryLoadError.message});
       } else {
-        showNetworkError(idToCategoryError);
+        showNetworkError(idToCategoryLoadError);
       }
     }
 
-    if (categoryIdToArticleAmountError) {
-      if (categoryIdToArticleAmountError instanceof ModelAccessDeniedError) {
-        notification.error({message: categoryIdToArticleAmountError.message});
+    if (idToArticleAmountLoadError) {
+      if (idToArticleAmountLoadError instanceof ModelAccessDeniedError) {
+        notification.error({message: idToArticleAmountLoadError.message});
       } else {
-        showNetworkError(categoryIdToArticleAmountError);
+        showNetworkError(idToArticleAmountLoadError);
       }
     }
-  }, [idToCategoryError, categoryIdToArticleAmountError]);
+  }, [idToCategoryLoadError, idToArticleAmountLoadError]);
 
   const onArticleAmountTagClick: (id: number) => TagProps['onClick'] = (
     id: number,
@@ -87,7 +87,7 @@ export function Manage() {
       return;
     }
 
-    modifyCategory(
+    handleCategoryModificationSubmit(
       idOfCategoryToModify,
       {name: nameOfCategoryToModify},
       () => {
@@ -132,13 +132,13 @@ export function Manage() {
   };
 
   const onDeleteCategoryConfirm: PopconfirmProps['onConfirm'] = () => {
-    assert(categoryIdToArticleAmount);
-    if (categoryIdToArticleAmount.get(idOfCategoryToDelete) === 0) {
+    assert(idToArticleAmount);
+    if (idToArticleAmount.get(idOfCategoryToDelete) === 0) {
       void message.warning('Can not delete category with articles');
       return;
     }
 
-    deleteCategoryById(idOfCategoryToDelete, (e) => {
+    handleCategoryDeletion(idOfCategoryToDelete, (e) => {
       if (e instanceof ModelAccessDeniedError) {
         notification.error({message: e.message});
       } else {
@@ -151,12 +151,12 @@ export function Manage() {
     <ManageView
       loading={
         idToCategoryLoading ||
-        modifyCategoryLoading ||
-        deleteCategoryByIdLoading ||
-        categoryIdToArticleAmountLoading
+        categoryModificationSubmitting ||
+        categoryDeletionSubmitting ||
+        idToArticleAmountLoading
       }
-      categoryMap={idToCategory ?? new Map()}
-      categoryToArticleNumberMap={categoryIdToArticleAmount ?? new Map()}
+      idToCategory={idToCategory}
+      categoryToArticleNumberMap={idToArticleAmount}
       isArticleListModalVisible={isArticleListModalVisible}
       categoryIdOfArticleListModal={categoryIdOfArticleListModal}
       onArticleAmountTagClick={onArticleAmountTagClick}
