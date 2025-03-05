@@ -8,6 +8,7 @@ import {ArticleModel} from '../../models/blog/article-model.js';
 
 export const ArticleModelHooks = {
   useArticles,
+  useArticleById,
   useIdToArticle,
 };
 
@@ -30,6 +31,23 @@ function useArticles(
     loading: pending,
     error: rejectedError,
     articles: resolvedValue,
+  };
+}
+
+function useArticleById(
+  id: Article['id'],
+  onSuccess?: ResolveCallback<Article>,
+  onReject?: RejectCallback,
+) {
+  const {pending, resolvedValue, rejectedError} = usePromise(
+    articleModel.getById(id),
+    onSuccess,
+    onReject,
+  );
+  return {
+    loading: pending,
+    error: rejectedError,
+    article: resolvedValue,
   };
 }
 
