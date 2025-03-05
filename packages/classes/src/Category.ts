@@ -1,3 +1,5 @@
+import {Nullable} from './types.js';
+
 export type CategoryIdToArticleAmount = Record<Category['id'], number>;
 
 interface CategoryBase {
@@ -9,6 +11,18 @@ export class NewCategory implements CategoryBase {
 
   constructor(name: string) {
     this.name = name;
+  }
+
+  public static validateFormInput(
+    newCategory: Partial<Nullable<NewCategory>>,
+    onValidationFailed?: (message: string) => void,
+  ): boolean {
+    const {name} = newCategory;
+    if (!name) {
+      onValidationFailed?.('Please input category');
+      return false;
+    }
+    return true;
   }
 }
 
