@@ -84,31 +84,6 @@ export function useSubmitArticle(afterSubmitSuccess: () => void) {
   const [isSubmittingArticle, setIsSubmittingArticle] = useState(false);
   const articleModel = useMemo(() => new BlogModels.ArticleModel(), []);
 
-  const validateInput = useCallback(
-    (
-      title: Article['title'],
-      content: Article['content'],
-      selectedCategory: Article['category'] | null,
-      onValidationFailed: (message: string) => void,
-    ) => {
-      let validationPassed = true;
-      if (title.length === 0) {
-        onValidationFailed('Please input title');
-        validationPassed = false;
-      }
-      if (content.length === 0) {
-        onValidationFailed('Please input content');
-        validationPassed = false;
-      }
-      if (selectedCategory === null) {
-        onValidationFailed('Please select a category');
-        validationPassed = false;
-      }
-      return validationPassed;
-    },
-    [],
-  );
-
   const handleArticleSubmit = useCallback(
     (
       title: Article['title'],
@@ -119,10 +94,13 @@ export function useSubmitArticle(afterSubmitSuccess: () => void) {
       onSubmitSuccess: () => void,
       onSubmitFailed: (error: Error) => void,
     ) => {
-      const validationPassed = validateInput(
-        title,
-        content,
-        selectedCategory,
+      const validationPassed = NewArticle.validateFormInput(
+        {
+          title,
+          content,
+          category: selectedCategory,
+          isVisible,
+        },
         onValidationFailed,
       );
       if (!validationPassed) {
@@ -145,7 +123,7 @@ export function useSubmitArticle(afterSubmitSuccess: () => void) {
           setIsSubmittingArticle(false);
         });
     },
-    [afterSubmitSuccess, articleModel, validateInput],
+    [afterSubmitSuccess, articleModel],
   );
 
   return {
