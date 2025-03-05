@@ -12,5 +12,5 @@ export function useAntdCheckbox(defaultChecked = false) {
     setChecked(defaultChecked);
   }, [defaultChecked]);
 
-  return {checked, onChange, resetValue};
+  return {checked, setChecked, onChange, resetValue};
 }
