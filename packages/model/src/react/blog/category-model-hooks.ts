@@ -2,7 +2,7 @@ import assert from 'node:assert';
 
 import {Category, CategoryIdToArticleAmount} from '@website/classes';
 import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 
 import {CategoryModel} from '../../models/blog/category-model.js';
 
@@ -12,6 +12,7 @@ export const CategoryModelHooks = Object.freeze({
   useAllCategories,
   useIdToCategory,
   useArticleAmountGroupedById,
+  useIdToArticleAmount,
 });
 
 function useAllCategories(
@@ -82,5 +83,32 @@ function useArticleAmountGroupedById(
     loading: pending,
     error: rejectedError,
     articleAmountGroupedById: resolvedValue,
+  };
+}
+
+function useIdToArticleAmount(
+  onSuccess?: ResolveCallback<CategoryIdToArticleAmount>,
+  onReject?: RejectCallback,
+) {
+  const {loading, error, articleAmountGroupedById} =
+    useArticleAmountGroupedById(onSuccess, onReject);
+
+  const idToArticleAmount: Map<Category['id'], number> | null = useMemo(() => {
+    if (loading || error || !articleAmountGroupedById) {
+      return null;
+    }
+
+    const idToArticleAmount = new Map<Category['id'], number>();
+    const entries = Object.entries(articleAmountGroupedById);
+    for (const entry of entries) {
+      idToArticleAmount.set(Number.parseInt(entry[0]), entry[1]);
+    }
+    return idToArticleAmount;
+  }, [articleAmountGroupedById, error, loading]);
+
+  return {
+    loading,
+    error,
+    idToArticleAmount,
   };
 }
