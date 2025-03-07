@@ -283,6 +283,9 @@ importers:
       '@website/request':
         specifier: workspace:^
         version: link:../request
+      path-browserify:
+        specifier: '>=1.0.0'
+        version: 1.0.1
       react:
         specifier: '>=16.8.0'
         version: 19.0.0

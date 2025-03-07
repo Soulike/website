@@ -1,4 +1,4 @@
-import path from 'node:path/posix';
+import path from 'node:path';
 
 import {ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
