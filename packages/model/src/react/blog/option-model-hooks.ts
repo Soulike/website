@@ -1,4 +1,5 @@
 import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
+import {useMemo} from 'react';
 
 import {OptionModel} from '../../models/blog/option-model.js';
 
@@ -12,8 +13,9 @@ function useAbout(
   onSuccess?: ResolveCallback<string>,
   onReject?: RejectCallback,
 ) {
+  const promise = useMemo(() => optionModel.getAbout(), []);
   const {pending, resolvedValue, rejectedError} = usePromise(
-    optionModel.getAbout(),
+    promise,
     onSuccess,
     onReject,
   );

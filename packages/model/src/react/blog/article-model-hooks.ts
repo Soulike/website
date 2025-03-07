@@ -2,7 +2,7 @@ import assert from 'node:assert';
 
 import {Article} from '@website/classes';
 import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 
 import {ArticleModel} from '../../models/blog/article-model.js';
 
@@ -19,10 +19,15 @@ function useArticles(
   onSuccess?: ResolveCallback<Article[]>,
   onReject?: RejectCallback,
 ) {
+  const promise = useMemo(
+    () =>
+      category === undefined
+        ? articleModel.getAll()
+        : articleModel.getByCategory(category),
+    [category],
+  );
   const {pending, resolvedValue, rejectedError} = usePromise(
-    category === undefined
-      ? articleModel.getAll()
-      : articleModel.getByCategory(category),
+    promise,
     onSuccess,
     onReject,
   );
@@ -39,8 +44,9 @@ function useArticleById(
   onSuccess?: ResolveCallback<Article>,
   onReject?: RejectCallback,
 ) {
+  const promise = useMemo(() => articleModel.getById(id), [id]);
   const {pending, resolvedValue, rejectedError} = usePromise(
-    articleModel.getById(id),
+    promise,
     onSuccess,
     onReject,
   );

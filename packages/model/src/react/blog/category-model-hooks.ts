@@ -19,8 +19,9 @@ function useAllCategories(
   onSuccess?: ResolveCallback<Category[]>,
   onReject?: RejectCallback,
 ) {
+  const promise = useMemo(() => categoryModel.getAll(), []);
   const {pending, resolvedValue, rejectedError} = usePromise(
-    categoryModel.getAll(),
+    promise,
     onSuccess,
     onReject,
   );
@@ -73,8 +74,12 @@ function useArticleAmountGroupedById(
   onSuccess?: ResolveCallback<CategoryIdToArticleAmount>,
   onReject?: RejectCallback,
 ) {
+  const promise = useMemo(
+    () => categoryModel.getArticleAmountGroupedById(),
+    [],
+  );
   const {pending, resolvedValue, rejectedError} = usePromise(
-    categoryModel.getArticleAmountGroupedById(),
+    promise,
     onSuccess,
     onReject,
   );
