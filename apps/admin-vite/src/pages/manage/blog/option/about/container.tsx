@@ -1,79 +1,64 @@
-import {type ButtonProps, message, type ModalProps, notification} from 'antd';
-import {type TextAreaProps} from 'antd/lib/input';
-import {useEffect, useState} from 'react';
+import {ModelAccessDeniedError} from '@website/model';
+import {type ButtonProps, notification} from 'antd';
+import {useEffect} from 'react';
 
 import {showNetworkError} from '@/helpers/error-notification-helper.js';
-import {useAbout} from '@/hooks/useAbout';
 
 import {AboutView} from './view.js';
+import {useViewModel} from './view-model.js';
 
 export function About() {
-  const [aboutMarkdown, setAboutMarkdown] = useState('');
-  const [previewModalOpen, setPreviewModalOpen] = useState(false);
-  const {loading: loadingAbout, set: setAbout, get: getAbout} = useAbout();
+  const {
+    aboutLoading,
+    aboutLoadError,
+    aboutMarkdown,
+    onAboutMarkdownInputChange,
+    showAboutPreviewModal,
+    hideAboutPreviewModal,
+    aboutPreviewModalVisible,
+    aboutModificationSubmitting,
+    handleAboutModificationSubmit,
+  } = useViewModel();
 
   useEffect(() => {
-    void getAbout()
-      .then((response) => {
-        if (response.isSuccessful) {
-          const {
-            data: {about: aboutMarkdown},
-          } = response;
-          setAboutMarkdown(aboutMarkdown);
-        } else {
-          notification.warning({message: response.message});
-        }
-      })
-      .catch((e: unknown) => {
-        showNetworkError(e);
-      });
-  }, [getAbout]);
-
-  const onAboutTextareaChange: TextAreaProps['onChange'] = (e) => {
-    setAboutMarkdown(e.target.value);
-  };
-
-  const onPreviewButtonClick: ButtonProps['onClick'] = () => {
-    setPreviewModalOpen(true);
-  };
+    if (aboutLoadError) {
+      if (aboutLoadError instanceof ModelAccessDeniedError) {
+        notification.error({message: aboutLoadError.message});
+      } else {
+        showNetworkError(aboutLoadError);
+      }
+    }
+  }, [aboutLoadError]);
 
   const onSubmitButtonClick: ButtonProps['onClick'] = () => {
-    const executor = async () => {
-      if (aboutMarkdown.length !== 0) {
-        try {
-          const response = await setAbout(aboutMarkdown);
-          if (response.isSuccessful) {
-            notification.success({message: '修改关于成功'});
-          } else {
-            notification.warning({message: response.message});
-          }
-        } catch (e) {
-          showNetworkError(e);
+    handleAboutModificationSubmit(
+      aboutMarkdown,
+      (message) => {
+        notification.error({message});
+      },
+      () => {
+        notification.success({message: 'About modified successfully'});
+      },
+      (error) => {
+        if (error instanceof ModelAccessDeniedError) {
+          notification.error({message: error.message});
+        } else {
+          showNetworkError(error);
         }
-      } else {
-        void message.warning('关于内容不能为空');
-      }
-    };
-
-    void executor();
+      },
+    );
   };
-
-  const onPreviewModalOk: ModalProps['onOk'] = () => {
-    setPreviewModalOpen(false);
-  };
-
-  const onPreviewModalCancel: ModalProps['onCancel'] = onPreviewModalOk;
 
   return (
     <AboutView
       onSubmitButtonClick={onSubmitButtonClick}
       aboutMarkdown={aboutMarkdown}
-      previewModalOpen={previewModalOpen}
-      onAboutTextareaChange={onAboutTextareaChange}
-      onPreviewButtonClick={onPreviewButtonClick}
-      onPreviewModalCancel={onPreviewModalCancel}
-      onPreviewModalOk={onPreviewModalOk}
-      loading={loadingAbout}
+      previewModalOpen={aboutPreviewModalVisible}
+      onAboutTextareaChange={onAboutMarkdownInputChange}
+      onPreviewButtonClick={showAboutPreviewModal}
+      onPreviewModalCancel={hideAboutPreviewModal}
+      onPreviewModalOk={hideAboutPreviewModal}
+      loading={aboutLoading || aboutModificationSubmitting}
     />
   );
 }

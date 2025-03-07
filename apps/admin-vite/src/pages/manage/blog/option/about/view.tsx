@@ -59,7 +59,7 @@ export function AboutView(props: Props) {
         contentMarkdown={aboutMarkdown}
         onOk={onPreviewModalOk}
         onCancel={onPreviewModalCancel}
-        open={previewModalOpen}
+        visible={previewModalOpen}
       />
     </div>
   );

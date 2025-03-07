@@ -25,8 +25,8 @@ const {Meta} = Item;
 interface Props {
   loading: boolean;
 
-  categoryMap: Map<number, Category>;
-  categoryToArticleNumberMap: Map<number, number>;
+  idToCategory: Map<Category['id'], Category> | null;
+  categoryToArticleNumberMap: Map<Category['id'], number> | null;
 
   isArticleListModalVisible: boolean;
   categoryIdOfArticleListModal: number;
@@ -48,7 +48,7 @@ interface Props {
 export function ManageView(props: Props) {
   const {
     loading,
-    categoryMap,
+    idToCategory,
     categoryToArticleNumberMap,
     categoryIdOfArticleListModal,
     isArticleListModalVisible,
@@ -65,12 +65,12 @@ export function ManageView(props: Props) {
     onCategoryNameInputChange,
   } = props;
 
-  const categoryInModal = categoryMap.get(categoryIdOfArticleListModal);
+  const categoryInModal = idToCategory?.get(categoryIdOfArticleListModal);
   return (
     <div className={Style.Manage}>
       <List
         loading={loading}
-        dataSource={Array.from(categoryMap.values())}
+        dataSource={Array.from(idToCategory?.values() ?? [])}
         bordered={true}
         pagination={{
           position: 'bottom',
@@ -88,7 +88,7 @@ export function ManageView(props: Props) {
                   className={Style.articleAmountTag}
                 >
                   文章：
-                  {categoryToArticleNumberMap.get(id)}
+                  {categoryToArticleNumberMap?.get(id) ?? 0}
                 </Tag>
               </Spin>
               <Space.Compact size={'small'} className={Style.buttonWrapper}>

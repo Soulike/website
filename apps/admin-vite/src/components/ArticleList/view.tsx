@@ -4,7 +4,6 @@ import {
   Button,
   type ButtonProps,
   List,
-  type ModalProps,
   Popconfirm,
   type PopconfirmProps,
   Skeleton,
@@ -16,56 +15,47 @@ import {
 } from 'antd';
 import {type DOMAttributes} from 'react';
 
-import {ArticlePreviewModal} from '@/components/ArticlePreviewModal';
-
 import styles from './styles.module.css';
 
 const {Item} = List;
 const {Meta} = Item;
 
 interface Props {
-  articleMap: Map<number, Article>;
-  categoryMap: Map<number, Category>;
+  idToArticle: Map<number, Article> | null;
+  idToCategory: Map<number, Category> | null;
   isLoading: boolean;
 
-  onArticleTitleClick: (
+  articleTitleClickHandlerFactory: (
     id: number,
   ) => DOMAttributes<HTMLSpanElement>['onClick'];
-  articleInModalTitle: string;
-  articleInModalMarkdown: string;
-  modalIsOpen: boolean;
-  modalOnOk: ModalProps['onOk'];
-  modalOnCancel: ModalProps['onCancel'];
-  loadingArticleId: number;
+  processingArticleId: number | null;
 
   onIsVisibleSwitchClick: (id: number) => SwitchProps['onClick'];
   onModifyArticleButtonClick: (id: number) => ButtonProps['onClick'];
-  onDeleteArticleButtonClick: (id: number) => ButtonProps['onClick'];
+  deleteArticleButtonClickHandlerFactory: (
+    id: number,
+  ) => ButtonProps['onClick'];
   onDeleteArticleConfirm: PopconfirmProps['onConfirm'];
 }
 
 export function ArticleListView(props: Props) {
   const {
-    articleMap,
-    categoryMap,
+    idToArticle,
+    idToCategory,
     isLoading,
-    loadingArticleId,
-    articleInModalMarkdown,
-    articleInModalTitle,
-    modalIsOpen,
-    modalOnCancel,
-    modalOnOk,
-    onArticleTitleClick,
+    processingArticleId,
+    articleTitleClickHandlerFactory,
     onIsVisibleSwitchClick,
     onModifyArticleButtonClick,
-    onDeleteArticleButtonClick,
+    deleteArticleButtonClickHandlerFactory,
     onDeleteArticleConfirm,
   } = props;
+
   return (
     <div className={styles.ArticleList}>
       <Skeleton loading={isLoading} active={true} paragraph={{rows: 15}}>
         <List
-          dataSource={Array.from(articleMap.values())}
+          dataSource={Array.from(idToArticle?.values() ?? [])}
           bordered={true}
           pagination={{
             position: 'bottom',
@@ -78,27 +68,26 @@ export function ArticleListView(props: Props) {
               id,
               title,
               isVisible,
+              category: categoryId,
               publicationTime: publicationTimeString,
               modificationTime: modificationTimeString,
             } = article;
             const publicationTime = new Date(publicationTimeString);
             const modificationTime = new Date(modificationTimeString);
+            const category = idToCategory?.get(categoryId);
             return (
               <Item key={id}>
                 <Meta
                   title={
                     <span
                       className={styles.title}
-                      onClick={onArticleTitleClick(id)}
+                      onClick={articleTitleClickHandlerFactory(id)}
                     >
                       {title}
                     </span>
                   }
                 />
-                <Tag color={'blue'}>
-                  {categoryMap.get(articleMap.get(id)?.category ?? 0)?.name ??
-                    '??'}
-                </Tag>
+                <Tag color={'blue'}>{category?.name ?? 'Unknown'}</Tag>
                 <Tag color={'geekblue'}>
                   Published at：
                   <time>
@@ -130,8 +119,8 @@ export function ArticleListView(props: Props) {
                     className={styles.switch}
                     onClick={onIsVisibleSwitchClick(id)}
                     checked={isVisible}
-                    disabled={loadingArticleId === id}
-                    loading={loadingArticleId === id}
+                    disabled={processingArticleId === id}
+                    loading={processingArticleId === id}
                     checkedChildren={'Public'}
                     unCheckedChildren={'Private'}
                   />
@@ -154,7 +143,7 @@ export function ArticleListView(props: Props) {
                       <Button
                         danger={true}
                         ghost={true}
-                        onClick={onDeleteArticleButtonClick(id)}
+                        onClick={deleteArticleButtonClickHandlerFactory(id)}
                       >
                         <DeleteOutlined />
                       </Button>
@@ -166,13 +155,6 @@ export function ArticleListView(props: Props) {
           }}
         />
       </Skeleton>
-      <ArticlePreviewModal
-        title={articleInModalTitle}
-        contentMarkdown={articleInModalMarkdown}
-        open={modalIsOpen}
-        onOk={modalOnOk}
-        onCancel={modalOnCancel}
-      />
     </div>
   );
 }

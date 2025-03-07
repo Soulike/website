@@ -23,7 +23,7 @@ const {Option} = Select;
 interface Props {
   title: string;
   content: string;
-  category: number | undefined;
+  selectedCategory: number | null;
   isVisible: boolean;
   categoryOption: Category[];
   onTitleInputChange: InputProps['onChange'];
@@ -44,7 +44,7 @@ export function ArticleEditor(props: Props) {
   const {
     title,
     content,
-    category,
+    selectedCategory,
     isVisible,
     categoryOption,
     onTitleInputChange,
@@ -90,7 +90,7 @@ export function ArticleEditor(props: Props) {
         <Select
           size={'large'}
           onChange={onCategorySelectorChange}
-          value={category}
+          value={selectedCategory}
           loading={isLoadingCategory}
           className={styles.categorySelect}
           disabled={isLoadingCategory}
@@ -134,7 +134,7 @@ export function ArticleEditor(props: Props) {
       <ArticlePreviewModal
         title={title}
         contentMarkdown={content}
-        open={isArticlePreviewModalOpen}
+        visible={isArticlePreviewModalOpen}
         onOk={onArticlePreviewModalOk}
         onCancel={onArticlePreviewModalCancel}
       />
