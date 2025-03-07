@@ -31,14 +31,14 @@ export function useViewModel() {
     const modifiedCategory = idToCategoryCache.get(id);
     assert(modifiedCategory);
     Object.assign(modifiedCategory, modifiedParts);
-    setIdToCategoryCache(idToCategoryCache);
+    setIdToCategoryCache(new Map(idToCategoryCache));
   });
 
   const {submitting: categoryDeletionSubmitting, handleCategoryDeletion} =
     useSubmitCategoryDeletion((id) => {
       assert(idToCategoryCache);
       idToCategoryCache.delete(id);
-      setIdToCategoryCache(idToCategoryCache);
+      setIdToCategoryCache(new Map(idToCategoryCache));
     });
 
   return {

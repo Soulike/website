@@ -204,7 +204,7 @@ function useArticleDeleteButtonViewModel(
         .then(() => {
           if (idToArticleCache) {
             idToArticleCache.delete(deletingArticleId);
-            setIdToArticleCache(idToArticleCache);
+            setIdToArticleCache(new Map(idToArticleCache));
           }
           if (onSuccess) {
             onSuccess();
