@@ -41,7 +41,7 @@ export class AccountModel {
   }
 
   public async isLoggedIn(): Promise<boolean> {
-    const response = await Request.JSONToJSON.post<
+    const response = await Request.JSONToJSON.get<
       ServerResponse<{isInSession: boolean}>
     >(AccountModel.PATH.CHECK_SESSION);
 
