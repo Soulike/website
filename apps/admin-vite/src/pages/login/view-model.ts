@@ -29,7 +29,7 @@ export function useViewModel() {
 }
 
 function useIsLoggedIn() {
-  const [isLoggedInCache, setIsLoggedInCache] = useState<boolean | null>(false);
+  const [isLoggedInCache, setIsLoggedInCache] = useState<boolean | null>(null);
   const {
     isLoggedIn,
     loading: isLoggedInLoading,

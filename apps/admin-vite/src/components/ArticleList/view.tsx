@@ -1,5 +1,3 @@
-import assert from 'node:assert';
-
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
 import {type Article, type Category} from '@website/classes';
 import {
@@ -77,7 +75,6 @@ export function ArticleListView(props: Props) {
             const publicationTime = new Date(publicationTimeString);
             const modificationTime = new Date(modificationTimeString);
             const category = idToCategory?.get(categoryId);
-            assert(category);
             return (
               <Item key={id}>
                 <Meta
@@ -90,7 +87,7 @@ export function ArticleListView(props: Props) {
                     </span>
                   }
                 />
-                <Tag color={'blue'}>{category.name}</Tag>
+                <Tag color={'blue'}>{category?.name ?? 'Unknown'}</Tag>
                 <Tag color={'geekblue'}>
                   Published at：
                   <time>

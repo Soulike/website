@@ -69,7 +69,7 @@ export function Layout() {
 
   return (
     <>
-      {isLoggedInLoading && logoutLoading && <Loading />}
+      {(isLoggedInLoading || logoutLoading) && <Loading />}
       {!isLoggedInLoading && (
         <LayoutView onExitButtonClick={onExitButtonClick}>
           <Outlet />
