@@ -1,6 +1,11 @@
 import {ModelAccessDeniedError} from '@website/model';
 import {notification} from 'antd';
-import {type DOMAttributes, useCallback, useEffect} from 'react';
+import {
+  type DOMAttributes,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
 import {useNavigate} from 'react-router';
 
 import {showNetworkError} from '@/helpers/error-notification-helper.js';
@@ -23,7 +28,7 @@ export function Login() {
   } = useViewModel();
   const navigate = useNavigate();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isLoggedInLoading && isLoggedIn) {
       void navigate(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.INDEX], {replace: true});
     }

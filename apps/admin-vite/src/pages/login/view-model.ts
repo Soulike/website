@@ -3,16 +3,14 @@ import assert from 'node:assert';
 import {useTextInput} from '@website/hooks';
 import {AccountModel} from '@website/model';
 import {AccountModelHooks} from '@website/model/react';
-import {useCallback, useMemo, useState} from 'react';
+import {useCallback, useLayoutEffect, useMemo, useState} from 'react';
 
 export function useViewModel() {
-  const {
-    isLoggedIn,
-    loading: isLoggedInLoading,
-    error: isLoggedInError,
-  } = AccountModelHooks.useIsLoggedIn();
-
-  const {login, loginLoading} = useLoginViewModel();
+  const {isLoggedIn, isLoggedInError, isLoggedInLoading, setIsLoggedIn} =
+    useIsLoggedIn();
+  const {login, loginLoading} = useLogin(() => {
+    setIsLoggedIn(true);
+  });
 
   const {value: username, onChange: onUsernameInputChange} = useTextInput();
   const {value: password, onChange: onPasswordInputChange} = useTextInput();
@@ -30,7 +28,26 @@ export function useViewModel() {
   };
 }
 
-function useLoginViewModel() {
+function useIsLoggedIn() {
+  const [isLoggedInCache, setIsLoggedInCache] = useState<boolean | null>(false);
+  const {
+    isLoggedIn,
+    loading: isLoggedInLoading,
+    error: isLoggedInError,
+  } = AccountModelHooks.useIsLoggedIn();
+  useLayoutEffect(() => {
+    setIsLoggedInCache(isLoggedIn);
+  }, [isLoggedIn]);
+
+  return {
+    isLoggedIn: isLoggedInCache,
+    setIsLoggedIn: setIsLoggedInCache,
+    isLoggedInLoading,
+    isLoggedInError,
+  };
+}
+
+function useLogin(afterLoggedIn?: () => void) {
   const [loginLoading, setLoginLoading] = useState(false);
   const accountModel = useMemo(() => new AccountModel(), []);
 
@@ -47,6 +64,7 @@ function useLoginViewModel() {
         .then(() => {
           if (onSuccess) {
             onSuccess();
+            afterLoggedIn?.();
           }
         })
         .catch((e: unknown) => {
@@ -59,7 +77,7 @@ function useLoginViewModel() {
           setLoginLoading(false);
         });
     },
-    [accountModel],
+    [accountModel, afterLoggedIn],
   );
 
   return {
