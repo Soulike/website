@@ -23,7 +23,7 @@ export interface ArticleEditorViewProps {
   content: Article['content'];
   selectedCategory: Article['category'] | null;
   isVisible: Article['isVisible'];
-  categoryOption: Category[] | null;
+  categories: Category[] | null;
   onTitleInputChange: InputProps['onChange'];
   onContentTextAreaChange: TextAreaProps['onChange'];
   onCategorySelectorChange: SelectProps<number>['onChange'];
@@ -47,7 +47,7 @@ export function ArticleEditorView(props: ArticleEditorViewProps) {
     content,
     selectedCategory,
     isVisible,
-    categoryOption,
+    categories,
     onTitleInputChange,
     onContentTextAreaChange,
     onCategorySelectorChange,
@@ -95,10 +95,10 @@ export function ArticleEditorView(props: ArticleEditorViewProps) {
           value={selectedCategory}
           loading={isLoadingCategory}
           className={styles.categorySelect}
-          disabled={shouldDisable}
+          disabled={shouldDisable || !categories}
           placeholder={'Category'}
         >
-          {categoryOption?.map((category) => {
+          {categories?.map((category) => {
             const {id, name} = category;
             return (
               <Option value={id} key={id}>

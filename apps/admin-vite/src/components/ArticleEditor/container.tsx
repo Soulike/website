@@ -65,7 +65,7 @@ export function ArticleEditor(props: ArticleEditorProps) {
         content={content}
         selectedCategory={selectedCategory}
         isVisible={isVisibleChecked}
-        categoryOption={categories}
+        categories={categories}
         onTitleInputChange={onTitleInputChange}
         onContentTextAreaChange={onContentInputChange}
         onCategorySelectorChange={onCategorySelectChange}
