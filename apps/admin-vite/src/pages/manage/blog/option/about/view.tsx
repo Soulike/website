@@ -1,7 +1,5 @@
-import {Button, type ButtonProps, Input, type ModalProps, Space} from 'antd';
+import {Button, type ButtonProps, Input, Space} from 'antd';
 import {type TextAreaProps} from 'antd/lib/input';
-
-import {ArticlePreviewModal} from '@/components/ArticlePreviewModal';
 
 import styles from './styles.module.css';
 
@@ -12,9 +10,6 @@ interface Props {
   onAboutTextareaChange: TextAreaProps['onChange'];
   onPreviewButtonClick: ButtonProps['onClick'];
   onSubmitButtonClick: ButtonProps['onClick'];
-
-  onPreviewModalOk: ModalProps['onOk'];
-  previewModalOpen: boolean;
   loading: boolean;
 }
 
@@ -22,8 +17,6 @@ export function AboutView(props: Props) {
   const {
     onAboutTextareaChange,
     aboutMarkdown,
-    onPreviewModalOk,
-    previewModalOpen,
     onSubmitButtonClick,
     onPreviewButtonClick,
     loading,
@@ -52,12 +45,6 @@ export function AboutView(props: Props) {
           </Button>
         </Space.Compact>
       </div>
-      <ArticlePreviewModal
-        title={'About'}
-        contentMarkdown={aboutMarkdown}
-        onOkButtonClick={onPreviewModalOk}
-        shown={previewModalOpen}
-      />
     </div>
   );
 }

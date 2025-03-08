@@ -1,7 +1,6 @@
 import assert from 'node:assert';
 
 import {Article} from '@website/classes';
-import {useModal} from '@website/hooks';
 import {BlogModels} from '@website/model';
 import {BlogModelHooks} from '@website/model/react';
 import {type ButtonProps, message, type SwitchProps} from 'antd';
@@ -12,6 +11,8 @@ import {
   useMemo,
   useState,
 } from 'react';
+
+import {useArticlePreviewModal} from '@/components/ArticlePreviewModal/index.js';
 
 export function useViewModel(category?: Article['category']) {
   const {
@@ -29,13 +30,10 @@ export function useViewModel(category?: Article['category']) {
 
   const {
     show: showArticlePreviewModal,
-    hide: hideArticlePreviewModal,
-    visible: articlePreviewModalVisible,
-    title: articlePreviewModalTitle,
     setTitle: setArticlePreviewModalTitle,
-    contentInMarkdown: articlePreviewModalContentInMarkdown,
-    setContentInMarkdown: setArticlePreviewModalContentInMarkdown,
-  } = useArticlePreviewModalViewModel();
+    setContentMarkdown: setArticlePreviewModalContentMarkdown,
+    modal: articlePreviewModal,
+  } = useArticlePreviewModal();
 
   const articleTitleClickHandlerFactory: (
     id: Article['id'],
@@ -48,7 +46,7 @@ export function useViewModel(category?: Article['category']) {
           void message.warning('Article not found');
         } else {
           setArticlePreviewModalTitle(article.title);
-          setArticlePreviewModalContentInMarkdown(article.content);
+          setArticlePreviewModalContentMarkdown(article.content);
           showArticlePreviewModal();
         }
       };
@@ -56,7 +54,7 @@ export function useViewModel(category?: Article['category']) {
     [
       idToArticleCache,
       setArticlePreviewModalTitle,
-      setArticlePreviewModalContentInMarkdown,
+      setArticlePreviewModalContentMarkdown,
       showArticlePreviewModal,
     ],
   );
@@ -77,10 +75,7 @@ export function useViewModel(category?: Article['category']) {
     idToArticle: idToArticleCache,
     idToArticleLoading,
     idToArticleError,
-    articlePreviewModalVisible,
-    hideArticlePreviewModal,
-    articlePreviewModalTitle,
-    articlePreviewModalContentInMarkdown,
+    articlePreviewModal,
     processingArticleId,
     articleTitleClickHandlerFactory,
     isVisibleSwitchClickHandlerFactory,
@@ -112,23 +107,6 @@ function useIdToArticleCache(category?: Article['category']) {
     setIdToArticleCache,
     idToArticleLoading,
     idToArticleError,
-  };
-}
-
-function useArticlePreviewModalViewModel() {
-  const {show, hide, visible} = useModal();
-
-  const [title, setTitle] = useState('');
-  const [contentInMarkdown, setContentInMarkdown] = useState('');
-
-  return {
-    show,
-    hide,
-    visible,
-    title,
-    setTitle,
-    contentInMarkdown,
-    setContentInMarkdown,
   };
 }
 

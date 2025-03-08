@@ -1,15 +1,8 @@
 import assert from 'node:assert';
 
 import {Article, NewArticle} from '@website/classes';
-import {
-  useAntdCheckbox,
-  useAntdSelect,
-  useModal,
-  useTextInput,
-} from '@website/hooks';
 import {BlogModels} from '@website/model';
-import {BlogModelHooks} from '@website/model/react';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useLayoutEffect, useMemo, useState} from 'react';
 import {useNavigate, useSearchParams} from 'react-router';
 
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config/index.js';
@@ -17,101 +10,23 @@ import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config/index.js';
 export function useViewModel() {
   const modifyingArticleId = useSearchParameterId();
   const navigate = useNavigate();
-  const articleModel = useMemo(() => new BlogModels.ArticleModel(), []);
-  const [articleLoading, setArticleLoading] = useState(false);
-  const [articleLoadError, setArticleLoadError] = useState<Error | null>(null);
-  const {
-    categories,
-    loading: categoriesLoading,
-    error: categoriesLoadError,
-  } = BlogModelHooks.CategoryModelHooks.useAllCategories();
-  const {
-    value: title,
-    setValue: setTitle,
-    resetValue: resetTitleInput,
-    onChange: onTitleInputChange,
-  } = useTextInput();
-  const {
-    value: content,
-    setValue: setContent,
-    resetValue: resetContentInput,
-    onChange: onContentInputChange,
-  } = useTextInput();
-  const {
-    value: selectedCategory,
-    setValue: setSelectedCategory,
-    onChange: onCategorySelectChange,
-    resetValue: resetCategorySelect,
-  } = useAntdSelect<number>();
-  const {
-    checked: isVisibleChecked,
-    setChecked: setIsVisibleChecked,
-    resetValue: resetIsVisibleCheckbox,
-    onChange: onIsVisibleCheckboxChange,
-  } = useAntdCheckbox();
-  const {
-    show: showArticlePreviewModal,
-    hide: hideArticlePreviewModal,
-    visible: articlePreviewModalVisible,
-  } = useModal();
 
   const {isSubmittingArticleModification, handleArticleModificationSubmit} =
     useSubmitArticleModification(() => {
-      resetTitleInput();
-      resetContentInput();
-      resetCategorySelect();
-      resetIsVisibleCheckbox();
+      void navigate(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE], {
+        replace: true,
+      });
     });
 
-  useEffect(() => {
-    if (!modifyingArticleId) {
-      void navigate(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.INDEX], {replace: true});
-      return;
-    }
-    setArticleLoading(true);
-    articleModel
-      .getById(modifyingArticleId)
-      .then((article) => {
-        const {title, content, category, isVisible} = article;
-        setTitle(title);
-        setContent(content);
-        setSelectedCategory(category);
-        setIsVisibleChecked(isVisible);
-      })
-      .catch((error: unknown) => {
-        assert(error instanceof Error);
-        setArticleLoadError(error);
-      })
-      .finally(() => {
-        setArticleLoading(false);
+  useLayoutEffect(() => {
+    if (modifyingArticleId === null) {
+      void navigate(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE], {
+        replace: true,
       });
-  }, [
-    articleModel,
-    modifyingArticleId,
-    navigate,
-    setContent,
-    setIsVisibleChecked,
-    setSelectedCategory,
-    setTitle,
-  ]);
+    }
+  }, [modifyingArticleId, navigate]);
 
   return {
-    articleLoading,
-    articleLoadError,
-    categories,
-    categoriesLoading,
-    categoriesLoadError,
-    title,
-    onTitleInputChange,
-    content,
-    onContentInputChange,
-    selectedCategory,
-    onCategorySelectChange,
-    isVisibleChecked,
-    onIsVisibleCheckboxChange,
-    showArticlePreviewModal,
-    hideArticlePreviewModal,
-    articlePreviewModalVisible,
     modifyingArticleId,
     isSubmittingArticleModification,
     handleArticleModificationSubmit,
@@ -127,7 +42,7 @@ function useSearchParameterId(): Article['id'] | null {
   return Number.parseInt(id);
 }
 
-export function useSubmitArticleModification(afterSubmitSuccess: () => void) {
+export function useSubmitArticleModification(afterSubmitSuccess?: () => void) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const articleModel = useMemo(() => new BlogModels.ArticleModel(), []);
 
@@ -161,7 +76,7 @@ export function useSubmitArticleModification(afterSubmitSuccess: () => void) {
         .modify(id, {title, content, category: selectedCategory, isVisible})
         .then(() => {
           onSubmitSuccess();
-          afterSubmitSuccess();
+          afterSubmitSuccess?.();
         })
         .catch((e: unknown) => {
           assert(e instanceof Error);

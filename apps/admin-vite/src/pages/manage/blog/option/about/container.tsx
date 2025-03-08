@@ -14,10 +14,9 @@ export function About() {
     aboutMarkdown,
     onAboutMarkdownInputChange,
     showAboutPreviewModal,
-    hideAboutPreviewModal,
-    aboutPreviewModalVisible,
     aboutModificationSubmitting,
     handleAboutModificationSubmit,
+    aboutPreviewModal,
   } = useViewModel();
 
   useEffect(() => {
@@ -50,14 +49,15 @@ export function About() {
   };
 
   return (
-    <AboutView
-      onSubmitButtonClick={onSubmitButtonClick}
-      aboutMarkdown={aboutMarkdown}
-      previewModalOpen={aboutPreviewModalVisible}
-      onAboutTextareaChange={onAboutMarkdownInputChange}
-      onPreviewButtonClick={showAboutPreviewModal}
-      onPreviewModalOk={hideAboutPreviewModal}
-      loading={aboutLoading || aboutModificationSubmitting}
-    />
+    <>
+      <AboutView
+        onSubmitButtonClick={onSubmitButtonClick}
+        aboutMarkdown={aboutMarkdown}
+        onAboutTextareaChange={onAboutMarkdownInputChange}
+        onPreviewButtonClick={showAboutPreviewModal}
+        loading={aboutLoading || aboutModificationSubmitting}
+      />
+      {aboutPreviewModal}
+    </>
   );
 }

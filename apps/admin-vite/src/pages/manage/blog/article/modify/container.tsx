@@ -1,9 +1,9 @@
 import assert from 'node:assert';
 
 import {ModelAccessDeniedError} from '@website/model';
-import {type ButtonProps, notification} from 'antd';
-import {useEffect} from 'react';
+import {notification} from 'antd';
 
+import {ArticleEditorProps} from '@/components/ArticleEditor/index.js';
 import {showNetworkError} from '@/helpers/error-notification-helper.js';
 
 import {ModifyView} from './view.js';
@@ -11,54 +11,24 @@ import {useViewModel} from './view-model.js';
 
 export function Modify() {
   const {
-    articleLoading,
-    articleLoadError,
-    categories,
-    categoriesLoading,
-    categoriesLoadError,
-    title,
-    onTitleInputChange,
-    content,
-    onContentInputChange,
-    selectedCategory,
-    onCategorySelectChange,
-    isVisibleChecked,
-    onIsVisibleCheckboxChange,
-    showArticlePreviewModal,
-    hideArticlePreviewModal,
-    articlePreviewModalVisible,
     modifyingArticleId,
     isSubmittingArticleModification,
     handleArticleModificationSubmit,
   } = useViewModel();
 
-  useEffect(() => {
-    if (categoriesLoadError) {
-      if (categoriesLoadError instanceof ModelAccessDeniedError) {
-        notification.error({message: categoriesLoadError.message});
-      } else {
-        showNetworkError(categoriesLoadError);
-      }
-    }
-
-    if (articleLoadError) {
-      if (articleLoadError instanceof ModelAccessDeniedError) {
-        notification.error({message: articleLoadError.message});
-      } else {
-        showNetworkError(articleLoadError);
-      }
-    }
-  }, [articleLoadError, categoriesLoadError]);
-
-  const onSubmitButtonClick: ButtonProps['onClick'] = (e) => {
-    e.preventDefault();
+  const onSubmitButtonClick: ArticleEditorProps['onSubmitButtonClick'] = ({
+    title,
+    content,
+    category,
+    isVisible,
+  }) => {
     assert(modifyingArticleId !== null);
     handleArticleModificationSubmit(
       modifyingArticleId,
       title,
       content,
-      selectedCategory,
-      isVisibleChecked,
+      category,
+      isVisible,
       (message: string) => {
         notification.error({message});
       },
@@ -75,25 +45,11 @@ export function Modify() {
     );
   };
 
-  return (
+  return modifyingArticleId === null ? null : (
     <ModifyView
-      title={title}
-      content={content}
-      selectedCategory={selectedCategory}
-      categoryOption={categories ?? []}
-      isLoadingCategory={categoriesLoading}
-      isLoadingArticle={articleLoading}
-      isSubmittingArticle={isSubmittingArticleModification}
-      isVisible={isVisibleChecked}
-      onArticlePreviewButtonClick={showArticlePreviewModal}
-      onArticlePreviewModalOk={hideArticlePreviewModal}
-      onArticlePreviewModalCancel={hideArticlePreviewModal}
-      isArticlePreviewModalOpen={articlePreviewModalVisible}
+      articleId={modifyingArticleId}
+      submitting={isSubmittingArticleModification}
       onSubmitButtonClick={onSubmitButtonClick}
-      onIsVisibleCheckboxChange={onIsVisibleCheckboxChange}
-      onCategorySelectorChange={onCategorySelectChange}
-      onContentTextAreaChange={onContentInputChange}
-      onTitleInputChange={onTitleInputChange}
     />
   );
 }

@@ -1,80 +1,22 @@
 import assert from 'node:assert';
 
-import {Article, Category, NewArticle} from '@website/classes';
-import {
-  useAntdCheckbox,
-  useAntdSelect,
-  useModal,
-  useTextInput,
-} from '@website/hooks';
+import {Article, NewArticle} from '@website/classes';
 import {BlogModels} from '@website/model';
-import {BlogModelHooks} from '@website/model/react';
 import {useCallback, useMemo, useState} from 'react';
+import {useNavigate} from 'react-router';
+
+import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config/index.js';
 
 export function useViewModel() {
-  const {
-    value: title,
-    onChange: onTitleInputChange,
-    resetValue: resetTitleInput,
-  } = useTextInput();
-  const {
-    value: content,
-    onChange: onContentTextAreaChange,
-    resetValue: resetContentInput,
-  } = useTextInput();
-  const {
-    value: selectedCategory,
-    onChange: onCategorySelectChange,
-    resetValue: resetCategorySelect,
-  } = useAntdSelect<Category['id']>();
-  const {
-    checked: isVisibleChecked,
-    onChange: onIsVisibleCheckboxChange,
-    resetValue: resetIsVisibleCheckbox,
-  } = useAntdCheckbox(true);
-
-  const {
-    categories,
-    loading: categoriesLoading,
-    error: categoriesLoadError,
-  } = BlogModelHooks.CategoryModelHooks.useAllCategories();
-
-  const {
-    show: showArticlePreviewModal,
-    hide: hideArticlePreviewModal,
-    visible: articlePreviewModalVisible,
-  } = useModal();
-
+  const navigate = useNavigate();
   const afterArticleSubmitSuccess = useCallback(() => {
-    resetTitleInput();
-    resetContentInput();
-    resetCategorySelect();
-    resetIsVisibleCheckbox();
-  }, [
-    resetCategorySelect,
-    resetContentInput,
-    resetIsVisibleCheckbox,
-    resetTitleInput,
-  ]);
+    void navigate(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE]);
+  }, [navigate]);
   const {isSubmittingArticle, handleArticleSubmit} = useSubmitArticle(
     afterArticleSubmitSuccess,
   );
 
   return {
-    categories,
-    categoriesLoading,
-    categoriesLoadError,
-    title,
-    onTitleInputChange,
-    content,
-    onContentTextAreaChange,
-    selectedCategory,
-    onCategorySelectChange,
-    isVisibleChecked,
-    onIsVisibleCheckboxChange,
-    articlePreviewModalVisible,
-    showArticlePreviewModal,
-    hideArticlePreviewModal,
     isSubmittingArticle,
     handleArticleSubmit,
   };

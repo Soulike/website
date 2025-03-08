@@ -1,9 +1,11 @@
 import assert from 'node:assert';
 
-import {useModal, useTextInput} from '@website/hooks';
+import {useTextInput} from '@website/hooks';
 import {BlogModels} from '@website/model';
 import {BlogModelHooks} from '@website/model/react';
 import {useCallback, useEffect, useMemo, useState} from 'react';
+
+import {useArticlePreviewModal} from '@/components/ArticlePreviewModal';
 
 export function useViewModel() {
   const {
@@ -11,11 +13,6 @@ export function useViewModel() {
     setValue: setAboutMarkdown,
     onChange: onAboutMarkdownInputChange,
   } = useTextInput();
-  const {
-    show: showAboutPreviewModal,
-    hide: hideAboutPreviewModal,
-    visible: aboutPreviewModalVisible,
-  } = useModal();
   const {
     about,
     loading: aboutLoading,
@@ -32,14 +29,33 @@ export function useViewModel() {
     handleAboutModificationSubmit,
   } = useSubmitAboutModification();
 
+  const {
+    modal: aboutPreviewModal,
+    show: showAboutPreviewModal,
+    setTitle: setAboutPreviewModalTitle,
+    setContentMarkdown: setAboutPreviewModalContentMarkdown,
+    visible: aboutPreviewModalVisible,
+  } = useArticlePreviewModal();
+
+  useEffect(() => {
+    if (aboutPreviewModalVisible) {
+      setAboutPreviewModalTitle('About');
+      setAboutPreviewModalContentMarkdown(aboutMarkdown);
+    }
+  }, [
+    aboutMarkdown,
+    aboutPreviewModalVisible,
+    setAboutPreviewModalContentMarkdown,
+    setAboutPreviewModalTitle,
+  ]);
+
   return {
     aboutLoading,
     aboutLoadError,
     aboutMarkdown,
     onAboutMarkdownInputChange,
+    aboutPreviewModal,
     showAboutPreviewModal,
-    hideAboutPreviewModal,
-    aboutPreviewModalVisible,
     aboutModificationSubmitting,
     handleAboutModificationSubmit,
   };
