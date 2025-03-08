@@ -1,5 +1,3 @@
-import assert from 'node:assert';
-
 import {Article, type Category, NewArticle} from '@website/classes';
 import {
   Button,
@@ -20,7 +18,7 @@ import styles from './styles.module.css';
 const {TextArea} = Input;
 const {Option} = Select;
 
-interface Props {
+export interface ArticleEditorViewProps {
   title: Article['title'];
   content: Article['content'];
   selectedCategory: Article['category'] | null;
@@ -30,7 +28,12 @@ interface Props {
   onContentTextAreaChange: TextAreaProps['onChange'];
   onCategorySelectorChange: SelectProps<number>['onChange'];
   onIsVisibleCheckboxChange: CheckboxProps['onChange'];
-  onSubmitButtonClick: (newArticle: NewArticle) => void;
+  onSubmitButtonClick: (article: {
+    title: NewArticle['title'];
+    content: NewArticle['content'];
+    category: NewArticle['category'] | null;
+    isVisible: NewArticle['isVisible'];
+  }) => void;
   onPreviewButtonClick: ButtonProps['onClick'];
   isLoadingCategory: boolean;
   isLoadingArticle: boolean;
@@ -38,7 +41,7 @@ interface Props {
   disabled: boolean;
 }
 
-export function ArticleEditorView(props: Props) {
+export function ArticleEditorView(props: ArticleEditorViewProps) {
   const {
     title,
     content,
@@ -125,11 +128,10 @@ export function ArticleEditorView(props: Props) {
             size={'large'}
             disabled={shouldDisable}
             onClick={() => {
-              assert(selectedCategory !== null);
               onSubmitButtonClick({
                 title,
-                category: selectedCategory,
                 content,
+                category: selectedCategory,
                 isVisible,
               });
             }}
