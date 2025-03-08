@@ -1,1 +1,1 @@
-export {ArticleEditor} from './view.js';
+export * from './container.js';

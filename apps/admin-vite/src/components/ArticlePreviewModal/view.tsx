@@ -1,3 +1,4 @@
+import {Article} from '@website/classes';
 import {Markdown} from '@website/react-components/csr';
 import {Modal, type ModalProps, Skeleton} from 'antd';
 
@@ -5,15 +6,14 @@ import styles from './styles.module.css';
 import {useViewModel} from './view-model.js';
 
 export interface ArticlePreviewModalProps {
-  title: string;
-  contentMarkdown: string;
+  title: Article['title'];
+  contentMarkdown: Article['content'];
   visible: ModalProps['open'];
-  onOk: ModalProps['onOk'];
-  onCancel: ModalProps['onCancel'];
+  onOkButtonClick: ModalProps['onOk'];
 }
 
 export function ArticlePreviewModal(props: ArticlePreviewModalProps) {
-  const {title, visible, onOk, onCancel, contentMarkdown} = props;
+  const {title, visible, onOkButtonClick, contentMarkdown} = props;
 
   const {isMarkdownRendering, onMarkdownRenderFinish, onMarkdownRenderStart} =
     useViewModel();
@@ -22,10 +22,11 @@ export function ArticlePreviewModal(props: ArticlePreviewModalProps) {
     <Modal
       title={title}
       width={'80vw'}
+      closable={false}
       open={visible}
-      onOk={onOk}
-      onCancel={onCancel}
+      onOk={onOkButtonClick}
       destroyOnClose={true}
+      cancelButtonProps={{style: {display: 'none'}}}
     >
       <div className={styles.ArticlePreviewModal}>
         {isMarkdownRendering && (

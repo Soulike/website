@@ -4,7 +4,6 @@ import {type ButtonProps, notification, type PopconfirmProps} from 'antd';
 import {useCallback, useEffect} from 'react';
 import {useNavigate} from 'react-router';
 
-import {ArticlePreviewModal} from '@/components/ArticlePreviewModal/index.js';
 import {showNetworkError} from '@/helpers/error-notification-helper.js';
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config';
 
@@ -33,10 +32,7 @@ export function ArticleList(props: IProps) {
     deleteArticlePending,
     handleDeleteArticleConfirm,
     deleteArticleButtonClickHandlerFactory,
-    articlePreviewModalTitle,
-    articlePreviewModalVisible,
-    articlePreviewModalContentInMarkdown,
-    hideArticlePreviewModal,
+    articlePreviewModal,
   } = useViewModel(category);
 
   useEffect(() => {
@@ -121,13 +117,7 @@ export function ArticleList(props: IProps) {
         }
         onDeleteArticleConfirm={onDeleteArticleConfirm}
       />
-      <ArticlePreviewModal
-        title={articlePreviewModalTitle}
-        contentMarkdown={articlePreviewModalContentInMarkdown}
-        visible={articlePreviewModalVisible}
-        onOk={hideArticlePreviewModal}
-        onCancel={hideArticlePreviewModal}
-      />
+      {articlePreviewModal}
     </>
   );
 }
