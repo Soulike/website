@@ -16,7 +16,7 @@ export function useArticlePreviewModal() {
         <ArticlePreviewModal
           title={title}
           contentMarkdown={contentMarkdown}
-          shown={visible}
+          visible={visible}
           onOkButtonClick={hide}
         />,
         document.body,

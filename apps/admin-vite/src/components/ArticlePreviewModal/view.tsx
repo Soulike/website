@@ -8,12 +8,12 @@ import {useViewModel} from './view-model.js';
 export interface ArticlePreviewModalProps {
   title: Article['title'];
   contentMarkdown: Article['content'];
-  shown: ModalProps['open'];
+  visible: ModalProps['open'];
   onOkButtonClick: ModalProps['onOk'];
 }
 
 export function ArticlePreviewModal(props: ArticlePreviewModalProps) {
-  const {title, shown, onOkButtonClick, contentMarkdown} = props;
+  const {title, visible, onOkButtonClick, contentMarkdown} = props;
 
   const {isMarkdownRendering, onMarkdownRenderFinish, onMarkdownRenderStart} =
     useViewModel();
@@ -23,7 +23,7 @@ export function ArticlePreviewModal(props: ArticlePreviewModalProps) {
       title={title}
       width={'80vw'}
       closable={false}
-      open={shown}
+      open={visible}
       onOk={onOkButtonClick}
       destroyOnClose={true}
       cancelButtonProps={{style: {display: 'none'}}}
