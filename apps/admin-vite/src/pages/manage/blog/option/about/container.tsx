@@ -56,7 +56,6 @@ export function About() {
       previewModalOpen={aboutPreviewModalVisible}
       onAboutTextareaChange={onAboutMarkdownInputChange}
       onPreviewButtonClick={showAboutPreviewModal}
-      onPreviewModalCancel={hideAboutPreviewModal}
       onPreviewModalOk={hideAboutPreviewModal}
       loading={aboutLoading || aboutModificationSubmitting}
     />

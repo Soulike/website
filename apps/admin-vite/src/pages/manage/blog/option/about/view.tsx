@@ -14,7 +14,6 @@ interface Props {
   onSubmitButtonClick: ButtonProps['onClick'];
 
   onPreviewModalOk: ModalProps['onOk'];
-  onPreviewModalCancel: ModalProps['onCancel'];
   previewModalOpen: boolean;
   loading: boolean;
 }
@@ -23,7 +22,6 @@ export function AboutView(props: Props) {
   const {
     onAboutTextareaChange,
     aboutMarkdown,
-    onPreviewModalCancel,
     onPreviewModalOk,
     previewModalOpen,
     onSubmitButtonClick,
@@ -57,9 +55,8 @@ export function AboutView(props: Props) {
       <ArticlePreviewModal
         title={'About'}
         contentMarkdown={aboutMarkdown}
-        onOk={onPreviewModalOk}
-        onCancel={onPreviewModalCancel}
-        visible={previewModalOpen}
+        onOkButtonClick={onPreviewModalOk}
+        shown={previewModalOpen}
       />
     </div>
   );
