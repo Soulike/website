@@ -25,7 +25,10 @@ export function useArticlePreviewModal() {
   );
 
   return {
-    modal, // Put this in DOM tree to render the modal
+    /**
+     * @description You should always add `modal` into your DOM tree. Otherwise, the modal will never show.
+     */
+    modal,
     show,
     hide,
     visible,
