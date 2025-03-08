@@ -1,26 +1,8 @@
-import assert from 'node:assert';
-
 import {Article} from '@website/classes';
-import {BlogModels} from '@website/model';
 import {BlogModelHooks} from '@website/model/react';
-import {type ButtonProps, message, type SwitchProps} from 'antd';
-import {
-  type DOMAttributes,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-
-import {useArticlePreviewModal} from '@/components/ArticlePreviewModal/index.js';
+import {useCallback, useEffect, useState} from 'react';
 
 export function useViewModel(category?: Article['category']) {
-  const {
-    loading: idToCategoryLoading,
-    idToCategory,
-    error: idToCategoryError,
-  } = BlogModelHooks.CategoryModelHooks.useIdToCategory();
-
   const {
     idToArticleCache,
     idToArticleLoading,
@@ -28,60 +10,21 @@ export function useViewModel(category?: Article['category']) {
     setIdToArticleCache,
   } = useIdToArticleCache(category);
 
-  const {
-    show: showArticlePreviewModal,
-    setTitle: setArticlePreviewModalTitle,
-    setContentMarkdown: setArticlePreviewModalContentMarkdown,
-    modal: articlePreviewModal,
-  } = useArticlePreviewModal();
-
-  const articleTitleClickHandlerFactory: (
-    id: Article['id'],
-  ) => DOMAttributes<HTMLSpanElement>['onClick'] = useCallback(
+  const handleDeleteArticleSuccess = useCallback(
     (id: Article['id']) => {
-      return (e) => {
-        e.preventDefault();
-        const article = idToArticleCache?.get(id);
-        if (typeof article === 'undefined') {
-          void message.warning('Article not found');
-        } else {
-          setArticlePreviewModalTitle(article.title);
-          setArticlePreviewModalContentMarkdown(article.content);
-          showArticlePreviewModal();
-        }
-      };
+      if (idToArticleCache) {
+        idToArticleCache.delete(id);
+        setIdToArticleCache(new Map(idToArticleCache));
+      }
     },
-    [
-      idToArticleCache,
-      setArticlePreviewModalTitle,
-      setArticlePreviewModalContentMarkdown,
-      showArticlePreviewModal,
-    ],
+    [idToArticleCache, setIdToArticleCache],
   );
 
-  const {processingArticleId, isVisibleSwitchClickHandlerFactory} =
-    useArticleIsVisibleSwitchViewModel();
-
-  const {
-    deletePending: deleteArticlePending,
-    deleteArticleButtonClickHandlerFactory,
-    handleDeleteArticleConfirm,
-  } = useArticleDeleteButtonViewModel(idToArticleCache, setIdToArticleCache);
-
   return {
-    idToCategory,
-    idToCategoryLoading,
-    idToCategoryError,
     idToArticle: idToArticleCache,
     idToArticleLoading,
     idToArticleError,
-    articlePreviewModal,
-    processingArticleId,
-    articleTitleClickHandlerFactory,
-    isVisibleSwitchClickHandlerFactory,
-    deleteArticlePending,
-    deleteArticleButtonClickHandlerFactory,
-    handleDeleteArticleConfirm,
+    handleDeleteArticleSuccess,
   };
 }
 
@@ -107,105 +50,5 @@ function useIdToArticleCache(category?: Article['category']) {
     setIdToArticleCache,
     idToArticleLoading,
     idToArticleError,
-  };
-}
-
-function useArticleIsVisibleSwitchViewModel() {
-  const articleModel = useMemo(() => new BlogModels.ArticleModel(), []);
-  const [processingArticleId, setProcessingArticleId] = useState<
-    Article['id'] | null
-  >(null);
-
-  const isVisibleSwitchClickHandlerFactory: (
-    id: Article['id'],
-    onSuccess?: () => void,
-    onError?: (error: Error) => void,
-  ) => SwitchProps['onClick'] = useCallback(
-    (
-      id: Article['id'],
-      onSuccess?: () => void,
-      onError?: (error: Error) => void,
-    ) => {
-      return (checked) => {
-        setProcessingArticleId(id);
-        articleModel
-          .modify(id, {isVisible: checked})
-          .then(() => {
-            setProcessingArticleId(null);
-            if (onSuccess) {
-              onSuccess();
-            }
-          })
-          .catch((e: unknown) => {
-            if (onError) {
-              assert(e instanceof Error);
-              onError(e);
-            }
-          });
-      };
-    },
-    [articleModel],
-  );
-
-  return {
-    processingArticleId,
-    isVisibleSwitchClickHandlerFactory,
-  };
-}
-
-function useArticleDeleteButtonViewModel(
-  idToArticleCache: Map<Article['id'], Article> | null,
-  setIdToArticleCache: (idToArticleCache: Map<Article['id'], Article>) => void,
-) {
-  const articleModel = useMemo(() => new BlogModels.ArticleModel(), []);
-  const [deletingArticleId, setDeletingArticleId] = useState<
-    Article['id'] | null
-  >(null);
-  const [deletePending, setDeletePending] = useState(false);
-
-  const deleteArticleButtonClickHandlerFactory: (
-    id: Article['id'],
-  ) => ButtonProps['onClick'] = useCallback((id: Article['id']) => {
-    return () => {
-      setDeletingArticleId(id);
-    };
-  }, []);
-
-  const handleDeleteArticleConfirm = useCallback(
-    (onSuccess?: () => void, onError?: (error: Error) => void) => {
-      if (deletingArticleId === null) {
-        return;
-      }
-      setDeletePending(true);
-      articleModel
-        .deleteById(deletingArticleId)
-        .then(() => {
-          if (idToArticleCache) {
-            idToArticleCache.delete(deletingArticleId);
-            setIdToArticleCache(new Map(idToArticleCache));
-          }
-          if (onSuccess) {
-            onSuccess();
-          }
-        })
-        .catch((error: unknown) => {
-          assert(error instanceof Error);
-          if (onError) {
-            onError(error);
-          }
-        })
-        .finally(() => {
-          setDeletePending(false);
-          setDeletingArticleId(null);
-        });
-    },
-    [articleModel, idToArticleCache, deletingArticleId, setIdToArticleCache],
-  );
-
-  return {
-    deletePending,
-    deletingArticleId,
-    deleteArticleButtonClickHandlerFactory,
-    handleDeleteArticleConfirm,
   };
 }
