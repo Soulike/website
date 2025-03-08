@@ -49,7 +49,7 @@ function useCategoryById(
   return {
     loading: pending,
     error: rejectedError,
-    categories: resolvedValue,
+    category: resolvedValue,
   };
 }
 
