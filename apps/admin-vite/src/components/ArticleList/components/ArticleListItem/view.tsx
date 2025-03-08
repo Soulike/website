@@ -35,7 +35,7 @@ export interface ArticleListItemViewProps {
 
   onTitleClick: DOMAttributes<HTMLSpanElement>['onClick'];
   isVisibleSwitchChecked: boolean;
-  onIsVisibleSwitchClick: SwitchProps['onClick'];
+  onIsVisibleSwitchChange: SwitchProps['onChange'];
   onModifyButtonClick: ButtonProps['onClick'];
   onDeleteArticleConfirm: PopconfirmProps['onConfirm'];
 }
@@ -49,7 +49,7 @@ export function ArticleListItemView(props: ArticleListItemViewProps) {
     categoryName,
     onTitleClick,
     isVisibleSwitchChecked,
-    onIsVisibleSwitchClick,
+    onIsVisibleSwitchChange,
     onModifyButtonClick,
     onDeleteArticleConfirm,
     locked,
@@ -78,7 +78,7 @@ export function ArticleListItemView(props: ArticleListItemViewProps) {
         <Tooltip title={'Change Visibility'}>
           <Switch
             className={styles.switch}
-            onClick={onIsVisibleSwitchClick}
+            onChange={onIsVisibleSwitchChange}
             checked={isVisibleSwitchChecked}
             disabled={locked}
             loading={loading}

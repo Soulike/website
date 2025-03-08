@@ -73,7 +73,7 @@ export function ArticleListItem(props: ArticleListItemProps) {
         categoryName={category?.name ?? '...'}
         onTitleClick={handleTitleClick}
         isVisibleSwitchChecked={isVisibleChecked}
-        onIsVisibleSwitchClick={onIsVisibleSwitchChange}
+        onIsVisibleSwitchChange={onIsVisibleSwitchChange}
         onModifyButtonClick={handleModifyArticleButtonClick}
         onDeleteArticleConfirm={onDeleteArticleConfirm}
       />
