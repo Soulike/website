@@ -55,9 +55,18 @@ function useLogin(afterLoggedIn?: () => void) {
     (
       username: string,
       password: string,
+      onValidationFailed: (message: string) => void,
       onSuccess?: () => void,
       onError?: (error: Error) => void,
     ) => {
+      if (!username) {
+        onValidationFailed('Please input username');
+        return;
+      }
+      if (!password) {
+        onValidationFailed('Please input password');
+        return;
+      }
       setLoginLoading(true);
       accountModel
         .login(username, password)

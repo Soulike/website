@@ -51,6 +51,9 @@ export function Login() {
         login(
           username,
           password,
+          (message) => {
+            notification.error({message});
+          },
           () => {
             notification.success({message: 'Successfully logged in'});
           },
