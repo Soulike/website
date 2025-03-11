@@ -1,0 +1,10 @@
+{
+  "name": "@website/i18n",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  },
+  "dependencies": {
+    "@website/helpers": "workspace:^"
+  }
+}

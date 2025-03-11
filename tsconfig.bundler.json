@@ -8,6 +8,7 @@
     "module": "esnext",
     /* Specify how TypeScript looks up a file from a given module specifier. */
     "moduleResolution": "bundler",
-    "declaration": true
+    "declaration": true,
+    "allowJs": true
   }
 }
