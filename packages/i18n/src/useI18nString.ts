@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useState} from 'react';
 
-import {LanguageCode} from './language-code.js';
 import {STRING_KEY} from './string-key.js';
+import {loadStringsForLanguageCode} from './strings/index.js';
 import {Strings} from './strings/Strings.js';
 
 export function useI18nString(key: STRING_KEY) {
@@ -9,7 +9,7 @@ export function useI18nString(key: STRING_KEY) {
 
   const loadStrings = useCallback(async () => {
     const languageCode = navigator.language;
-    const strings = await loadStringsForLanguage(languageCode);
+    const strings = await loadStringsForLanguageCode(languageCode);
     setStrings(strings);
   }, []);
 
@@ -21,15 +21,4 @@ export function useI18nString(key: STRING_KEY) {
   }, [loadStrings]);
 
   return strings?.[key] ?? '';
-}
-
-async function loadStringsForLanguage(languageCode: string): Promise<Strings> {
-  languageCode = languageCode.toLowerCase();
-  if (languageCode === LanguageCode.ZH_CN) {
-    const {ZH_CN} = await import('./strings/zh-cn.js');
-    return ZH_CN;
-  } else {
-    const {EN} = await import('./strings/en.js');
-    return EN;
-  }
 }
