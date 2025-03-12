@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useState} from 'react';
 
 import {LanguageCode} from './language-code.js';
-import {STRING_KEY} from './strings/string-key.js';
+import {STRING_KEY} from './string-key.js';
 import {Strings} from './strings/Strings.js';
 
 export function useI18nString(key: STRING_KEY) {

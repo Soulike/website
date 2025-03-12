@@ -1,4 +1,4 @@
-import {STRING_KEY} from './string-key.js';
+import {STRING_KEY} from '../string-key.js';
 import {Strings} from './Strings.js';
 
 export const ZH_CN: Strings = Object.freeze({
