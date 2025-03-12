@@ -47,6 +47,9 @@ importers:
       '@website/hooks':
         specifier: workspace:^
         version: link:../../packages/hooks
+      '@website/i18n':
+        specifier: workspace:^
+        version: link:../../packages/i18n
       '@website/model':
         specifier: workspace:^
         version: link:../../packages/model
@@ -260,6 +263,13 @@ importers:
       '@website/helpers':
         specifier: workspace:^
         version: link:../helpers
+      react:
+        specifier: '>=16.8.0'
+        version: 19.0.0
+    devDependencies:
+      '@types/react':
+        specifier: ^19.0.10
+        version: 19.0.10
 
   packages/markdown-article-renderer:
     dependencies:
