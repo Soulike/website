@@ -1,9 +1,6 @@
-import {deepFreeze} from '@website/helpers/object';
+import {STRING_KEY} from '../string-keys.js';
+import {Strings} from './Strings.js';
 
-import {EN_US} from './en-us.js';
-
-export const ZH_CN: typeof EN_US = deepFreeze({
-  UI_MESSAGE: {
-    NETWORK_ERROR: '网络错误',
-  },
+export const ZH_CN: Strings = Object.freeze({
+  [STRING_KEY.UI_MESSAGE_NETWORK_ERROR]: '网络错误',
 });
