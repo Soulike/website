@@ -1,10 +1,9 @@
-import {ModelAccessDeniedError} from '@website/model';
 import {type ButtonProps, Modal, type ModalFuncProps, notification} from 'antd';
 import {useCallback, useEffect} from 'react';
 import {Outlet, useNavigate} from 'react-router';
 
 import {Loading} from '@/components/Loading';
-import {showNetworkError} from '@/helpers/error-notification-helper.js';
+import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config/index.js';
 
 import {LayoutView} from './view.js';
@@ -28,11 +27,7 @@ export function Layout() {
 
   useEffect(() => {
     if (isLoggedInError) {
-      if (isLoggedInError instanceof ModelAccessDeniedError) {
-        notification.error({message: isLoggedInError.message});
-      } else {
-        showNetworkError(isLoggedInError);
-      }
+      showErrorNotification(isLoggedInError);
     }
   }, [isLoggedInError]);
 
@@ -45,11 +40,7 @@ export function Layout() {
         void navigate(PAGE_ID_TO_PATH[PAGE_ID.LOGIN], {replace: true});
       },
       (e) => {
-        if (e instanceof ModelAccessDeniedError) {
-          notification.error({message: e.message});
-        } else {
-          showNetworkError(e);
-        }
+        showErrorNotification(e);
       },
     );
   }, [logout, navigate]);

@@ -1,8 +1,7 @@
-import {ModelAccessDeniedError} from '@website/model';
 import {type ButtonProps, notification} from 'antd';
 import {useEffect} from 'react';
 
-import {showNetworkError} from '@/helpers/error-notification-helper.js';
+import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 
 import {AboutView} from './view.js';
 import {useViewModel} from './view-model.js';
@@ -21,11 +20,7 @@ export function About() {
 
   useEffect(() => {
     if (aboutLoadError) {
-      if (aboutLoadError instanceof ModelAccessDeniedError) {
-        notification.error({message: aboutLoadError.message});
-      } else {
-        showNetworkError(aboutLoadError);
-      }
+      showErrorNotification(aboutLoadError);
     }
   }, [aboutLoadError]);
 
@@ -39,11 +34,7 @@ export function About() {
         notification.success({message: 'About modified successfully'});
       },
       (error) => {
-        if (error instanceof ModelAccessDeniedError) {
-          notification.error({message: error.message});
-        } else {
-          showNetworkError(error);
-        }
+        showErrorNotification(error);
       },
     );
   };

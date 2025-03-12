@@ -1,7 +1,6 @@
-import {ModelAccessDeniedError} from '@website/model';
 import {type ButtonProps, notification} from 'antd';
 
-import {showNetworkError} from '@/helpers/error-notification-helper.js';
+import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 
 import {AddView} from './view.js';
 import {useViewModel} from './view-model.js';
@@ -25,11 +24,7 @@ export function Add() {
         notification.success({message: 'Category created'});
       },
       (error) => {
-        if (error instanceof ModelAccessDeniedError) {
-          notification.error({message: error.message});
-        } else {
-          showNetworkError(error);
-        }
+        showErrorNotification(error);
       },
     );
   };
