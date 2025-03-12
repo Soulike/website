@@ -1,8 +1,7 @@
-import {ModelAccessDeniedError} from '@website/model';
 import {notification} from 'antd';
 
 import {ArticleEditorProps} from '@/components/ArticleEditor/index.js';
-import {showNetworkError} from '@/helpers/error-notification-helper.js';
+import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 
 import {AddView} from './view.js';
 import {useViewModel} from './view-model.js';
@@ -28,11 +27,7 @@ export function Add() {
         notification.success({message: 'Submitted'});
       },
       (error) => {
-        if (error instanceof ModelAccessDeniedError) {
-          notification.error({message: error.message});
-        } else {
-          showNetworkError(error);
-        }
+        showErrorNotification(error);
       },
     );
   };

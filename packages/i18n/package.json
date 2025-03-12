@@ -1,0 +1,16 @@
+{
+  "name": "@website/i18n",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  },
+  "dependencies": {
+    "@website/helpers": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.10"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  }
+}

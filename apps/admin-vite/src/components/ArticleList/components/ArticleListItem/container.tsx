@@ -1,11 +1,10 @@
 import {Article} from '@website/classes';
-import {ModelAccessDeniedError} from '@website/model';
 import {notification, PopconfirmProps} from 'antd';
 import {useCallback, useMemo} from 'react';
 
-import {ArticleListItemView} from '@/components/ArticleList/components/ArticleListItem/view.js';
-import {showNetworkError} from '@/helpers/error-notification-helper.js';
+import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 
+import {ArticleListItemView} from './view.js';
 import {useViewModel} from './view-model.js';
 
 export interface ArticleListItemProps {
@@ -52,11 +51,7 @@ export function ArticleListItem(props: ArticleListItemProps) {
           onDeleteArticleSuccess(id);
         },
         (error) => {
-          if (error instanceof ModelAccessDeniedError) {
-            notification.error({message: error.message});
-          } else {
-            showNetworkError(error);
-          }
+          showErrorNotification(error);
         },
       );
     }, [deleteArticle, id, onDeleteArticleSuccess]);

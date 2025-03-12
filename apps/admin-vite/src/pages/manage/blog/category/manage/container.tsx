@@ -1,5 +1,4 @@
 import {useTextInput} from '@website/hooks';
-import {ModelAccessDeniedError} from '@website/model';
 import {
   type ButtonProps,
   message,
@@ -11,7 +10,7 @@ import {
 import assert from 'assert';
 import {useCallback, useEffect, useState} from 'react';
 
-import {showNetworkError} from '@/helpers/error-notification-helper.js';
+import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 
 import {ManageView} from './view.js';
 import {useViewModel} from './view-model.js';
@@ -49,19 +48,11 @@ export function Manage() {
 
   useEffect(() => {
     if (idToCategoryLoadError) {
-      if (idToCategoryLoadError instanceof ModelAccessDeniedError) {
-        notification.error({message: idToCategoryLoadError.message});
-      } else {
-        showNetworkError(idToCategoryLoadError);
-      }
+      showErrorNotification(idToCategoryLoadError);
     }
 
     if (idToArticleAmountLoadError) {
-      if (idToArticleAmountLoadError instanceof ModelAccessDeniedError) {
-        notification.error({message: idToArticleAmountLoadError.message});
-      } else {
-        showNetworkError(idToArticleAmountLoadError);
-      }
+      showErrorNotification(idToArticleAmountLoadError);
     }
   }, [idToCategoryLoadError, idToArticleAmountLoadError]);
 
@@ -94,11 +85,7 @@ export function Manage() {
         notification.success({message: 'Category modified'});
       },
       (e) => {
-        if (e instanceof ModelAccessDeniedError) {
-          notification.error({message: e.message});
-        } else {
-          showNetworkError(e);
-        }
+        showErrorNotification(e);
       },
     );
   };
@@ -139,11 +126,7 @@ export function Manage() {
     }
 
     handleCategoryDeletion(idOfCategoryToDelete, (e) => {
-      if (e instanceof ModelAccessDeniedError) {
-        notification.error({message: e.message});
-      } else {
-        showNetworkError(e);
-      }
+      showErrorNotification(e);
     });
   };
 

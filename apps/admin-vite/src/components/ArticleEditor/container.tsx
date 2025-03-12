@@ -1,9 +1,7 @@
 import {Article} from '@website/classes';
-import {ModelAccessDeniedError} from '@website/model';
-import {notification} from 'antd';
 import {useEffect} from 'react';
 
-import {showNetworkError} from '@/helpers/error-notification-helper.js';
+import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 
 import {ArticleEditorView, ArticleEditorViewProps} from './view.js';
 import {useViewModel} from './view-model.js';
@@ -41,19 +39,11 @@ export function ArticleEditor(props: ArticleEditorProps) {
 
   useEffect(() => {
     if (articleLoadError) {
-      if (articleLoadError instanceof ModelAccessDeniedError) {
-        notification.error({message: articleLoadError.message});
-      } else {
-        showNetworkError(articleLoadError);
-      }
+      showErrorNotification(articleLoadError);
     }
 
     if (categoriesLoadError) {
-      if (categoriesLoadError instanceof ModelAccessDeniedError) {
-        notification.error({message: categoriesLoadError.message});
-      } else {
-        showNetworkError(categoriesLoadError);
-      }
+      showErrorNotification(categoriesLoadError);
     }
   }, [articleLoadError, categoriesLoadError]);
 

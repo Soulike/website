@@ -1,4 +1,3 @@
-import {ModelAccessDeniedError} from '@website/model';
 import {notification} from 'antd';
 import {
   type DOMAttributes,
@@ -8,7 +7,7 @@ import {
 } from 'react';
 import {useNavigate} from 'react-router';
 
-import {showNetworkError} from '@/helpers/error-notification-helper.js';
+import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config';
 
 import {LoginView} from './view.js';
@@ -36,11 +35,7 @@ export function Login() {
 
   useEffect(() => {
     if (isLoggedInError) {
-      if (isLoggedInError instanceof ModelAccessDeniedError) {
-        notification.warning({message: isLoggedInError.message});
-      } else {
-        showNetworkError(isLoggedInError);
-      }
+      showErrorNotification(isLoggedInError);
     }
   }, [isLoggedInError]);
 
@@ -58,11 +53,7 @@ export function Login() {
             notification.success({message: 'Successfully logged in'});
           },
           (error) => {
-            if (error instanceof ModelAccessDeniedError) {
-              notification.error({message: error.message});
-            } else {
-              showNetworkError(error);
-            }
+            showErrorNotification(error);
           },
         );
       },
