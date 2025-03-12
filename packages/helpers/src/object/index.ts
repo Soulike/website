@@ -1,1 +1,1 @@
-export {deepFreeze} from './deep-freeze.js';
+export * from './deep-freeze.js';
