@@ -12,7 +12,6 @@ interface EventTypeToPayload {
   [I18nEventType.LANGUAGE_CHANGE]: Strings;
 }
 
-// TODO: add test
 class I18nCore {
   private eventTypeToListeners: Map<
     I18nEventType,
@@ -26,19 +25,32 @@ class I18nCore {
     this.currentLanguageCode = navigator.language.toLowerCase();
     this.strings = null;
 
-    this.loadStringsForCurrentLanguageCode().catch((error: unknown) => {
+    this.ensureStringsLoaded().catch((error: unknown) => {
       console.error(error);
     });
 
     window.addEventListener('languagechange', () => {
-      this.loadStringsForCurrentLanguageCode().catch((error: unknown) => {
+      this.ensureStringsLoaded().catch((error: unknown) => {
         console.error(error);
       });
     });
   }
 
-  public async ensureI18nLoaded() {
-    await this.loadStringsForCurrentLanguageCode();
+  public async ensureStringsLoaded() {
+    const languageCode = navigator.language.toLowerCase();
+    if (languageCode == this.currentLanguageCode && this.strings) {
+      return;
+    }
+
+    if (languageCode === LanguageCode.ZH_CN) {
+      const {ZH_CN} = await import('./strings/zh-cn.js');
+      this.strings = ZH_CN;
+    } else {
+      const {EN} = await import('./strings/en.js');
+      this.strings = EN;
+    }
+    this.currentLanguageCode = languageCode;
+    this.dispatchEvent(I18nEventType.LANGUAGE_CHANGE, this.strings);
   }
 
   public getString(key: STRING_KEY): string {
@@ -83,23 +95,6 @@ class I18nCore {
     for (const listener of listeners) {
       listener(payload);
     }
-  }
-
-  private async loadStringsForCurrentLanguageCode() {
-    const languageCode = navigator.language.toLowerCase();
-    if (languageCode == this.currentLanguageCode && this.strings) {
-      return;
-    }
-
-    if (languageCode === LanguageCode.ZH_CN) {
-      const {ZH_CN} = await import('./strings/zh-cn.js');
-      this.strings = ZH_CN;
-    } else {
-      const {EN} = await import('./strings/en.js');
-      this.strings = EN;
-    }
-    this.currentLanguageCode = languageCode;
-    this.dispatchEvent(I18nEventType.LANGUAGE_CHANGE, this.strings);
   }
 }
 
