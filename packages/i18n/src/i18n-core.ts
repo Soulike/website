@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import {LanguageCode} from './language-code.js';
 import {STRING_KEY} from './string-key.js';
 import {Strings} from './strings/Strings.js';
@@ -30,9 +32,14 @@ class I18nCore {
     });
 
     window.addEventListener('languagechange', () => {
-      this.ensureStringsLoaded().catch((error: unknown) => {
-        console.error(error);
-      });
+      this.ensureStringsLoaded()
+        .then(() => {
+          assert(this.strings);
+          this.dispatchEvent(I18nEventType.LANGUAGE_CHANGE, this.strings);
+        })
+        .catch((error: unknown) => {
+          console.error(error);
+        });
     });
   }
 
@@ -50,7 +57,6 @@ class I18nCore {
       this.strings = EN;
     }
     this.currentLanguageCode = languageCode;
-    this.dispatchEvent(I18nEventType.LANGUAGE_CHANGE, this.strings);
   }
 
   public getString(key: STRING_KEY): string {
