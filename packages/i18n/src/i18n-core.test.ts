@@ -1,14 +1,13 @@
-import {beforeEach, describe, expect, test} from 'vitest';
+import {beforeEach, describe, expect, test, vi} from 'vitest';
 
-import {i18nCore} from './i18n-core';
+import {i18nCore, I18nEventType} from './i18n-core';
 import {STRING_KEY} from './string-key.js';
 import {EN} from './strings/en.js';
 import {ZH_CN} from './strings/zh-cn.js';
 
 describe('I18nCore', () => {
   beforeEach(async () => {
-    changeNavigatorLanguage('en');
-    await i18nCore.ensureStringsLoaded();
+    await changeNavigatorLanguage('en');
   });
 
   test('Should load strings', () => {
@@ -18,24 +17,47 @@ describe('I18nCore', () => {
     );
   });
 
-  test('Should handle language change', () => {
+  test('Should handle language change', async () => {
     expect(
       i18nCore.getString(STRING_KEY.TEST_STRING),
       EN[STRING_KEY.TEST_STRING],
     );
-    changeNavigatorLanguage('zh-CN');
+    await changeNavigatorLanguage('zh-CN');
     expect(
       i18nCore.getString(STRING_KEY.TEST_STRING),
       ZH_CN[STRING_KEY.TEST_STRING],
     );
   });
+
+  test('Should load English if strings is not available for language', async () => {
+    await changeNavigatorLanguage('ja');
+    expect(
+      i18nCore.getString(STRING_KEY.TEST_STRING),
+      EN[STRING_KEY.TEST_STRING],
+    );
+  });
+
+  test('Should call available event listeners when language changes', async () => {
+    const listener1 = vi.fn();
+    const listener2 = vi.fn();
+    i18nCore.addEventListener(I18nEventType.LANGUAGE_CHANGE, listener1);
+    i18nCore.addEventListener(I18nEventType.LANGUAGE_CHANGE, listener2);
+    await changeNavigatorLanguage('zh-CN');
+    expect(listener1).toHaveBeenCalledTimes(1);
+    expect(listener2).toHaveBeenCalledTimes(1);
+
+    i18nCore.removeEventListener(I18nEventType.LANGUAGE_CHANGE, listener1);
+    await changeNavigatorLanguage('en');
+    expect(listener1).toHaveBeenCalledTimes(1);
+    expect(listener2).toHaveBeenCalledTimes(2);
+  });
 });
 
-function changeNavigatorLanguage(language: string) {
-  Object.defineProperty(window.navigator, 'language', {
+async function changeNavigatorLanguage(language: string) {
+  Object.defineProperty(navigator, 'language', {
     get: () => language,
     configurable: true,
   });
-
   window.dispatchEvent(new Event('languagechange'));
+  await i18nCore.ensureStringsLoaded();
 }
