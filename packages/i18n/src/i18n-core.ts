@@ -45,7 +45,7 @@ class I18nCore {
 
   public async ensureStringsLoaded() {
     const languageCode = navigator.language.toLowerCase();
-    if (languageCode == this.currentLanguageCode && this.strings) {
+    if (languageCode === this.currentLanguageCode && this.strings) {
       return;
     }
 
