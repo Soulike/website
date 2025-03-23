@@ -12,28 +12,24 @@ describe('I18nCore', () => {
   });
 
   test('Should load strings', () => {
-    expect(
-      i18nCore.getString(STRING_KEY.TEST_STRING),
+    expect(i18nCore.getString(STRING_KEY.TEST_STRING)).toEqual(
       EN[STRING_KEY.TEST_STRING],
     );
   });
 
   test('Should handle language change', async () => {
-    expect(
-      i18nCore.getString(STRING_KEY.TEST_STRING),
+    expect(i18nCore.getString(STRING_KEY.TEST_STRING)).toEqual(
       EN[STRING_KEY.TEST_STRING],
     );
     await changeNavigatorLanguage('zh-CN');
-    expect(
-      i18nCore.getString(STRING_KEY.TEST_STRING),
+    expect(i18nCore.getString(STRING_KEY.TEST_STRING)).toEqual(
       ZH_CN[STRING_KEY.TEST_STRING],
     );
   });
 
   test('Should load English if strings is not available for language', async () => {
     await changeNavigatorLanguage('ja');
-    expect(
-      i18nCore.getString(STRING_KEY.TEST_STRING),
+    expect(i18nCore.getString(STRING_KEY.TEST_STRING)).toEqual(
       EN[STRING_KEY.TEST_STRING],
     );
   });
