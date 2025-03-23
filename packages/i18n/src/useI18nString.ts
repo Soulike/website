@@ -15,7 +15,15 @@ export function useI18nString(key: STRING_KEY) {
   );
 
   useEffect(() => {
-    setString(i18nCore.getString(key));
+    i18nCore
+      .ensureStringsLoaded()
+      .then(() => {
+        setString(i18nCore.getString(key));
+      })
+      .catch((e: unknown) => {
+        console.error(e);
+      });
+
     i18nCore.addEventListener(
       I18nEventType.LANGUAGE_CHANGE,
       languageChangeCallback,

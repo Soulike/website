@@ -1,4 +1,4 @@
-import {act, renderHook} from '@testing-library/react';
+import {act, renderHook, waitFor} from '@testing-library/react';
 import {beforeEach, describe, expect, test} from 'vitest';
 
 import {STRING_KEY} from './string-key.js';
@@ -14,6 +14,9 @@ describe('useI18nString', () => {
 
   test('Should handle language change', async () => {
     const {result} = renderHook(() => useI18nString(STRING_KEY.TEST_STRING));
+    await waitFor(() => {
+      expect(result.current).not.toEqual('');
+    });
     expect(result.current).toEqual(EN.TEST_STRING);
     await act(async () => {
       await changeNavigatorLanguage('zh-CN');
