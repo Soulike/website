@@ -10,7 +10,10 @@
     "@website/helpers": "workspace:^"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.2.0",
     "@types/react": "^19.0.10",
+    "@vitejs/plugin-react": "^4.3.4",
     "@vitest/coverage-v8": "^3.0.9",
     "typescript": "^5.7.3",
     "vitest": "^3.0.9"

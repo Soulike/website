@@ -1,9 +1,10 @@
 import {beforeEach, describe, expect, test, vi} from 'vitest';
 
-import {i18nCore, I18nEventType} from './i18n-core';
+import {i18nCore, I18nEventType} from './i18n-core.js';
 import {STRING_KEY} from './string-key.js';
 import {EN} from './strings/en.js';
 import {ZH_CN} from './strings/zh-cn.js';
+import {changeNavigatorLanguage} from './test-helper.js';
 
 describe('I18nCore', () => {
   beforeEach(async () => {
@@ -52,12 +53,3 @@ describe('I18nCore', () => {
     expect(listener2).toHaveBeenCalledTimes(2);
   });
 });
-
-async function changeNavigatorLanguage(language: string) {
-  Object.defineProperty(navigator, 'language', {
-    get: () => language,
-    configurable: true,
-  });
-  window.dispatchEvent(new Event('languagechange'));
-  await i18nCore.ensureStringsLoaded();
-}
