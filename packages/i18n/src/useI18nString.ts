@@ -1,24 +1,40 @@
 import {useCallback, useEffect, useState} from 'react';
 
+import {i18nCore, I18nEventType} from './i18n-core.js';
 import {STRING_KEY} from './string-key.js';
-import {loadStringsForLanguageCode} from './strings/index.js';
 import {Strings} from './strings/Strings.js';
 
 export function useI18nString(key: STRING_KEY) {
-  const [strings, setStrings] = useState<Strings | null>(null);
+  const [string, setString] = useState('');
 
-  const loadStrings = useCallback(async () => {
-    const languageCode = navigator.language;
-    const strings = await loadStringsForLanguageCode(languageCode);
-    setStrings(strings);
-  }, []);
+  const languageChangeCallback = useCallback(
+    (strings: Strings) => {
+      setString(strings[key]);
+    },
+    [key],
+  );
 
   useEffect(() => {
-    void loadStrings();
-    window.addEventListener('languagechange', () => {
-      void loadStrings();
-    });
-  }, [loadStrings]);
+    i18nCore
+      .ensureStringsLoaded()
+      .then(() => {
+        setString(i18nCore.getString(key));
+      })
+      .catch((e: unknown) => {
+        console.error(e);
+      });
 
-  return strings?.[key] ?? '';
+    i18nCore.addEventListener(
+      I18nEventType.LANGUAGE_CHANGE,
+      languageChangeCallback,
+    );
+    return () => {
+      i18nCore.removeEventListener(
+        I18nEventType.LANGUAGE_CHANGE,
+        languageChangeCallback,
+      );
+    };
+  }, [key, languageChangeCallback]);
+
+  return string;
 }
