@@ -1,8 +1,6 @@
-import {Category} from '@website/classes';
-import {Blog} from '@website/server-api';
+import {useTextInput} from '@website/hooks';
 import {
   type ButtonProps,
-  type InputProps,
   message,
   type ModalProps,
   notification,
@@ -10,27 +8,15 @@ import {
   type TagProps,
 } from 'antd';
 import assert from 'assert';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 
-import {showNetworkError} from '@/helpers/error-notification-helper.js';
-import {useCategories} from '@/hooks/useCategories';
+import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 
 import {ManageView} from './view.js';
+import {useViewModel} from './view-model.js';
 
+// TODO: Revamp this component.
 export function Manage() {
-  const {loading: isLoadingCategories, categories} = useCategories();
-  const [isModifyingCategory, setIsModifyingCategory] = useState(false);
-  const [
-    loadingArticleAmountOfCategories,
-    setLoadingArticleAmountOfCategories,
-  ] = useState(true);
-  const [categoryMap, setCategoryMap] = useState<Map<number, Category>>(
-    new Map(),
-  );
-  const [categoryToArticleNumberMap, setCategoryToArticleNumberMap] = useState<
-    Map<number, number>
-  >(new Map());
-
   const [isArticleListModalVisible, setIsArticleListModalVisible] =
     useState(false);
   const [categoryIdOfArticleListModal, setCategoryIdOfArticleListModal] =
@@ -38,47 +24,37 @@ export function Manage() {
 
   const [isModifyModalVisible, setIsModifyModalVisible] = useState(false);
   const [idOfCategoryToModify, setIdOfCategoryToModify] = useState(0);
-  const [nameOfCategoryToModify, setNameOfCategoryToModify] = useState('');
+
+  const {
+    value: nameOfCategoryToModify,
+    setValue: setNameOfCategoryToModify,
+    onChange: onCategoryNameInputChange,
+  } = useTextInput();
 
   const [idOfCategoryToDelete, setIdOfCategoryToDelete] = useState(0);
 
-  useEffect(() => {
-    if (categories) {
-      const categoryMap = new Map<number, Category>();
-      categories.forEach((category) => {
-        categoryMap.set(category.id, category);
-      });
-      setCategoryMap(categoryMap);
-    }
-  }, [categories]);
+  const {
+    idToCategory,
+    idToCategoryLoadError,
+    idToCategoryLoading,
+    idToArticleAmountLoading,
+    idToArticleAmountLoadError,
+    idToArticleAmount,
+    handleCategoryModificationSubmit,
+    categoryModificationSubmitting,
+    handleCategoryDeletion,
+    categoryDeletionSubmitting,
+  } = useViewModel();
 
   useEffect(() => {
-    setLoadingArticleAmountOfCategories(true);
-    void Blog.Category.getAllArticleAmountById()
-      .then((response) => {
-        if (response.isSuccessful) {
-          const {data: categoryIdToArticleAmountPair} = response;
-          const categoryToArticleNumberMap = new Map<number, number>();
-          Object.keys(categoryIdToArticleAmountPair).forEach((idString) => {
-            const id = Number.parseInt(idString);
-            categoryToArticleNumberMap.set(
-              id,
-              categoryIdToArticleAmountPair[id],
-            );
-          });
-          setCategoryToArticleNumberMap(categoryToArticleNumberMap);
-        } else {
-          const {message} = response;
-          notification.warning({message});
-        }
-      })
-      .catch((e: unknown) => {
-        showNetworkError(e);
-      })
-      .finally(() => {
-        setLoadingArticleAmountOfCategories(false);
-      });
-  }, []);
+    if (idToCategoryLoadError) {
+      showErrorNotification(idToCategoryLoadError);
+    }
+
+    if (idToArticleAmountLoadError) {
+      showErrorNotification(idToArticleAmountLoadError);
+    }
+  }, [idToCategoryLoadError, idToArticleAmountLoadError]);
 
   const onArticleAmountTagClick: (id: number) => TagProps['onClick'] = (
     id: number,
@@ -97,36 +73,21 @@ export function Manage() {
 
   const onModifyModalOk: ModalProps['onOk'] = (e) => {
     e.preventDefault();
-    const executor = async () => {
-      if (nameOfCategoryToModify !== '') {
-        setIsModifyingCategory(true);
-        try {
-          const response = await Blog.Category.modify(
-            new Category(idOfCategoryToModify, nameOfCategoryToModify),
-          );
-          if (response.isSuccessful) {
-            notification.success({message: '文章分类编辑成功'});
-            setCategoryMap((categoryMap) => {
-              const modifiedCategory = categoryMap.get(idOfCategoryToModify);
-              assert.ok(modifiedCategory !== undefined);
-              modifiedCategory.name = nameOfCategoryToModify;
-              return new Map(categoryMap);
-            });
-            setIsModifyModalVisible(false);
-          } else {
-            const {message} = response;
-            notification.warning({message});
-          }
-        } catch (e) {
-          showNetworkError(e);
-        } finally {
-          setIsModifyingCategory(false);
-        }
-      } else {
-        await message.warning('文章分类名不能为空');
-      }
-    };
-    void executor();
+    if (nameOfCategoryToModify.length === 0) {
+      void message.warning('Please input category name.');
+      return;
+    }
+
+    handleCategoryModificationSubmit(
+      idOfCategoryToModify,
+      {name: nameOfCategoryToModify},
+      () => {
+        notification.success({message: 'Category modified'});
+      },
+      (e) => {
+        showErrorNotification(e);
+      },
+    );
   };
 
   const onModifyModalCancel: ModalProps['onCancel'] = (e) => {
@@ -134,19 +95,20 @@ export function Manage() {
     setIsModifyModalVisible(false);
   };
 
-  const onModifyButtonClick: (id: number) => ButtonProps['onClick'] = (id) => {
-    const modifiedCategory = categoryMap.get(id);
-    assert.ok(modifiedCategory !== undefined);
-    return () => {
-      setIdOfCategoryToModify(id);
-      setNameOfCategoryToModify(modifiedCategory.name);
-      setIsModifyModalVisible(true);
-    };
-  };
-
-  const onCategoryNameInputChange: InputProps['onChange'] = (e) => {
-    setNameOfCategoryToModify(e.target.value);
-  };
+  const onModifyButtonClick: (id: number) => ButtonProps['onClick'] =
+    useCallback(
+      (id) => {
+        assert(idToCategory);
+        const modifiedCategory = idToCategory.get(id);
+        assert.ok(modifiedCategory !== undefined);
+        return () => {
+          setIdOfCategoryToModify(id);
+          setNameOfCategoryToModify(modifiedCategory.name);
+          setIsModifyModalVisible(true);
+        };
+      },
+      [idToCategory, setNameOfCategoryToModify],
+    );
 
   const onDeleteCategoryButtonClick: (id: number) => ButtonProps['onClick'] = (
     id,
@@ -157,50 +119,27 @@ export function Manage() {
   };
 
   const onDeleteCategoryConfirm: PopconfirmProps['onConfirm'] = () => {
-    const executor = async () => {
-      if (categoryToArticleNumberMap.get(idOfCategoryToDelete) !== 0) {
-        await message.warning('不能删除有文章的分类');
-      } else {
-        setIsModifyingCategory(true);
-        try {
-          const response = await Blog.Category.deleteById(idOfCategoryToDelete);
-          if (response.isSuccessful) {
-            notification.success({
-              message: '删除文章分类成功',
-            });
+    assert(idToArticleAmount);
+    if (idToArticleAmount.get(idOfCategoryToDelete) === 0) {
+      void message.warning('Can not delete category with articles');
+      return;
+    }
 
-            setCategoryMap((categoryMap) => {
-              categoryMap.delete(idOfCategoryToDelete);
-              return new Map(categoryMap);
-            });
-            setCategoryToArticleNumberMap((categoryToArticleNumberMap) => {
-              categoryToArticleNumberMap.delete(idOfCategoryToDelete);
-              return new Map(categoryToArticleNumberMap);
-            });
-          } else {
-            const {message} = response;
-            notification.warning({message});
-          }
-        } catch (e) {
-          showNetworkError(e);
-        } finally {
-          setIsModifyingCategory(false);
-        }
-      }
-    };
-
-    void executor();
+    handleCategoryDeletion(idOfCategoryToDelete, (e) => {
+      showErrorNotification(e);
+    });
   };
 
   return (
     <ManageView
       loading={
-        isLoadingCategories ||
-        isModifyingCategory ||
-        loadingArticleAmountOfCategories
+        idToCategoryLoading ||
+        categoryModificationSubmitting ||
+        categoryDeletionSubmitting ||
+        idToArticleAmountLoading
       }
-      categoryMap={categoryMap}
-      categoryToArticleNumberMap={categoryToArticleNumberMap}
+      idToCategory={idToCategory}
+      categoryToArticleNumberMap={idToArticleAmount}
       isArticleListModalVisible={isArticleListModalVisible}
       categoryIdOfArticleListModal={categoryIdOfArticleListModal}
       onArticleAmountTagClick={onArticleAmountTagClick}

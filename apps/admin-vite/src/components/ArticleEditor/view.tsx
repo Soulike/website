@@ -1,4 +1,4 @@
-import {type Category} from '@website/classes';
+import {Article, type Category, NewArticle} from '@website/classes';
 import {
   Button,
   type ButtonProps,
@@ -6,60 +6,66 @@ import {
   type CheckboxProps,
   Input,
   type InputProps,
-  type ModalProps,
   Select,
   type SelectProps,
   Space,
 } from 'antd';
 import type {TextAreaProps} from 'antd/lib/input';
-
-import {ArticlePreviewModal} from '@/components/ArticlePreviewModal';
+import {useMemo} from 'react';
 
 import styles from './styles.module.css';
 
 const {TextArea} = Input;
 const {Option} = Select;
 
-interface Props {
-  title: string;
-  content: string;
-  category: number | undefined;
-  isVisible: boolean;
-  categoryOption: Category[];
+export interface ArticleEditorViewProps {
+  title: Article['title'];
+  content: Article['content'];
+  selectedCategory: Article['category'] | null;
+  isVisible: Article['isVisible'];
+  categories: Category[] | null;
   onTitleInputChange: InputProps['onChange'];
   onContentTextAreaChange: TextAreaProps['onChange'];
   onCategorySelectorChange: SelectProps<number>['onChange'];
   onIsVisibleCheckboxChange: CheckboxProps['onChange'];
-  onSubmitButtonClick: ButtonProps['onClick'];
+  onSubmitButtonClick: (article: {
+    title: NewArticle['title'];
+    content: NewArticle['content'];
+    category: NewArticle['category'] | null;
+    isVisible: NewArticle['isVisible'];
+  }) => void;
+  onPreviewButtonClick: ButtonProps['onClick'];
   isLoadingCategory: boolean;
   isLoadingArticle: boolean;
   isSubmittingArticle: boolean;
-  onArticlePreviewButtonClick: ButtonProps['onClick'];
-  isArticlePreviewModalOpen: boolean;
-  onArticlePreviewModalOk: ModalProps['onOk'];
-  onArticlePreviewModalCancel: ModalProps['onCancel'];
+  disabled: boolean;
 }
 
-export function ArticleEditor(props: Props) {
+export function ArticleEditorView(props: ArticleEditorViewProps) {
   const {
     title,
     content,
-    category,
+    selectedCategory,
     isVisible,
-    categoryOption,
+    categories,
     onTitleInputChange,
     onContentTextAreaChange,
     onCategorySelectorChange,
     onIsVisibleCheckboxChange,
     onSubmitButtonClick,
+    onPreviewButtonClick,
     isLoadingCategory,
     isSubmittingArticle,
     isLoadingArticle,
-    onArticlePreviewButtonClick,
-    isArticlePreviewModalOpen,
-    onArticlePreviewModalOk,
-    onArticlePreviewModalCancel,
+    disabled,
   } = props;
+
+  const shouldDisable = useMemo(
+    () =>
+      isLoadingCategory || isSubmittingArticle || isLoadingArticle || disabled,
+    [disabled, isLoadingArticle, isLoadingCategory, isSubmittingArticle],
+  );
+
   return (
     <div className={styles.ArticleEditor}>
       <Space.Compact
@@ -68,18 +74,14 @@ export function ArticleEditor(props: Props) {
         className={styles.inputGroup}
       >
         <Input
-          disabled={
-            isLoadingCategory || isSubmittingArticle || isLoadingArticle
-          }
+          disabled={shouldDisable}
           value={title}
           onChange={onTitleInputChange}
           className={styles.title}
           placeholder={'Title'}
         />
         <TextArea
-          disabled={
-            isLoadingCategory || isSubmittingArticle || isLoadingArticle
-          }
+          disabled={shouldDisable}
           value={content}
           onChange={onContentTextAreaChange}
           className={styles.content}
@@ -90,13 +92,13 @@ export function ArticleEditor(props: Props) {
         <Select
           size={'large'}
           onChange={onCategorySelectorChange}
-          value={category}
+          value={selectedCategory}
           loading={isLoadingCategory}
           className={styles.categorySelect}
-          disabled={isLoadingCategory}
+          disabled={shouldDisable || !categories}
           placeholder={'Category'}
         >
-          {categoryOption.map((category) => {
+          {categories?.map((category) => {
             const {id, name} = category;
             return (
               <Option value={id} key={id}>
@@ -106,38 +108,38 @@ export function ArticleEditor(props: Props) {
           })}
         </Select>
         <Checkbox
-          disabled={
-            isSubmittingArticle || isLoadingCategory || isLoadingArticle
-          }
+          disabled={shouldDisable}
           checked={isVisible}
           onChange={onIsVisibleCheckboxChange}
         >
           Is Public
         </Checkbox>
         <Space.Compact>
-          <Button size={'large'} onClick={onArticlePreviewButtonClick}>
+          <Button
+            size={'large'}
+            onClick={onPreviewButtonClick}
+            disabled={shouldDisable}
+          >
             Preview
           </Button>
           <Button
             loading={isSubmittingArticle}
             type={'primary'}
             size={'large'}
-            disabled={
-              isSubmittingArticle || isLoadingCategory || isLoadingArticle
-            }
-            onClick={onSubmitButtonClick}
+            disabled={shouldDisable}
+            onClick={() => {
+              onSubmitButtonClick({
+                title,
+                content,
+                category: selectedCategory,
+                isVisible,
+              });
+            }}
           >
             Submit
           </Button>
         </Space.Compact>
       </div>
-      <ArticlePreviewModal
-        title={title}
-        contentMarkdown={content}
-        open={isArticlePreviewModalOpen}
-        onOk={onArticlePreviewModalOk}
-        onCancel={onArticlePreviewModalCancel}
-      />
     </div>
   );
 }

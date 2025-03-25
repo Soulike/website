@@ -1,41 +1,35 @@
+import {Article} from '@website/classes';
 import {Markdown} from '@website/react-components/csr';
 import {Modal, type ModalProps, Skeleton} from 'antd';
 
 import styles from './styles.module.css';
+import {useViewModel} from './view-model.js';
 
-export interface ArticlePreviewModalViewProps {
-  title: string;
-  open: ModalProps['open'];
-  onOk: ModalProps['onOk'];
-  onCancel: ModalProps['onCancel'];
-  loading: boolean;
-  onMarkdownRenderFinish: () => unknown;
-  onMarkdownRenderStart: () => unknown;
-  contentMarkdown: string;
+export interface ArticlePreviewModalProps {
+  title: Article['title'];
+  contentMarkdown: Article['content'];
+  visible: ModalProps['open'];
+  onOkButtonClick: ModalProps['onOk'];
 }
 
-export function ArticlePreviewModalView(props: ArticlePreviewModalViewProps) {
-  const {
-    title,
-    loading,
-    open,
-    onOk,
-    onCancel,
-    contentMarkdown,
-    onMarkdownRenderStart,
-    onMarkdownRenderFinish,
-  } = props;
+export function ArticlePreviewModal(props: ArticlePreviewModalProps) {
+  const {title, visible, onOkButtonClick, contentMarkdown} = props;
+
+  const {isMarkdownRendering, onMarkdownRenderFinish, onMarkdownRenderStart} =
+    useViewModel();
+
   return (
     <Modal
       title={title}
       width={'80vw'}
-      open={open}
-      onOk={onOk}
-      onCancel={onCancel}
+      closable={false}
+      open={visible}
+      onOk={onOkButtonClick}
       destroyOnClose={true}
+      cancelButtonProps={{style: {display: 'none'}}}
     >
       <div className={styles.ArticlePreviewModal}>
-        {loading && (
+        {isMarkdownRendering && (
           <Skeleton
             loading={true}
             active={true}
@@ -43,7 +37,7 @@ export function ArticlePreviewModalView(props: ArticlePreviewModalViewProps) {
             title={true}
           />
         )}
-        <div className={loading ? styles.hide : ''}>
+        <div className={isMarkdownRendering ? styles.hide : ''}>
           <Markdown
             onRenderStart={onMarkdownRenderStart}
             onRenderFinish={onMarkdownRenderFinish}

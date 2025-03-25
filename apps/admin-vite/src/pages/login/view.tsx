@@ -9,6 +9,7 @@ import styles from './styles.module.css';
 
 interface Props {
   loading: boolean;
+  isLoggingIn: boolean;
   username: string;
   password: string;
   onUsernameInputChange: InputProps['onChange'];
@@ -19,6 +20,7 @@ interface Props {
 export function LoginView(props: Props) {
   const {
     loading,
+    isLoggingIn,
     username,
     password,
     onUsernameInputChange,
@@ -41,6 +43,7 @@ export function LoginView(props: Props) {
               alt='web developer image'
             />
             <Input
+              disabled={isLoggingIn}
               type={'text'}
               size={'large'}
               onChange={onUsernameInputChange}
@@ -50,6 +53,7 @@ export function LoginView(props: Props) {
               prefix={<UserOutlined />}
             />
             <Input
+              disabled={isLoggingIn}
               type={'password'}
               size={'large'}
               onChange={onPasswordInputChange}
@@ -58,6 +62,8 @@ export function LoginView(props: Props) {
               prefix={<LockOutlined />}
             />
             <Button
+              disabled={isLoggingIn}
+              loading={isLoggingIn}
               htmlType={'submit'}
               className={styles.button}
               size={'large'}

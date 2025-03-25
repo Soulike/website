@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify';
 import {useCallback, useEffect, useState} from 'react';
 
 import {MarkdownView} from '../../shared-views/MarkdownView';
@@ -24,7 +25,7 @@ export function Markdown(props: IProps) {
       onRenderStart();
     }
     void renderChildrenToHtml().then((textRenderedHtml) => {
-      setRenderedHtml(textRenderedHtml);
+      setRenderedHtml(DOMPurify.sanitize(textRenderedHtml));
       if (onRenderFinish) {
         onRenderFinish();
       }
