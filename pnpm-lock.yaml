@@ -319,6 +319,9 @@ importers:
 
   packages/hitokoto:
     devDependencies:
+      '@types/react':
+        specifier: ^19.0.12
+        version: 19.0.12
       '@vitest/coverage-v8':
         specifier: ^3.0.9
         version: 3.0.9(vitest@3.0.9(@types/node@22.13.5)(jiti@2.4.2)(jsdom@26.0.0)(sass@1.85.0)(terser@5.37.0)(yaml@2.7.0))
