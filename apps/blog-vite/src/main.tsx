@@ -11,8 +11,7 @@ import {createRoot} from 'react-dom/client';
 
 import {Loading} from '@/components/Loading';
 import {NotFound} from '@/components/NotFound';
-
-import App from './App.tsx';
+import {Router} from '@/router/index.js';
 
 const rootHTMLElement = document.getElementById('root');
 assert(rootHTMLElement, 'The root HTMLElement for React is missing.');
@@ -24,7 +23,7 @@ reactRoot.render(
     <ConfigProvider locale={enUS}>
       <ErrorBoundary fallback={<NotFound />}>
         <Suspense fallback={<Loading />}>
-          <App />
+          <Router />
         </Suspense>
       </ErrorBoundary>
     </ConfigProvider>
