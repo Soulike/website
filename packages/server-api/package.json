@@ -1,7 +1,9 @@
 {
   "name": "@website/server-api",
   "private": "true",
-  "main": "dist/index.js",
+  "exports": {
+    "./admin": "./dist/admin/index.js"
+  },
   "scripts": {
     "build": "rm -rf dist && tsc"
   },
