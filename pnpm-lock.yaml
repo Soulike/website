@@ -52,7 +52,7 @@ importers:
         version: link:../../packages/i18n
       '@website/model':
         specifier: workspace:^
-        version: file:packages/model(antd@5.24.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(path-browserify@1.0.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        version: link:../../packages/model
       '@website/react-components':
         specifier: workspace:^
         version: link:../../packages/react-components
@@ -3232,25 +3232,6 @@ packages:
       {
         integrity: sha512-ilHM5fHhZ89MCp5aAaM9uhfl1c2JdxVxl3McqsdVyVNN6JffnEen8UMCdRTzOhGXNQGo5GNL9QugHrz727Wnng==,
       }
-
-  '@website/classes@file:packages/classes':
-    resolution: {directory: packages/classes, type: directory}
-
-  '@website/hooks@file:packages/hooks':
-    resolution: {directory: packages/hooks, type: directory}
-    peerDependencies:
-      antd: '>=5.24.1'
-      react: '>=18.0.0'
-
-  '@website/model@file:packages/model':
-    resolution: {directory: packages/model, type: directory}
-    peerDependencies:
-      path-browserify: '>=1.0.0'
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
-
-  '@website/request@file:packages/request':
-    resolution: {directory: packages/request, type: directory}
 
   JSONStream@1.3.5:
     resolution:
@@ -10855,28 +10836,6 @@ snapshots:
       '@vitest/pretty-format': 3.0.9
       loupe: 3.1.3
       tinyrainbow: 2.0.0
-
-  '@website/classes@file:packages/classes': {}
-
-  '@website/hooks@file:packages/hooks(antd@5.24.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)':
-    dependencies:
-      antd: 5.24.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      react: 19.0.0
-
-  '@website/model@file:packages/model(antd@5.24.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(path-browserify@1.0.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
-    dependencies:
-      '@website/classes': file:packages/classes
-      '@website/hooks': file:packages/hooks(antd@5.24.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
-      '@website/request': file:packages/request
-      path-browserify: 1.0.1
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-    transitivePeerDependencies:
-      - antd
-
-  '@website/request@file:packages/request':
-    dependencies:
-      '@website/classes': file:packages/classes
 
   JSONStream@1.3.5:
     dependencies:
