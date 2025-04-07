@@ -1,5 +1,5 @@
-import {AccountModel} from '@website/model';
-import {AccountModelHooks} from '@website/model/react';
+import {AccountModel} from '@website/model/admin';
+import {AccountModelHooks} from '@website/model/react/admin';
 import {useCallback, useMemo, useState} from 'react';
 
 export function useViewModel() {

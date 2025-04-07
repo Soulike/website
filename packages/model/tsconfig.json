@@ -2,6 +2,10 @@
   "extends": "../../tsconfig.bundler.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "paths": {
+      "@models/*": ["./src/models/*"],
+      "@react/*": ["./src/react/*"]
+    }
   }
 }

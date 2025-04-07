@@ -1,9 +1,9 @@
 import path from 'node:path';
 
+import {ModelAccessDeniedError} from '@models/model-access-error.js';
 import {ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
 
-import {ModelAccessDeniedError} from '../model-access-error.js';
 import {prependBlogPrefix} from './path-helper.js';
 
 export class OptionModel {

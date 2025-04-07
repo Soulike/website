@@ -1,4 +1,4 @@
-import {prefix} from './utils';
+import {prefix} from './utils.js';
 
 export const GET_BY_ID = prefix('/getById');
 export const GET_ALL = prefix('/getAll');
