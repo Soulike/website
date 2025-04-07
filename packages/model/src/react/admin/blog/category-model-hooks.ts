@@ -4,7 +4,7 @@ import {Category, CategoryIdToArticleAmount} from '@website/classes';
 import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
 import {useEffect, useMemo, useState} from 'react';
 
-import {CategoryModel} from '../../models/blog/category-model.js';
+import {CategoryModel} from '../../../models/admin/blog/category-model.js';
 
 const categoryModel = new CategoryModel();
 
@@ -81,6 +81,7 @@ function useIdToCategory(
       idToCategory.set(category.id, category);
     }
     setIdToCategory(idToCategory);
+    void onSuccess?.(idToCategory);
   }, [loading, error, onReject, categories]);
 
   return {

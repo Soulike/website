@@ -3,7 +3,8 @@
   "private": "true",
   "exports": {
     ".": "./dist/models/index.js",
-    "./react": "./dist/react/index.js"
+    "./admin": "./dist/models/admin/index.js",
+    "./react/admin": "./dist/react/admin/index.js"
   },
   "scripts": {
     "build": "rm -rf dist && tsc"

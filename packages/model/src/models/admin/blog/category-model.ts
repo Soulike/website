@@ -8,7 +8,7 @@ import {
 } from '@website/classes';
 import {Request} from '@website/request';
 
-import {ModelAccessDeniedError} from '../model-access-error.js';
+import {ModelAccessDeniedError} from '../../model-access-error.js';
 import {prependBlogPrefix} from './path-helper.js';
 
 export class CategoryModel {

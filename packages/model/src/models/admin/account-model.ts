@@ -3,8 +3,8 @@ import path from 'node:path';
 import {ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
 
-import {ModelAccessDeniedError} from './model-access-error.js';
-import {prependServerPrefix} from './path-helper.js';
+import {ModelAccessDeniedError} from '../model-access-error.js';
+import {prependServerPrefix} from '../path-helper.js';
 
 export class AccountModel {
   private static readonly PATH = Object.freeze({
