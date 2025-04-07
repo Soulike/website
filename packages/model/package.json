@@ -7,20 +7,21 @@
     "./react/admin": "./dist/react/admin/index.js"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "build": "rm -rf dist && tsc && tsc-alias"
   },
   "dependencies": {
     "@website/classes": "workspace:^",
-    "@website/request": "workspace:^",
-    "@website/hooks": "workspace:^"
+    "@website/hooks": "workspace:^",
+    "@website/request": "workspace:^"
   },
   "devDependencies": {
-    "typescript": "^5.7.3",
-    "@types/react": "^19.0.10"
+    "@types/react": "^19.0.10",
+    "tsc-alias": "^1.8.13",
+    "typescript": "^5.7.3"
   },
   "peerDependencies": {
+    "path-browserify": ">=1.0.0",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "path-browserify": ">=1.0.0"
+    "react-dom": ">=16.8.0"
   }
 }

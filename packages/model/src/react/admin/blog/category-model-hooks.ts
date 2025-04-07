@@ -1,10 +1,9 @@
 import assert from 'node:assert';
 
+import {CategoryModel} from '@models/admin/blog/category-model.js';
 import {Category, CategoryIdToArticleAmount} from '@website/classes';
 import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
 import {useEffect, useMemo, useState} from 'react';
-
-import {CategoryModel} from '../../../models/admin/blog/category-model.js';
 
 const categoryModel = new CategoryModel();
 

@@ -1,10 +1,9 @@
 import path from 'node:path';
 
+import {ModelAccessDeniedError} from '@models/model-access-error.js';
+import {prependServerPrefix} from '@models/path-helper.js';
 import {ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
-
-import {ModelAccessDeniedError} from '../model-access-error.js';
-import {prependServerPrefix} from '../path-helper.js';
 
 export class AccountModel {
   private static readonly PATH = Object.freeze({
