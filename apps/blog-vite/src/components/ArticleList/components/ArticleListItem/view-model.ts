@@ -1,26 +1,16 @@
 import {Category} from '@website/classes';
-import {useMemo} from 'react';
+import {CategoryModelHooks} from '@website/model/react/blog';
 
-import {useCategories} from '@/hooks/useCategories.js';
-
-export type CategoryIdToCategoryMap = Map<string, Category>;
-
-export function useViewModel() {
-  const {categories, loading: categoriesIsLoading} = useCategories();
-
-  const idToCategory: CategoryIdToCategoryMap = useMemo(() => {
-    const map: CategoryIdToCategoryMap = new Map();
-    if (categories !== null) {
-      for (const category of categories) {
-        map.set(category.id.toString(), category);
-      }
-    }
-    return map;
-  }, [categories]);
+export function useViewModel(categoryId: Category['id']) {
+  const {
+    category,
+    error: categoryLoadError,
+    loading: categoryLoading,
+  } = CategoryModelHooks.useCategoryById(categoryId);
 
   return {
-    loading: categoriesIsLoading,
-    categories,
-    idToCategory,
+    categoryLoading,
+    category,
+    categoryLoadError,
   };
 }

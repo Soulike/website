@@ -1,10 +1,11 @@
 import type {Article} from '@website/classes';
 import {List} from 'antd';
-import {useMemo} from 'react';
+import {useEffect, useMemo} from 'react';
 
-import {ArticlePreviewCard} from '@/components/ArticleList/components/ArticleListItem/components/ArticlePreviewCard/index.js';
+import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 import {useMarkdownAbstract} from '@/hooks/useMarkdownAbstract.js';
 
+import {ArticlePreviewCard} from './components/ArticlePreviewCard/index.js';
 import {useViewModel} from './view-model.js';
 
 export interface ArticleListItemProps {
@@ -24,14 +25,20 @@ export function ArticleListItem(props: ArticleListItemProps) {
     pageViews,
   } = article;
   const {loading: abstractLoading, abstract} = useMarkdownAbstract(content);
-  const {idToCategory, loading: viewModelLoading} = useViewModel();
+  const {category, categoryLoading, categoryLoadError} =
+    useViewModel(categoryId);
   const time = new Date(publicationTime);
-  const category = idToCategory.get(categoryId.toString());
 
   const loading = useMemo(
-    () => abstractLoading || viewModelLoading,
-    [abstractLoading, viewModelLoading],
+    () => abstractLoading || categoryLoading,
+    [abstractLoading, categoryLoading],
   );
+
+  useEffect(() => {
+    if (categoryLoadError) {
+      showErrorNotification(categoryLoadError);
+    }
+  }, [categoryLoadError]);
 
   return (
     <Item key={id}>
@@ -40,7 +47,7 @@ export function ArticleListItem(props: ArticleListItemProps) {
         articleId={id}
         articleTitle={title}
         articleTime={time}
-        articleCategory={category}
+        articleCategory={category ?? undefined}
         articleViewAmount={pageViews}
         articleBriefTextMarkdown={abstract}
       />
