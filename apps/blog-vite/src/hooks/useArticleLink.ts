@@ -1,4 +1,4 @@
-import path from 'node:path/posix';
+import path from 'node:path';
 
 import {useEffect, useState} from 'react';
 
