@@ -4,7 +4,8 @@
   "exports": {
     ".": "./dist/models/index.js",
     "./admin": "./dist/models/admin/index.js",
-    "./react/admin": "./dist/react/admin/index.js"
+    "./react/admin": "./dist/react/admin/index.js",
+    "./react/blog": "./dist/react/blog/index.js"
   },
   "scripts": {
     "build": "rm -rf dist && tsc && tsc-alias"
