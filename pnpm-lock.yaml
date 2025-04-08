@@ -205,9 +205,6 @@ importers:
       '@website/request':
         specifier: workspace:^
         version: link:../../packages/request
-      '@website/server-api':
-        specifier: workspace:^
-        version: link:../../packages/server-api
       '@website/utils':
         specifier: workspace:^
         version: link:../../packages/utils
@@ -508,19 +505,6 @@ importers:
       assert:
         specifier: ^2.1.0
         version: 2.1.0
-      typescript:
-        specifier: ^5.7.3
-        version: 5.7.3
-
-  packages/server-api:
-    dependencies:
-      '@website/classes':
-        specifier: workspace:^
-        version: link:../classes
-      '@website/request':
-        specifier: workspace:^
-        version: link:../request
-    devDependencies:
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
