@@ -2,13 +2,15 @@ import path from 'node:path';
 
 import {RouteObject} from 'react-router';
 
+import {Index} from '@/pages/_index';
+
 import {PAGE_ID, PAGE_ID_TO_PATH, type PageIdType} from './page-config';
 
 const routeConfig: Record<PageIdType, Readonly<RouteObject>> = {};
 
 routeConfig[PAGE_ID.INDEX] = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.INDEX]),
-  element: null,
+  element: <Index />,
 };
 
 routeConfig[PAGE_ID.ARTICLE] = {
