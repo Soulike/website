@@ -1,9 +1,3 @@
-import {ArticleModelHooks} from './article-model-hooks.js';
-import {CategoryModelHooks} from './category-model-hooks.js';
-import {OptionModelHooks} from './option-model-hooks.js';
-
-export const BlogModelHooks = Object.freeze({
-  CategoryModelHooks,
-  ArticleModelHooks,
-  OptionModelHooks,
-});
+export {ArticleModelHooks} from './article-model-hooks.js';
+export {CategoryModelHooks} from './category-model-hooks.js';
+export {OptionModelHooks} from './option-model-hooks.js';
