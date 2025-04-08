@@ -1,10 +1,9 @@
 import path from 'node:path';
 
 import {ModelAccessDeniedError} from '@models/model-access-error.js';
+import {prependServerPrefix} from '@models/path-helper.js';
 import {Category, ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
-
-import {prependBlogPrefix} from './path-helper.js';
 
 export class CategoryModel {
   private static readonly PATH = Object.freeze({
@@ -13,7 +12,7 @@ export class CategoryModel {
   });
 
   private static prependCategoryPrefix(subPath: string): string {
-    return prependBlogPrefix(path.join('category', subPath));
+    return prependServerPrefix(path.join('category', subPath));
   }
 
   public async getAll(): Promise<Category[]> {

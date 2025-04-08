@@ -1,10 +1,9 @@
 import path from 'node:path';
 
 import {ModelAccessDeniedError} from '@models/model-access-error.js';
+import {prependServerPrefix} from '@models/path-helper.js';
 import {Article, ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
-
-import {prependBlogPrefix} from './path-helper.js';
 
 export class ArticleModel {
   private static readonly PATH = Object.freeze({
@@ -18,7 +17,7 @@ export class ArticleModel {
   });
 
   private static prependArticlePrefix(subPath: string): string {
-    return prependBlogPrefix(path.join('article', subPath));
+    return prependServerPrefix(path.join('article', subPath));
   }
 
   public async getAllWithAbstract(): Promise<Article[]> {

@@ -1,10 +1,9 @@
 import path from 'node:path';
 
 import {ModelAccessDeniedError} from '@models/model-access-error.js';
+import {prependServerPrefix} from '@models/path-helper.js';
 import {ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
-
-import {prependBlogPrefix} from './path-helper.js';
 
 export class OptionModel {
   private static readonly PATH = Object.freeze({
@@ -12,7 +11,7 @@ export class OptionModel {
   });
 
   private static prependOptionPrefix(subPath: string): string {
-    return prependBlogPrefix(path.join('option', subPath));
+    return prependServerPrefix(path.join('option', subPath));
   }
 
   public async getAbout(): Promise<string> {
