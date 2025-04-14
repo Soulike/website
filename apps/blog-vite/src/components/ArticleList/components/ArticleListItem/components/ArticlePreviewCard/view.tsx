@@ -7,7 +7,7 @@ import {type Category} from '@website/classes';
 import {Markdown} from '@website/react-components/csr';
 import {Card, Tag} from 'antd';
 
-import {useDateString} from '@/hooks/useDateString.js';
+import {getDateString} from '@/helpers/get-date-string.js';
 
 import {ArticleLink} from './components/ArticleLink/index.js';
 import styles from './styles.module.css';
@@ -46,7 +46,7 @@ export function ArticlePreviewCard(props: IProps) {
           <div className={styles.info}>
             <Tag color={'purple'}>
               <ClockCircleOutlined className={styles.icon} />
-              <span>{useDateString(articleTime)}</span>
+              <span>{getDateString(articleTime)}</span>
             </Tag>
             <Tag color={'blue'}>
               <TagsOutlined className={styles.icon} />
