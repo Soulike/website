@@ -10,7 +10,6 @@ export interface ICategoryMenuViewProps {
 }
 
 export function CategoryMenu({isMobile}: ICategoryMenuViewProps) {
-  // TODO: Cache all categories globally
   const {categories, categoriesLoading, categoriesLoadError} = useViewModel();
 
   useEffect(() => {
