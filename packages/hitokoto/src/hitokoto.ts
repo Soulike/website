@@ -19,3 +19,4 @@ class Hitokoto {
 }
 
 export const hitokoto = new Hitokoto();
+export {SentenceCategory};

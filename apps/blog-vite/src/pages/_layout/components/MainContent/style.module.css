@@ -1,0 +1,29 @@
+.MainContent {
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  background: none !important;
+
+  .navigationHeaderWrapper {
+    @media (orientation: landscape) {
+      display: none;
+    }
+  }
+
+  .content {
+    padding: 10px 20px;
+    height: 100%;
+    overflow: auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+
+  .siteFooterWrapper {
+    background-color: inherit;
+
+    @media (max-height: 500px) {
+      display: none;
+    }
+  }
+}

@@ -9,3 +9,7 @@ export function getDateString(date: Date): string {
   const day = date.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
+
+export function getFullYearString(date = new Date()): string {
+  return date.getFullYear().toString();
+}

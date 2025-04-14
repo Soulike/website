@@ -1,5 +1,5 @@
 {
-  "name": "@website/hitikoto",
+  "name": "@website/hitokoto",
   "private": "true",
   "type": "module",
   "main": "./dist/index.js",

@@ -7,7 +7,7 @@ import {type Category} from '@website/classes';
 import {Markdown} from '@website/react-components/csr';
 import {Card, Tag} from 'antd';
 
-import {getDateString} from '@/helpers/get-date-string.js';
+import {getDateString} from '@/helpers/date-helpers.js';
 
 import {ArticleLink} from './components/ArticleLink/index.js';
 import styles from './styles.module.css';
