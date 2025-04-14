@@ -8,6 +8,7 @@ const categoryModel = new CategoryModel();
 export const CategoryModelHooks = Object.freeze({
   useAllCategories,
   useCategoryById,
+  useAllCategoriesCache,
 });
 
 function useAllCategories(
@@ -15,6 +16,28 @@ function useAllCategories(
   onReject?: RejectCallback,
 ) {
   const promise = useMemo(() => categoryModel.getAll(), []);
+  const {pending, resolvedValue, rejectedError} = usePromise(
+    promise,
+    onSuccess,
+    onReject,
+  );
+
+  return {
+    loading: pending,
+    error: rejectedError,
+    categories: resolvedValue,
+  };
+}
+
+function useAllCategoriesCache(
+  forceRefresh = false,
+  onSuccess?: ResolveCallback<Category[]>,
+  onReject?: RejectCallback,
+) {
+  const promise = useMemo(
+    () => categoryModel.getAllCache(forceRefresh),
+    [forceRefresh],
+  );
   const {pending, resolvedValue, rejectedError} = usePromise(
     promise,
     onSuccess,
