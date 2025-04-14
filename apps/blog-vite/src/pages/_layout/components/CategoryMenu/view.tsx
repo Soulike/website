@@ -12,7 +12,7 @@ import {Link} from 'react-router';
 import {getCategoryLink} from '@/helpers/get-category-link.js';
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config';
 
-import Style from './style.module.css';
+import style from './style.module.css';
 
 export interface ICategoryMenuViewProps {
   loading: boolean;
@@ -29,9 +29,9 @@ export function CategoryMenuView({
     () => [
       {
         label: (
-          <div className={Style.item}>
+          <div className={style.item}>
             <Link to={PAGE_ID_TO_PATH[PAGE_ID.INDEX]}>
-              <HomeOutlined className={Style.icon} />
+              <HomeOutlined className={style.icon} />
               首页
             </Link>
           </div>
@@ -41,7 +41,7 @@ export function CategoryMenuView({
       {
         label: (
           <>
-            <TagsOutlined className={Style.icon} />
+            <TagsOutlined className={style.icon} />
             分类
           </>
         ),
@@ -52,7 +52,7 @@ export function CategoryMenuView({
             label: (
               <div>
                 <Link to={getCategoryLink(id)}>
-                  <TagOutlined className={Style.icon} />
+                  <TagOutlined className={style.icon} />
                   {name}
                 </Link>
               </div>
@@ -63,9 +63,9 @@ export function CategoryMenuView({
       },
       {
         label: (
-          <div className={Style.item}>
+          <div className={style.item}>
             <Link to={PAGE_ID_TO_PATH[PAGE_ID.ABOUT]}>
-              <InfoOutlined className={Style.icon} />
+              <InfoOutlined className={style.icon} />
               关于
             </Link>
           </div>
@@ -80,7 +80,7 @@ export function CategoryMenuView({
     <Spin spinning={loading} size={'small'}>
       {isMobile ? (
         <Menu
-          className={Style.CategoryMenuMobile}
+          className={style.CategoryMenuMobile}
           mode={'horizontal'}
           selectable={false}
           items={menuItems}
@@ -88,7 +88,7 @@ export function CategoryMenuView({
         />
       ) : (
         <Menu
-          className={Style.CategoryMenu}
+          className={style.CategoryMenu}
           mode={'inline'}
           selectable={false}
           items={menuItems}
