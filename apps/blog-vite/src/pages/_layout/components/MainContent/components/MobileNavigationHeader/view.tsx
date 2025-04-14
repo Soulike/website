@@ -2,8 +2,7 @@ import {Header} from 'antd/lib/layout/layout';
 
 import avatar from '@/src/static/avatar.png';
 
-// TODO: Check better ways to import CategoryMenu
-import {CategoryMenu} from '../../../CategoryMenu';
+import {CategoryMenuMobile} from '../../../CategoryMenu';
 import style from './style.module.css';
 
 export function MobileNavigationHeader() {
@@ -14,7 +13,7 @@ export function MobileNavigationHeader() {
           <img src={avatar} className={style.avatar} alt={'avatar'} />
         </div>
         <div className={style.categoryMenuWrapper}>
-          <CategoryMenu isMobile={true} />
+          <CategoryMenuMobile />
         </div>
       </div>
     </Header>

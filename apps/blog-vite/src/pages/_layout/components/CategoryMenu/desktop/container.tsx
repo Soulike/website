@@ -2,15 +2,12 @@ import {useEffect} from 'react';
 
 import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 
+import {useViewModel} from '../common/view-model.js';
 import {CategoryMenuView} from './view.js';
-import {useViewModel} from './view-model.js';
 
-export interface ICategoryMenuViewProps {
-  isMobile: boolean;
-}
-
-export function CategoryMenu({isMobile}: ICategoryMenuViewProps) {
-  const {categories, categoriesLoading, categoriesLoadError} = useViewModel();
+export function CategoryMenu() {
+  const {categories, categoriesLoading, categoriesLoadError, menuItemLabels} =
+    useViewModel();
 
   useEffect(() => {
     if (!categoriesLoading && categoriesLoadError) {
@@ -22,7 +19,7 @@ export function CategoryMenu({isMobile}: ICategoryMenuViewProps) {
     <CategoryMenuView
       loading={categoriesLoading}
       categories={categories ?? []}
-      isMobile={isMobile}
+      menuItemLabels={menuItemLabels}
     />
   );
 }

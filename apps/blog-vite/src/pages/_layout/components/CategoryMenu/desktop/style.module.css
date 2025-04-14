@@ -3,12 +3,6 @@
   background-color: var(--BACKGROUND_COLOR) !important;
 }
 
-.CategoryMenuMobile {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-}
-
 /* .icon is here because the popup menu is not inside .CategoryMenu */
 .icon {
   display: inline-block;
