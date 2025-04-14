@@ -1,0 +1,21 @@
+.RootLayout {
+  height: 100dvh;
+  width: 100vw;
+
+  .navigationSideBarWrapper {
+    @media (orientation: portrait) {
+      display: none;
+    }
+
+    width: 20vw;
+    min-width: 225px;
+  }
+
+  .mainContentWrapper {
+    width: 100% !important;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-x: hidden;
+    background-color: var(--BACKGROUND_COLOR) !important;
+  }
+}
