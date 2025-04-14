@@ -7,6 +7,7 @@ import {Request} from '@website/request';
 
 export class CategoryModel {
   private allCategoriesCache: Category[] | null = null;
+  private idToCategoryCache = new Map<Category['id'], Category>();
 
   private static readonly PATH = Object.freeze({
     GET_ALL: CategoryModel.prependCategoryPrefix('/getAll'),
@@ -58,5 +59,22 @@ export class CategoryModel {
     } else {
       return response.data;
     }
+  }
+
+  public async getByIdCache(
+    id: Category['id'],
+    forceRefresh = false,
+  ): Promise<Category> {
+    if (forceRefresh) {
+      this.idToCategoryCache.delete(id);
+    }
+    const categoryCache = this.idToCategoryCache.get(id);
+    if (categoryCache) {
+      return categoryCache;
+    }
+
+    const category = await this.getById(id);
+    this.idToCategoryCache.set(id, category);
+    return category;
   }
 }

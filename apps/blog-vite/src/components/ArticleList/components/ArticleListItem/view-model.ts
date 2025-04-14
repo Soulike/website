@@ -6,7 +6,7 @@ export function useViewModel(categoryId: Category['id']) {
     category,
     error: categoryLoadError,
     loading: categoryLoading,
-  } = CategoryModelHooks.useCategoryById(categoryId);
+  } = CategoryModelHooks.useCategoryByIdCache(categoryId);
 
   return {
     categoryLoading,

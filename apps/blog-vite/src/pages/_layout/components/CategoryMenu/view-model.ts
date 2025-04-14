@@ -5,7 +5,7 @@ export function useViewModel() {
     categories,
     error: categoriesLoadError,
     loading: categoriesLoading,
-  } = CategoryModelHooks.useAllCategories();
+  } = CategoryModelHooks.useAllCategoriesCache();
 
   return {
     categories,
