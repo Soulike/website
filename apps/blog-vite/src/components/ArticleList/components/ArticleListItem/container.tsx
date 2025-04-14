@@ -3,7 +3,7 @@ import {List} from 'antd';
 import {useEffect} from 'react';
 
 import {showErrorNotification} from '@/helpers/error-notification-helper.js';
-import {getMarkdownAbstract} from '@/helpers/get-markdown-abstract.js';
+import {getMarkdownAbstract} from '@/helpers/markdown-helpers.js';
 
 import {ArticlePreviewCard} from './components/ArticlePreviewCard/index.js';
 import {useViewModel} from './view-model.js';

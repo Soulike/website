@@ -1,7 +1,7 @@
 import type {JSX} from 'react';
 import {Link, LinkProps} from 'react-router';
 
-import {getArticleLink} from '@/helpers/get-article-link.js';
+import {getArticleLink} from '@/helpers/link-helpers.js';
 
 interface Props extends Omit<LinkProps, 'to' | 'target' | 'rel'> {
   articleId: number;

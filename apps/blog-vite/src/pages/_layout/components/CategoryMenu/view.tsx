@@ -9,7 +9,7 @@ import {Menu, Spin} from 'antd';
 import {useMemo} from 'react';
 import {Link} from 'react-router';
 
-import {getCategoryLink} from '@/helpers/get-category-link.js';
+import {getCategoryLink} from '@/helpers/link-helpers.js';
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config';
 
 import style from './style.module.css';
