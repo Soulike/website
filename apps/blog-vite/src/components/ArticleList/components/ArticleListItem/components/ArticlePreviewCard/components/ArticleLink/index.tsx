@@ -1,7 +1,7 @@
 import type {JSX} from 'react';
 import {Link, LinkProps} from 'react-router';
 
-import {useArticleLink} from '@/hooks/useArticleLink.js';
+import {getArticleLink} from '@/helpers/get-article-link.js';
 
 interface Props extends Omit<LinkProps, 'to' | 'target' | 'rel'> {
   articleId: number;
@@ -10,7 +10,7 @@ interface Props extends Omit<LinkProps, 'to' | 'target' | 'rel'> {
 
 export function ArticleLink(props: Props) {
   const {children, articleId, ...rest} = props;
-  const articleLink = useArticleLink(articleId.toString());
+  const articleLink = getArticleLink(articleId);
   return (
     <Link
       to={articleLink}
