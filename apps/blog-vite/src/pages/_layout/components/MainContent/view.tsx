@@ -2,7 +2,7 @@ import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
 import type {ReactNode} from 'react';
 
-import {MobileNavigationHeader} from './components/MobileNavigationHeader';
+import {MobileNavigationHeader} from '../MobileNavigationHeader';
 import {SiteFooter} from './components/SiteFooter';
 import Style from './style.module.css';
 

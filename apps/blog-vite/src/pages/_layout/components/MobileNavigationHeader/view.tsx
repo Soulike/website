@@ -2,7 +2,7 @@ import {Header} from 'antd/lib/layout/layout';
 
 import avatar from '@/src/static/avatar.png';
 
-import {CategoryMenuMobile} from '../../../CategoryMenu';
+import {CategoryMenuMobile} from '../CategoryMenu/index.js';
 import style from './style.module.css';
 
 export function MobileNavigationHeader() {
