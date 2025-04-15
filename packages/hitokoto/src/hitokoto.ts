@@ -12,6 +12,7 @@ class Hitokoto {
     const response = await fetch(url, {
       referrer: '',
       credentials: 'omit',
+      mode: 'no-cors',
     });
 
     return response.text();

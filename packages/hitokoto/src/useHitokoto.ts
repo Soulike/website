@@ -6,7 +6,6 @@ import {SentenceCategory} from './v1/types.js';
 export function useHitokoto(
   categories: SentenceCategory[],
   placeholder: string,
-  deps: unknown[],
 ) {
   const [sentence, setSentence] = useState(placeholder);
   const [loading, setLoading] = useState(false);
@@ -24,7 +23,7 @@ export function useHitokoto(
       .finally(() => {
         setLoading(false);
       });
-  }, [categories, deps, ...deps]);
+  }, [categories]);
 
   return {
     loading,
