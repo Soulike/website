@@ -5,7 +5,7 @@ import {prependServerPrefix} from '@models/path-helper.js';
 import {Article, ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
 
-export class ArticleModel {
+class ArticleModel {
   private static readonly PATH = Object.freeze({
     GET_ALL_WITH_ABSTRACT: ArticleModel.prependArticlePrefix(
       '/getAllWithAbstract',
@@ -63,3 +63,5 @@ export class ArticleModel {
     }
   }
 }
+
+export const articleModel = new ArticleModel();

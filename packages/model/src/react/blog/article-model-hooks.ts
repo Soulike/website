@@ -1,4 +1,4 @@
-import {ArticleModel} from '@models/blog/article-model.js';
+import {articleModel} from '@models/blog';
 import {Article} from '@website/classes';
 import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
 import {useMemo} from 'react';
@@ -8,8 +8,6 @@ export const ArticleModelHooks = {
   useArticleById,
   useArticlesByCategory,
 };
-
-const articleModel = new ArticleModel();
 
 function useAllArticlesWithAbstract(
   onSuccess?: ResolveCallback<Article[]>,

@@ -5,7 +5,7 @@ import {prependServerPrefix} from '@models/path-helper.js';
 import {ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
 
-export class OptionModel {
+class OptionModel {
   private static readonly PATH = Object.freeze({
     GET_ABOUT: OptionModel.prependOptionPrefix('/getAbout'),
   });
@@ -25,3 +25,5 @@ export class OptionModel {
     }
   }
 }
+
+export const optionModel = new OptionModel();

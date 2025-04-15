@@ -1,9 +1,7 @@
-import {CategoryModel} from '@models/blog/category-model.js';
+import {categoryModel} from '@models/blog';
 import {Category} from '@website/classes';
 import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
 import {useMemo} from 'react';
-
-const categoryModel = new CategoryModel();
 
 export const CategoryModelHooks = Object.freeze({
   useAllCategories,

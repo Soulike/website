@@ -1,3 +1,3 @@
-export {ArticleModel} from './article-model.js';
-export {CategoryModel} from './category-model.js';
-export {OptionModel} from './option-model.js';
+export {articleModel} from './article-model.js';
+export {categoryModel} from './category-model.js';
+export {optionModel} from './option-model.js';

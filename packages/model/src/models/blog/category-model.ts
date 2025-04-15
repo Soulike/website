@@ -5,9 +5,12 @@ import {prependServerPrefix} from '@models/path-helper.js';
 import {Category, ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
 
-export class CategoryModel {
-  private allCategoriesCache: Category[] | null = null;
-  private idToCategoryCache = new Map<Category['id'], Category>();
+class CategoryModel {
+  private allCategoriesCachedPromise: Promise<Category[]> | null = null;
+  private idToCategoryCachedPromise = new Map<
+    Category['id'],
+    Promise<Category>
+  >();
 
   private static readonly PATH = Object.freeze({
     GET_ALL: CategoryModel.prependCategoryPrefix('/getAll'),
@@ -35,14 +38,10 @@ export class CategoryModel {
    */
   public async getAllCache(forceRefresh = false): Promise<Category[]> {
     if (forceRefresh) {
-      this.allCategoriesCache = null;
+      this.allCategoriesCachedPromise = null;
     }
-    if (this.allCategoriesCache) {
-      return this.allCategoriesCache;
-    }
-    const categories = await this.getAll();
-    this.allCategoriesCache = categories;
-    return categories;
+    this.allCategoriesCachedPromise ??= this.getAll();
+    return this.allCategoriesCachedPromise;
   }
 
   public async getById(id: Category['id']): Promise<Category> {
@@ -66,15 +65,16 @@ export class CategoryModel {
     forceRefresh = false,
   ): Promise<Category> {
     if (forceRefresh) {
-      this.idToCategoryCache.delete(id);
+      this.idToCategoryCachedPromise.delete(id);
     }
-    const categoryCache = this.idToCategoryCache.get(id);
-    if (categoryCache) {
-      return categoryCache;
+    let categoryCache = this.idToCategoryCachedPromise.get(id);
+    if (!categoryCache) {
+      categoryCache = this.getById(id);
+      this.idToCategoryCachedPromise.set(id, categoryCache);
     }
 
-    const category = await this.getById(id);
-    this.idToCategoryCache.set(id, category);
-    return category;
+    return categoryCache;
   }
 }
+
+export const categoryModel = new CategoryModel();
