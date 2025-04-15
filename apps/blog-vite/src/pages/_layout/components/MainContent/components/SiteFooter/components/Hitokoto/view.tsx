@@ -1,16 +1,15 @@
-import {hitokoto, SentenceCategory} from '@website/hitokoto';
+import {SentenceCategory, useHitokoto} from '@website/hitokoto';
+import {useMemo} from 'react';
 
-export async function Hitokoto() {
-  let sentence = '这里应该有一句话';
-  try {
-    sentence = await hitokoto.getSentence([
+export function Hitokoto() {
+  const hitokotoCategories = useMemo(
+    () => [
       SentenceCategory.ANIME,
       SentenceCategory.COMIC,
       SentenceCategory.GAME,
-    ]);
-  } catch (e) {
-    console.error(e);
-  }
-
+    ],
+    [],
+  );
+  const {sentence} = useHitokoto(hitokotoCategories, '这里应该有一句话');
   return <div>{sentence}</div>;
 }
