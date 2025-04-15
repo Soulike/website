@@ -1,7 +1,6 @@
 import Sider from 'antd/lib/layout/Sider';
 
-import avatar from '@/src/static/avatar.png';
-
+import avatar from '../assets/avatar.png';
 import {CategoryMenu} from '../CategoryMenu';
 import style from './style.module.css';
 

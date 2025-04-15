@@ -1,19 +1,23 @@
-import type React from 'react';
+import {ErrorBoundary} from '@website/react-components';
+import {Suspense} from 'react';
+import {Outlet} from 'react-router';
 
+import {Loading} from '@/components/Loading/index.js';
+import {NotFound} from '@/components/NotFound/index.js';
 import {ThemeProvider} from '@/components/ThemeProvider';
 
 import {RootLayoutView} from './view.js';
 
-export interface IRootLayoutProps {
-  children?: React.ReactNode;
-}
-
-export function RootLayout(props: IRootLayoutProps) {
-  const {children} = props;
-
+export function RootLayout() {
   return (
-    <ThemeProvider>
-      <RootLayoutView>{children}</RootLayoutView>
-    </ThemeProvider>
+    <ErrorBoundary fallback={<NotFound />}>
+      <Suspense fallback={<Loading />}>
+        <ThemeProvider>
+          <RootLayoutView>
+            <Outlet />
+          </RootLayoutView>
+        </ThemeProvider>
+      </Suspense>
+    </ErrorBoundary>
   );
 }
