@@ -1,6 +1,6 @@
 .RootLayout {
   height: 100dvh;
-  width: 100vw;
+  width: 100dvw;
 
   .navigationSideBarWrapper {
     @media (orientation: portrait) {

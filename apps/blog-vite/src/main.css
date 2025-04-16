@@ -7,11 +7,18 @@ html {
 
 body {
   font-size: 1rem;
+
+  #root {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 :root {
   background-color: #fff;
   overflow-y: hidden;
+  width: 100dvw;
+  height: 100dvh;
 }
 
 @media (prefers-color-scheme: dark) {
