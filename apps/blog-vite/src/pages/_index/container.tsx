@@ -20,7 +20,7 @@ export function Index() {
 
   return (
     <IndexView
-      articles={articlesWithAbstract}
+      articles={articlesWithAbstract ?? []}
       loading={articlesWithAbstractLoading}
     />
   );

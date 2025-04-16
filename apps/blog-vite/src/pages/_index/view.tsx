@@ -5,7 +5,7 @@ import {ArticleList} from '@/components/ArticleList';
 import styles from './styles.module.css';
 
 export interface IndexViewProps {
-  articles: Article[] | null;
+  articles: Article[];
   loading: boolean;
 }
 
@@ -14,7 +14,7 @@ export function IndexView(props: IndexViewProps) {
 
   return (
     <div className={styles.Index}>
-      {articles && <ArticleList articles={articles} loading={loading} />}
+      <ArticleList articles={articles} loading={loading} />
     </div>
   );
 }
