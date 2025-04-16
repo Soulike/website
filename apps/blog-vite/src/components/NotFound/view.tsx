@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 
 export function NotFound() {
   return (
-    <div className={styles.notFound}>
+    <div className={styles.NotFound}>
       <img src={notFoundImage} alt='not found image' className={styles.image} />
     </div>
   );
