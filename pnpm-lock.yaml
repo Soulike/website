@@ -401,6 +401,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^3.0.9
         version: 3.1.1(vitest@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
       typescript:
         specifier: ^5.7.3
         version: 5.8.3

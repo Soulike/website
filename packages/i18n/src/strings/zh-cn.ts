@@ -7,4 +7,5 @@ export const ZH_CN: Strings = Object.freeze({
   [STRING_KEY.UI_LABEL_INDEX]: '首页',
   [STRING_KEY.UI_LABEL_CATEGORY]: '分类',
   [STRING_KEY.UI_LABEL_ABOUT]: '关于',
+  [STRING_KEY.UI_TITLE_BLOG]: `Soulike 的博客`,
 });
