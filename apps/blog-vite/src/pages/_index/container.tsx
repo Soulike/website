@@ -7,6 +7,7 @@ import {useViewModel} from './view-model';
 
 export function Index() {
   const {
+    pageTitle,
     articlesWithAbstractError,
     articlesWithAbstractLoading,
     articlesWithAbstract,
@@ -19,9 +20,12 @@ export function Index() {
   }, [articlesWithAbstractError]);
 
   return (
-    <IndexView
-      articles={articlesWithAbstract ?? []}
-      loading={articlesWithAbstractLoading}
-    />
+    <>
+      <title>{pageTitle}</title>
+      <IndexView
+        articles={articlesWithAbstract ?? []}
+        loading={articlesWithAbstractLoading}
+      />
+    </>
   );
 }

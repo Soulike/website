@@ -1,18 +1,16 @@
-import {Article} from '@website/classes';
+import {STRING_KEY, useI18nString} from '@website/i18n';
 import {ArticleModelHooks} from '@website/model/react/blog';
 
-export function useViewModel(): {
-  articlesWithAbstract: Article[] | null;
-  articlesWithAbstractLoading: boolean;
-  articlesWithAbstractError: Error | null;
-} {
+export function useViewModel() {
   const {
     articles: articlesWithAbstract,
     loading: articlesWithAbstractLoading,
     error: articlesWithAbstractError,
   } = ArticleModelHooks.useAllArticlesWithAbstract();
+  const pageTitle = useI18nString(STRING_KEY.UI_TITLE_BLOG);
 
   return {
+    pageTitle,
     articlesWithAbstract,
     articlesWithAbstractLoading,
     articlesWithAbstractError,
