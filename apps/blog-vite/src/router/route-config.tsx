@@ -4,6 +4,7 @@ import {RouteObject} from 'react-router';
 
 import {Index} from '@/pages/_index';
 import {RootLayout} from '@/pages/_layout/index.js';
+import {About} from '@/pages/about/index.js';
 
 import {PAGE_ID, PAGE_ID_TO_PATH, type PageIdType} from './page-config';
 
@@ -16,7 +17,7 @@ routeConfig[PAGE_ID.ARTICLE] = {
 
 routeConfig[PAGE_ID.ABOUT] = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.ABOUT]),
-  element: null,
+  element: <About />,
 };
 
 routeConfig[PAGE_ID.CATEGORY] = {
