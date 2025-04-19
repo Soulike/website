@@ -2,9 +2,12 @@ import path from 'node:path';
 
 import {RouteObject} from 'react-router';
 
+import {NotFound} from '@/components/NotFound/index.js';
 import {Index} from '@/pages/_index';
 import {RootLayout} from '@/pages/_layout/index.js';
 import {About} from '@/pages/about/index.js';
+import {Category} from '@/pages/category/index.js';
+import {CATEGORY_PATH_PARAM_NAME_ID} from '@/router/page-config/page-path-params.js';
 
 import {PAGE_ID, PAGE_ID_TO_PATH, type PageIdType} from './page-config';
 
@@ -21,8 +24,11 @@ routeConfig[PAGE_ID.ABOUT] = {
 };
 
 routeConfig[PAGE_ID.CATEGORY] = {
-  path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.CATEGORY]),
-  element: null,
+  path: path.join(
+    path.basename(PAGE_ID_TO_PATH[PAGE_ID.CATEGORY]),
+    `:${CATEGORY_PATH_PARAM_NAME_ID}`,
+  ),
+  element: <Category />,
 };
 
 routeConfig[PAGE_ID.INDEX] = {
@@ -39,4 +45,10 @@ routeConfig[PAGE_ID.INDEX] = {
   ],
 };
 
-export const CONFIG: Readonly<RouteObject>[] = [routeConfig[PAGE_ID.INDEX]];
+export const CONFIG: Readonly<RouteObject>[] = [
+  routeConfig[PAGE_ID.INDEX],
+  {
+    path: '*',
+    element: <NotFound />,
+  },
+];
