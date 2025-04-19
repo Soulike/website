@@ -16,7 +16,7 @@ export function ArticleLink(props: Props) {
       to={articleLink}
       {...rest}
       target={'_blank'}
-      rel='noopener norefferrer'
+      rel='noopener noreferrer'
     >
       {children}
     </Link>
