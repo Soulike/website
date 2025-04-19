@@ -1,5 +1,3 @@
-import assert from 'node:assert';
-
 import {useEffect, useState} from 'react';
 
 export type ResolveCallback<T> = (resolvedValue: T) => void | Promise<void>;
@@ -26,13 +24,16 @@ export function usePromise<T>(
         }
       })
       .catch((e: unknown) => {
-        assert(
-          e instanceof Error,
-          'Promise should reject with an Error instance.',
-        );
-        setRejectedError(e);
+        let error: Error;
+        if (!(e instanceof Error)) {
+          error = new Error();
+          error.cause = error;
+        } else {
+          error = e;
+        }
+        setRejectedError(error);
         if (onReject) {
-          void onReject(e);
+          void onReject(error);
         }
       })
       .finally(() => {
