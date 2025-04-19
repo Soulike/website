@@ -18,14 +18,14 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 
 # Build blog
 FROM deps AS blog-builder
-RUN pnpm --filter "./apps/blog-vite" build && \
-    pnpm --filter "./apps/blog-vite" deploy --prod /blog
+RUN pnpm --filter "./apps/blog-vite" build
 
-FROM base AS blog
-COPY --from=blog-builder /blog /blog
-WORKDIR /blog
+# Setup blog static server
+FROM nginx:stable-alpine AS blog
+COPY --from=blog-builder /website/apps/blog-vite/dist /blog-dist
+COPY --from=blog-builder /website/apps/blog-vite/nginx.conf /etc/nginx/conf.d/blog.conf
+WORKDIR /
 EXPOSE 3000
-CMD pnpm start
 
 # Build admin
 FROM deps AS admin-builder
