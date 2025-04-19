@@ -1,8 +1,7 @@
-import assert from 'node:assert';
-
-import {Article, Category} from '@website/classes';
+import {Category} from '@website/classes';
+import {useLazyPromise} from '@website/hooks';
 import {articleModel} from '@website/model/blog';
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router';
 
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config/index.js';
@@ -39,35 +38,14 @@ export function useViewModel() {
 }
 
 function useLoadArticlesByCategoryWithAbstract() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const [articlesWithAbstract, setArticlesWithAbstract] = useState<
-    Article[] | null
-  >(null);
-
-  const loadArticlesByCategoryWithAbstract = useCallback(
-    (categoryId: Category['id']) => {
-      setLoading(true);
-      articleModel
-        .getByCategoryWithAbstract(categoryId)
-        .then((articles) => {
-          setArticlesWithAbstract(articles);
-        })
-        .catch((e: unknown) => {
-          assert(e instanceof Error);
-          setError(e);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    },
-    [],
+  const {run, pending, resolvedValue, rejectedError} = useLazyPromise(
+    (id: Category['id']) => articleModel.getByCategoryWithAbstract(id),
   );
 
   return {
-    loading,
-    error,
-    loadArticlesByCategoryWithAbstract,
-    articlesWithAbstract,
+    loading: pending,
+    error: rejectedError,
+    loadArticlesByCategoryWithAbstract: run,
+    articlesWithAbstract: resolvedValue,
   };
 }
