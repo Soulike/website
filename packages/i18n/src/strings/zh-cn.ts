@@ -12,6 +12,9 @@ export const ZH_CN: Strings = Object.freeze({
   get [STRING_KEY.PAGE_TITLE_INDEX]() {
     return ZH_CN[STRING_KEY.SITE_TITLE];
   },
+  get [STRING_KEY.PAGE_TITLE_ARTICLE]() {
+    return getPageTitle(PLACEHOLDER_MARK, ZH_CN[STRING_KEY.SITE_TITLE]);
+  },
   get [STRING_KEY.PAGE_TITLE_ABOUT]() {
     return getPageTitle(
       ZH_CN[STRING_KEY.UI_LABEL_ABOUT],
@@ -25,4 +28,5 @@ export const ZH_CN: Strings = Object.freeze({
   [STRING_KEY.UI_LABEL_INDEX]: '首页',
   [STRING_KEY.UI_LABEL_CATEGORY]: '类别',
   [STRING_KEY.UI_LABEL_ABOUT]: '关于',
+  [STRING_KEY.UI_LABEL_LOADING]: '加载中',
 });

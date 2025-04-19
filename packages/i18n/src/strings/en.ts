@@ -12,6 +12,9 @@ export const EN: Strings = Object.freeze({
   get [STRING_KEY.PAGE_TITLE_INDEX]() {
     return EN[STRING_KEY.SITE_TITLE];
   },
+  get [STRING_KEY.PAGE_TITLE_ARTICLE]() {
+    return getPageTitle(PLACEHOLDER_MARK, EN[STRING_KEY.SITE_TITLE]);
+  },
   get [STRING_KEY.PAGE_TITLE_ABOUT]() {
     return getPageTitle(
       EN[STRING_KEY.UI_LABEL_ABOUT],
@@ -25,4 +28,5 @@ export const EN: Strings = Object.freeze({
   [STRING_KEY.UI_LABEL_INDEX]: 'Index',
   [STRING_KEY.UI_LABEL_CATEGORY]: 'Category',
   [STRING_KEY.UI_LABEL_ABOUT]: 'About',
+  [STRING_KEY.UI_LABEL_LOADING]: 'Loading',
 });
