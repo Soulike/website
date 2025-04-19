@@ -1,4 +1,4 @@
-import {i18nCore} from './i18n-core.js';
+import {i18nCore} from '../i18n-core.js';
 
 export async function changeNavigatorLanguage(language: string) {
   Object.defineProperty(navigator, 'language', {
