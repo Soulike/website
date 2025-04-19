@@ -7,7 +7,7 @@ export function useViewModel() {
     loading: articlesWithAbstractLoading,
     error: articlesWithAbstractError,
   } = ArticleModelHooks.useAllArticlesWithAbstract();
-  const pageTitle = useI18nString(STRING_KEY.UI_TITLE_BLOG);
+  const pageTitle = useI18nString(STRING_KEY.PAGE_TITLE_INDEX);
 
   return {
     pageTitle,
