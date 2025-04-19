@@ -27,6 +27,16 @@ describe('I18nCore', () => {
     );
   });
 
+  test('Should handle template', async () => {
+    expect(
+      i18nCore.getString(STRING_KEY.TEST_TEMPLATE_STRING, 'b', 'd'),
+    ).toEqual(EN[STRING_KEY.TEST_TEMPLATE_STRING_FILLED]);
+    await changeNavigatorLanguage('zh-CN');
+    expect(
+      i18nCore.getString(STRING_KEY.TEST_TEMPLATE_STRING, '乙', '丁'),
+    ).toEqual(ZH_CN[STRING_KEY.TEST_TEMPLATE_STRING_FILLED]);
+  });
+
   test('Should load English if strings is not available for language', async () => {
     await changeNavigatorLanguage('ja');
     expect(i18nCore.getString(STRING_KEY.TEST_STRING)).toEqual(
