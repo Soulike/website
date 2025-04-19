@@ -1,8 +1,0 @@
-@media (prefers-color-scheme: dark) {
-  :root {
-    --BACKGROUND_COLOR: #222;
-    --BORDER_COLOR: #444;
-    --COLOR: #ddd;
-    --LIGHT_COLOR: #999;
-  }
-}

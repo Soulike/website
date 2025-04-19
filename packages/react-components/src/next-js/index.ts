@@ -1,1 +1,0 @@
-export {StyledComponentsRegistry} from './StyledComponentsRegistry';
