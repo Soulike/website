@@ -1,0 +1,10 @@
+.CategoryMenu {
+  border: none !important; /* override antd */
+  background-color: var(--BACKGROUND_COLOR) !important;
+}
+
+/* .icon is here because the popup menu is not inside .CategoryMenu */
+.icon {
+  display: inline-block;
+  margin: 0 5px 0 0 !important;
+}

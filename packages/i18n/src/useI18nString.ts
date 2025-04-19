@@ -4,7 +4,7 @@ import {i18nCore, I18nEventType} from './i18n-core.js';
 import {STRING_KEY} from './string-key.js';
 import {Strings} from './strings/Strings.js';
 
-export function useI18nString(key: STRING_KEY) {
+export function useI18nString(key: STRING_KEY, ...args: string[]) {
   const [string, setString] = useState('');
 
   const languageChangeCallback = useCallback(
@@ -18,7 +18,7 @@ export function useI18nString(key: STRING_KEY) {
     i18nCore
       .ensureStringsLoaded()
       .then(() => {
-        setString(i18nCore.getString(key));
+        setString(i18nCore.getString(key, ...args));
       })
       .catch((e: unknown) => {
         console.error(e);
@@ -34,7 +34,7 @@ export function useI18nString(key: STRING_KEY) {
         languageChangeCallback,
       );
     };
-  }, [key, languageChangeCallback]);
+  }, [args, key, languageChangeCallback]);
 
   return string;
 }

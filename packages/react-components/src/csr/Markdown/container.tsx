@@ -3,13 +3,13 @@ import {useCallback, useEffect, useState} from 'react';
 
 import {MarkdownView} from '../../shared-views/MarkdownView';
 
-interface IProps {
+export interface MarkdownProps {
   children: string;
   onRenderStart?: () => unknown;
   onRenderFinish?: () => unknown;
 }
 
-export function Markdown(props: IProps) {
+export function Markdown(props: MarkdownProps) {
   const {children, onRenderStart, onRenderFinish} = props;
   const [renderedHtml, setRenderedHtml] = useState('');
 

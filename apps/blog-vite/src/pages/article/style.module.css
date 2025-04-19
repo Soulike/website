@@ -1,0 +1,19 @@
+.Article {
+  .header {
+    margin-bottom: 20px;
+
+    .title {
+      font-size: 2rem;
+      font-family: sans-serif;
+      font-weight: lighter;
+    }
+
+    .info {
+      margin-top: 4px;
+    }
+  }
+
+  .alert {
+    margin-bottom: 20px;
+  }
+}

@@ -18,8 +18,8 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 
 # Build blog
 FROM deps AS blog-builder
-RUN pnpm --filter "./apps/blog" build && \
-    pnpm --filter "./apps/blog" deploy --prod /blog
+RUN pnpm --filter "./apps/blog-vite" build && \
+    pnpm --filter "./apps/blog-vite" deploy --prod /blog
 
 FROM base AS blog
 COPY --from=blog-builder /blog /blog

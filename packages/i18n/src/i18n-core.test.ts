@@ -1,10 +1,10 @@
 import {beforeEach, describe, expect, test, vi} from 'vitest';
 
+import {changeNavigatorLanguage} from './helpers/test-helpers.js';
 import {i18nCore, I18nEventType} from './i18n-core.js';
 import {STRING_KEY} from './string-key.js';
 import {EN} from './strings/en.js';
 import {ZH_CN} from './strings/zh-cn.js';
-import {changeNavigatorLanguage} from './test-helper.js';
 
 describe('I18nCore', () => {
   beforeEach(async () => {
@@ -25,6 +25,16 @@ describe('I18nCore', () => {
     expect(i18nCore.getString(STRING_KEY.TEST_STRING)).toEqual(
       ZH_CN[STRING_KEY.TEST_STRING],
     );
+  });
+
+  test('Should handle template', async () => {
+    expect(
+      i18nCore.getString(STRING_KEY.TEST_TEMPLATE_STRING, 'b', 'd'),
+    ).toEqual(EN[STRING_KEY.TEST_TEMPLATE_STRING_FILLED]);
+    await changeNavigatorLanguage('zh-CN');
+    expect(
+      i18nCore.getString(STRING_KEY.TEST_TEMPLATE_STRING, '乙', '丁'),
+    ).toEqual(ZH_CN[STRING_KEY.TEST_TEMPLATE_STRING_FILLED]);
   });
 
   test('Should load English if strings is not available for language', async () => {

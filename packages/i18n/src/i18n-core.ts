@@ -1,5 +1,6 @@
 import assert from 'node:assert';
 
+import {format} from './helpers/string-helpers.js';
 import {LanguageCode} from './language-code.js';
 import {STRING_KEY} from './string-key.js';
 import {Strings} from './strings/Strings.js';
@@ -59,11 +60,15 @@ class I18nCore {
     this.currentLanguageCode = languageCode;
   }
 
-  public getString(key: STRING_KEY): string {
+  public getString(key: STRING_KEY, ...values: string[]): string {
     if (!this.strings) {
       console.warn('I18n is not ready yet');
     }
-    return this.strings?.[key] ?? '';
+    const template = this.strings?.[key];
+    if (!template) {
+      return '';
+    }
+    return format(template, ...values);
   }
 
   public addEventListener(
@@ -71,9 +76,7 @@ class I18nCore {
     callback: I18nEventListener<EventTypeToPayload[typeof type]>,
   ): void {
     let listeners = this.eventTypeToListeners.get(type);
-    if (!listeners) {
-      listeners = new Set();
-    }
+    listeners ??= new Set();
     listeners.add(callback as I18nEventListener<unknown>);
     this.eventTypeToListeners.set(type, listeners);
   }

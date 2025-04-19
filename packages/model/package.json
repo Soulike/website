@@ -4,7 +4,9 @@
   "exports": {
     ".": "./dist/models/index.js",
     "./admin": "./dist/models/admin/index.js",
-    "./react/admin": "./dist/react/admin/index.js"
+    "./blog": "./dist/models/blog/index.js",
+    "./react/admin": "./dist/react/admin/index.js",
+    "./react/blog": "./dist/react/blog/index.js"
   },
   "scripts": {
     "build": "rm -rf dist && tsc && tsc-alias"
@@ -12,7 +14,8 @@
   "dependencies": {
     "@website/classes": "workspace:^",
     "@website/hooks": "workspace:^",
-    "@website/request": "workspace:^"
+    "@website/request": "workspace:^",
+    "@website/eslint-config": "workspace:^"
   },
   "devDependencies": {
     "@types/react": "^19.0.10",

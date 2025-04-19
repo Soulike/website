@@ -1,0 +1,20 @@
+{
+  "name": "@website/hitokoto",
+  "private": "true",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.12",
+    "@website/eslint-config": "workspace:^",
+    "@vitest/coverage-v8": "^3.0.9",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.9"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  }
+}

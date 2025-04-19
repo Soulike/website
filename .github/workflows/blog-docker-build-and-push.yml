@@ -5,7 +5,7 @@ on:
     branches:
       - 'main'
     paths:
-      - 'apps/blog/**'
+      - 'apps/blog-vite/**'
       - 'packages/**'
       - 'pnpm-lock.yaml'
       - 'Dockerfile'

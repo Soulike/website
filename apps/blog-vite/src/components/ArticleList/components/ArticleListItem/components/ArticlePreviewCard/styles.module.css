@@ -1,0 +1,43 @@
+.ArticlePreviewCard {
+  width: 100%;
+  box-shadow: none !important;
+
+  .header {
+    padding: 16px 0;
+
+    .title {
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 1.5rem;
+      font-family: sans-serif;
+      font-weight: 100;
+      color: var(--COLOR);
+
+      @media (orientation: portrait) {
+        font-size: 1.1rem;
+      }
+    }
+
+    .info {
+      margin-top: 4px;
+    }
+  }
+
+  .briefContainer {
+    position: relative;
+
+    .brief {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      color: var(--LIGHT_COLOR);
+      max-height: 3lh;
+      overflow: hidden;
+      mask-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 1) 1.5lh,
+        rgba(0, 0, 0, 0) 3lh
+      );
+    }
+  }
+}
