@@ -1,5 +1,5 @@
 import {articleModel} from '@models/blog';
-import {Article} from '@website/classes';
+import {Article, Category} from '@website/classes';
 import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
 import {useMemo} from 'react';
 
@@ -7,6 +7,7 @@ export const ArticleModelHooks = {
   useAllArticlesWithAbstract,
   useArticleById,
   useArticlesByCategory,
+  useAllArticlesWithAbstractByCategory,
 };
 
 function useAllArticlesWithAbstract(
@@ -14,6 +15,28 @@ function useAllArticlesWithAbstract(
   onReject?: RejectCallback,
 ) {
   const promise = useMemo(() => articleModel.getAllWithAbstract(), []);
+  const {pending, resolvedValue, rejectedError} = usePromise(
+    promise,
+    onSuccess,
+    onReject,
+  );
+
+  return {
+    loading: pending,
+    error: rejectedError,
+    articles: resolvedValue,
+  };
+}
+
+function useAllArticlesWithAbstractByCategory(
+  categoryId: Category['id'],
+  onSuccess?: ResolveCallback<Article[]>,
+  onReject?: RejectCallback,
+) {
+  const promise = useMemo(
+    () => articleModel.getByCategoryWithAbstract(categoryId),
+    [categoryId],
+  );
   const {pending, resolvedValue, rejectedError} = usePromise(
     promise,
     onSuccess,
