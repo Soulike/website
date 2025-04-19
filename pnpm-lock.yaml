@@ -501,6 +501,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.0.4
         version: 19.1.2(@types/react@19.1.2)
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
       esbuild:
         specifier: ^0.25.0
         version: 0.25.2
