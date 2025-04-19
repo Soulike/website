@@ -13,3 +13,9 @@ export function getDateString(date: Date): string {
 export function getFullYearString(date = new Date()): string {
   return date.getFullYear().toString();
 }
+
+export function getDiffInDays(date1: Date, date2: Date): number {
+  const ONE_DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
+  const timestampDiff = Math.abs(date1.getTime() - date2.getTime());
+  return Math.floor(timestampDiff / ONE_DAY_MILLISECONDS);
+}
