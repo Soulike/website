@@ -5,6 +5,7 @@ import {useCallback, useRef, useState} from 'react';
 import {ArticleListView} from './view.js';
 
 interface IProps {
+  // TODO: Make ArticleList accept a list of article ids instead of all articles
   articles: Article[];
   loading: boolean;
 }
