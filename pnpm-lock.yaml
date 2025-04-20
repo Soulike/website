@@ -281,9 +281,18 @@ importers:
         specifier: '>=18.0.0'
         version: 19.1.0
     devDependencies:
+      '@testing-library/dom':
+        specifier: ^10.4.0
+        version: 10.4.0
+      '@testing-library/react':
+        specifier: ^16.2.0
+        version: 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@types/react':
         specifier: ^19.0.10
         version: 19.1.2
+      '@vitest/coverage-v8':
+        specifier: ^3.0.9
+        version: 3.1.1(vitest@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
       '@website/eslint-config':
         specifier: workspace:^
         version: link:../eslint-config
@@ -296,6 +305,9 @@ importers:
       typescript:
         specifier: ^5.7.3
         version: 5.8.3
+      vitest:
+        specifier: ^3.0.9
+        version: 3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
 
   packages/html-code-highlighter:
     dependencies:
