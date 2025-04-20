@@ -68,6 +68,7 @@ describe('useMediaQuery', () => {
     const {unmount} = renderHook(() => useMediaQuery('(min-width: 768px)'));
 
     // Verify listener was added
+    expect(addEventListener).toHaveBeenCalledOnce();
     expect(addEventListener).toHaveBeenCalledWith(
       'change',
       expect.any(Function),
@@ -77,9 +78,10 @@ describe('useMediaQuery', () => {
     unmount();
 
     // Verify cleanup
+    expect(removeEventListener).toHaveBeenCalledOnce();
     expect(removeEventListener).toHaveBeenCalledWith(
       'change',
-      expect.any(Function),
+      addEventListener.mock.calls[0][1],
     );
   });
 });
