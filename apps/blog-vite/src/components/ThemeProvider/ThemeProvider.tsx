@@ -15,9 +15,10 @@ export function ThemeProvider({children}: IThemeProviderProps) {
     <ConfigProvider
       theme={{
         algorithm:
-          colorScheme == ColorScheme.LIGHT
+          colorScheme === ColorScheme.LIGHT
             ? theme.defaultAlgorithm
             : theme.darkAlgorithm,
+        cssVar: true,
       }}
     >
       <App>{children}</App>

@@ -17,6 +17,7 @@
     overflow: auto;
     flex-grow: 1;
     flex-shrink: 1;
+    color: inherit;
   }
 
   .siteFooterWrapper {
