@@ -14,7 +14,7 @@ services:
     depends_on:
       - blog-server
     networks:
-      - frontend
+      - blog
   admin:
     restart: always
     image: 'soulike/admin:latest'
@@ -22,7 +22,7 @@ services:
       - admin-server
       - auth-server
     networks:
-      - frontend
+      - admin
   auth-server:
     restart: always
     image: 'soulike/auth-server:latest'
@@ -30,8 +30,7 @@ services:
       - redis
       - database-server
     networks:
-      - server
-      - database
+      - admin
   admin-server:
     restart: always
     image: 'soulike/admin-server:latest'
@@ -41,8 +40,7 @@ services:
       - redis
       - database-server
     networks:
-      - server
-      - database
+      - admin
   blog-server:
     restart: always
     image: 'soulike/blog-server:latest'
@@ -52,8 +50,7 @@ services:
       - redis
       - database-server
     networks:
-      - server
-      - database
+      - blog
   database-server:
     restart: always
     image: 'soulike/database-server:latest'
@@ -65,8 +62,8 @@ services:
       - redis
       - db
     networks:
-      - server
-      - database
+      - blog
+      - admin
   nginx:
     restart: always
     image: 'soulike/website-nginx:latest'
@@ -82,13 +79,13 @@ services:
       - 80:80
       - 443:443
     networks:
-      - frontend
-      - server
+      - blog
+      - admin
   redis:
     restart: always
     image: redis:alpine
     networks:
-      - server
+      - admin
   db:
     image: postgres:16-alpine
     restart: always
@@ -103,16 +100,16 @@ services:
     ports:
       - 5432:5432
     networks:
-      - database
+      - blog
+      - admin
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER']
       interval: 10s
       timeout: 5s
       retries: 5
 networks:
-  frontend:
-  server:
-  database:
+  blog:
+  admin:
 secrets:
   db-password:
     file: $HOME/website-database/db-password
