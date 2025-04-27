@@ -31,6 +31,7 @@ services:
       - database-server
     networks:
       - admin
+      - database
   admin-server:
     restart: always
     image: 'soulike/admin-server:latest'
@@ -41,6 +42,8 @@ services:
       - database-server
     networks:
       - admin
+      - redis
+      - database
   blog-server:
     restart: always
     image: 'soulike/blog-server:latest'
@@ -51,6 +54,7 @@ services:
       - database-server
     networks:
       - blog
+      - database
   database-server:
     restart: always
     image: 'soulike/database-server:latest'
@@ -62,8 +66,7 @@ services:
       - redis
       - db
     networks:
-      - blog
-      - admin
+      - database # Database shall never be exposed with other networks for safety
   nginx:
     restart: always
     image: 'soulike/website-nginx:latest'
@@ -85,7 +88,7 @@ services:
     restart: always
     image: redis:alpine
     networks:
-      - admin
+      - redis # Redis shall never be exposed with other networks for safety
   db:
     image: postgres:16-alpine
     restart: always
@@ -100,8 +103,7 @@ services:
     ports:
       - 5432:5432
     networks:
-      - blog
-      - admin
+      - database
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER']
       interval: 10s
@@ -110,6 +112,7 @@ services:
 networks:
   blog:
   admin:
+  database:
 secrets:
   db-password:
     file: $HOME/website-database/db-password
