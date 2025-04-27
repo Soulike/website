@@ -113,6 +113,7 @@ networks:
   blog:
   admin:
   database:
+  redis:
 secrets:
   db-password:
     file: $HOME/website-database/db-password
