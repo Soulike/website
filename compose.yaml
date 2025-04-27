@@ -31,6 +31,7 @@ services:
       - database-server
     networks:
       - admin
+      - redis
       - database
   admin-server:
     restart: always
@@ -50,7 +51,6 @@ services:
     volumes:
       - $HOME/.blog-data:/.blog-data:ro
     depends_on:
-      - redis
       - database-server
     networks:
       - blog
