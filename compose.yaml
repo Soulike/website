@@ -14,7 +14,7 @@ services:
     depends_on:
       - blog-server
     networks:
-      - frontend
+      - blog
   admin:
     restart: always
     image: 'soulike/admin:latest'
@@ -22,7 +22,7 @@ services:
       - admin-server
       - auth-server
     networks:
-      - frontend
+      - admin
   auth-server:
     restart: always
     image: 'soulike/auth-server:latest'
@@ -30,7 +30,8 @@ services:
       - redis
       - database-server
     networks:
-      - server
+      - admin
+      - redis
       - database
   admin-server:
     restart: always
@@ -41,7 +42,8 @@ services:
       - redis
       - database-server
     networks:
-      - server
+      - admin
+      - redis
       - database
   blog-server:
     restart: always
@@ -49,10 +51,9 @@ services:
     volumes:
       - $HOME/.blog-data:/.blog-data:ro
     depends_on:
-      - redis
       - database-server
     networks:
-      - server
+      - blog
       - database
   database-server:
     restart: always
@@ -65,8 +66,7 @@ services:
       - redis
       - db
     networks:
-      - server
-      - database
+      - database # Database shall never be exposed with other networks for safety
   nginx:
     restart: always
     image: 'soulike/website-nginx:latest'
@@ -82,13 +82,13 @@ services:
       - 80:80
       - 443:443
     networks:
-      - frontend
-      - server
+      - blog
+      - admin
   redis:
     restart: always
     image: redis:alpine
     networks:
-      - server
+      - redis # Redis shall never be exposed with other networks for safety
   db:
     image: postgres:16-alpine
     restart: always
@@ -110,8 +110,8 @@ services:
       timeout: 5s
       retries: 5
 networks:
-  frontend:
-  server:
+  blog:
+  admin:
   database:
 secrets:
   db-password:
