@@ -8,13 +8,10 @@ class Hitokoto {
       encode: Encoding.TEXT,
       charset: Charset.UTF8,
     });
-
     const response = await fetch(url, {
       referrer: '',
       credentials: 'omit',
-      mode: 'no-cors',
     });
-
     return response.text();
   }
 }
