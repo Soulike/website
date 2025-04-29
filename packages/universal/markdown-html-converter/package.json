@@ -6,7 +6,8 @@
   },
   "devDependencies": {
     "@types/showdown": "^2.0.6",
-    "@website/ts-config": "workspace:^"
+    "@website/ts-config": "workspace:^",
+    "@website/eslint-config": "workspace:^"
   },
   "scripts": {
     "build": "rm -rf dist && tsc"
