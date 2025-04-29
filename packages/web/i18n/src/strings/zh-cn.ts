@@ -1,6 +1,7 @@
+import {STRING_KEY} from '@website/i18n-base';
+
 import {PLACEHOLDER_MARK} from '../constants.js';
 import {getPageTitle} from '../helpers/page-title-helpers.js';
-import {STRING_KEY} from '../string-key.js';
 import {Strings} from './Strings.js';
 
 export const ZH_CN: Strings = Object.freeze({

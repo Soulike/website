@@ -1,7 +1,7 @@
+import {STRING_KEY} from '@website/i18n-base';
 import {useCallback, useEffect, useState} from 'react';
 
 import {i18nCore, I18nEventType} from './i18n-core.js';
-import {STRING_KEY} from './string-key.js';
 import {Strings} from './strings/Strings.js';
 
 export function useI18nString(key: STRING_KEY, ...args: string[]) {

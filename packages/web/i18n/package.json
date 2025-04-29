@@ -7,7 +7,8 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@website/helpers": "workspace:^"
+    "@website/helpers": "workspace:^",
+    "@website/i18n-base": "workspace:^"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",

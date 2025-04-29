@@ -1,8 +1,8 @@
+import {STRING_KEY} from '@website/i18n-base';
 import {beforeEach, describe, expect, test, vi} from 'vitest';
 
 import {changeNavigatorLanguage} from './helpers/test-helpers.js';
 import {i18nCore, I18nEventType} from './i18n-core.js';
-import {STRING_KEY} from './string-key.js';
 import {EN} from './strings/en.js';
 import {ZH_CN} from './strings/zh-cn.js';
 

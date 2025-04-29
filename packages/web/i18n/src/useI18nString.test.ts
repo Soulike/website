@@ -1,8 +1,8 @@
 import {act, renderHook, waitFor} from '@testing-library/react';
+import {STRING_KEY} from '@website/i18n-base';
 import {beforeEach, describe, expect, test} from 'vitest';
 
 import {changeNavigatorLanguage} from './helpers/test-helpers.js';
-import {STRING_KEY} from './string-key.js';
 import {EN} from './strings/en.js';
 import {ZH_CN} from './strings/zh-cn.js';
 import {useI18nString} from './useI18nString.js';

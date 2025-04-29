@@ -49,7 +49,7 @@ importers:
         version: link:../../packages/web/hooks
       '@website/i18n':
         specifier: workspace:^
-        version: link:../../packages/i18n
+        version: link:../../packages/web/i18n
       '@website/model':
         specifier: workspace:^
         version: link:../../packages/web/model
@@ -126,9 +126,6 @@ importers:
       '@website/classes':
         specifier: workspace:^
         version: link:../../packages/universal/classes
-      '@website/hitokoto-base':
-        specifier: workspace:^
-        version: link:../../packages/universal/hitokoto-base
       '@website/hitokoto-hooks':
         specifier: workspace:^
         version: link:../../packages/web/hitokoto-hooks
@@ -137,7 +134,7 @@ importers:
         version: link:../../packages/web/hooks
       '@website/i18n':
         specifier: workspace:^
-        version: link:../../packages/i18n
+        version: link:../../packages/web/i18n
       '@website/model':
         specifier: workspace:^
         version: link:../../packages/web/model
@@ -249,43 +246,6 @@ importers:
         specifier: ^0.25.0
         version: 0.25.2
 
-  packages/i18n:
-    dependencies:
-      '@website/helpers':
-        specifier: workspace:^
-        version: link:../helpers
-      react:
-        specifier: '>=16.8.0'
-        version: 19.1.0
-    devDependencies:
-      '@testing-library/dom':
-        specifier: ^10.4.0
-        version: 10.4.0
-      '@testing-library/react':
-        specifier: ^16.2.0
-        version: 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@types/react':
-        specifier: ^19.0.10
-        version: 19.1.2
-      '@vitejs/plugin-react':
-        specifier: ^4.3.4
-        version: 4.3.4(vite@6.2.6(@types/node@22.14.1)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1))
-      '@vitest/coverage-v8':
-        specifier: ^3.0.9
-        version: 3.1.1(vitest@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
-      '@website/eslint-config':
-        specifier: workspace:^
-        version: link:../universal/eslint-config
-      '@website/ts-config':
-        specifier: workspace:^
-        version: link:../universal/ts-config
-      typescript:
-        specifier: ^5.7.3
-        version: 5.8.3
-      vitest:
-        specifier: ^3.0.9
-        version: 3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
-
   packages/markdown-article-renderer:
     dependencies:
       '@website/html-code-highlighter':
@@ -358,6 +318,24 @@ importers:
         version: 8.30.1(eslint@9.24.0(jiti@2.4.2))(typescript@5.8.3)
 
   packages/universal/hitokoto-base:
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: ^3.0.9
+        version: 3.1.1(vitest@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../ts-config
+      typescript:
+        specifier: ^5.7.3
+        version: 5.8.3
+      vitest:
+        specifier: ^3.0.9
+        version: 3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
+
+  packages/universal/i18n-base:
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^3.0.9
@@ -473,6 +451,46 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ^5.1.0
         version: 5.2.0(eslint@9.24.0(jiti@2.4.2))
+      typescript:
+        specifier: ^5.7.3
+        version: 5.8.3
+      vitest:
+        specifier: ^3.0.9
+        version: 3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
+
+  packages/web/i18n:
+    dependencies:
+      '@website/helpers':
+        specifier: workspace:^
+        version: link:../../helpers
+      '@website/i18n-base':
+        specifier: workspace:^
+        version: link:../../universal/i18n-base
+      react:
+        specifier: '>=16.8.0'
+        version: 19.1.0
+    devDependencies:
+      '@testing-library/dom':
+        specifier: ^10.4.0
+        version: 10.4.0
+      '@testing-library/react':
+        specifier: ^16.2.0
+        version: 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@types/react':
+        specifier: ^19.0.10
+        version: 19.1.2
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.3.4(vite@6.2.6(@types/node@22.14.1)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1))
+      '@vitest/coverage-v8':
+        specifier: ^3.0.9
+        version: 3.1.1(vitest@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../../universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../universal/ts-config
       typescript:
         specifier: ^5.7.3
         version: 5.8.3

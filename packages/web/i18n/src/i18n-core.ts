@@ -1,8 +1,9 @@
 import assert from 'node:assert';
 
+import {STRING_KEY} from '@website/i18n-base';
+
 import {format} from './helpers/string-helpers.js';
 import {LanguageCode} from './language-code.js';
-import {STRING_KEY} from './string-key.js';
 import {Strings} from './strings/Strings.js';
 
 export enum I18nEventType {
