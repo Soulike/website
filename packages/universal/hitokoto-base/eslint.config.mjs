@@ -1,3 +1,3 @@
 import eslintConfig from '@website/eslint-config';
 
-export default [...eslintConfig.recommendedReactTs];
+export default [...eslintConfig.recommendedTypeScript];

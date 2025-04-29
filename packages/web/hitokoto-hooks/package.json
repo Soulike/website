@@ -1,5 +1,5 @@
 {
-  "name": "@website/hitokoto",
+  "name": "@website/hitokoto-hooks",
   "private": "true",
   "type": "module",
   "main": "./dist/index.js",
@@ -17,5 +17,8 @@
   },
   "peerDependencies": {
     "react": ">=16.8.0"
+  },
+  "dependencies": {
+    "@website/hitokoto-base": "workspace:^"
   }
 }

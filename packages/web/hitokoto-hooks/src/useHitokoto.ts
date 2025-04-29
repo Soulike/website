@@ -1,7 +1,5 @@
+import {hitokoto, SentenceCategory} from '@website/hitokoto-base';
 import {useEffect, useState} from 'react';
-
-import {hitokoto} from './hitokoto.js';
-import {SentenceCategory} from './v1/types.js';
 
 export function useHitokoto(
   categories: SentenceCategory[],

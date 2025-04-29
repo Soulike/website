@@ -126,9 +126,12 @@ importers:
       '@website/classes':
         specifier: workspace:^
         version: link:../../packages/universal/classes
-      '@website/hitokoto':
+      '@website/hitokoto-base':
         specifier: workspace:^
-        version: link:../../packages/hitokoto
+        version: link:../../packages/universal/hitokoto-base
+      '@website/hitokoto-hooks':
+        specifier: workspace:^
+        version: link:../../packages/web/hitokoto-hooks
       '@website/hooks':
         specifier: workspace:^
         version: link:../../packages/web/hooks
@@ -229,31 +232,6 @@ importers:
       typescript:
         specifier: ^5.7.3
         version: 5.8.3
-
-  packages/hitokoto:
-    dependencies:
-      react:
-        specifier: '>=16.8.0'
-        version: 19.1.0
-    devDependencies:
-      '@types/react':
-        specifier: ^19.0.12
-        version: 19.1.2
-      '@vitest/coverage-v8':
-        specifier: ^3.0.9
-        version: 3.1.1(vitest@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
-      '@website/eslint-config':
-        specifier: workspace:^
-        version: link:../universal/eslint-config
-      '@website/ts-config':
-        specifier: workspace:^
-        version: link:../universal/ts-config
-      typescript:
-        specifier: ^5.7.3
-        version: 5.8.3
-      vitest:
-        specifier: ^3.0.9
-        version: 3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
 
   packages/html-code-highlighter:
     dependencies:
@@ -436,6 +414,34 @@ importers:
       '@website/ts-config':
         specifier: workspace:^
         version: link:../universal/ts-config
+
+  packages/web/hitokoto-hooks:
+    dependencies:
+      '@website/hitokoto-base':
+        specifier: workspace:^
+        version: link:../../universal/hitokoto-base
+      react:
+        specifier: '>=16.8.0'
+        version: 19.1.0
+    devDependencies:
+      '@types/react':
+        specifier: ^19.0.12
+        version: 19.1.2
+      '@vitest/coverage-v8':
+        specifier: ^3.0.9
+        version: 3.1.1(vitest@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../../universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../universal/ts-config
+      typescript:
+        specifier: ^5.7.3
+        version: 5.8.3
+      vitest:
+        specifier: ^3.0.9
+        version: 3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
 
   packages/web/hooks:
     dependencies:
