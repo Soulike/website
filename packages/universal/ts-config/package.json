@@ -1,0 +1,12 @@
+{
+  "name": "@website/ts-config",
+  "description": "TypeScript configuration for website",
+  "private": "true",
+  "type": "module",
+  "exports": {
+    "./bundler": "./src/tsconfig.bundler.json"
+  },
+  "scripts": {
+    "build": "echo \"ts-config is not required to build.\""
+  }
+}

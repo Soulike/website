@@ -13,12 +13,13 @@
   },
   "dependencies": {
     "@website/classes": "workspace:^",
+    "@website/eslint-config": "workspace:^",
     "@website/hooks": "workspace:^",
-    "@website/request": "workspace:^",
-    "@website/eslint-config": "workspace:^"
+    "@website/request": "workspace:^"
   },
   "devDependencies": {
     "@types/react": "^19.0.10",
+    "@website/ts-config": "workspace:^",
     "tsc-alias": "^1.8.13",
     "typescript": "^5.7.3"
   },

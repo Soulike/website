@@ -217,6 +217,9 @@ importers:
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../universal/ts-config
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.14.1)(babel-plugin-macros@3.1.0)
@@ -242,6 +245,9 @@ importers:
       '@website/eslint-config':
         specifier: workspace:^
         version: link:../universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../universal/ts-config
       typescript:
         specifier: ^5.7.3
         version: 5.8.3
@@ -258,6 +264,9 @@ importers:
         specifier: ^11.11.1
         version: 11.11.1
     devDependencies:
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../universal/ts-config
       esbuild:
         specifier: ^0.25.0
         version: 0.25.2
@@ -289,6 +298,9 @@ importers:
       '@website/eslint-config':
         specifier: workspace:^
         version: link:../universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../universal/ts-config
       typescript:
         specifier: ^5.7.3
         version: 5.8.3
@@ -314,6 +326,9 @@ importers:
       '@website/eslint-config':
         specifier: workspace:^
         version: link:../universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../universal/ts-config
       esbuild:
         specifier: ^0.25.0
         version: 0.25.2
@@ -327,12 +342,18 @@ importers:
       '@types/showdown':
         specifier: ^2.0.6
         version: 2.0.6
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../universal/ts-config
 
   packages/universal/classes:
     devDependencies:
       '@website/eslint-config':
         specifier: workspace:^
         version: link:../eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../ts-config
 
   packages/universal/eslint-config:
     devDependencies:
@@ -358,6 +379,24 @@ importers:
         specifier: ^8.24.1
         version: 8.30.1(eslint@9.24.0(jiti@2.4.2))(typescript@5.8.3)
 
+  packages/universal/hitokoto-base:
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: ^3.0.9
+        version: 3.1.1(vitest@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../ts-config
+      typescript:
+        specifier: ^5.7.3
+        version: 5.8.3
+      vitest:
+        specifier: ^3.0.9
+        version: 3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
+
   packages/universal/request:
     dependencies:
       '@website/classes':
@@ -370,12 +409,17 @@ importers:
       '@website/eslint-config':
         specifier: workspace:^
         version: link:../eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../ts-config
       assert:
         specifier: ^2.1.0
         version: 2.1.0
       typescript:
         specifier: ^5.7.3
         version: 5.8.3
+
+  packages/universal/ts-config: {}
 
   packages/utils:
     dependencies:
@@ -389,6 +433,9 @@ importers:
       '@types/jsdom':
         specifier: ^21.1.7
         version: 21.1.7
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../universal/ts-config
 
   packages/web/hooks:
     dependencies:
@@ -411,6 +458,9 @@ importers:
       '@website/eslint-config':
         specifier: workspace:^
         version: link:../../universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../universal/ts-config
       antd:
         specifier: ^5.24.1
         version: 5.24.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -451,6 +501,9 @@ importers:
       '@types/react':
         specifier: ^19.0.10
         version: 19.1.2
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../universal/ts-config
       tsc-alias:
         specifier: ^1.8.13
         version: 1.8.13
@@ -482,6 +535,9 @@ importers:
       '@website/eslint-config':
         specifier: workspace:^
         version: link:../../universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../universal/ts-config
       esbuild:
         specifier: ^0.25.0
         version: 0.25.2
@@ -513,6 +569,9 @@ importers:
       '@website/eslint-config':
         specifier: workspace:^
         version: link:../../universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../universal/ts-config
       esbuild:
         specifier: ^0.25.0
         version: 0.25.2
