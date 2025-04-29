@@ -43,22 +43,22 @@ importers:
         version: 1.0.3(antd@5.24.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@website/classes':
         specifier: workspace:^
-        version: link:../../packages/classes
+        version: link:../../packages/universal/classes
       '@website/hooks':
         specifier: workspace:^
-        version: link:../../packages/hooks
+        version: link:../../packages/web/hooks
       '@website/i18n':
         specifier: workspace:^
         version: link:../../packages/i18n
       '@website/model':
         specifier: workspace:^
-        version: link:../../packages/model
+        version: link:../../packages/web/model
       '@website/react-components':
         specifier: workspace:^
-        version: link:../../packages/react-components
+        version: link:../../packages/web/react-components
       '@website/request':
         specifier: workspace:^
-        version: link:../../packages/request
+        version: link:../../packages/universal/request
       antd:
         specifier: ^5.24.1
         version: 5.24.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -83,7 +83,7 @@ importers:
         version: 3.8.1(vite@6.2.6(@types/node@22.14.1)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1))
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../../packages/eslint-config
+        version: link:../../packages/universal/eslint-config
       browserslist-to-esbuild:
         specifier: ^2.1.1
         version: 2.1.1(browserslist@4.24.4)
@@ -125,25 +125,25 @@ importers:
         version: 6.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@website/classes':
         specifier: workspace:^
-        version: link:../../packages/classes
+        version: link:../../packages/universal/classes
       '@website/hitokoto':
         specifier: workspace:^
         version: link:../../packages/hitokoto
       '@website/hooks':
         specifier: workspace:^
-        version: link:../../packages/hooks
+        version: link:../../packages/web/hooks
       '@website/i18n':
         specifier: workspace:^
         version: link:../../packages/i18n
       '@website/model':
         specifier: workspace:^
-        version: link:../../packages/model
+        version: link:../../packages/web/model
       '@website/react-components':
         specifier: workspace:^
-        version: link:../../packages/react-components
+        version: link:../../packages/web/react-components
       '@website/request':
         specifier: workspace:^
-        version: link:../../packages/request
+        version: link:../../packages/universal/request
       '@website/utils':
         specifier: workspace:^
         version: link:../../packages/utils
@@ -174,7 +174,7 @@ importers:
         version: 3.8.1(vite@6.2.6(@types/node@22.14.1)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1))
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../../packages/eslint-config
+        version: link:../../packages/universal/eslint-config
       browserslist-to-esbuild:
         specifier: ^2.1.1
         version: 2.1.1(browserslist@4.24.4)
@@ -212,32 +212,6 @@ importers:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.8.3)(vite@6.2.6(@types/node@22.14.1)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1))
 
-  packages/classes: {}
-
-  packages/eslint-config:
-    devDependencies:
-      '@eslint/js':
-        specifier: ^9.21.0
-        version: 9.24.0
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^8.24.1
-        version: 8.30.1(@typescript-eslint/parser@8.30.1(eslint@9.24.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.24.0(jiti@2.4.2))(typescript@5.8.3)
-      eslint-config-prettier:
-        specifier: ^10.0.1
-        version: 10.1.2(eslint@9.24.0(jiti@2.4.2))
-      eslint-plugin-react:
-        specifier: ^7.37.4
-        version: 7.37.5(eslint@9.24.0(jiti@2.4.2))
-      eslint-plugin-react-hooks:
-        specifier: ^5.1.0
-        version: 5.2.0(eslint@9.24.0(jiti@2.4.2))
-      eslint-plugin-simple-import-sort:
-        specifier: ^12.1.1
-        version: 12.1.1(eslint@9.24.0(jiti@2.4.2))
-      typescript-eslint:
-        specifier: ^8.24.1
-        version: 8.30.1(eslint@9.24.0(jiti@2.4.2))(typescript@5.8.3)
-
   packages/helpers:
     devDependencies:
       '@types/jest':
@@ -267,41 +241,7 @@ importers:
         version: 3.1.1(vitest@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../eslint-config
-      typescript:
-        specifier: ^5.7.3
-        version: 5.8.3
-      vitest:
-        specifier: ^3.0.9
-        version: 3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
-
-  packages/hooks:
-    dependencies:
-      react:
-        specifier: '>=18.0.0'
-        version: 19.1.0
-    devDependencies:
-      '@testing-library/dom':
-        specifier: ^10.4.0
-        version: 10.4.0
-      '@testing-library/react':
-        specifier: ^16.2.0
-        version: 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@types/react':
-        specifier: ^19.0.10
-        version: 19.1.2
-      '@vitest/coverage-v8':
-        specifier: ^3.0.9
-        version: 3.1.1(vitest@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
-      '@website/eslint-config':
-        specifier: workspace:^
-        version: link:../eslint-config
-      antd:
-        specifier: ^5.24.1
-        version: 5.24.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      eslint-plugin-react-hooks:
-        specifier: ^5.1.0
-        version: 5.2.0(eslint@9.24.0(jiti@2.4.2))
+        version: link:../universal/eslint-config
       typescript:
         specifier: ^5.7.3
         version: 5.8.3
@@ -348,7 +288,7 @@ importers:
         version: 3.1.1(vitest@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../eslint-config
+        version: link:../universal/eslint-config
       typescript:
         specifier: ^5.7.3
         version: 5.8.3
@@ -366,14 +306,14 @@ importers:
         version: link:../markdown-html-converter
       '@website/tex-renderer':
         specifier: workspace:^
-        version: link:../tex-renderer
+        version: link:../web/tex-renderer
     devDependencies:
       '@types/showdown':
         specifier: ^2.0.6
         version: 2.0.6
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../eslint-config
+        version: link:../universal/eslint-config
       esbuild:
         specifier: ^0.25.0
         version: 0.25.2
@@ -388,20 +328,116 @@ importers:
         specifier: ^2.0.6
         version: 2.0.6
 
-  packages/model:
+  packages/universal/classes:
+    devDependencies:
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+
+  packages/universal/eslint-config:
+    devDependencies:
+      '@eslint/js':
+        specifier: ^9.21.0
+        version: 9.24.0
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^8.24.1
+        version: 8.30.1(@typescript-eslint/parser@8.30.1(eslint@9.24.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.24.0(jiti@2.4.2))(typescript@5.8.3)
+      eslint-config-prettier:
+        specifier: ^10.0.1
+        version: 10.1.2(eslint@9.24.0(jiti@2.4.2))
+      eslint-plugin-react:
+        specifier: ^7.37.4
+        version: 7.37.5(eslint@9.24.0(jiti@2.4.2))
+      eslint-plugin-react-hooks:
+        specifier: ^5.1.0
+        version: 5.2.0(eslint@9.24.0(jiti@2.4.2))
+      eslint-plugin-simple-import-sort:
+        specifier: ^12.1.1
+        version: 12.1.1(eslint@9.24.0(jiti@2.4.2))
+      typescript-eslint:
+        specifier: ^8.24.1
+        version: 8.30.1(eslint@9.24.0(jiti@2.4.2))(typescript@5.8.3)
+
+  packages/universal/request:
     dependencies:
       '@website/classes':
         specifier: workspace:^
         version: link:../classes
+    devDependencies:
+      '@types/assert':
+        specifier: ^1.5.11
+        version: 1.5.11
       '@website/eslint-config':
         specifier: workspace:^
         version: link:../eslint-config
+      assert:
+        specifier: ^2.1.0
+        version: 2.1.0
+      typescript:
+        specifier: ^5.7.3
+        version: 5.8.3
+
+  packages/utils:
+    dependencies:
+      jsdom:
+        specifier: ^26.0.0
+        version: 26.1.0
+    devDependencies:
+      '@types/assert':
+        specifier: ^1.5.11
+        version: 1.5.11
+      '@types/jsdom':
+        specifier: ^21.1.7
+        version: 21.1.7
+
+  packages/web/hooks:
+    dependencies:
+      react:
+        specifier: '>=18.0.0'
+        version: 19.1.0
+    devDependencies:
+      '@testing-library/dom':
+        specifier: ^10.4.0
+        version: 10.4.0
+      '@testing-library/react':
+        specifier: ^16.2.0
+        version: 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@types/react':
+        specifier: ^19.0.10
+        version: 19.1.2
+      '@vitest/coverage-v8':
+        specifier: ^3.0.9
+        version: 3.1.1(vitest@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../../universal/eslint-config
+      antd:
+        specifier: ^5.24.1
+        version: 5.24.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      eslint-plugin-react-hooks:
+        specifier: ^5.1.0
+        version: 5.2.0(eslint@9.24.0(jiti@2.4.2))
+      typescript:
+        specifier: ^5.7.3
+        version: 5.8.3
+      vitest:
+        specifier: ^3.0.9
+        version: 3.1.1(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
+
+  packages/web/model:
+    dependencies:
+      '@website/classes':
+        specifier: workspace:^
+        version: link:../../universal/classes
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../../universal/eslint-config
       '@website/hooks':
         specifier: workspace:^
         version: link:../hooks
       '@website/request':
         specifier: workspace:^
-        version: link:../request
+        version: link:../../universal/request
       path-browserify:
         specifier: '>=1.0.0'
         version: 1.0.1
@@ -422,14 +458,14 @@ importers:
         specifier: ^5.7.3
         version: 5.8.3
 
-  packages/react-components:
+  packages/web/react-components:
     dependencies:
       '@website/hooks':
         specifier: workspace:^
         version: link:../hooks
       '@website/markdown-article-renderer':
         specifier: workspace:^
-        version: link:../markdown-article-renderer
+        version: link:../../markdown-article-renderer
       dompurify:
         specifier: ^3.2.4
         version: 3.2.5
@@ -445,7 +481,7 @@ importers:
         version: 19.1.2(@types/react@19.1.2)
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../eslint-config
+        version: link:../../universal/eslint-config
       esbuild:
         specifier: ^0.25.0
         version: 0.25.2
@@ -456,30 +492,14 @@ importers:
         specifier: ^19.0.0
         version: 19.1.0(react@19.1.0)
 
-  packages/request:
-    dependencies:
-      '@website/classes':
-        specifier: workspace:^
-        version: link:../classes
-    devDependencies:
-      '@types/assert':
-        specifier: ^1.5.11
-        version: 1.5.11
-      assert:
-        specifier: ^2.1.0
-        version: 2.1.0
-      typescript:
-        specifier: ^5.7.3
-        version: 5.8.3
-
-  packages/tex-renderer:
+  packages/web/tex-renderer:
     dependencies:
       '@types/katex':
         specifier: ^0.16.7
         version: 0.16.7
       '@website/utils':
         specifier: workspace:^
-        version: link:../utils
+        version: link:../../utils
       html-entities:
         specifier: ^2.5.2
         version: 2.6.0
@@ -490,22 +510,12 @@ importers:
       '@types/jsdom':
         specifier: ^21.1.7
         version: 21.1.7
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../../universal/eslint-config
       esbuild:
         specifier: ^0.25.0
         version: 0.25.2
-
-  packages/utils:
-    dependencies:
-      jsdom:
-        specifier: ^26.0.0
-        version: 26.1.0
-    devDependencies:
-      '@types/assert':
-        specifier: ^1.5.11
-        version: 1.5.11
-      '@types/jsdom':
-        specifier: ^21.1.7
-        version: 21.1.7
 
 packages:
   '@ampproject/remapping@2.3.0':
