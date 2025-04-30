@@ -1,0 +1,22 @@
+{
+  "name": "@website/tex-renderer",
+  "exports": {
+    ".": "./dist/TeXRenderer.js",
+    "./style.css": "./dist/style.css"
+  },
+  "dependencies": {
+    "@types/katex": "^0.16.7",
+    "@website/dom-helpers": "workspace:^",
+    "html-entities": "^2.5.2",
+    "katex": "^0.16.21"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc && node esbuild.config.mjs"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.7",
+    "@website/eslint-config": "workspace:^",
+    "@website/ts-config": "workspace:^",
+    "esbuild": "^0.25.0"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@website/markdown-article-renderer",
+  "exports": {
+    "./csr": "./dist/csr.js",
+    "./ssr": "./dist/ssr.js",
+    "./style.css": "./dist/style.css"
+  },
+  "dependencies": {
+    "@website/html-code-highlighter": "workspace:^",
+    "@website/markdown-html-converter": "workspace:^",
+    "@website/tex-renderer": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/showdown": "^2.0.6",
+    "@website/eslint-config": "workspace:^",
+    "@website/ts-config": "workspace:^",
+    "esbuild": "^0.25.0"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc && node esbuild.config.mjs"
+  }
+}

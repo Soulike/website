@@ -1,0 +1,7 @@
+{
+  "extends": "@website/ts-config/bundler",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist"
+  }
+}

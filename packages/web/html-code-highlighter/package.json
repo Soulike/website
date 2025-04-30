@@ -1,0 +1,20 @@
+{
+  "name": "@website/html-code-highlighter",
+  "exports": {
+    "./csr": "./dist/csr.js",
+    "./ssr": "./dist/ssr.js",
+    "./style.css": "./dist/style.css"
+  },
+  "dependencies": {
+    "@website/dom-helpers": "workspace:^",
+    "highlight.js": "^11.11.1"
+  },
+  "devDependencies": {
+    "@website/eslint-config": "workspace:^",
+    "@website/ts-config": "workspace:^",
+    "esbuild": "^0.25.0"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc && node esbuild.config.mjs"
+  }
+}

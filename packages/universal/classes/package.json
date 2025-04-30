@@ -1,0 +1,11 @@
+{
+  "name": "@website/classes",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  },
+  "devDependencies": {
+    "@website/eslint-config": "workspace:^",
+    "@website/ts-config": "workspace:^"
+  }
+}

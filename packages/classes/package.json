@@ -1,7 +1,0 @@
-{
-  "name": "@website/classes",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "rm -rf dist && tsc"
-  }
-}

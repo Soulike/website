@@ -1,0 +1,15 @@
+{
+  "name": "@website/markdown-html-converter",
+  "main": "dist/index.js",
+  "dependencies": {
+    "showdown": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/showdown": "^2.0.6",
+    "@website/ts-config": "workspace:^",
+    "@website/eslint-config": "workspace:^"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  }
+}

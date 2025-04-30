@@ -1,0 +1,23 @@
+{
+  "name": "@website/hitokoto-hooks",
+  "private": "true",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.12",
+    "@vitest/coverage-v8": "^3.0.9",
+    "@website/eslint-config": "workspace:^",
+    "@website/ts-config": "workspace:^",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.9"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "dependencies": {
+    "@website/hitokoto-base": "workspace:^"
+  }
+}
