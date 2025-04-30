@@ -7,7 +7,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@website/helpers": "workspace:^",
+    "@website/object-helpers": "workspace:^",
     "@website/i18n-base": "workspace:^"
   },
   "devDependencies": {

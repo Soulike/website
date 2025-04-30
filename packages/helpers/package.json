@@ -1,5 +1,5 @@
 {
-  "name": "@website/helpers",
+  "name": "@website/object-helpers",
   "private": "true",
   "type": "module",
   "exports": {

@@ -1,4 +1,4 @@
-import {deepFreeze} from '@website/helpers/object';
+import {deepFreeze} from '@website/object-helpers/object';
 
 export const LanguageCode = deepFreeze({
   ZH_CN: 'zh-cn',

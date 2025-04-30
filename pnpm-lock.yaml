@@ -463,12 +463,12 @@ importers:
 
   packages/web/i18n:
     dependencies:
-      '@website/helpers':
-        specifier: workspace:^
-        version: link:../../helpers
       '@website/i18n-base':
         specifier: workspace:^
         version: link:../../universal/i18n-base
+      '@website/object-helpers':
+        specifier: workspace:^
+        version: link:../../helpers
       react:
         specifier: '>=16.8.0'
         version: 19.1.0
