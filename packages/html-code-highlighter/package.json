@@ -6,10 +6,11 @@
     "./style.css": "./dist/style.css"
   },
   "dependencies": {
-    "@website/utils": "workspace:^",
+    "@website/dom-helpers": "workspace:^",
     "highlight.js": "^11.11.1"
   },
   "devDependencies": {
+    "@website/eslint-config": "workspace:^",
     "@website/ts-config": "workspace:^",
     "esbuild": "^0.25.0"
   },

@@ -1,4 +1,7 @@
-import {convertDOMToString, convertHTMLStringToDOM} from '@website/utils/csr';
+import {
+  convertDOMToString,
+  convertHTMLStringToDOM,
+} from '@website/dom-helpers/csr';
 
 import {hljs} from './hljs.js';
 

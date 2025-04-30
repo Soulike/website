@@ -144,9 +144,6 @@ importers:
       '@website/request':
         specifier: workspace:^
         version: link:../../packages/universal/request
-      '@website/utils':
-        specifier: workspace:^
-        version: link:../../packages/utils
       antd:
         specifier: ^5.24.7
         version: 5.24.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -214,13 +211,16 @@ importers:
 
   packages/html-code-highlighter:
     dependencies:
-      '@website/utils':
+      '@website/dom-helpers':
         specifier: workspace:^
-        version: link:../utils
+        version: link:../universal/dom-helpers
       highlight.js:
         specifier: ^11.11.1
         version: 11.11.1
     devDependencies:
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../universal/eslint-config
       '@website/ts-config':
         specifier: workspace:^
         version: link:../universal/ts-config
@@ -255,6 +255,25 @@ importers:
 
   packages/universal/classes:
     devDependencies:
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../ts-config
+
+  packages/universal/dom-helpers:
+    dependencies:
+      jsdom:
+        specifier: ^26.0.0
+        version: 26.1.0
+    devDependencies:
+      '@types/assert':
+        specifier: ^1.5.11
+        version: 1.5.11
+      '@types/jsdom':
+        specifier: ^21.1.7
+        version: 21.1.7
       '@website/eslint-config':
         specifier: workspace:^
         version: link:../eslint-config
@@ -379,22 +398,6 @@ importers:
         version: 5.8.3
 
   packages/universal/ts-config: {}
-
-  packages/utils:
-    dependencies:
-      jsdom:
-        specifier: ^26.0.0
-        version: 26.1.0
-    devDependencies:
-      '@types/assert':
-        specifier: ^1.5.11
-        version: 1.5.11
-      '@types/jsdom':
-        specifier: ^21.1.7
-        version: 21.1.7
-      '@website/ts-config':
-        specifier: workspace:^
-        version: link:../universal/ts-config
 
   packages/web/hitokoto-hooks:
     dependencies:
@@ -580,9 +583,9 @@ importers:
       '@types/katex':
         specifier: ^0.16.7
         version: 0.16.7
-      '@website/utils':
+      '@website/dom-helpers':
         specifier: workspace:^
-        version: link:../../utils
+        version: link:../../universal/dom-helpers
       html-entities:
         specifier: ^2.5.2
         version: 2.6.0
