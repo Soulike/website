@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "test": "jest --passWithNoTests"
+    "test": "vitest"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^3.0.9",
