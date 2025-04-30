@@ -39,10 +39,10 @@ jobs:
     needs: [test]
     strategy:
       matrix:
-        docker-build-targets: [blog, admin]
+        docker-build-target: [blog, admin]
     uses: ./.github/workflows/docker-image-build-and-push.yml
     secrets: inherit
     with:
       docker-file-path: ./Dockerfile
-      docker-build-target: ${{ matrix.docker-build-targets }}
+      docker-build-target: ${{ matrix.docker-build-target }}
       push-to-registry: false
