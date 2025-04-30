@@ -1,13 +1,22 @@
-name: CI
+name: Apps CI
 
 on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - 'pnpm-lock.yaml'
+      - 'Dockerfile'
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  ci:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,7 +33,16 @@ jobs:
           cache: 'pnpm'
       - name: Install Dependencies
         run: pnpm install
-      - name: Build
-        run: pnpm build:all
       - name: Test
         run: pnpm test
+  build:
+    needs: [test]
+    strategy:
+      matrix:
+        docker-build-targets: [blog, admin]
+    uses: docker-image-build-and-push.yml
+    secrets: inherit
+    with:
+      docker-file-path: ./Dockerfile
+      docker-build-target: ${{ matrix.docker-build-targets }}
+      push-to-registry: false

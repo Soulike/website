@@ -1,0 +1,23 @@
+name: Nginx Docker Image Build and Push
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'nginx/configurations/**'
+      - 'nginx/Dockerfile'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: docker-image-build-and-push.yml
+    secrets: inherit
+    with:
+      docker-file-path: ./nginx/Dockerfile
+      docker-build-target: website-nginx
+      push-to-registry: true
