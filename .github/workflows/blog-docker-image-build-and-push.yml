@@ -1,4 +1,4 @@
-name: Build and Push Blog Docker Image
+name: Blog Docker Image Build and Push
 
 on:
   push:
@@ -17,8 +17,9 @@ concurrency:
 
 jobs:
   build:
-    uses: ./.github/workflows/docker-build.yml
+    uses: ./.github/workflows/docker-image-build-and-push.yml
     secrets: inherit
     with:
       docker-file-path: ./Dockerfile
       docker-build-target: blog
+      push-to-registry: true

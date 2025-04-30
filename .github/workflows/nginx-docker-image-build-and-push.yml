@@ -1,4 +1,4 @@
-name: Build and Push NGINX Docker Image
+name: Nginx Docker Image Build and Push
 
 on:
   push:
@@ -15,8 +15,9 @@ concurrency:
 
 jobs:
   build:
-    uses: ./.github/workflows/docker-build.yml
+    uses: ./.github/workflows/docker-image-build-and-push.yml
     secrets: inherit
     with:
       docker-file-path: ./nginx/Dockerfile
       docker-build-target: website-nginx
+      push-to-registry: true

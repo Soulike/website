@@ -1,4 +1,4 @@
-name: Docker Build
+name: Docker Image Build & Push
 
 on:
   workflow_call:
@@ -9,6 +9,9 @@ on:
       docker-file-path:
         required: true
         type: string
+      push-to-registry:
+        required: true
+        type: boolean
 
 jobs:
   build:
@@ -32,7 +35,7 @@ jobs:
           file: ${{ inputs.docker-file-path }}
           target: ${{ inputs.docker-build-target }}
           platforms: linux/amd64
-          push: true
+          push: ${{ inputs.push-to-registry }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.docker-build-target }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
