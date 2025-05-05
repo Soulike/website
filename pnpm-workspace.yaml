@@ -8,7 +8,7 @@ overrides:
   '@types/node': '^22.15.3'
   'typescript': '^5.8.3'
   'esbuild': '^0.25.3'
-  'tsc-alias': '1.8.13' # bug in 1.8.15.
+  'tsc-alias': '^1.8.16'
   'vite': '^6.3.4'
   '@vitejs/plugin-react-swc': '^3.9.0'
   '@vitejs/plugin-react': '^4.4.1'
