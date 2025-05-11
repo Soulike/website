@@ -25,7 +25,7 @@ export function ArticlePreviewModal(props: ArticlePreviewModalProps) {
       closable={false}
       open={visible}
       onOk={onOkButtonClick}
-      destroyOnClose={true}
+      destroyOnHidden={true}
       cancelButtonProps={{style: {display: 'none'}}}
     >
       <div className={styles.ArticlePreviewModal}>

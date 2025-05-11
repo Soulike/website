@@ -21,7 +21,7 @@ export function ArticleListModal(props: Props) {
       width={'80vw'}
       onOk={onOk}
       onCancel={onCancel}
-      destroyOnClose={true}
+      destroyOnHidden={true}
     >
       <div className={styles.ArticleListModal}>
         <ArticleList
