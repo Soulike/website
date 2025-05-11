@@ -4,7 +4,8 @@
   "private": "true",
   "type": "module",
   "exports": {
-    "./bundler": "./src/tsconfig.bundler.json"
+    "./bundler": "./src/tsconfig.bundler.json",
+    "./node": "./src/tsconfig.node.json"
   },
   "scripts": {
     "build": "echo \"ts-config is not required to build.\""

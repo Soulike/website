@@ -1,0 +1,10 @@
+{
+  "extends": "@website/ts-config/node",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
