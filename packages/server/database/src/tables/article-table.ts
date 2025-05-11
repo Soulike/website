@@ -1,4 +1,5 @@
 import {Article} from '@website/classes';
+import {isObjectEmpty} from '@website/object-helpers';
 
 import {generateSqlParameters} from '@/helpers/sql-helpers.js';
 import {pool} from '@/pool/index.js';
@@ -72,6 +73,26 @@ export class ArticleTable {
     return rows.map((row) => Article.from(row));
   }
 
+  static async selectInPublicationTimeDescOrder(
+    article: Partial<Article>,
+  ): Promise<Article[]> {
+    if (isObjectEmpty(article)) {
+      return this.selectAllByPublicationTimeDescOrder();
+    }
+    const {parameterizedStatement, parameters} = generateSqlParameters(
+      article,
+      'AND',
+    );
+    const {rows} = await pool.query<Article>(
+      `SELECT *
+     FROM "articles"
+     WHERE ${parameterizedStatement}
+     ORDER BY "publicationTime" DESC, "id" DESC `,
+      parameters,
+    );
+    return rows.map((row) => Article.from(row));
+  }
+
   static async selectByPublicationTimeDescOrder(
     year: number,
     month?: number,
@@ -118,24 +139,10 @@ export class ArticleTable {
     return Number.parseInt(rows[0].c);
   }
 
-  static async selectInPublicationTimeDescOrder(
-    article: Partial<Article>,
-  ): Promise<Article[]> {
-    const {parameterizedStatement, parameters} = generateSqlParameters(
-      article,
-      'AND',
-    );
-    const {rows} = await pool.query<Article>(
-      `SELECT *
-     FROM "articles"
-     WHERE ${parameterizedStatement}
-     ORDER BY "publicationTime" DESC, "id" DESC `,
-      parameters,
-    );
-    return rows.map((row) => Article.from(row));
-  }
-
   static async count(article: Partial<Article>): Promise<number> {
+    if (isObjectEmpty(article)) {
+      return this.countAll();
+    }
     const {parameterizedStatement, parameters} = generateSqlParameters(
       article,
       'AND',
