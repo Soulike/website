@@ -18,22 +18,22 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 
 # Build blog
 FROM deps AS blog-builder
-RUN pnpm --filter "./apps/blog-vite" build
+RUN pnpm --filter "./apps/web/blog-vite" build
 
 # Setup blog static server
 FROM nginx:stable-alpine AS blog
-COPY --from=blog-builder /website/apps/blog-vite/dist /blog-dist
-COPY --from=blog-builder /website/apps/blog-vite/nginx.conf /etc/nginx/conf.d/blog.conf
+COPY --from=blog-builder /website/apps/web/blog-vite/dist /blog-dist
+COPY --from=blog-builder /website/apps/web/blog-vite/nginx.conf /etc/nginx/conf.d/blog.conf
 WORKDIR /
 EXPOSE 3000
 
 # Build admin
 FROM deps AS admin-builder
-RUN pnpm --filter "./apps/admin-vite" build
+RUN pnpm --filter "./apps/web/admin-vite" build
 
 # Setup admin static server
 FROM nginx:stable-alpine AS admin
-COPY --from=admin-builder /website/apps/admin-vite/dist /admin-dist
-COPY --from=admin-builder /website/apps/admin-vite/nginx.conf /etc/nginx/conf.d/admin.conf
+COPY --from=admin-builder /website/apps/web/admin-vite/dist /admin-dist
+COPY --from=admin-builder /website/apps/web/admin-vite/nginx.conf /etc/nginx/conf.d/admin.conf
 WORKDIR /
 EXPOSE 3000

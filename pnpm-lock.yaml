@@ -53,7 +53,7 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
 
-  apps/admin-vite:
+  apps/web/admin-vite:
     dependencies:
       '@ant-design/icons':
         specifier: ^5.6.1
@@ -63,22 +63,22 @@ importers:
         version: 1.0.3(antd@5.25.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@website/classes':
         specifier: workspace:^
-        version: link:../../packages/universal/classes
+        version: link:../../../packages/universal/classes
       '@website/hooks':
         specifier: workspace:^
-        version: link:../../packages/web/hooks
+        version: link:../../../packages/web/hooks
       '@website/i18n':
         specifier: workspace:^
-        version: link:../../packages/web/i18n
+        version: link:../../../packages/web/i18n
       '@website/model':
         specifier: workspace:^
-        version: link:../../packages/web/model
+        version: link:../../../packages/web/model
       '@website/react-components':
         specifier: workspace:^
-        version: link:../../packages/web/react-components
+        version: link:../../../packages/web/react-components
       '@website/request':
         specifier: workspace:^
-        version: link:../../packages/universal/request
+        version: link:../../../packages/universal/request
       antd:
         specifier: ^5.24.9
         version: 5.25.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -103,7 +103,7 @@ importers:
         version: 3.9.0(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1))
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../../packages/universal/eslint-config
+        version: link:../../../packages/universal/eslint-config
       browserslist-to-esbuild:
         specifier: ^2.1.1
         version: 2.1.1(browserslist@4.24.4)
@@ -138,32 +138,32 @@ importers:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1))
 
-  apps/blog-vite:
+  apps/web/blog-vite:
     dependencies:
       '@ant-design/icons':
         specifier: ^6.0.0
         version: 6.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@website/classes':
         specifier: workspace:^
-        version: link:../../packages/universal/classes
+        version: link:../../../packages/universal/classes
       '@website/hitokoto-hooks':
         specifier: workspace:^
-        version: link:../../packages/web/hitokoto-hooks
+        version: link:../../../packages/web/hitokoto-hooks
       '@website/hooks':
         specifier: workspace:^
-        version: link:../../packages/web/hooks
+        version: link:../../../packages/web/hooks
       '@website/i18n':
         specifier: workspace:^
-        version: link:../../packages/web/i18n
+        version: link:../../../packages/web/i18n
       '@website/model':
         specifier: workspace:^
-        version: link:../../packages/web/model
+        version: link:../../../packages/web/model
       '@website/react-components':
         specifier: workspace:^
-        version: link:../../packages/web/react-components
+        version: link:../../../packages/web/react-components
       '@website/request':
         specifier: workspace:^
-        version: link:../../packages/universal/request
+        version: link:../../../packages/universal/request
       antd:
         specifier: ^5.24.9
         version: 5.25.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -191,7 +191,7 @@ importers:
         version: 3.9.0(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1))
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../../packages/universal/eslint-config
+        version: link:../../../packages/universal/eslint-config
       browserslist-to-esbuild:
         specifier: ^2.1.1
         version: 2.1.1(browserslist@4.24.4)
@@ -6988,49 +6988,6 @@ packages:
       vite:
         optional: true
 
-  vite@6.3.4:
-    resolution:
-      {
-        integrity: sha512-BiReIiMS2fyFqbqNT/Qqt4CVITDU9M9vE+DKcVAsB+ZV0wvTKd+3hMbkpxz1b+NmEDMegpVbisKiAZOnvO92Sw==,
-      }
-    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^22.15.3
-      jiti: '>=1.21.0'
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      sass-embedded: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.16.0
-      tsx: ^4.8.1
-      yaml: ^2.4.2
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      jiti:
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      sass-embedded:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-      tsx:
-        optional: true
-      yaml:
-        optional: true
-
   vite@6.3.5:
     resolution:
       {
@@ -8414,13 +8371,13 @@ snapshots:
       chai: 5.2.0
       tinyrainbow: 2.0.0
 
-  '@vitest/mocker@3.1.3(vite@6.3.4(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1))':
+  '@vitest/mocker@3.1.3(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1))':
     dependencies:
       '@vitest/spy': 3.1.3
       estree-walker: 3.0.3
       magic-string: 0.30.17
     optionalDependencies:
-      vite: 6.3.4(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1)
+      vite: 6.3.5(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1)
 
   '@vitest/pretty-format@3.1.3':
     dependencies:
@@ -11500,7 +11457,7 @@ snapshots:
       debug: 4.4.0
       es-module-lexer: 1.7.0
       pathe: 2.0.3
-      vite: 6.3.4(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1)
+      vite: 6.3.5(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -11540,21 +11497,6 @@ snapshots:
       - supports-color
       - typescript
 
-  vite@6.3.4(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1):
-    dependencies:
-      esbuild: 0.25.4
-      fdir: 6.4.4(picomatch@4.0.2)
-      picomatch: 4.0.2
-      postcss: 8.5.3
-      rollup: 4.40.1
-      tinyglobby: 0.2.13
-    optionalDependencies:
-      '@types/node': 22.15.17
-      fsevents: 2.3.3
-      jiti: 2.4.2
-      sass: 1.86.3
-      yaml: 2.7.1
-
   vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1):
     dependencies:
       esbuild: 0.25.4
@@ -11573,7 +11515,7 @@ snapshots:
   vitest@3.1.3(@types/node@22.15.17)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1):
     dependencies:
       '@vitest/expect': 3.1.3
-      '@vitest/mocker': 3.1.3(vite@6.3.4(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1))
+      '@vitest/mocker': 3.1.3(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1))
       '@vitest/pretty-format': 3.1.3
       '@vitest/runner': 3.1.3
       '@vitest/snapshot': 3.1.3
@@ -11590,7 +11532,7 @@ snapshots:
       tinyglobby: 0.2.13
       tinypool: 1.0.2
       tinyrainbow: 2.0.0
-      vite: 6.3.4(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1)
+      vite: 6.3.5(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1)
       vite-node: 3.1.3(@types/node@22.15.17)(jiti@2.4.2)(sass@1.86.3)(yaml@2.7.1)
       why-is-node-running: 2.3.0
     optionalDependencies:

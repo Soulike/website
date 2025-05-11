@@ -16,7 +16,7 @@ export function ModifyModal(props: Props) {
   return (
     <Modal
       title={'Modify Category'}
-      destroyOnClose={true}
+      destroyOnHidden={true}
       open={open}
       onOk={onOk}
       onCancel={onCancel}
