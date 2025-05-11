@@ -1,4 +1,9 @@
-import {type Client, type PoolClient} from 'pg';
+import {
+  type Client,
+  type PoolClient,
+  type QueryResult,
+  type QueryResultRow,
+} from 'pg';
 
 import {pool} from '@/pool/index.js';
 
@@ -17,4 +22,11 @@ export async function transaction<ReturnType>(
   } finally {
     client.release();
   }
+}
+
+export async function query<R extends QueryResultRow>(
+  queryText: string,
+  values?: unknown[],
+): Promise<QueryResult<R>> {
+  return pool.query<R>(queryText, values);
 }

@@ -1,19 +1,19 @@
 import {User} from '@website/classes';
 
+import {query} from '@/helpers/query-helpers.js';
 import {generateSqlParameters} from '@/helpers/sql-helpers.js';
-import {pool} from '@/pool/index.js';
 
 export class UserTable {
   static async insert(user: User): Promise<void> {
     const insertStatement =
       'INSERT INTO "users"("username", "password") VALUES ($1,$2)';
     const {username, password} = user;
-    await pool.query<unknown[]>(insertStatement, [username, password]);
+    await query<unknown[]>(insertStatement, [username, password]);
   }
 
   static async deleteByUsername(username: User['username']): Promise<void> {
     const deleteStatement = 'DELETE FROM "users" WHERE "username"=$1';
-    await pool.query(deleteStatement, [username]);
+    await query(deleteStatement, [username]);
   }
 
   static async update(
@@ -23,7 +23,7 @@ export class UserTable {
       user,
       ',',
     );
-    await pool.query(
+    await query(
       `UPDATE "users"
      SET ${parameterizedStatement}
      WHERE "username" = $${(parameters.length + 1).toString()}`,
@@ -35,9 +35,7 @@ export class UserTable {
     username: User['username'],
   ): Promise<User | null> {
     const selectStatement = 'SELECT * FROM "users" WHERE "username"=$1';
-    const {rows, rowCount} = await pool.query<User>(selectStatement, [
-      username,
-    ]);
+    const {rows, rowCount} = await query<User>(selectStatement, [username]);
     if (rowCount === 0) {
       return null;
     } else {
@@ -50,7 +48,7 @@ export class UserTable {
       user,
       'AND',
     );
-    const {rows} = await pool.query<{c: string}>(
+    const {rows} = await query<{c: string}>(
       `SELECT count("username") AS "c"
      FROM "users"
      WHERE ${parameterizedStatement}`,
