@@ -2,7 +2,12 @@ import {Article} from '@website/classes';
 import {isObjectEmpty} from '@website/object-helpers';
 
 import {query} from '@/helpers/query-helpers.js';
-import {generateSqlParameters} from '@/helpers/sql-helpers.js';
+import {
+  generateOrderByClause,
+  generateSetClause,
+  generateWhereClause,
+} from '@/helpers/sql-helpers.js';
+import {OrderConfig} from '@/types.js';
 
 export class ArticleTable {
   static async insert(article: Omit<Article, 'id'>): Promise<void> {
@@ -34,18 +39,19 @@ export class ArticleTable {
     await query(deleteStatement, [id]);
   }
 
-  static async update(
-    article: Partial<Article> & Pick<Article, 'id'>,
+  static async updateById(
+    id: Article['id'],
+    article: Partial<Omit<Article, 'id'>>,
   ): Promise<void> {
-    const {parameterizedStatement, parameters} = generateSqlParameters(
-      article,
-      ',',
-    );
+    const {setClause, values} = generateSetClause(article);
+    if (values.length == 0) {
+      return;
+    }
     await query(
       `UPDATE "articles"
-       SET ${parameterizedStatement}
-       WHERE "id" = $${(parameters.length + 1).toString()}`,
-      [...parameters, article.id],
+       ${setClause}
+       WHERE "id" = $${(values.length + 1).toString()}`,
+      [...values, id],
     );
   }
 
@@ -59,77 +65,25 @@ export class ArticleTable {
     }
   }
 
-  static async countByTitle(title: Article['title']): Promise<number> {
-    const selectStatement =
-      'SELECT count("id") AS "c" FROM "articles" WHERE "title"=$1';
-    const {rows} = await query<{c: string}>(selectStatement, [title]);
-    return Number.parseInt(rows[0].c);
+  static async selectAll(
+    orderConfig: OrderConfig<Article> = {},
+  ): Promise<Article[]> {
+    return this.select({}, orderConfig);
   }
 
-  static async selectAllByPublicationTimeDescOrder(): Promise<Article[]> {
-    const {rows} = await query<Article>(`SELECT *
-                                         FROM "articles"
-                                         ORDER BY "publicationTime" DESC, "id" DESC `);
-    return rows.map((row) => Article.from(row));
-  }
-
-  static async selectInPublicationTimeDescOrder(
+  static async select(
     article: Partial<Article>,
+    orderConfig: OrderConfig<Article> = {},
   ): Promise<Article[]> {
     if (isObjectEmpty(article)) {
-      return this.selectAllByPublicationTimeDescOrder();
+      return this.selectAll(orderConfig);
     }
-    const {parameterizedStatement, parameters} = generateSqlParameters(
-      article,
-      'AND',
-    );
+    const {whereClause, values} = generateWhereClause(article);
     const {rows} = await query<Article>(
       `SELECT *
-       FROM "articles"
-       WHERE ${parameterizedStatement}
-       ORDER BY "publicationTime" DESC, "id" DESC `,
-      parameters,
+       FROM "articles" ${whereClause} ${generateOrderByClause(orderConfig)}`,
+      values,
     );
-    return rows.map((row) => Article.from(row));
-  }
-
-  static async selectByPublicationTimeDescOrder(
-    year: number,
-    month?: number,
-    day?: number,
-  ): Promise<Article[]> {
-    let queryResult = null;
-    if (typeof month === 'number') {
-      if (typeof day === 'number') {
-        queryResult = await query<Article>(
-          `SELECT *
-           FROM "articles" AS "a"
-           WHERE extract(YEAR FROM a."publicationTime") = $1
-             AND extract(MONTH FROM a."publicationTime") = $2
-             AND extract(DAY FROM a."publicationTime") = $3
-           ORDER BY a."publicationTime" DESC, a.id DESC`,
-          [year, month, day],
-        );
-      } else {
-        queryResult = await query<Article>(
-          `SELECT *
-           FROM "articles" AS "a"
-           WHERE extract(YEAR FROM a."publicationTime") = $1
-             AND extract(MONTH FROM a."publicationTime") = $2
-           ORDER BY a."publicationTime" DESC, a.id DESC`,
-          [year, month],
-        );
-      }
-    } else {
-      queryResult = await query<Article>(
-        `SELECT *
-         FROM "articles" AS "a"
-         WHERE extract(YEAR FROM a."publicationTime") = $1
-         ORDER BY a."publicationTime" DESC, a.id DESC`,
-        [year],
-      );
-    }
-    const {rows} = queryResult;
     return rows.map((row) => Article.from(row));
   }
 
@@ -143,15 +97,12 @@ export class ArticleTable {
     if (isObjectEmpty(article)) {
       return this.countAll();
     }
-    const {parameterizedStatement, parameters} = generateSqlParameters(
-      article,
-      'AND',
-    );
+    const {whereClause, values} = generateWhereClause(article);
     const {rows} = await query<{c: string}>(
       `SELECT count("id") AS "c"
        FROM "articles"
-       WHERE ${parameterizedStatement}`,
-      parameters,
+       ${whereClause}`,
+      values,
     );
     return Number.parseInt(rows[0].c);
   }

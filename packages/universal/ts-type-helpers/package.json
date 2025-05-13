@@ -1,0 +1,14 @@
+{
+  "name": "@universal/ts-type-helpers",
+  "private": "true",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  },
+  "devDependencies": {
+    "@website/eslint-config": "workspace:^",
+    "@website/ts-config": "workspace:^",
+    "typescript": "^5.8.3"
+  }
+}

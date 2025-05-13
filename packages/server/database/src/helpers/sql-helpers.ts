@@ -1,43 +1,110 @@
+import assert from 'node:assert';
+
+import {ValueType} from '@universal/ts-type-helpers';
 import {removeUndefinedFieldsShallow} from '@website/object-helpers';
 
-/**
- * Generates SQL parameters and a parameterized statement from an object.
- *
- * @param {Record<string, unknown>} object - The object containing field-value pairs for SQL parameters
- * @param {'AND' | ','} connector - The SQL connector to use between parameters ('AND' for WHERE clauses, ',' for INSERT/UPDATE statements)
- * @returns {{
- *   parameters: unknown[];
- *   parameterizedStatement: string;
- * }} Object containing the parameter values array and the parameterized SQL statement
- *
- * @example
- * // For WHERE clauses
- * const { parameters, parameterizedStatement } = generateSqlParameters({ id: 1, active: true }, 'AND');
- * // Result: parameters = [1, true], parameterizedStatement = '"id"=$1 AND "active"=$2'
- *
- * @example
- * // For INSERT/UPDATE statements
- * const { parameters, parameterizedStatement } = generateSqlParameters({ name: 'John', age: 30 }, ',');
- * // Result: parameters = ['John', 30], parameterizedStatement = '"name"=$1 , "age"=$2'
- */
-export function generateSqlParameters(
-  object: Record<string, unknown>,
-  connector: 'AND' | ',',
-): {
-  parameters: unknown[];
-  parameterizedStatement: string;
-} {
-  object = removeUndefinedFieldsShallow(object);
-  const parameters: unknown[] = [];
-  const statementParts: string[] = [];
+import {OrderConfig} from '@/types.js';
 
-  Object.keys(object).forEach((key, index) => {
-    statementParts.push(`"${key}"=$${(index + 1).toString()}`);
-    parameters.push(object[key]);
-  });
+/**
+ * Generates an SQL ORDER BY statement from an OrderConfig object.
+ *
+ * @param {OrderConfig<T>} orderConfig - Configuration object specifying field names and sort directions
+ * @returns {string} The SQL ORDER BY statement
+ *
+ * @example
+ * // Generate an ORDER BY statement for sorting by name ascending and age descending
+ * const orderStatement = generateOrderByClause({ name: 'ASC', age: 'DESC' });
+ * // Result: 'ORDER BY "name" ASC, "age" DESC'
+ */
+export function generateOrderByClause<T extends object>(
+  orderConfig: OrderConfig<T>,
+): string {
+  if (Object.keys(orderConfig).length === 0) {
+    return '';
+  }
+
+  const orderParts = Object.entries<ValueType<OrderConfig<T>>>(orderConfig).map(
+    ([column, direction]) => {
+      assert(direction);
+      return `"${column}" ${direction}`;
+    },
+  );
+
+  return `ORDER BY ${orderParts.join(', ')}`;
+}
+
+/**
+ * Generates a parameterized SQL WHERE clause from an object of field-value pairs.
+ *
+ * @param {Record<string, unknown>} whereConfig - Object where keys are field names and values are the values to match
+ * @param {'AND' | 'OR'} operator - The logical operator to use between conditions (default: 'AND')
+ * @returns {{ whereClause: string; values: unknown[] }} Object containing the WHERE clause text and values array
+ *
+ * @example
+ * // Generate a WHERE clause with AND operator
+ * const { whereClause, values } = generateWhereClause({ name: 'John', active: true });
+ * // Result: whereClause = 'WHERE "name" = $1 AND "active" = $2', values = ['John', true]
+ *
+ * @example
+ * // Generate a WHERE clause with OR operator
+ * const { whereClause, values } = generateWhereClause({ name: 'John', email: 'john@example.com' }, 'OR');
+ * // Result: whereClause = 'WHERE "name" = $1 OR "email" = $2', values = ['John', 'john@example.com']
+ */
+export function generateWhereClause(
+  whereConfig: Record<string, unknown>,
+  operator: 'AND' | 'OR' = 'AND',
+): {whereClause: string; values: unknown[]} {
+  const filteredConfig = removeUndefinedFieldsShallow(whereConfig);
+
+  if (Object.keys(filteredConfig).length === 0) {
+    return {whereClause: '', values: []};
+  }
+
+  const values: unknown[] = [];
+  const conditions = Object.entries(filteredConfig).map(
+    ([field, value], index) => {
+      values.push(value);
+      return `"${field}" = $${(index + 1).toString()}`;
+    },
+  );
 
   return {
-    parameters,
-    parameterizedStatement: statementParts.join(` ${connector} `),
+    whereClause: `WHERE ${conditions.join(` ${operator} `)}`,
+    values,
+  };
+}
+
+/**
+ * Generates a parameterized SQL SET clause from an object of field-value pairs.
+ *
+ * @param {Record<string, unknown>} setConfig - Object where keys are field names and values are the new values to set
+ * @returns {{ setClause: string; values: unknown[] }} Object containing the SET clause text and values array
+ *
+ * @example
+ * // Generate a SET clause
+ * const { setClause, values } = generateSetClause({ name: 'John', active: true });
+ * // Result: setClause = 'SET "name" = $1, "active" = $2', values = ['John', true]
+ */
+export function generateSetClause(setConfig: Record<string, unknown>): {
+  setClause: string;
+  values: unknown[];
+} {
+  const filteredConfig = removeUndefinedFieldsShallow(setConfig);
+
+  if (Object.keys(filteredConfig).length === 0) {
+    return {setClause: '', values: []};
+  }
+
+  const values: unknown[] = [];
+  const setStatements = Object.entries(filteredConfig).map(
+    ([field, value], index) => {
+      values.push(value);
+      return `"${field}" = $${(index + 1).toString()}`;
+    },
+  );
+
+  return {
+    setClause: `SET ${setStatements.join(', ')}`,
+    values,
   };
 }

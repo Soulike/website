@@ -2,7 +2,12 @@ import {Category} from '@website/classes';
 import {isObjectEmpty} from '@website/object-helpers';
 
 import {query} from '@/helpers/query-helpers.js';
-import {generateSqlParameters} from '@/helpers/sql-helpers.js';
+import {
+  generateOrderByClause,
+  generateSetClause,
+  generateWhereClause,
+} from '@/helpers/sql-helpers.js';
+import {OrderConfig} from '@/types.js';
 
 export class CategoryTable {
   static async insert(category: Omit<Category, 'id'>): Promise<void> {
@@ -16,18 +21,19 @@ export class CategoryTable {
     await query(deleteStatement, [id]);
   }
 
-  static async update(
-    category: Partial<Category> & Pick<Category, 'id'>,
+  static async updateById(
+    id: Category['id'],
+    category: Partial<Omit<Category, 'id'>>,
   ): Promise<void> {
-    const {parameterizedStatement, parameters} = generateSqlParameters(
-      category,
-      ',',
-    );
+    const {setClause, values} = generateSetClause(category);
+    if (values.length == 0) {
+      return;
+    }
     await query(
       `UPDATE "categories"
-       SET ${parameterizedStatement}
-       WHERE "id" = $${(parameters.length + 1).toString()}`,
-      [...parameters, category.id],
+       ${setClause}
+       WHERE "id" = $${(values.length + 1).toString()}`,
+      [...values, id],
     );
   }
 
@@ -42,49 +48,39 @@ export class CategoryTable {
   }
 
   static async countAll(): Promise<number> {
-    const {rows} = await query<{c: string}>(
-      `SELECT count("id") AS "c"
-       FROM "categories"`,
-    );
-    return Number.parseInt(rows[0].c);
+    return this.count({});
   }
 
   static async count(category: Partial<Category>): Promise<number> {
-    if (isObjectEmpty(category)) {
-      return this.countAll();
-    }
-    const {parameterizedStatement, parameters} = generateSqlParameters(
-      category,
-      'AND',
-    );
+    const {whereClause, values} = generateWhereClause(category);
     const {rows} = await query<{c: string}>(
       `SELECT count("id") AS "c"
        FROM "categories"
-       WHERE ${parameterizedStatement}`,
-      parameters,
+       ${whereClause}`,
+      values,
     );
     return Number.parseInt(rows[0].c);
   }
 
-  static async selectAll(): Promise<Category[]> {
-    const {rows} = await query<Category>(`SELECT *
-                                               FROM "categories"`);
-    return rows.map((row) => Category.from(row));
+  static async selectAll(
+    orderConfig: OrderConfig<Category> = {},
+  ): Promise<Category[]> {
+    return this.select({}, orderConfig);
   }
 
-  static async select(category: Partial<Category>): Promise<Category[]> {
+  static async select(
+    category: Partial<Category>,
+    orderConfig: OrderConfig<Category> = {},
+  ): Promise<Category[]> {
     if (isObjectEmpty(category)) {
-      return this.selectAll();
+      return this.selectAll(orderConfig);
     }
-    const {parameterizedStatement, parameters} = generateSqlParameters(
-      category,
-      'AND',
-    );
+    const {whereClause, values} = generateWhereClause(category);
     const {rows} = await query<Category>(
       `SELECT *
        FROM "categories"
-       WHERE ${parameterizedStatement}`,
-      parameters,
+       ${whereClause} ${generateOrderByClause(orderConfig)}`,
+      values,
     );
     return rows.map((row) => Category.from(row));
   }
