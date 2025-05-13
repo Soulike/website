@@ -108,3 +108,41 @@ export function generateSetClause(setConfig: Record<string, unknown>): {
     values,
   };
 }
+
+/**
+ * Generates a parameterized SQL INSERT statement from a table name and an object of field-value pairs.
+ *
+ * @param {string} tableName - The name of the table to insert into
+ * @param {Record<string, unknown>} insertConfig - Object where keys are field names and values are the values to insert
+ * @returns {{ insertStatement: string; values: unknown[] }} Object containing the INSERT statement text and values array
+ *
+ * @example
+ * // Generate an INSERT statement
+ * const { insertStatement, values } = generateInsertStatement('users', { name: 'John', active: true });
+ * // Result: insertStatement = 'INSERT INTO "users" ("name", "active") VALUES ($1, $2)', values = ['John', true]
+ */
+export function generateInsertStatement(
+  tableName: string,
+  insertConfig: Record<string, unknown>,
+): {
+  insertStatement: string;
+  values: unknown[];
+} {
+  const filteredConfig = removeUndefinedFieldsShallow(insertConfig);
+
+  if (Object.keys(filteredConfig).length === 0) {
+    return {insertStatement: '', values: []};
+  }
+
+  const values: unknown[] = [];
+  const columns = Object.keys(filteredConfig).map((field) => `"${field}"`);
+  const placeholders = Object.values(filteredConfig).map((value, index) => {
+    values.push(value);
+    return `$${(index + 1).toString()}`;
+  });
+
+  return {
+    insertStatement: `INSERT INTO "${tableName}" (${columns.join(', ')}) VALUES (${placeholders.join(', ')})`,
+    values,
+  };
+}

@@ -3,6 +3,7 @@ import {isObjectEmpty} from '@website/object-helpers';
 
 import {query} from '@/helpers/query-helpers.js';
 import {
+  generateInsertStatement,
   generateOrderByClause,
   generateSetClause,
   generateWhereClause,
@@ -11,10 +12,15 @@ import {OrderConfig} from '@/types.js';
 
 export class UserTable {
   static async insert(user: User): Promise<void> {
-    const insertStatement =
-      'INSERT INTO "users"("username", "password") VALUES ($1,$2)';
-    const {username, password} = user;
-    await query<unknown[]>(insertStatement, [username, password]);
+    const filteredUser = Object.assign<Record<string, unknown>, User>(
+      {},
+      User.from(user),
+    );
+    const {insertStatement, values} = generateInsertStatement(
+      'users',
+      filteredUser,
+    );
+    await query<unknown[]>(insertStatement, values);
   }
 
   static async deleteByUsername(username: User['username']): Promise<void> {
@@ -81,8 +87,7 @@ export class UserTable {
     const {whereClause, values} = generateWhereClause(user);
     const {rows} = await query<{c: string}>(
       `SELECT count("username") AS "c"
-       FROM "users"
-       ${whereClause}`,
+       FROM "users" ${whereClause}`,
       values,
     );
     return Number.parseInt(rows[0].c);

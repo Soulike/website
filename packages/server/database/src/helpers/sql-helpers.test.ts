@@ -3,6 +3,7 @@ import {describe, expect, it} from 'vitest';
 import {OrderConfig} from '@/types.js';
 
 import {
+  generateInsertStatement,
   generateOrderByClause,
   generateSetClause,
   generateWhereClause,
@@ -176,5 +177,74 @@ describe('generateSetClause', () => {
       'SET "id" = $1, "name" = $2, "active" = $3, "score" = $4, "updatedAt" = $5, "tags" = $6',
     );
     expect(values).toEqual([123, 'John', true, 42.5, now, ['tag1', 'tag2']]);
+  });
+});
+
+describe('generateInsertStatement', () => {
+  // Basic functionality tests
+  it('should generate a simple INSERT statement with one field', () => {
+    const {insertStatement, values} = generateInsertStatement('users', {
+      name: 'John',
+    });
+    expect(insertStatement).toBe('INSERT INTO "users" ("name") VALUES ($1)');
+    expect(values).toEqual(['John']);
+  });
+
+  it('should handle multiple fields', () => {
+    const {insertStatement, values} = generateInsertStatement('users', {
+      firstName: 'John',
+      lastName: 'Doe',
+      active: true,
+    });
+    expect(insertStatement).toBe(
+      'INSERT INTO "users" ("firstName", "lastName", "active") VALUES ($1, $2, $3)',
+    );
+    expect(values).toEqual(['John', 'Doe', true]);
+  });
+
+  // Edge cases
+  it('should return empty strings for empty objects', () => {
+    const {insertStatement, values} = generateInsertStatement('users', {});
+    expect(insertStatement).toBe('');
+    expect(values).toEqual([]);
+  });
+
+  it('should filter out undefined values', () => {
+    const {insertStatement, values} = generateInsertStatement('users', {
+      name: 'John',
+      age: undefined,
+      active: true,
+    });
+    expect(insertStatement).toBe(
+      'INSERT INTO "users" ("name", "active") VALUES ($1, $2)',
+    );
+    expect(values).toEqual(['John', true]);
+  });
+
+  it('should handle different value types', () => {
+    const now = new Date();
+    const {insertStatement, values} = generateInsertStatement('users', {
+      id: 123,
+      name: 'John',
+      active: true,
+      score: 42.5,
+      createdAt: now,
+      tags: ['tag1', 'tag2'],
+    });
+    expect(insertStatement).toBe(
+      'INSERT INTO "users" ("id", "name", "active", "score", "createdAt", "tags") VALUES ($1, $2, $3, $4, $5, $6)',
+    );
+    expect(values).toEqual([123, 'John', true, 42.5, now, ['tag1', 'tag2']]);
+  });
+
+  it('should properly escape table and column names', () => {
+    const {insertStatement, values} = generateInsertStatement('user-table', {
+      'first-name': 'Jane',
+      'email.address': 'jane@example.com',
+    });
+    expect(insertStatement).toBe(
+      'INSERT INTO "user-table" ("first-name", "email.address") VALUES ($1, $2)',
+    );
+    expect(values).toEqual(['Jane', 'jane@example.com']);
   });
 });

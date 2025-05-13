@@ -3,6 +3,7 @@ import {isObjectEmpty} from '@website/object-helpers';
 
 import {query} from '@/helpers/query-helpers.js';
 import {
+  generateInsertStatement,
   generateOrderByClause,
   generateSetClause,
   generateWhereClause,
@@ -11,9 +12,13 @@ import {OrderConfig} from '@/types.js';
 
 export class CategoryTable {
   static async insert(category: Omit<Category, 'id'>): Promise<void> {
-    const insertStatement = 'INSERT INTO "categories"("name") VALUES ($1)';
-    const {name} = category;
-    await query<unknown[]>(insertStatement, [name]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {id, ...filteredCategory} = Category.from({id: 0, ...category});
+    const {insertStatement, values} = generateInsertStatement(
+      'categories',
+      filteredCategory,
+    );
+    await query<unknown[]>(insertStatement, values);
   }
 
   static async deleteById(id: Category['id']): Promise<void> {
