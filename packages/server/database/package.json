@@ -10,6 +10,7 @@
     "@vitest/coverage-v8": "^3.1.2",
     "@website/eslint-config": "workspace:^",
     "@website/ts-config": "workspace:^",
+    "@universal/ts-type-helpers": "workspace:^",
     "tsc-alias": "^1.8.13",
     "typescript": "^5.8.3",
     "vitest": "^3.1.2"

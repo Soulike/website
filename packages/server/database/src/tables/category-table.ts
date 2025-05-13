@@ -1,39 +1,50 @@
 import {Category} from '@website/classes';
 import {isObjectEmpty} from '@website/object-helpers';
 
-import {generateSqlParameters} from '@/helpers/sql-helpers.js';
-import {pool} from '@/pool/index.js';
+import {query} from '@/helpers/query-helpers.js';
+import {
+  generateInsertStatement,
+  generateOrderByClause,
+  generateSetClause,
+  generateWhereClause,
+} from '@/helpers/sql-helpers.js';
+import {OrderConfig} from '@/types.js';
 
 export class CategoryTable {
   static async insert(category: Omit<Category, 'id'>): Promise<void> {
-    const insertStatement = 'INSERT INTO "categories"("name") VALUES ($1)';
-    const {name} = category;
-    await pool.query<unknown[]>(insertStatement, [name]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {id, ...filteredCategory} = Category.from({id: 0, ...category});
+    const {insertStatement, values} = generateInsertStatement(
+      'categories',
+      filteredCategory,
+    );
+    await query<unknown[]>(insertStatement, values);
   }
 
   static async deleteById(id: Category['id']): Promise<void> {
     const deleteStatement = 'DELETE FROM "categories" WHERE "id"=$1';
-    await pool.query(deleteStatement, [id]);
+    await query(deleteStatement, [id]);
   }
 
-  static async update(
-    category: Partial<Category> & Pick<Category, 'id'>,
+  static async updateById(
+    id: Category['id'],
+    category: Partial<Omit<Category, 'id'>>,
   ): Promise<void> {
-    const {parameterizedStatement, parameters} = generateSqlParameters(
-      category,
-      ',',
-    );
-    await pool.query(
+    const {setClause, values} = generateSetClause(category);
+    if (values.length == 0) {
+      return;
+    }
+    await query(
       `UPDATE "categories"
-       SET ${parameterizedStatement}
-       WHERE "id" = $${(parameters.length + 1).toString()}`,
-      [...parameters, category.id],
+       ${setClause}
+       WHERE "id" = $${(values.length + 1).toString()}`,
+      [...values, id],
     );
   }
 
   static async selectById(id: Category['id']): Promise<Category | null> {
     const selectStatement = 'SELECT * FROM "categories" WHERE "id"=$1';
-    const {rows, rowCount} = await pool.query<Category>(selectStatement, [id]);
+    const {rows, rowCount} = await query<Category>(selectStatement, [id]);
     if (rowCount === 0) {
       return null;
     } else {
@@ -42,55 +53,45 @@ export class CategoryTable {
   }
 
   static async countAll(): Promise<number> {
-    const {rows} = await pool.query<{c: string}>(
-      `SELECT count("id") AS "c"
-       FROM "categories"`,
-    );
-    return Number.parseInt(rows[0].c);
+    return this.count({});
   }
 
   static async count(category: Partial<Category>): Promise<number> {
-    if (isObjectEmpty(category)) {
-      return this.countAll();
-    }
-    const {parameterizedStatement, parameters} = generateSqlParameters(
-      category,
-      'AND',
-    );
-    const {rows} = await pool.query<{c: string}>(
+    const {whereClause, values} = generateWhereClause(category);
+    const {rows} = await query<{c: string}>(
       `SELECT count("id") AS "c"
        FROM "categories"
-       WHERE ${parameterizedStatement}`,
-      parameters,
+       ${whereClause}`,
+      values,
     );
     return Number.parseInt(rows[0].c);
   }
 
-  static async selectAll(): Promise<Category[]> {
-    const {rows} = await pool.query<Category>(`SELECT *
-                                               FROM "categories"`);
-    return rows.map((row) => Category.from(row));
+  static async selectAll(
+    orderConfig: OrderConfig<Category> = {},
+  ): Promise<Category[]> {
+    return this.select({}, orderConfig);
   }
 
-  static async select(category: Partial<Category>): Promise<Category[]> {
+  static async select(
+    category: Partial<Category>,
+    orderConfig: OrderConfig<Category> = {},
+  ): Promise<Category[]> {
     if (isObjectEmpty(category)) {
-      return this.selectAll();
+      return this.selectAll(orderConfig);
     }
-    const {parameterizedStatement, parameters} = generateSqlParameters(
-      category,
-      'AND',
-    );
-    const {rows} = await pool.query<Category>(
+    const {whereClause, values} = generateWhereClause(category);
+    const {rows} = await query<Category>(
       `SELECT *
        FROM "categories"
-       WHERE ${parameterizedStatement}`,
-      parameters,
+       ${whereClause} ${generateOrderByClause(orderConfig)}`,
+      values,
     );
     return rows.map((row) => Category.from(row));
   }
 
   static async countArticlesById(id: Category['id']): Promise<number> {
-    const {rows} = await pool.query<{count: string}>(
+    const {rows} = await query<{count: string}>(
       `SELECT count("a"."id") AS "count"
        FROM "categories" "c"
               JOIN "articles" "a" ON "c"."id" = "a"."category"
