@@ -4,11 +4,7 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - 'apps/**'
-      - 'packages/**'
-      - 'pnpm-lock.yaml'
-      - 'Dockerfile'
+      - develop
   workflow_dispatch:
 
 concurrency:
