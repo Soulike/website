@@ -1,0 +1,7 @@
+/* The config is created for packages used by node applications. */
+{
+  "extends": "./tsconfig.node.json",
+  "compilerOptions": {
+    "declaration": true
+  }
+}
