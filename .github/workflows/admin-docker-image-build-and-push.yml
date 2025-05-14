@@ -5,8 +5,9 @@ on:
     branches:
       - 'main'
     paths:
-      - 'apps/admin-vite/**'
-      - 'packages/**'
+      - 'apps/web/admin-vite/**'
+      - 'packages/universal/**'
+      - 'packages/web/**'
       - 'pnpm-lock.yaml'
       - 'Dockerfile'
   workflow_dispatch:
