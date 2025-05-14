@@ -1,4 +1,4 @@
-/* The config is created for packages used by node applications. */
+/* The config is created for node applications. */
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
@@ -8,6 +8,6 @@
     "module": "nodenext",
     /* Specify how TypeScript looks up a file from a given module specifier. */
     "moduleResolution": "nodenext",
-    "declaration": true
+    "declaration": false
   }
 }

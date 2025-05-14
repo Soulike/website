@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     "./bundler": "./src/tsconfig.bundler.json",
-    "./node": "./src/tsconfig.node.json"
+    "./node": "./src/tsconfig.node.json",
+    "./package": "./src/tsconfig.package.json"
   },
   "scripts": {
     "build": "echo \"ts-config is not required to build.\""
