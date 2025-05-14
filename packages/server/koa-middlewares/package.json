@@ -3,8 +3,7 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "rm -rf dist && tsc && tsc-alias",
-    "test": "vitest"
+    "build": "rm -rf dist && tsc && tsc-alias"
   },
   "devDependencies": {
     "@types/koa": "^2.15.0",
