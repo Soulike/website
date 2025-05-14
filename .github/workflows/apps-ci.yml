@@ -37,7 +37,7 @@ jobs:
     needs: [test]
     strategy:
       matrix:
-        docker-build-target: [blog, admin]
+        docker-build-target: [blog, admin, auth-server]
     uses: ./.github/workflows/docker-image-build-and-push.yml
     secrets: inherit
     with:
