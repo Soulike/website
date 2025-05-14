@@ -37,3 +37,15 @@ COPY --from=admin-builder /website/apps/web/admin-vite/dist /admin-dist
 COPY --from=admin-builder /website/apps/web/admin-vite/nginx.conf /etc/nginx/conf.d/admin.conf
 WORKDIR /
 EXPOSE 3000
+
+# Build auth server
+FROM deps AS auth-server-builder
+RUN pnpm --filter "./apps/server/auth" build && \
+    pnpm --filter "./apps/server/auth" deploy --prod /auth
+
+FROM node:lts-alpine AS auth-server
+COPY --from=auth-server-builder /auth/node_modules /auth/node_modules
+COPY --from=auth-server-builder /auth/dist /auth/dist
+WORKDIR /auth/dist
+EXPOSE 4001
+CMD [ "node", "index.js" ]

@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/react": "^19.1.2",
     "@website/ts-config": "workspace:^",
-    "tsc-alias": "1.8.13",
+    "tsc-alias": "^1.8.16",
     "typescript": "^5.8.3"
   },
   "peerDependencies": {

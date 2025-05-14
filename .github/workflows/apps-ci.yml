@@ -37,10 +37,15 @@ jobs:
     needs: [test]
     strategy:
       matrix:
-        docker-build-target: [blog, admin]
+        docker-build-target: [blog, admin, auth-server]
     uses: ./.github/workflows/docker-image-build-and-push.yml
     secrets: inherit
     with:
       docker-file-path: ./Dockerfile
       docker-build-target: ${{ matrix.docker-build-target }}
       push-to-registry: false
+  ci-success:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - run: echo Done!
