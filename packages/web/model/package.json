@@ -1,6 +1,7 @@
 {
   "name": "@website/model",
   "private": "true",
+  "type": "module",
   "exports": {
     ".": "./dist/models/index.js",
     "./admin": "./dist/models/admin/index.js",

@@ -1,5 +1,6 @@
 {
   "name": "@website/markdown-article-renderer",
+  "type": "module",
   "exports": {
     "./csr": "./dist/csr.js",
     "./ssr": "./dist/ssr.js",

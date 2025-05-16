@@ -1,7 +1,7 @@
 import {act, renderHook} from '@testing-library/react';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 
-import {useMediaQuery} from './useMediaQuery';
+import {useMediaQuery} from './useMediaQuery.js';
 
 describe('useMediaQuery', () => {
   // Setup mocks

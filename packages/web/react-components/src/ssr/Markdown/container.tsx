@@ -1,6 +1,6 @@
 import {MarkdownArticleRenderer} from '@website/markdown-article-renderer/ssr';
 
-import {MarkdownView} from '../../shared-views/MarkdownView';
+import {MarkdownView} from '../../shared-views/MarkdownView/index.js';
 
 interface IProps {
   children: string;

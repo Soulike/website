@@ -1,4 +1,4 @@
-import {optionModel} from '@models/blog';
+import {optionModel} from '@models/blog/index.js';
 import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
 import {useMemo} from 'react';
 
