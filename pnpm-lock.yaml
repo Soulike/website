@@ -482,6 +482,18 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
 
+  packages/universal/task-runner:
+    devDependencies:
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../ts-config
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+
   packages/universal/ts-config: {}
 
   packages/universal/ts-type-helpers:
