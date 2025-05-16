@@ -1,7 +1,7 @@
 import DOMPurify from 'dompurify';
 import {useCallback, useEffect, useState} from 'react';
 
-import {MarkdownView} from '../../shared-views/MarkdownView';
+import {MarkdownView} from '../../shared-views/MarkdownView/index.js';
 
 export interface MarkdownProps {
   children: string;

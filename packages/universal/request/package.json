@@ -1,6 +1,7 @@
 {
   "name": "@website/request",
   "main": "dist/index.js",
+  "type": "module",
   "dependencies": {
     "@website/classes": "workspace:^"
   },

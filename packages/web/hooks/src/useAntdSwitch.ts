@@ -1,7 +1,12 @@
 import type {SwitchProps} from 'antd';
 import {useCallback, useState} from 'react';
 
-export function useAntdSwitch(defaultChecked = false) {
+export function useAntdSwitch(defaultChecked = false): {
+  checked: boolean;
+  setChecked: (checked: boolean) => void;
+  onChange: Required<SwitchProps>['onChange'];
+  resetValue: () => void;
+} {
   const [checked, setChecked] = useState(defaultChecked);
 
   const onChange: Required<SwitchProps>['onChange'] = useCallback((checked) => {

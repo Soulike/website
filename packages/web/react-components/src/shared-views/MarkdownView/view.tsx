@@ -1,6 +1,6 @@
 import '@website/markdown-article-renderer/style.css';
 
-import {MarkdownArticle} from './components/MarkdownArticle';
+import {MarkdownArticle} from './components/MarkdownArticle/index.js';
 
 export interface IMarkdownViewProps {
   htmlContent: string;

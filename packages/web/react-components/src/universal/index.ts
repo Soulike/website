@@ -1,2 +1,2 @@
-export * from './DateString';
-export * from './ErrorBoundary';
+export * from './DateString/index.js';
+export * from './ErrorBoundary/index.js';
