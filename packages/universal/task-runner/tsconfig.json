@@ -2,6 +2,9 @@
   "extends": "@website/ts-config/package",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }
