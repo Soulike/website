@@ -3,7 +3,8 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "rm -rf dist && tsc && tsc-alias"
+    "build": "rm -rf dist && tsc && tsc-alias",
+    "test": "vitest"
   },
   "dependencies": {
     "@universal/async-helpers": "workspace:^"
