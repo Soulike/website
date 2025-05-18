@@ -21,9 +21,12 @@ export abstract class AsyncCallbackTaskRunner extends TaskRunner {
     return new Promise<ResultT | null>((resolve, reject) => {
       this.asyncCallbackFunction(() => {
         if (task.hasAborted()) {
+          // Abort before run.
           resolve(null);
+          return;
         }
         task.onAbort(() => {
+          // Abort during run.
           resolve(null);
         });
         task
@@ -31,6 +34,7 @@ export abstract class AsyncCallbackTaskRunner extends TaskRunner {
           .then((result) => {
             if (task.hasAborted()) {
               resolve(null);
+              return;
             }
             resolve(result);
           })
