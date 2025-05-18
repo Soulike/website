@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import {describe, expect, it, vi} from 'vitest';
 
 import {queueMacroTask} from './queue-macro-task.js';
@@ -39,26 +41,28 @@ describe('queueMacroTask', () => {
     expect(executionOrder).toEqual(['sync', 'micro', 'macro']);
   });
 
-  it('should handle errors in callbacks without stopping execution', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {
-      return 0;
-    });
-    const flag = {executed: false};
+  it('should let errors propagate while not affecting other tasks', async () => {
+    const results: string[] = [];
 
-    queueMacroTask(() => {
-      throw new Error('An error for test');
-    });
-
-    queueMacroTask(() => {
-      flag.executed = true;
+    const promise1 = new Promise((_, reject) => {
+      queueMacroTask(() => {
+        reject(new Error('An error for test'));
+      });
+    }).catch((error: unknown) => {
+      assert(error instanceof Error);
+      results.push('error: ' + error.message);
     });
 
-    await waitForMacroTasks();
+    const promise2 = new Promise((resolve) => {
+      queueMacroTask(() => {
+        results.push('task2 executed');
+        resolve(undefined);
+      });
+    });
 
-    // The second task should still execute even if the first one threw an error
-    expect(flag.executed).toBe(true);
+    await Promise.all([promise1, promise2]);
 
-    consoleSpy.mockRestore();
+    expect(results).toEqual(['error: An error for test', 'task2 executed']);
   });
 
   it('should queue multiple tasks in order', async () => {
