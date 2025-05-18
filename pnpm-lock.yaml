@@ -338,6 +338,21 @@ importers:
         specifier: ^3.1.2
         version: 3.1.3(@types/node@22.15.18)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
 
+  packages/universal/async-helpers:
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: ^3.1.2
+        version: 3.1.3(vitest@3.1.3(@types/node@22.15.18)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../ts-config
+      vitest:
+        specifier: ^3.1.2
+        version: 3.1.3(@types/node@22.15.18)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
+
   packages/universal/classes:
     devDependencies:
       '@website/eslint-config':
@@ -481,6 +496,31 @@ importers:
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
+
+  packages/universal/task-runner:
+    dependencies:
+      '@universal/async-helpers':
+        specifier: workspace:^
+        version: link:../async-helpers
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: ^3.1.2
+        version: 3.1.3(vitest@3.1.3(@types/node@22.15.18)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../ts-config
+      tsc-alias:
+        specifier: ^1.8.16
+        version: 1.8.16
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+      vitest:
+        specifier: ^3.1.2
+        version: 3.1.3(@types/node@22.15.18)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
 
   packages/universal/ts-config: {}
 
