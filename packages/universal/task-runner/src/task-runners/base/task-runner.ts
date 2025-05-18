@@ -7,7 +7,7 @@ export abstract class TaskRunner {
   public async push<ResultT>(
     task: Task<ResultT>,
   ): ReturnType<Task<ResultT>['run']> {
-    if (task.hasCanceled()) {
+    if (task.hasAborted()) {
       return null;
     }
     const taskRunPromise = this.getTaskRunPromise<ResultT>(task);
@@ -21,7 +21,7 @@ export abstract class TaskRunner {
       }
       throw error;
     } finally {
-      await task.teardown?.();
+      await task.teardown();
     }
   }
 
