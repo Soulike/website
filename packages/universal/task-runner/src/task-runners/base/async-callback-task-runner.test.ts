@@ -2,19 +2,19 @@ import {describe, expect, test, vi} from 'vitest';
 
 import {Task} from '@/task.js';
 
-import {macroTaskRunner} from './macro-task-runner.js';
 import {AbortableTask} from './test-helpers/abortable-task.js';
 import {AbortedErrorTask} from './test-helpers/aborted-error-task.js';
 import {ErrorTask} from './test-helpers/error-task.js';
 import {SuccessTask} from './test-helpers/success-task.js';
-import {waitForMacroTask} from './test-helpers/wait-for-macro-task.js';
+import {testMicroTaskRunner} from './test-helpers/test-micro-task-runner.js';
+import {waitForMicroTask} from './test-helpers/wait-for-micro-task.js';
 
-describe('macroTaskRunner', () => {
+describe('AsyncCallbackTaskRunner', () => {
   test('should execute task and return result', async () => {
     const task = new SuccessTask();
-    const resultPromise = macroTaskRunner.push(task);
+    const resultPromise = testMicroTaskRunner.push(task);
 
-    await waitForMacroTask();
+    await waitForMicroTask();
     const result = await resultPromise;
 
     expect(result).toBe(42);
@@ -23,9 +23,9 @@ describe('macroTaskRunner', () => {
   test('should handle task error and return null', async () => {
     const task = new ErrorTask();
     const handleErrorSpy = vi.spyOn(task, 'handleError');
-    const resultPromise = macroTaskRunner.push(task);
+    const resultPromise = testMicroTaskRunner.push(task);
 
-    await waitForMacroTask();
+    await waitForMicroTask();
     const result = await resultPromise;
 
     expect(result).toBeNull();
@@ -34,10 +34,10 @@ describe('macroTaskRunner', () => {
 
   test('should return null for aborted task', async () => {
     const task = new AbortableTask();
-    const resultPromise = macroTaskRunner.push(task);
+    const resultPromise = testMicroTaskRunner.push(task);
     task.abort();
 
-    await waitForMacroTask();
+    await waitForMicroTask();
     const result = await resultPromise;
 
     expect(result).toBeNull();
@@ -59,12 +59,12 @@ describe('macroTaskRunner', () => {
     }
 
     const taskPromises = [
-      macroTaskRunner.push(new OrderedTask(1)),
-      macroTaskRunner.push(new OrderedTask(2)),
-      macroTaskRunner.push(new OrderedTask(3)),
+      testMicroTaskRunner.push(new OrderedTask(1)),
+      testMicroTaskRunner.push(new OrderedTask(2)),
+      testMicroTaskRunner.push(new OrderedTask(3)),
     ];
 
-    await waitForMacroTask();
+    await waitForMicroTask();
     await Promise.all(taskPromises);
 
     expect(executionOrder).toEqual([1, 2, 3]);
@@ -75,8 +75,8 @@ describe('macroTaskRunner', () => {
     const runSpy = vi.spyOn(task, 'run');
     task.abort();
 
-    const resultPromise = macroTaskRunner.push(task);
-    await waitForMacroTask();
+    const resultPromise = testMicroTaskRunner.push(task);
+    await waitForMicroTask();
     const result = await resultPromise;
 
     expect(result).toBeNull();
@@ -85,10 +85,10 @@ describe('macroTaskRunner', () => {
 
   test('should abort task during execution', async () => {
     const task = new AbortableTask();
-    const resultPromise = macroTaskRunner.push(task);
+    const resultPromise = testMicroTaskRunner.push(task);
 
     // Wait for task to start executing
-    await waitForMacroTask();
+    await waitForMicroTask();
     // Abort while task is running
     task.abort();
 
@@ -100,8 +100,8 @@ describe('macroTaskRunner', () => {
     const task = new SuccessTask();
     const teardownSpy = vi.spyOn(task, 'teardown');
 
-    const resultPromise = macroTaskRunner.push(task);
-    await waitForMacroTask();
+    const resultPromise = testMicroTaskRunner.push(task);
+    await waitForMicroTask();
     await resultPromise;
 
     expect(teardownSpy).toHaveBeenCalledTimes(1);
@@ -111,8 +111,8 @@ describe('macroTaskRunner', () => {
     const task = new ErrorTask();
     const teardownSpy = vi.spyOn(task, 'teardown');
 
-    const resultPromise = macroTaskRunner.push(task);
-    await waitForMacroTask();
+    const resultPromise = testMicroTaskRunner.push(task);
+    await waitForMicroTask();
     await resultPromise;
 
     expect(teardownSpy).toHaveBeenCalledTimes(1);
@@ -121,10 +121,10 @@ describe('macroTaskRunner', () => {
   test('should ignore errors when task is aborted', async () => {
     const task = new AbortedErrorTask();
     const handleErrorSpy = vi.spyOn(task, 'handleError');
-    const resultPromise = macroTaskRunner.push(task);
+    const resultPromise = testMicroTaskRunner.push(task);
     task.abort();
 
-    await waitForMacroTask();
+    await waitForMicroTask();
     const result = await resultPromise;
 
     expect(result).toBeNull();
