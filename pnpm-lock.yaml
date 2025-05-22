@@ -38,6 +38,15 @@ importers:
       '@koa/router':
         specifier: ^13.1.0
         version: 13.1.0
+      '@server/database':
+        specifier: workspace:^
+        version: link:../../../packages/server/database
+      '@server/koa-middlewares':
+        specifier: workspace:^
+        version: link:../../../packages/server/koa-middlewares
+      '@server/logger':
+        specifier: workspace:^
+        version: link:../../../packages/server/logger
       '@website/classes':
         specifier: workspace:^
         version: link:../../../packages/universal/classes
@@ -319,6 +328,34 @@ importers:
       '@types/koa':
         specifier: ^2.15.0
         version: 2.15.0
+      '@vitest/coverage-v8':
+        specifier: ^3.1.2
+        version: 3.1.3(vitest@3.1.3(@types/node@22.15.18)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../../universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../universal/ts-config
+      tsc-alias:
+        specifier: ^1.8.13
+        version: 1.8.16
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+      vitest:
+        specifier: ^3.1.2
+        version: 3.1.3(@types/node@22.15.18)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1)
+
+  packages/server/logger:
+    dependencies:
+      signale:
+        specifier: ^1.4.0
+        version: 1.4.0
+    devDependencies:
+      '@types/signale':
+        specifier: ^1.4.7
+        version: 1.4.7
       '@vitest/coverage-v8':
         specifier: ^3.1.2
         version: 3.1.3(vitest@3.1.3(@types/node@22.15.18)(jiti@2.4.2)(jsdom@26.1.0)(sass@1.86.3)(yaml@2.7.1))
