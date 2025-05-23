@@ -1,25 +1,53 @@
 import type {Task} from '@/task.js';
 
+interface TaskSuccessResult<T> {
+  error: null;
+  result: T | null;
+}
+
+interface TaskFailureResult {
+  error: Error;
+  result: null;
+}
+
+interface TaskCancelResult {
+  error: null;
+  result: null;
+}
+
+type TaskResult<T> =
+  | TaskSuccessResult<T>
+  | TaskFailureResult
+  | TaskCancelResult;
+
 export abstract class TaskRunner {
   /**
    * Start running a task with the `TaskRunner`.
    */
   public async push<ResultT>(
     task: Task<ResultT>,
-  ): ReturnType<Task<ResultT>['run']> {
+  ): Promise<TaskResult<ResultT>> {
     if (task.hasAborted()) {
-      return null;
+      return {
+        error: null,
+        result: null,
+      };
     }
     const taskRunPromise = this.getTaskRunPromise<ResultT>(task);
 
     try {
-      return await taskRunPromise;
+      const result = await taskRunPromise;
+      return {
+        error: null,
+        result,
+      };
     } catch (error: unknown) {
-      if (task.handleError) {
-        await task.handleError(error);
-        return null;
-      }
-      throw error;
+      const outputError = new Error(`Error during task execution.`);
+      outputError.cause = error;
+      return {
+        error: outputError,
+        result: null,
+      };
     } finally {
       await task.teardown();
     }

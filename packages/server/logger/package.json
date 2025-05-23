@@ -1,0 +1,20 @@
+{
+  "name": "@server/logger",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "rm -rf dist && tsc && tsc-alias"
+  },
+  "devDependencies": {
+    "@types/signale": "^1.4.7",
+    "@vitest/coverage-v8": "^3.1.2",
+    "@website/eslint-config": "workspace:^",
+    "@website/ts-config": "workspace:^",
+    "tsc-alias": "^1.8.13",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2"
+  },
+  "dependencies": {
+    "signale": "^1.4.0"
+  }
+}

@@ -8,5 +8,8 @@
   "devDependencies": {
     "@website/eslint-config": "workspace:^",
     "@website/ts-config": "workspace:^"
+  },
+  "dependencies": {
+    "joi": "^17.13.3"
   }
 }

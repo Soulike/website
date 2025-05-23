@@ -17,19 +17,19 @@ describe('AsyncCallbackTaskRunner', () => {
     await waitForMicroTask();
     const result = await resultPromise;
 
-    expect(result).toBe(42);
+    expect(result.error).toBeNull();
+    expect(result.result).toBe(42);
   });
 
-  test('should handle task error and return null', async () => {
+  test('should return task error and return null result', async () => {
     const task = new ErrorTask();
-    const handleErrorSpy = vi.spyOn(task, 'handleError');
     const resultPromise = testMicroTaskRunner.push(task);
 
     await waitForMicroTask();
     const result = await resultPromise;
 
-    expect(result).toBeNull();
-    expect(handleErrorSpy).toHaveBeenCalledTimes(1);
+    expect(result.error).not.toBeNull();
+    expect(result.result).toBeNull();
   });
 
   test('should return null for aborted task', async () => {
@@ -40,7 +40,8 @@ describe('AsyncCallbackTaskRunner', () => {
     await waitForMicroTask();
     const result = await resultPromise;
 
-    expect(result).toBeNull();
+    expect(result.error).toBeNull();
+    expect(result.result).toBeNull();
   });
 
   test('should execute multiple tasks in order', async () => {
@@ -79,7 +80,8 @@ describe('AsyncCallbackTaskRunner', () => {
     await waitForMicroTask();
     const result = await resultPromise;
 
-    expect(result).toBeNull();
+    expect(result.error).toBeNull();
+    expect(result.result).toBeNull();
     expect(runSpy).not.toHaveBeenCalled();
   });
 
@@ -93,7 +95,8 @@ describe('AsyncCallbackTaskRunner', () => {
     task.abort();
 
     const result = await resultPromise;
-    expect(result).toBeNull();
+    expect(result.error).toBeNull();
+    expect(result.result).toBeNull();
   });
 
   test('should call teardown after task completion', async () => {
@@ -120,15 +123,13 @@ describe('AsyncCallbackTaskRunner', () => {
 
   test('should ignore errors when task is aborted', async () => {
     const task = new AbortedErrorTask();
-    const handleErrorSpy = vi.spyOn(task, 'handleError');
     const resultPromise = testMicroTaskRunner.push(task);
     task.abort();
 
     await waitForMicroTask();
     const result = await resultPromise;
 
-    expect(result).toBeNull();
-    // handleError should not be called because task was aborted
-    expect(handleErrorSpy).not.toHaveBeenCalled();
+    expect(result.error).toBeNull();
+    expect(result.result).toBeNull();
   });
 });
