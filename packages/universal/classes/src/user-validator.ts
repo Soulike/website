@@ -1,13 +1,15 @@
 import Joi from 'joi';
 
+import {User} from './User.js';
+
 export class UserValidator {
-  private static readonly schema = Joi.object({
+  private static readonly schema = Joi.object<User, true>({
     username: Joi.string().required(),
     password: Joi.string().required(),
   });
 
   public static validate(value: unknown): boolean {
-    const {error} = this.schema.validate(value);
-    return !error;
+    const validationResult = this.schema.validate(value);
+    return !validationResult.error;
   }
 }
