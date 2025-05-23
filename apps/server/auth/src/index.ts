@@ -8,6 +8,7 @@ import session from 'koa-session';
 import {KOA_BODY_OPTIONS} from '@/configurations/koa-body-options.js';
 import {KOS_SESSION_OPTIONS} from '@/configurations/koa-session-options.js';
 import {LISTEN_OPTIONS} from '@/configurations/listen-options.js';
+import {dispatcher} from '@/dispatcher/index.js';
 
 const app = new Koa();
 
@@ -24,11 +25,7 @@ app.keys = [secret];
 
 app.use(session(KOS_SESSION_OPTIONS, app));
 app.use(koaBody(KOA_BODY_OPTIONS));
-
-app.use(async (ctx, next) => {
-  ctx.response.body = 'hello world!';
-  await next();
-});
+app.use(dispatcher());
 
 app.listen(LISTEN_OPTIONS, () => {
   Logger.success(

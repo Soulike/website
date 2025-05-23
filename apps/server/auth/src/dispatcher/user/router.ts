@@ -1,5 +1,10 @@
 import Router from '@koa/router';
+import {Logger} from '@server/logger';
+import {UserValidator} from '@website/classes';
+import {StatusCodes} from 'http-status-codes';
 import {DefaultState} from 'koa';
+
+import {createSession} from '@/service/user/create-session.js';
 
 import type {Context} from '../types.js';
 import {SESSION} from './path.js';
@@ -14,25 +19,28 @@ router.get(SESSION, (ctx) => {
   }
 });
 
-router.post(SESSION, (ctx) => {
+router.post(SESSION, async (ctx) => {
   const body: unknown = ctx.request.body;
-  if (!body || typeof body !== 'object') {
-    ctx.response.status = 400;
+  if (!UserValidator.validate(body)) {
+    ctx.response.status = StatusCodes.BAD_REQUEST;
     return;
   }
-  if (!('username' in body) || !('password' in body)) {
-    ctx.response.status = 400;
-    return;
+  try {
+    const result = await createSession(body, ctx);
+    if (result) {
+      ctx.response.status = StatusCodes.NO_CONTENT;
+    } else {
+      ctx.response.status = StatusCodes.UNAUTHORIZED;
+    }
+  } catch (e: unknown) {
+    ctx.response.status = StatusCodes.INTERNAL_SERVER_ERROR;
+    Logger.dispatcherError(SESSION, 'POST', e);
   }
-  if (typeof body.username !== 'string' || typeof body.password !== 'string') {
-    ctx.response.status = 400;
-    return;
-  }
-  // TODO: create session
 });
 
 router.delete(SESSION, (ctx) => {
   ctx.session = null;
+  ctx.response.status = StatusCodes.NO_CONTENT;
 });
 
 export {router};
