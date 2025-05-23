@@ -8,7 +8,7 @@ export class UserValidator {
     password: Joi.string().required(),
   });
 
-  public static validate(value: unknown): boolean {
+  public static validate(value: unknown): value is User {
     const validationResult = this.schema.validate(value);
     return !validationResult.error;
   }
