@@ -26,11 +26,6 @@ export abstract class Task<ResultT> {
   public abstract run(): Promise<ResultT | null>;
 
   /**
-   * Called when any error is thrown.
-   */
-  public handleError?(error: unknown): Promise<void>;
-
-  /**
    * Perform cleanup work.
    * Subclass should always call `super.teardown()`.
    */
