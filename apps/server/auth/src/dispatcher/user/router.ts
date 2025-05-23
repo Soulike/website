@@ -1,6 +1,6 @@
 import Router from '@koa/router';
 import {Logger} from '@server/logger';
-import {UserValidator} from '@website/classes';
+import {User, UserValidator} from '@website/classes';
 import {StatusCodes} from 'http-status-codes';
 import {DefaultState} from 'koa';
 
@@ -26,7 +26,7 @@ router.post(SESSION, async (ctx) => {
     return;
   }
   try {
-    const result = await createSession(body, ctx);
+    const result = await createSession(User.from(body), ctx);
     if (result) {
       ctx.response.status = StatusCodes.NO_CONTENT;
     } else {
