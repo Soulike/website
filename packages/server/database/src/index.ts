@@ -1,3 +1,6 @@
+export {FakeArticleTable} from './fake-tables/fake-article-table.js';
+export {FakeCategoryTable} from './fake-tables/fake-category-table.js';
+export {FakeUserTable} from './fake-tables/fake-user-table.js';
 export {ArticleTable} from './tables/article-table.js';
 export {CategoryTable} from './tables/category-table.js';
 export {UserTable} from './tables/user-table.js';
