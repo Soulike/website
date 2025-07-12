@@ -1,5 +1,6 @@
 {
   "name": "@website/tex-renderer",
+  "type": "module",
   "exports": {
     ".": "./dist/TeXRenderer.js",
     "./style.css": "./dist/style.css"

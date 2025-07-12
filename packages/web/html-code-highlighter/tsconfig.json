@@ -1,5 +1,5 @@
 {
-  "extends": "@website/ts-config/bundler",
+  "extends": "@website/ts-config/package",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist"

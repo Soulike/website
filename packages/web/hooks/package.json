@@ -1,10 +1,12 @@
 {
   "name": "@website/hooks",
   "main": "dist/index.js",
+  "type": "module",
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.3.0",
     "@types/react": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
     "@vitest/coverage-v8": "^3.1.2",
     "@website/eslint-config": "workspace:^",
     "@website/ts-config": "workspace:^",

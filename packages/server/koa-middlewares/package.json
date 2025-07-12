@@ -1,0 +1,20 @@
+{
+  "name": "@server/koa-middlewares",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "rm -rf dist && tsc && tsc-alias"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.15.0",
+    "@vitest/coverage-v8": "^3.1.2",
+    "@website/eslint-config": "workspace:^",
+    "@website/ts-config": "workspace:^",
+    "tsc-alias": "^1.8.13",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2"
+  },
+  "peerDependencies": {
+    "koa": ">=2.0.0"
+  }
+}

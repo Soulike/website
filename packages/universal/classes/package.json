@@ -1,11 +1,15 @@
 {
   "name": "@website/classes",
   "main": "dist/index.js",
+  "type": "module",
   "scripts": {
     "build": "rm -rf dist && tsc"
   },
   "devDependencies": {
     "@website/eslint-config": "workspace:^",
     "@website/ts-config": "workspace:^"
+  },
+  "dependencies": {
+    "joi": "^17.13.3"
   }
 }

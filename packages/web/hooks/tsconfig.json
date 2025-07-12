@@ -1,8 +1,9 @@
 {
-  "extends": "@website/ts-config/bundler",
+  "extends": "@website/ts-config/package",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "declaration": true
+    "declaration": true,
+    "skipLibCheck": true
   }
 }

@@ -1,4 +1,4 @@
-import {RequestOptions} from './types';
+import {RequestOptions} from './types.js';
 
 export type JSONRequestGetOptions = RequestOptions;
 

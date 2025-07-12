@@ -1,6 +1,7 @@
 {
   "name": "@website/markdown-html-converter",
   "main": "dist/index.js",
+  "type": "module",
   "dependencies": {
     "showdown": "^2.1.0"
   },

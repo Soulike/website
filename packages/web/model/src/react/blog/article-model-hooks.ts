@@ -1,4 +1,4 @@
-import {articleModel} from '@models/blog';
+import {articleModel} from '@models/blog/index.js';
 import {Article, Category} from '@website/classes';
 import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
 import {useMemo} from 'react';
