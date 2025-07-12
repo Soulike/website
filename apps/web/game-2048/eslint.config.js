@@ -1,5 +1,5 @@
-import reactRefresh from 'eslint-plugin-react-refresh';
 import eslintConfig from '@website/eslint-config';
+import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default [
   ...eslintConfig.recommendedReactTs,
@@ -13,6 +13,7 @@ export default [
         'warn',
         {allowConstantExport: true},
       ],
+      '@typescript-eslint/prefer-for-of': 'warn',
     },
   },
 ];
