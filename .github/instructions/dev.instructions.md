@@ -17,12 +17,14 @@ This is a pnpm monorepo containing multiple types of projects.
 
 ## Work Memory
 
-Before performing and actions or tasks, create a Markdown file as your work memory inside `.memory` folder. The content of the file should be concise, and it includes:
+Before performing ANY actions or tasks, create a Markdown file as your work memory inside `.memory` folder. The content of the file should be concise, and it includes:
 
 1. Your plan and work status. Use checklist for steps, and update it after finishing a step.
 2. Your insights.
 3. Your investigation results.
 4. Any other important information.
+
+You MUST update the file after performing ANY actions or tasks.
 
 ---
 
