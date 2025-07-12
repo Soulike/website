@@ -84,6 +84,7 @@ Check <https://google.github.io/styleguide/tsguide.html>.
 ### File Naming
 
 - A common folder/file: **dash-case**.
+- Unit test for a file: **<file-name>.test.ts**.
 - A folder containing a page component: **dash-case**.
 - A folder containing a special page component: **\_dash-case**, e.g., `_layout`.
 - A file/folder containing a React component: **UpperCamelCase**.
@@ -135,3 +136,10 @@ import {Component} from 'path/to/Component/container.js';
 // ✅ Good.
 import {Component} from 'path/to/Component/index.js';
 ```
+
+---
+
+## Unit Tests
+
+- When developing unit tests, develop based on API interfaces and DO NOT read implementations.
+- Can expose private methods and members required in testing with `xxxForTesting` methods. The test-only methods does not need test cases.
