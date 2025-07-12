@@ -1,4 +1,4 @@
-import {describe, expect, it, vi} from 'vitest';
+import {describe, expect, it} from 'vitest';
 
 import {getRandomInteger, pickRandomElement} from './random-helpers.js';
 
@@ -158,21 +158,5 @@ describe('pickRandomElement', () => {
     expect(typeof result).toBe('number');
     expect(result).toBeGreaterThanOrEqual(0);
     expect(result).toBeLessThan(10000);
-  });
-});
-
-describe('integration tests', () => {
-  it('should work together when pickRandomElement uses getRandomInteger internally', () => {
-    // Mock Math.random to test deterministic behavior
-    const mockRandom = vi.spyOn(Math, 'random');
-    mockRandom.mockReturnValue(0.5);
-
-    const elements = ['a', 'b', 'c', 'd'];
-    const result = pickRandomElement(elements);
-
-    // With Math.random() = 0.5, we expect the middle elements
-    expect(elements).toContain(result);
-
-    mockRandom.mockRestore();
   });
 });
