@@ -366,4 +366,119 @@ describe('Model', () => {
       expect(emptyCount).toBe(0); // All cells should be filled after the move
     });
   });
+
+  describe('IsMovable', () => {
+    beforeEach(() => {
+      model.init();
+      model.clearGridForTesting();
+    });
+
+    it('should return true when there are empty cells', () => {
+      // Set up a grid with some empty cells
+      model.setGridStateForTesting([
+        [2, 4, 0, 0],
+        [4, 2, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+      ]);
+
+      expect(model.IsMovable()).toBe(true);
+    });
+
+    it('should return true when adjacent horizontal cells can be merged', () => {
+      // Set up a full grid with mergeable horizontal neighbors
+      model.setGridStateForTesting([
+        [2, 2, 4, 8],
+        [4, 8, 16, 32],
+        [8, 16, 32, 64],
+        [16, 32, 64, 128],
+      ]);
+
+      expect(model.IsMovable()).toBe(true);
+    });
+
+    it('should return true when adjacent vertical cells can be merged', () => {
+      // Set up a full grid with mergeable vertical neighbors
+      model.setGridStateForTesting([
+        [2, 4, 8, 16],
+        [2, 8, 16, 32],
+        [4, 16, 32, 64],
+        [8, 32, 64, 128],
+      ]);
+
+      expect(model.IsMovable()).toBe(true);
+    });
+
+    it('should return true when cells can be merged in multiple directions', () => {
+      // Set up a grid with both horizontal and vertical merges possible
+      model.setGridStateForTesting([
+        [2, 2, 4, 8],
+        [4, 4, 8, 16],
+        [8, 8, 16, 32],
+        [16, 32, 64, 128],
+      ]);
+
+      expect(model.IsMovable()).toBe(true);
+    });
+
+    it('should return false when no moves are possible (game over)', () => {
+      // Set up a grid where no adjacent cells can be merged
+      model.setGridStateForTesting([
+        [2, 4, 8, 16],
+        [4, 8, 16, 32],
+        [8, 16, 32, 64],
+        [16, 32, 64, 128],
+      ]);
+
+      expect(model.IsMovable()).toBe(false);
+    });
+
+    it('should return false for another game over scenario', () => {
+      // Another pattern where no moves are possible
+      model.setGridStateForTesting([
+        [2, 4, 2, 4],
+        [4, 2, 4, 2],
+        [2, 4, 2, 4],
+        [4, 2, 4, 2],
+      ]);
+
+      expect(model.IsMovable()).toBe(false);
+    });
+
+    it('should return true when merge is possible at grid edges', () => {
+      // Test merge possibility at the rightmost edge
+      model.setGridStateForTesting([
+        [2, 4, 8, 8],
+        [4, 8, 16, 32],
+        [8, 16, 32, 64],
+        [16, 32, 64, 128],
+      ]);
+
+      expect(model.IsMovable()).toBe(true);
+    });
+
+    it('should return true when merge is possible at grid bottom edge', () => {
+      // Test merge possibility at the bottom edge
+      model.setGridStateForTesting([
+        [2, 4, 8, 16],
+        [4, 8, 16, 32],
+        [8, 16, 32, 64],
+        [8, 32, 64, 128],
+      ]);
+
+      expect(model.IsMovable()).toBe(true);
+    });
+
+    it('should return true when only one merge is possible', () => {
+      // Test with minimal merging opportunity
+      model.setGridStateForTesting([
+        [2, 4, 8, 16],
+        [4, 8, 16, 32],
+        [8, 16, 16, 64], // Only these two 16s can merge
+        [16, 32, 64, 128],
+      ]);
+
+      expect(model.IsMovable()).toBe(true);
+    });
+  });
 });

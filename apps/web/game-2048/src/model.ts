@@ -45,6 +45,8 @@ class Model {
   }
 
   public move(direction: MoveDirection) {
+    assert(this.IsMovable(), 'Try to move when is not movable.');
+
     switch (direction) {
       case MoveDirection.UP:
         this.moveUp();
@@ -62,6 +64,41 @@ class Model {
         assert.fail(`Unexpected direction ${String(direction)}`);
     }
     this.createNewNonEmptyCells(1);
+  }
+
+  /**
+   * Checks if any moves are possible on the current grid.
+   * @returns true if there are empty cells or adjacent cells with same values that can be merged, false otherwise (game over)
+   */
+  public IsMovable(): boolean {
+    if (this.emptyCellCount > 0) {
+      return true;
+    }
+
+    // Check if any adjacent cells can be merged
+    for (let row = 0; row < this.grid.length; row++) {
+      for (let col = 0; col < this.grid[0].length; col++) {
+        const cellValue = this.grid[row][col];
+
+        // Check right neighbor
+        if (
+          col < this.grid[0].length - 1 &&
+          this.grid[row][col + 1] === cellValue
+        ) {
+          return true;
+        }
+
+        // Check bottom neighbor
+        if (
+          row < this.grid.length - 1 &&
+          this.grid[row + 1][col] === cellValue
+        ) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   private moveUp() {
@@ -124,29 +161,6 @@ class Model {
           this.grid[readRow][colIndex] = Model.EMPTY_CELL_VALUE;
         }
         writeRow += rowMoveStep;
-      }
-    }
-  }
-
-  public setGridStateForTesting(gridState: number[][]): void {
-    assertIsTest('setGridStateForTesting');
-    assert(
-      gridState.length === Model.GRID_SIDE_LENGTH,
-      `Grid must be ${String(Model.GRID_SIDE_LENGTH)}x${String(Model.GRID_SIDE_LENGTH)}`,
-    );
-    assert(
-      gridState.every((row) => row.length === Model.GRID_SIDE_LENGTH),
-      `All rows must have ${String(Model.GRID_SIDE_LENGTH)} columns`,
-    );
-
-    this.emptyCellCount = Model.GRID_SIDE_LENGTH * Model.GRID_SIDE_LENGTH;
-
-    for (let i = 0; i < Model.GRID_SIDE_LENGTH; i++) {
-      for (let j = 0; j < Model.GRID_SIDE_LENGTH; j++) {
-        this.grid[i][j] = gridState[i][j];
-        if (this.grid[i][j] !== Model.EMPTY_CELL_VALUE) {
-          this.emptyCellCount--;
-        }
       }
     }
   }
@@ -278,6 +292,29 @@ class Model {
     this.emptyCellCount = Model.GRID_SIDE_LENGTH * Model.GRID_SIDE_LENGTH;
   }
 
+  public setGridStateForTesting(gridState: number[][]): void {
+    assertIsTest('setGridStateForTesting');
+    assert(
+      gridState.length === Model.GRID_SIDE_LENGTH,
+      `Grid must be ${String(Model.GRID_SIDE_LENGTH)}x${String(Model.GRID_SIDE_LENGTH)}`,
+    );
+    assert(
+      gridState.every((row) => row.length === Model.GRID_SIDE_LENGTH),
+      `All rows must have ${String(Model.GRID_SIDE_LENGTH)} columns`,
+    );
+
+    this.emptyCellCount = Model.GRID_SIDE_LENGTH * Model.GRID_SIDE_LENGTH;
+
+    for (let i = 0; i < Model.GRID_SIDE_LENGTH; i++) {
+      for (let j = 0; j < Model.GRID_SIDE_LENGTH; j++) {
+        this.grid[i][j] = gridState[i][j];
+        if (this.grid[i][j] !== Model.EMPTY_CELL_VALUE) {
+          this.emptyCellCount--;
+        }
+      }
+    }
+  }
+
   public getGridSideLengthForTesting(): number {
     assertIsTest('getGridSideLengthForTesting');
 
@@ -305,6 +342,7 @@ class Model {
     direction: MoveDirection,
   ): void {
     assertIsTest('moveWithoutCreatingNewNonEmptyCellForTesting');
+    assert(this.IsMovable(), 'Try to move when is not movable.');
 
     switch (direction) {
       case MoveDirection.UP:
