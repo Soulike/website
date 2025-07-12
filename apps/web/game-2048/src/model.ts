@@ -23,6 +23,10 @@ class Model {
   private static EMPTY_CELL_VALUE = 0;
   private static readonly NEW_CELL_VALUES: NewCellValue[] = [2, 4];
 
+  private static getRandomNewCellValue(): NewCellValue {
+    return pickRandomElement(this.NEW_CELL_VALUES);
+  }
+
   private grid: number[][] = [];
   private emptyCellCount = -1;
 
@@ -30,8 +34,14 @@ class Model {
     return this.grid;
   }
 
-  private static getRandomNewCellValue(): NewCellValue {
-    return pickRandomElement(this.NEW_CELL_VALUES);
+  public init() {
+    this.grid = new Array<number[]>(Model.GRID_SIDE_LENGTH);
+    for (let i = 0; i < this.grid.length; i++) {
+      this.grid[i] = new Array<number>(Model.GRID_SIDE_LENGTH);
+      this.grid[i].fill(Model.EMPTY_CELL_VALUE);
+    }
+    this.emptyCellCount = Model.GRID_SIDE_LENGTH * Model.GRID_SIDE_LENGTH;
+    this.createNewNonEmptyCells(2);
   }
 
   public move(direction: MoveDirection) {
@@ -82,40 +92,6 @@ class Model {
     }
   }
 
-  public init() {
-    this.grid = new Array<number[]>(Model.GRID_SIDE_LENGTH);
-    for (let i = 0; i < this.grid.length; i++) {
-      this.grid[i] = new Array<number>(Model.GRID_SIDE_LENGTH);
-      this.grid[i].fill(Model.EMPTY_CELL_VALUE);
-    }
-    this.emptyCellCount = Model.GRID_SIDE_LENGTH * Model.GRID_SIDE_LENGTH;
-    this.createNewNonEmptyCells(2);
-  }
-
-  // Testing methods - only to be used in test environment
-  public setGridStateForTesting(gridState: number[][]): void {
-    assertIsTest('setGridStateForTesting');
-    assert(
-      gridState.length === Model.GRID_SIDE_LENGTH,
-      `Grid must be ${String(Model.GRID_SIDE_LENGTH)}x${String(Model.GRID_SIDE_LENGTH)}`,
-    );
-    assert(
-      gridState.every((row) => row.length === Model.GRID_SIDE_LENGTH),
-      `All rows must have ${String(Model.GRID_SIDE_LENGTH)} columns`,
-    );
-
-    this.emptyCellCount = Model.GRID_SIDE_LENGTH * Model.GRID_SIDE_LENGTH;
-
-    for (let i = 0; i < Model.GRID_SIDE_LENGTH; i++) {
-      for (let j = 0; j < Model.GRID_SIDE_LENGTH; j++) {
-        this.grid[i][j] = gridState[i][j];
-        if (this.grid[i][j] !== Model.EMPTY_CELL_VALUE) {
-          this.emptyCellCount--;
-        }
-      }
-    }
-  }
-
   private compactRow(rowIndex: number, toLeft: boolean): void {
     const rowLength = this.grid[0].length;
     const colStart = toLeft ? 0 : rowLength - 1;
@@ -152,61 +128,26 @@ class Model {
     }
   }
 
-  public clearGridForTesting(): void {
-    assertIsTest('clearGridForTesting');
+  public setGridStateForTesting(gridState: number[][]): void {
+    assertIsTest('setGridStateForTesting');
+    assert(
+      gridState.length === Model.GRID_SIDE_LENGTH,
+      `Grid must be ${String(Model.GRID_SIDE_LENGTH)}x${String(Model.GRID_SIDE_LENGTH)}`,
+    );
+    assert(
+      gridState.every((row) => row.length === Model.GRID_SIDE_LENGTH),
+      `All rows must have ${String(Model.GRID_SIDE_LENGTH)} columns`,
+    );
+
+    this.emptyCellCount = Model.GRID_SIDE_LENGTH * Model.GRID_SIDE_LENGTH;
 
     for (let i = 0; i < Model.GRID_SIDE_LENGTH; i++) {
       for (let j = 0; j < Model.GRID_SIDE_LENGTH; j++) {
-        this.grid[i][j] = Model.EMPTY_CELL_VALUE;
+        this.grid[i][j] = gridState[i][j];
+        if (this.grid[i][j] !== Model.EMPTY_CELL_VALUE) {
+          this.emptyCellCount--;
+        }
       }
-    }
-
-    this.emptyCellCount = Model.GRID_SIDE_LENGTH * Model.GRID_SIDE_LENGTH;
-  }
-
-  public getGridSideLengthForTesting(): number {
-    assertIsTest('getGridSideLengthForTesting');
-
-    return Model.GRID_SIDE_LENGTH;
-  }
-
-  public getEmptyCellValueForTesting(): number {
-    assertIsTest('getEmptyCellValueForTesting');
-
-    return Model.EMPTY_CELL_VALUE;
-  }
-
-  public getNewCellValuesForTesting(): readonly NewCellValue[] {
-    assertIsTest('getNewCellValuesForTesting');
-
-    return Model.NEW_CELL_VALUES;
-  }
-
-  public getEmptyCellCountForTesting(): number {
-    assertIsTest('getEmptyCellCountForTesting');
-    return this.emptyCellCount;
-  }
-
-  public moveWithoutCreatingNewNonEmptyCellForTesting(
-    direction: MoveDirection,
-  ): void {
-    assertIsTest('moveWithoutCreatingNewNonEmptyCellForTesting');
-
-    switch (direction) {
-      case MoveDirection.UP:
-        this.moveUp();
-        break;
-      case MoveDirection.DOWN:
-        this.moveDown();
-        break;
-      case MoveDirection.LEFT:
-        this.moveLeft();
-        break;
-      case MoveDirection.RIGHT:
-        this.moveRight();
-        break;
-      default:
-        assert.fail(`Unexpected direction ${String(direction)}`);
     }
   }
 
@@ -323,6 +264,64 @@ class Model {
     }
 
     return reservoir;
+  }
+
+  public clearGridForTesting(): void {
+    assertIsTest('clearGridForTesting');
+
+    for (let i = 0; i < Model.GRID_SIDE_LENGTH; i++) {
+      for (let j = 0; j < Model.GRID_SIDE_LENGTH; j++) {
+        this.grid[i][j] = Model.EMPTY_CELL_VALUE;
+      }
+    }
+
+    this.emptyCellCount = Model.GRID_SIDE_LENGTH * Model.GRID_SIDE_LENGTH;
+  }
+
+  public getGridSideLengthForTesting(): number {
+    assertIsTest('getGridSideLengthForTesting');
+
+    return Model.GRID_SIDE_LENGTH;
+  }
+
+  public getEmptyCellValueForTesting(): number {
+    assertIsTest('getEmptyCellValueForTesting');
+
+    return Model.EMPTY_CELL_VALUE;
+  }
+
+  public getNewCellValuesForTesting(): readonly NewCellValue[] {
+    assertIsTest('getNewCellValuesForTesting');
+
+    return Model.NEW_CELL_VALUES;
+  }
+
+  public getEmptyCellCountForTesting(): number {
+    assertIsTest('getEmptyCellCountForTesting');
+    return this.emptyCellCount;
+  }
+
+  public moveWithoutCreatingNewNonEmptyCellForTesting(
+    direction: MoveDirection,
+  ): void {
+    assertIsTest('moveWithoutCreatingNewNonEmptyCellForTesting');
+
+    switch (direction) {
+      case MoveDirection.UP:
+        this.moveUp();
+        break;
+      case MoveDirection.DOWN:
+        this.moveDown();
+        break;
+      case MoveDirection.LEFT:
+        this.moveLeft();
+        break;
+      case MoveDirection.RIGHT:
+        this.moveRight();
+        break;
+      default:
+        assert.fail(`Unexpected direction ${String(direction)}`);
+    }
   }
 }
 

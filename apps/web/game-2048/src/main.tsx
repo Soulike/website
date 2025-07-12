@@ -1,9 +1,16 @@
+import './main.css';
+
+import assert from 'node:assert';
+
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
-import './main.css';
+
 import App from './App.tsx';
 
-createRoot(document.getElementById('root')!).render(
+const rootHTMLElement = document.getElementById('root');
+assert(rootHTMLElement, 'The root HTMLElement for React is missing.');
+
+createRoot(rootHTMLElement).render(
   <StrictMode>
     <App />
   </StrictMode>,
