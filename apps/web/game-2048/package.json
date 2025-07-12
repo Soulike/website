@@ -1,15 +1,20 @@
 {
   "name": "game-2048",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "lint": "eslint ./src",
+    "preview": "vite preview",
+    "analyze": "vite-bundle-visualizer"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.2.0",
+    "@mui/material": "^7.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
@@ -18,12 +23,21 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react-swc": "^3.10.2",
+    "browserslist-to-esbuild": "^2.1.1",
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
-    "vite": "^7.0.4"
-  }
+    "vite": "^7.0.4",
+    "vite-bundle-visualizer": "^1.2.1",
+    "vite-plugin-image-optimizer": "^2.0.2",
+    "vite-plugin-node-polyfills": "^0.24.0",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "browserslist": [
+    "defaults",
+    ">0.5% in cn and not dead"
+  ]
 }
