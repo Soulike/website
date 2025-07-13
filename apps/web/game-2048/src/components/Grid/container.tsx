@@ -1,3 +1,7 @@
+import {GridView} from './view';
+import {useViewModel} from './view-model.js';
+
 export function Grid() {
-  return null;
+  const {grid} = useViewModel();
+  return <GridView grid={grid} />;
 }

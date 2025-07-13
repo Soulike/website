@@ -4,4 +4,8 @@
   display: grid;
   grid-template: repeat(4, 1fr) / repeat(4, 1fr);
   gap: 10px;
+  padding: 20px;
+  border-radius: 15px;
+
+  background-color: var(--grid-background-color);
 }
