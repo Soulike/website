@@ -10,12 +10,18 @@ import {
 import {pickRandomElement} from '@/helpers/random-helpers.js';
 
 import {MoveDirection} from './constants.js';
-import type {Coordinate, Movement, OperationMovements} from './types.js';
+import type {
+  Coordinate,
+  GridChangeEventListener,
+  Movement,
+  OperationMovements,
+} from './types.js';
 
 class Model {
   private emptyTileCount = -1;
 
   private grid: number[][] = [];
+  private gridChangeEventListeners = new Set<GridChangeEventListener>();
 
   private static getRandomNewTileValue() {
     return pickRandomElement(NEW_TILE_VALUES);
@@ -23,6 +29,27 @@ class Model {
 
   public getGrid(): readonly (readonly number[])[] {
     return this.grid;
+  }
+
+  public onGridChange(listener: GridChangeEventListener) {
+    this.gridChangeEventListeners.add(listener);
+  }
+
+  public offGridChange(listener: GridChangeEventListener) {
+    this.gridChangeEventListeners.delete(listener);
+  }
+
+  public move(direction: MoveDirection): OperationMovements {
+    const operationMovements = this.moveWithoutCreatingNewTile(direction);
+    if (
+      operationMovements.mergeMovements.length > 0 ||
+      operationMovements.compactMovements.length > 0
+    ) {
+      this.createNewTile(1);
+      this.triggerGridChangeEventListeners();
+    }
+
+    return operationMovements;
   }
 
   public init() {
@@ -35,16 +62,10 @@ class Model {
     this.createNewTile(2);
   }
 
-  public move(direction: MoveDirection): OperationMovements {
-    const operationMovements = this.moveWithoutCreatingNewTile(direction);
-    if (
-      operationMovements.mergeMovements.length > 0 ||
-      operationMovements.compactMovements.length > 0
-    ) {
-      this.createNewTile(1);
+  private triggerGridChangeEventListeners() {
+    for (const listener of this.gridChangeEventListeners) {
+      listener(this.grid);
     }
-
-    return operationMovements;
   }
 
   public moveWithoutCreatingNewTileForTesting(
