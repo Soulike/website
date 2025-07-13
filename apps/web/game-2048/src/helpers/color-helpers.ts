@@ -1,4 +1,7 @@
+import assert from 'node:assert';
+
 import {TileBackgroundColor, TileTextColor} from '@/constants/colors.js';
+import {EMPTY_TILE_VALUE} from '@/constants/configs.js';
 
 /**
  * Returns the background color for a 2048 game tile based on its value
@@ -7,7 +10,7 @@ import {TileBackgroundColor, TileTextColor} from '@/constants/colors.js';
  */
 export function getTileBackgroundColor(value: number): TileBackgroundColor {
   // Empty cells (value 0) are transparent
-  if (value === 0) {
+  if (value === EMPTY_TILE_VALUE) {
     return TileBackgroundColor.TRANSPARENT;
   }
 
@@ -36,8 +39,7 @@ export function getTileBackgroundColor(value: number): TileBackgroundColor {
     return TileBackgroundColor.TILE_HIGH_VALUE;
   }
 
-  // Fallback for any other values
-  return TileBackgroundColor.FALLBACK;
+  assert.fail('Invalid value for 2048.');
 }
 
 /**
@@ -47,7 +49,7 @@ export function getTileBackgroundColor(value: number): TileBackgroundColor {
  */
 export function getTileTextColor(value: number): TileTextColor {
   // Empty cells (value 0) have no text
-  if (value === 0) {
+  if (value === EMPTY_TILE_VALUE) {
     return TileTextColor.TRANSPARENT;
   }
 

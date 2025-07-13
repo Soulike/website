@@ -35,10 +35,10 @@ describe('getTileBackgroundColor', () => {
     );
   });
 
-  it('should return fallback color for unknown values', () => {
-    expect(getTileBackgroundColor(3)).toBe(TileBackgroundColor.FALLBACK);
-    expect(getTileBackgroundColor(5)).toBe(TileBackgroundColor.FALLBACK);
-    expect(getTileBackgroundColor(100)).toBe(TileBackgroundColor.FALLBACK);
+  it('should throw for unknown values', () => {
+    expect(() => getTileBackgroundColor(3)).toThrow();
+    expect(() => getTileBackgroundColor(5)).toThrow();
+    expect(() => getTileBackgroundColor(100)).toThrow();
   });
 });
 

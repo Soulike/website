@@ -15,7 +15,6 @@ export enum TileBackgroundColor {
   TILE_1024 = '#edc53f',
   TILE_2048 = '#edc22e',
   TILE_HIGH_VALUE = '#3c3a32',
-  FALLBACK = '#cdc1b4',
 }
 
 /**
