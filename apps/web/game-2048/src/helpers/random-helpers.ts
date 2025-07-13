@@ -14,7 +14,7 @@ export function getRandomInteger(begin: number, end: number): number {
   return Math.floor(Math.random() * diff + begin);
 }
 
-export function pickRandomElement<T>(elements: T[]): T {
+export function pickRandomElement<T>(elements: readonly T[]): T {
   assert(elements.length > 0, 'elements should not be empty');
 
   const begin = 0;
