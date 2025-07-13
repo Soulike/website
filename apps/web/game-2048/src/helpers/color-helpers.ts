@@ -1,27 +1,29 @@
+import {TileBackgroundColor, TileTextColor} from '@/constants/colors.js';
+
 /**
  * Returns the background color for a 2048 game tile based on its value
  * @param value The tile value (2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, etc.)
  * @returns CSS color string for the tile background
  */
-export function getTileBackgroundColor(value: number): string {
+export function getTileBackgroundColor(value: number): TileBackgroundColor {
   // Empty cells (value 0) are transparent
   if (value === 0) {
-    return 'transparent';
+    return TileBackgroundColor.TRANSPARENT;
   }
 
   // Color map for 2048 tile values
-  const colorMap: Record<number, string> = {
-    2: '#eee4da',
-    4: '#ede0c8',
-    8: '#f2b179',
-    16: '#f59563',
-    32: '#f67c5f',
-    64: '#f65e3b',
-    128: '#edcf72',
-    256: '#edcc61',
-    512: '#edc850',
-    1024: '#edc53f',
-    2048: '#edc22e',
+  const colorMap: Record<number, TileBackgroundColor> = {
+    2: TileBackgroundColor.TILE_2,
+    4: TileBackgroundColor.TILE_4,
+    8: TileBackgroundColor.TILE_8,
+    16: TileBackgroundColor.TILE_16,
+    32: TileBackgroundColor.TILE_32,
+    64: TileBackgroundColor.TILE_64,
+    128: TileBackgroundColor.TILE_128,
+    256: TileBackgroundColor.TILE_256,
+    512: TileBackgroundColor.TILE_512,
+    1024: TileBackgroundColor.TILE_1024,
+    2048: TileBackgroundColor.TILE_2048,
   };
 
   // For known values, return the specific color
@@ -31,11 +33,11 @@ export function getTileBackgroundColor(value: number): string {
 
   // For higher values (4096, 8192, etc.), use a dark color
   if (value > 2048) {
-    return '#3c3a32';
+    return TileBackgroundColor.TILE_HIGH_VALUE;
   }
 
   // Fallback for any other values
-  return '#cdc1b4';
+  return TileBackgroundColor.FALLBACK;
 }
 
 /**
@@ -43,17 +45,17 @@ export function getTileBackgroundColor(value: number): string {
  * @param value The tile value (2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, etc.)
  * @returns CSS color string for the tile text
  */
-export function getTileTextColor(value: number): string {
+export function getTileTextColor(value: number): TileTextColor {
   // Empty cells (value 0) have no text
   if (value === 0) {
-    return 'transparent';
+    return TileTextColor.TRANSPARENT;
   }
 
   // Light tiles (2, 4) use dark text for better contrast
   if (value === 2 || value === 4) {
-    return '#776e65';
+    return TileTextColor.DARK;
   }
 
   // All other tiles use white text for better contrast on darker backgrounds
-  return '#f9f6f2';
+  return TileTextColor.LIGHT;
 }
