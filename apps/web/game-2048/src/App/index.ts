@@ -1,1 +1,2 @@
-export * from './container.js';
+const {App} = await import('./container.js');
+export {App};

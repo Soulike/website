@@ -1,1 +1,2 @@
-export * from './container.js';
+const {Grid} = await import('./container.js');
+export {Grid};
