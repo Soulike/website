@@ -2,7 +2,9 @@
   width: 100%;
   height: 100%;
   border-radius: 15px;
-  font-size: 2.5rem;
+  transition:
+    font-size,
+    background-color 0.25s;
   font-weight: bolder;
   font-family: sans-serif;
   user-select: none;
