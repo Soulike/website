@@ -141,5 +141,6 @@ import {Component} from 'path/to/Component/index.js';
 
 ## Unit Tests
 
+- Create unit test only when user prompts.
 - When developing unit tests, develop based on API interfaces and DO NOT read implementations.
 - Can expose private methods and members required in testing with `xxxForTesting` methods. The test-only methods does not need test cases.
