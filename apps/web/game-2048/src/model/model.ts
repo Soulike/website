@@ -2,20 +2,19 @@ import assert from 'node:assert';
 
 import {assertIsTest} from '@universal/test-helpers';
 
+import {
+  EMPTY_TILE_VALUE,
+  GRID_SIDE_LENGTH,
+  NEW_TILE_VALUES,
+} from '@/constants/configs.js';
 import {pickRandomElement} from '@/helpers/random-helpers.js';
 
 import {MoveDirection} from './constants.js';
 import type {Coordinate, Movement, OperationMovements} from './types.js';
 
-type NewCellValue = 2 | 4;
-
 class Model {
-  private static GRID_SIDE_LENGTH = 4;
-  private static EMPTY_CELL_VALUE = 0;
-  private static readonly NEW_CELL_VALUES: NewCellValue[] = [2, 4];
-
-  private static getRandomNewCellValue(): NewCellValue {
-    return pickRandomElement(this.NEW_CELL_VALUES);
+  private static getRandomNewCellValue() {
+    return pickRandomElement(NEW_TILE_VALUES);
   }
 
   private grid: number[][] = [];
@@ -26,12 +25,12 @@ class Model {
   }
 
   public init() {
-    this.grid = new Array<number[]>(Model.GRID_SIDE_LENGTH);
+    this.grid = new Array<number[]>(GRID_SIDE_LENGTH);
     for (let i = 0; i < this.grid.length; i++) {
-      this.grid[i] = new Array<number>(Model.GRID_SIDE_LENGTH);
-      this.grid[i].fill(Model.EMPTY_CELL_VALUE);
+      this.grid[i] = new Array<number>(GRID_SIDE_LENGTH);
+      this.grid[i].fill(EMPTY_TILE_VALUE);
     }
-    this.emptyCellCount = Model.GRID_SIDE_LENGTH * Model.GRID_SIDE_LENGTH;
+    this.emptyCellCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
     this.createNewNonEmptyCells(2);
   }
 
@@ -162,6 +161,63 @@ class Model {
     return {mergeMovements, compactMovements};
   }
 
+  public clearGridForTesting(): void {
+    assertIsTest('clearGridForTesting');
+
+    for (let i = 0; i < GRID_SIDE_LENGTH; i++) {
+      for (let j = 0; j < GRID_SIDE_LENGTH; j++) {
+        this.grid[i][j] = EMPTY_TILE_VALUE;
+      }
+    }
+
+    this.emptyCellCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
+  }
+
+  public setGridStateForTesting(gridState: number[][]): void {
+    assertIsTest('setGridStateForTesting');
+    assert(
+      gridState.length === GRID_SIDE_LENGTH,
+      `Grid must be ${String(GRID_SIDE_LENGTH)}x${String(GRID_SIDE_LENGTH)}`,
+    );
+    assert(
+      gridState.every((row) => row.length === GRID_SIDE_LENGTH),
+      `All rows must have ${String(GRID_SIDE_LENGTH)} columns`,
+    );
+
+    this.emptyCellCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
+
+    for (let i = 0; i < GRID_SIDE_LENGTH; i++) {
+      for (let j = 0; j < GRID_SIDE_LENGTH; j++) {
+        this.grid[i][j] = gridState[i][j];
+        if (this.grid[i][j] !== EMPTY_TILE_VALUE) {
+          this.emptyCellCount--;
+        }
+      }
+    }
+  }
+
+  public getGridSideLengthForTesting(): number {
+    assertIsTest('getGridSideLengthForTesting');
+
+    return GRID_SIDE_LENGTH;
+  }
+
+  private createNewNonEmptyCells(count: number) {
+    assert(count > 0);
+    const emptyCells = this.getRandomEmptyCells(count);
+    assert(emptyCells?.length == count, 'No enough empty cells');
+    for (const {row, col} of emptyCells) {
+      this.grid[row][col] = Model.getRandomNewCellValue();
+    }
+    this.emptyCellCount -= count;
+  }
+
+  public getEmptyCellValueForTesting(): number {
+    assertIsTest('getEmptyCellValueForTesting');
+
+    return EMPTY_TILE_VALUE;
+  }
+
   private compactRow(rowIndex: number, toLeft: boolean): Movement[] {
     const rowLength = this.grid[0].length;
     const colStart = toLeft ? 0 : rowLength - 1;
@@ -172,10 +228,10 @@ class Model {
 
     let writeCol = colStart;
     for (let readCol = colStart; readCol !== colEnd; readCol += colMoveStep) {
-      if (this.grid[rowIndex][readCol] !== Model.EMPTY_CELL_VALUE) {
+      if (this.grid[rowIndex][readCol] !== EMPTY_TILE_VALUE) {
         if (writeCol !== readCol) {
           this.grid[rowIndex][writeCol] = this.grid[rowIndex][readCol];
-          this.grid[rowIndex][readCol] = Model.EMPTY_CELL_VALUE;
+          this.grid[rowIndex][readCol] = EMPTY_TILE_VALUE;
 
           movements.push({
             from: {row: rowIndex, col: readCol},
@@ -199,10 +255,10 @@ class Model {
 
     let writeRow = rowStart;
     for (let readRow = rowStart; readRow !== rowEnd; readRow += rowMoveStep) {
-      if (this.grid[readRow][colIndex] !== Model.EMPTY_CELL_VALUE) {
+      if (this.grid[readRow][colIndex] !== EMPTY_TILE_VALUE) {
         if (writeRow !== readRow) {
           this.grid[writeRow][colIndex] = this.grid[readRow][colIndex];
-          this.grid[readRow][colIndex] = Model.EMPTY_CELL_VALUE;
+          this.grid[readRow][colIndex] = EMPTY_TILE_VALUE;
 
           movements.push({
             from: {row: readRow, col: colIndex},
@@ -225,7 +281,7 @@ class Model {
     const movements: Movement[] = [];
 
     for (let col = colStart; col !== colEnd; col += colMoveStep) {
-      if (this.grid[rowIndex][col] === Model.EMPTY_CELL_VALUE) {
+      if (this.grid[rowIndex][col] === EMPTY_TILE_VALUE) {
         continue;
       }
 
@@ -234,11 +290,11 @@ class Model {
         nextCol !== colEnd;
         nextCol += colMoveStep
       ) {
-        if (this.grid[rowIndex][nextCol] === Model.EMPTY_CELL_VALUE) {
+        if (this.grid[rowIndex][nextCol] === EMPTY_TILE_VALUE) {
           continue;
         }
         if (this.grid[rowIndex][nextCol] === this.grid[rowIndex][col]) {
-          this.grid[rowIndex][nextCol] = Model.EMPTY_CELL_VALUE;
+          this.grid[rowIndex][nextCol] = EMPTY_TILE_VALUE;
           this.emptyCellCount++;
           this.grid[rowIndex][col] *= 2;
 
@@ -256,16 +312,6 @@ class Model {
     return movements;
   }
 
-  private createNewNonEmptyCells(count: number) {
-    assert(count > 0);
-    const emptyCells = this.getRandomEmptyCells(count);
-    assert(emptyCells?.length == count, 'No enough empty cells');
-    for (const {row, col} of emptyCells) {
-      this.grid[row][col] = Model.getRandomNewCellValue();
-    }
-    this.emptyCellCount -= count;
-  }
-
   /**
    * Use reservoir sampling algorithm to randomly select empty cells.
    * @param count Number of empty cells to select
@@ -280,7 +326,7 @@ class Model {
     // First pass: use reservoir sampling to select count empty cells
     for (let row = 0; row < this.grid.length; row++) {
       for (let col = 0; col < this.grid[row].length; col++) {
-        if (this.grid[row][col] === Model.EMPTY_CELL_VALUE) {
+        if (this.grid[row][col] === EMPTY_TILE_VALUE) {
           totalEmptyCellCount++;
 
           if (reservoir.length < count) {
@@ -307,59 +353,6 @@ class Model {
     return reservoir;
   }
 
-  public clearGridForTesting(): void {
-    assertIsTest('clearGridForTesting');
-
-    for (let i = 0; i < Model.GRID_SIDE_LENGTH; i++) {
-      for (let j = 0; j < Model.GRID_SIDE_LENGTH; j++) {
-        this.grid[i][j] = Model.EMPTY_CELL_VALUE;
-      }
-    }
-
-    this.emptyCellCount = Model.GRID_SIDE_LENGTH * Model.GRID_SIDE_LENGTH;
-  }
-
-  public setGridStateForTesting(gridState: number[][]): void {
-    assertIsTest('setGridStateForTesting');
-    assert(
-      gridState.length === Model.GRID_SIDE_LENGTH,
-      `Grid must be ${String(Model.GRID_SIDE_LENGTH)}x${String(Model.GRID_SIDE_LENGTH)}`,
-    );
-    assert(
-      gridState.every((row) => row.length === Model.GRID_SIDE_LENGTH),
-      `All rows must have ${String(Model.GRID_SIDE_LENGTH)} columns`,
-    );
-
-    this.emptyCellCount = Model.GRID_SIDE_LENGTH * Model.GRID_SIDE_LENGTH;
-
-    for (let i = 0; i < Model.GRID_SIDE_LENGTH; i++) {
-      for (let j = 0; j < Model.GRID_SIDE_LENGTH; j++) {
-        this.grid[i][j] = gridState[i][j];
-        if (this.grid[i][j] !== Model.EMPTY_CELL_VALUE) {
-          this.emptyCellCount--;
-        }
-      }
-    }
-  }
-
-  public getGridSideLengthForTesting(): number {
-    assertIsTest('getGridSideLengthForTesting');
-
-    return Model.GRID_SIDE_LENGTH;
-  }
-
-  public getEmptyCellValueForTesting(): number {
-    assertIsTest('getEmptyCellValueForTesting');
-
-    return Model.EMPTY_CELL_VALUE;
-  }
-
-  public getNewCellValuesForTesting(): readonly NewCellValue[] {
-    assertIsTest('getNewCellValuesForTesting');
-
-    return Model.NEW_CELL_VALUES;
-  }
-
   public getEmptyCellCountForTesting(): number {
     assertIsTest('getEmptyCellCountForTesting');
     return this.emptyCellCount;
@@ -374,7 +367,7 @@ class Model {
     const movements: Movement[] = [];
 
     for (let row = rowStart; row !== rowEnd; row += rowMoveStep) {
-      if (this.grid[row][colIndex] === Model.EMPTY_CELL_VALUE) {
+      if (this.grid[row][colIndex] === EMPTY_TILE_VALUE) {
         continue;
       }
 
@@ -383,11 +376,11 @@ class Model {
         nextRow !== rowEnd;
         nextRow += rowMoveStep
       ) {
-        if (this.grid[nextRow][colIndex] === Model.EMPTY_CELL_VALUE) {
+        if (this.grid[nextRow][colIndex] === EMPTY_TILE_VALUE) {
           continue;
         }
         if (this.grid[nextRow][colIndex] === this.grid[row][colIndex]) {
-          this.grid[nextRow][colIndex] = Model.EMPTY_CELL_VALUE;
+          this.grid[nextRow][colIndex] = EMPTY_TILE_VALUE;
           this.emptyCellCount++;
           this.grid[row][colIndex] *= 2;
 

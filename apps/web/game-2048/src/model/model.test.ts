@@ -1,5 +1,7 @@
 import {beforeEach, describe, expect, it} from 'vitest';
 
+import {NEW_TILE_VALUES} from '@/constants/configs.js';
+
 import {MoveDirection} from './constants.js';
 import {model} from './model.js';
 
@@ -34,8 +36,6 @@ describe('Model', () => {
     });
 
     it('should create new cells with valid 2048 game values', () => {
-      const validValues = model.getNewCellValuesForTesting();
-
       // Run the test multiple times to ensure randomness works properly
       for (let i = 0; i < 10; i++) {
         model.init();
@@ -53,7 +53,7 @@ describe('Model', () => {
 
         // Each new cell should be either 2 or 4
         nonEmptyValues.forEach((value) => {
-          expect(validValues).toContain(value);
+          expect(NEW_TILE_VALUES).toContain(value);
         });
 
         expect(nonEmptyValues).toHaveLength(2);
@@ -423,7 +423,6 @@ describe('Model', () => {
     });
 
     it('should create new tiles with valid 2048 game values after move', () => {
-      const validValues = model.getNewCellValuesForTesting();
       const emptyCellValue = model.getEmptyCellValueForTesting();
 
       // Test multiple times to ensure randomness works properly
@@ -459,7 +458,7 @@ describe('Model', () => {
         // The new tile should be a valid 2048 game value
         expect(newTileValue).not.toBeNull();
         if (newTileValue !== null) {
-          expect(validValues).toContain(newTileValue);
+          expect(NEW_TILE_VALUES).toContain(newTileValue);
         }
 
         // Test movements - should have one compact movement
