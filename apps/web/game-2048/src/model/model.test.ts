@@ -582,7 +582,7 @@ describe('Model', () => {
         [E, E, E, E],
       ]);
 
-      expect(model.IsMovable()).toBe(true);
+      expect(model.isMovable()).toBe(true);
     });
 
     it('should return true when adjacent horizontal cells can be merged', () => {
@@ -594,7 +594,7 @@ describe('Model', () => {
         [16, 32, 64, 128],
       ]);
 
-      expect(model.IsMovable()).toBe(true);
+      expect(model.isMovable()).toBe(true);
     });
 
     it('should return true when adjacent vertical cells can be merged', () => {
@@ -606,7 +606,7 @@ describe('Model', () => {
         [8, 32, 64, 128],
       ]);
 
-      expect(model.IsMovable()).toBe(true);
+      expect(model.isMovable()).toBe(true);
     });
 
     it('should return true when cells can be merged in multiple directions', () => {
@@ -618,7 +618,7 @@ describe('Model', () => {
         [16, 32, 64, 128],
       ]);
 
-      expect(model.IsMovable()).toBe(true);
+      expect(model.isMovable()).toBe(true);
     });
 
     it('should return false when no moves are possible (game over)', () => {
@@ -630,7 +630,7 @@ describe('Model', () => {
         [16, 32, 64, 128],
       ]);
 
-      expect(model.IsMovable()).toBe(false);
+      expect(model.isMovable()).toBe(false);
     });
 
     it('should return false for another game over scenario', () => {
@@ -642,7 +642,7 @@ describe('Model', () => {
         [4, 2, 4, 2],
       ]);
 
-      expect(model.IsMovable()).toBe(false);
+      expect(model.isMovable()).toBe(false);
     });
 
     it('should return true when merge is possible at grid edges', () => {
@@ -654,7 +654,7 @@ describe('Model', () => {
         [16, 32, 64, 128],
       ]);
 
-      expect(model.IsMovable()).toBe(true);
+      expect(model.isMovable()).toBe(true);
     });
 
     it('should return true when merge is possible at grid bottom edge', () => {
@@ -666,7 +666,7 @@ describe('Model', () => {
         [8, 32, 64, 128],
       ]);
 
-      expect(model.IsMovable()).toBe(true);
+      expect(model.isMovable()).toBe(true);
     });
 
     it('should return true when only one merge is possible', () => {
@@ -678,7 +678,7 @@ describe('Model', () => {
         [16, 32, 64, 128],
       ]);
 
-      expect(model.IsMovable()).toBe(true);
+      expect(model.isMovable()).toBe(true);
     });
   });
 });

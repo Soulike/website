@@ -13,6 +13,6 @@ export interface OperationMovements {
   compactMovements: Movement[];
 }
 
-export type GridChangeEventListener = (
-  grid: readonly (readonly number[])[],
-) => void;
+export type GridChangeEventListener = (grid: GridType) => void;
+
+export type GridType = readonly (readonly number[])[];

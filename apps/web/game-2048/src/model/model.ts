@@ -13,6 +13,7 @@ import {MoveDirection} from './constants.js';
 import type {
   Coordinate,
   GridChangeEventListener,
+  GridType,
   Movement,
   OperationMovements,
 } from './types.js';
@@ -27,7 +28,7 @@ class Model {
     return pickRandomElement(NEW_TILE_VALUES);
   }
 
-  public getGrid(): readonly (readonly number[])[] {
+  public getGrid(): GridType {
     return this.grid;
   }
 
@@ -79,7 +80,7 @@ class Model {
    * Checks if any moves are possible on the current grid.
    * @returns true if there are empty tiles or adjacent tiles with same values that can be merged, false otherwise (game over)
    */
-  public IsMovable(): boolean {
+  public isMovable(): boolean {
     if (this.emptyTileCount > 0) {
       return true;
     }
@@ -111,7 +112,7 @@ class Model {
   }
 
   private moveWithoutCreatingNewTile(direction: MoveDirection) {
-    assert(this.IsMovable(), 'Try to move after game is over.');
+    assert(this.isMovable(), 'Try to move after game is over.');
 
     let operationMovements: OperationMovements | null = null;
 
