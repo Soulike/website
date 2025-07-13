@@ -1,27 +1,33 @@
+import {getCSSVariableOnRootElement} from '@/helpers/css-helpers.js';
+
+export const GridBackgroundColor = getCSSVariableOnRootElement(
+  '--grid-background-color',
+);
+
 /**
  * Background colors for 2048 game tiles
  */
-export enum TileBackgroundColor {
-  TRANSPARENT = 'transparent',
-  TILE_2 = '#eee4da',
-  TILE_4 = '#ede0c8',
-  TILE_8 = '#f2b179',
-  TILE_16 = '#f59563',
-  TILE_32 = '#f67c5f',
-  TILE_64 = '#f65e3b',
-  TILE_128 = '#edcf72',
-  TILE_256 = '#edcc61',
-  TILE_512 = '#edc850',
-  TILE_1024 = '#edc53f',
-  TILE_2048 = '#edc22e',
-  TILE_HIGH_VALUE = '#3c3a32',
-}
+export const TileBackgroundColor = Object.freeze({
+  TILE_EMPTY: getCSSVariableOnRootElement('--tile-empty'),
+  TILE_2: getCSSVariableOnRootElement('--tile-2'),
+  TILE_4: getCSSVariableOnRootElement('--tile-4'),
+  TILE_8: getCSSVariableOnRootElement('--tile-8'),
+  TILE_16: getCSSVariableOnRootElement('--tile-16'),
+  TILE_32: getCSSVariableOnRootElement('--tile-32'),
+  TILE_64: getCSSVariableOnRootElement('--tile-64'),
+  TILE_128: getCSSVariableOnRootElement('--tile-128'),
+  TILE_256: getCSSVariableOnRootElement('--tile-256'),
+  TILE_512: getCSSVariableOnRootElement('--tile-512'),
+  TILE_1024: getCSSVariableOnRootElement('--tile-1024'),
+  TILE_2048: getCSSVariableOnRootElement('--tile-2048'),
+  TILE_HIGHER_VALUE: getCSSVariableOnRootElement('--tile-higher-value'),
+});
 
 /**
  * Text colors for 2048 game tiles
  */
-export enum TileTextColor {
-  TRANSPARENT = 'transparent',
-  DARK = '#776e65',
-  LIGHT = '#f9f6f2',
-}
+export const TileTextColor = Object.freeze({
+  TRANSPARENT: getCSSVariableOnRootElement('--tile-text-transparent'),
+  DARK: getCSSVariableOnRootElement('--tile-text-dark'),
+  LIGHT: getCSSVariableOnRootElement('--tile-text-light'),
+});

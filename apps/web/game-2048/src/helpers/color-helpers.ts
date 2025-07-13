@@ -8,14 +8,10 @@ import {EMPTY_TILE_VALUE} from '@/constants/configs.js';
  * @param value The tile value (2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, etc.)
  * @returns CSS color string for the tile background
  */
-export function getTileBackgroundColor(value: number): TileBackgroundColor {
-  // Empty cells (value 0) are transparent
-  if (value === EMPTY_TILE_VALUE) {
-    return TileBackgroundColor.TRANSPARENT;
-  }
-
+export function getTileBackgroundColor(value: number): string {
   // Color map for 2048 tile values
-  const colorMap: Record<number, TileBackgroundColor> = {
+  const colorMap: Record<number, string> = {
+    [EMPTY_TILE_VALUE]: TileBackgroundColor.TILE_EMPTY,
     2: TileBackgroundColor.TILE_2,
     4: TileBackgroundColor.TILE_4,
     8: TileBackgroundColor.TILE_8,
@@ -36,7 +32,7 @@ export function getTileBackgroundColor(value: number): TileBackgroundColor {
 
   // For higher values (4096, 8192, etc.), use a dark color
   if (value > 2048) {
-    return TileBackgroundColor.TILE_HIGH_VALUE;
+    return TileBackgroundColor.TILE_HIGHER_VALUE;
   }
 
   assert.fail('Invalid value for 2048.');
@@ -47,7 +43,7 @@ export function getTileBackgroundColor(value: number): TileBackgroundColor {
  * @param value The tile value (2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, etc.)
  * @returns CSS color string for the tile text
  */
-export function getTileTextColor(value: number): TileTextColor {
+export function getTileTextColor(value: number): string {
   // Empty cells (value 0) have no text
   if (value === EMPTY_TILE_VALUE) {
     return TileTextColor.TRANSPARENT;

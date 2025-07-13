@@ -6,7 +6,7 @@ import {getTileBackgroundColor, getTileTextColor} from './color-helpers.js';
 
 describe('getTileBackgroundColor', () => {
   it('should return transparent for empty cells (value 0)', () => {
-    expect(getTileBackgroundColor(0)).toBe(TileBackgroundColor.TRANSPARENT);
+    expect(getTileBackgroundColor(0)).toBe(TileBackgroundColor.TILE_EMPTY);
   });
 
   it('should return correct colors for standard tile values', () => {
@@ -25,13 +25,13 @@ describe('getTileBackgroundColor', () => {
 
   it('should return dark color for values higher than 2048', () => {
     expect(getTileBackgroundColor(4096)).toBe(
-      TileBackgroundColor.TILE_HIGH_VALUE,
+      TileBackgroundColor.TILE_HIGHER_VALUE,
     );
     expect(getTileBackgroundColor(8192)).toBe(
-      TileBackgroundColor.TILE_HIGH_VALUE,
+      TileBackgroundColor.TILE_HIGHER_VALUE,
     );
     expect(getTileBackgroundColor(16384)).toBe(
-      TileBackgroundColor.TILE_HIGH_VALUE,
+      TileBackgroundColor.TILE_HIGHER_VALUE,
     );
   });
 
