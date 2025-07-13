@@ -1,9 +1,12 @@
 import {beforeEach, describe, expect, it} from 'vitest';
 
-import {NEW_TILE_VALUES} from '@/constants/configs.js';
+import {EMPTY_TILE_VALUE, NEW_TILE_VALUES} from '@/constants/configs.js';
 
 import {MoveDirection} from './constants.js';
 import {model} from './model.js';
+
+// Empty tile value used in grid literals.
+const E = EMPTY_TILE_VALUE;
 
 describe('Model', () => {
   describe('init', () => {
@@ -21,12 +24,11 @@ describe('Model', () => {
     it('should create exactly 2 non-empty cells after initialization', () => {
       model.init();
       const grid = model.getGrid();
-      const emptyCellValue = model.getEmptyCellValueForTesting();
 
       let nonEmptyCount = 0;
       for (const row of grid) {
         for (const cell of row) {
-          if (cell !== emptyCellValue) {
+          if (cell !== EMPTY_TILE_VALUE) {
             nonEmptyCount++;
           }
         }
@@ -40,12 +42,11 @@ describe('Model', () => {
       for (let i = 0; i < 10; i++) {
         model.init();
         const grid = model.getGrid();
-        const emptyCellValue = model.getEmptyCellValueForTesting();
 
         const nonEmptyValues: number[] = [];
         for (const row of grid) {
           for (const cell of row) {
-            if (cell !== emptyCellValue) {
+            if (cell !== EMPTY_TILE_VALUE) {
               nonEmptyValues.push(cell);
             }
           }
@@ -72,10 +73,10 @@ describe('Model', () => {
       it('should slide tiles to the left', () => {
         // Set up: [0, 2, 0, 4] should become [2, 4, 0, 0]
         model.setGridStateForTesting([
-          [0, 2, 0, 4],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
+          [E, 2, E, 4],
+          [E, E, E, E],
+          [E, E, E, E],
+          [E, E, E, E],
         ]);
 
         const movements = model.moveWithoutCreatingNewTileForTesting(
@@ -104,10 +105,10 @@ describe('Model', () => {
       it('should merge adjacent tiles with same value', () => {
         // Set up: [2, 2, 0, 0] should become [4, 0, 0, 0]
         model.setGridStateForTesting([
-          [2, 2, 0, 0],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
+          [2, 2, E, E],
+          [E, E, E, E],
+          [E, E, E, E],
+          [E, E, E, E],
         ]);
 
         const movements = model.moveWithoutCreatingNewTileForTesting(
@@ -133,9 +134,9 @@ describe('Model', () => {
         // Set up: [2, 2, 4, 4] should become [4, 8, 0, 0]
         model.setGridStateForTesting([
           [2, 2, 4, 4],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
+          [E, E, E, E],
+          [E, E, E, E],
+          [E, E, E, E],
         ]);
 
         const movements = model.moveWithoutCreatingNewTileForTesting(
@@ -174,10 +175,10 @@ describe('Model', () => {
       it('should slide tiles to the right', () => {
         // Set up: [2, 0, 4, 0] should become [0, 0, 2, 4]
         model.setGridStateForTesting([
-          [2, 0, 4, 0],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
+          [2, E, 4, E],
+          [E, E, E, E],
+          [E, E, E, E],
+          [E, E, E, E],
         ]);
 
         const movements = model.moveWithoutCreatingNewTileForTesting(
@@ -206,10 +207,10 @@ describe('Model', () => {
       it('should merge tiles from right to left', () => {
         // Set up: [0, 0, 2, 2] should become [0, 0, 0, 4]
         model.setGridStateForTesting([
-          [0, 0, 2, 2],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
+          [E, E, 2, 2],
+          [E, E, E, E],
+          [E, E, E, E],
+          [E, E, E, E],
         ]);
 
         const movements = model.moveWithoutCreatingNewTileForTesting(
@@ -236,10 +237,10 @@ describe('Model', () => {
       it('should slide tiles up', () => {
         // Set up column: [0, 2, 0, 4] should become [2, 4, 0, 0]
         model.setGridStateForTesting([
-          [0, 0, 0, 0],
-          [2, 0, 0, 0],
-          [0, 0, 0, 0],
-          [4, 0, 0, 0],
+          [E, E, E, E],
+          [2, E, E, E],
+          [E, E, E, E],
+          [4, E, E, E],
         ]);
 
         const movements = model.moveWithoutCreatingNewTileForTesting(
@@ -268,10 +269,10 @@ describe('Model', () => {
       it('should merge tiles vertically', () => {
         // Set up column: [2, 2, 0, 0] should become [4, 0, 0, 0]
         model.setGridStateForTesting([
-          [2, 0, 0, 0],
-          [2, 0, 0, 0],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
+          [2, E, E, E],
+          [2, E, E, E],
+          [E, E, E, E],
+          [E, E, E, E],
         ]);
 
         const movements = model.moveWithoutCreatingNewTileForTesting(
@@ -298,10 +299,10 @@ describe('Model', () => {
       it('should slide tiles down', () => {
         // Set up column: [2, 0, 4, 0] should become [0, 0, 2, 4]
         model.setGridStateForTesting([
-          [2, 0, 0, 0],
-          [0, 0, 0, 0],
-          [4, 0, 0, 0],
-          [0, 0, 0, 0],
+          [2, E, E, E],
+          [E, E, E, E],
+          [4, E, E, E],
+          [E, E, E, E],
         ]);
 
         const movements = model.moveWithoutCreatingNewTileForTesting(
@@ -330,10 +331,10 @@ describe('Model', () => {
       it('should merge tiles from bottom up', () => {
         // Set up column: [0, 0, 2, 2] should become [0, 0, 0, 4]
         model.setGridStateForTesting([
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
-          [2, 0, 0, 0],
-          [2, 0, 0, 0],
+          [E, E, E, E],
+          [E, E, E, E],
+          [2, E, E, E],
+          [2, E, E, E],
         ]);
 
         const movements = model.moveWithoutCreatingNewTileForTesting(
@@ -359,14 +360,13 @@ describe('Model', () => {
     it('should spawn exactly one new tile after each move', () => {
       // Set up a grid with many empty cells
       model.setGridStateForTesting([
-        [0, 2, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
+        [E, 2, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
       ]);
 
       const initialNonEmptyCount = 1;
-      const emptyCellValue = model.getEmptyCellValueForTesting();
 
       const movements = model.move(MoveDirection.LEFT);
 
@@ -374,7 +374,7 @@ describe('Model', () => {
       let newNonEmptyCount = 0;
       for (const row of newGrid) {
         for (const cell of row) {
-          if (cell !== emptyCellValue) {
+          if (cell !== EMPTY_TILE_VALUE) {
             newNonEmptyCount++;
           }
         }
@@ -394,14 +394,13 @@ describe('Model', () => {
     it('should spawn no new tile if no tile is moved', () => {
       // Set up a grid with many empty cells
       model.setGridStateForTesting([
-        [0, 2, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
+        [E, 2, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
       ]);
 
       const initialNonEmptyCount = 1;
-      const emptyCellValue = model.getEmptyCellValueForTesting();
 
       const movements = model.move(MoveDirection.UP);
 
@@ -409,7 +408,7 @@ describe('Model', () => {
       let newNonEmptyCount = 0;
       for (const row of newGrid) {
         for (const cell of row) {
-          if (cell !== emptyCellValue) {
+          if (cell !== EMPTY_TILE_VALUE) {
             newNonEmptyCount++;
           }
         }
@@ -423,15 +422,13 @@ describe('Model', () => {
     });
 
     it('should create new tiles with valid 2048 game values after move', () => {
-      const emptyCellValue = model.getEmptyCellValueForTesting();
-
       // Test multiple times to ensure randomness works properly
       for (let i = 0; i < 10; i++) {
         model.setGridStateForTesting([
-          [0, 2, 0, 0],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
+          [E, 2, E, E],
+          [E, E, E, E],
+          [E, E, E, E],
+          [E, E, E, E],
         ]);
 
         const movements = model.move(MoveDirection.LEFT);
@@ -443,7 +440,7 @@ describe('Model', () => {
 
         for (const row of grid) {
           for (const cell of row) {
-            if (cell !== emptyCellValue) {
+            if (cell !== EMPTY_TILE_VALUE) {
               foundTiles++;
               if (foundTiles === 2) {
                 // This is the new tile (first tile is the original 2)
@@ -482,9 +479,9 @@ describe('Model', () => {
       // Set up: [2, 2, 4, 4] -> LEFT -> [4, 8, 0, 0]
       model.setGridStateForTesting([
         [2, 2, 4, 4],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
+        [E, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
       ]);
 
       const movements = model.moveWithoutCreatingNewTileForTesting(
@@ -521,10 +518,10 @@ describe('Model', () => {
     it('should not merge tiles twice in one move', () => {
       // Set up: [4, 2, 2, 0] -> LEFT -> [4, 4, 0, 0] (not [8, 0, 0, 0])
       model.setGridStateForTesting([
-        [4, 2, 2, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
+        [4, 2, 2, E],
+        [E, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
       ]);
 
       const movements = model.moveWithoutCreatingNewTileForTesting(
@@ -554,13 +551,13 @@ describe('Model', () => {
         [2, 4, 8, 16],
         [4, 8, 16, 32],
         [8, 16, 32, 64],
-        [16, 32, 64, 0], // One empty cell
+        [16, 32, 64, E], // One empty cell
       ]);
 
       const movements = model.move(MoveDirection.RIGHT);
 
       // Verify that the move was processed and exactly one new tile was added
-      const emptyCount = model.getEmptyCellCountForTesting();
+      const emptyCount = model.getEmptyTileCountForTesting();
 
       expect(emptyCount).toBe(0); // All cells should be filled after the move
 
@@ -579,10 +576,10 @@ describe('Model', () => {
     it('should return true when there are empty cells', () => {
       // Set up a grid with some empty cells
       model.setGridStateForTesting([
-        [2, 4, 0, 0],
-        [4, 2, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
+        [2, 4, E, E],
+        [4, 2, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
       ]);
 
       expect(model.IsMovable()).toBe(true);

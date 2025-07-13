@@ -13,12 +13,13 @@ import {MoveDirection} from './constants.js';
 import type {Coordinate, Movement, OperationMovements} from './types.js';
 
 class Model {
-  private static getRandomNewCellValue() {
-    return pickRandomElement(NEW_TILE_VALUES);
-  }
+  private emptyTileCount = -1;
 
   private grid: number[][] = [];
-  private emptyCellCount = -1;
+
+  private static getRandomNewTileValue() {
+    return pickRandomElement(NEW_TILE_VALUES);
+  }
 
   public getGrid(): readonly (readonly number[])[] {
     return this.grid;
@@ -30,8 +31,8 @@ class Model {
       this.grid[i] = new Array<number>(GRID_SIDE_LENGTH);
       this.grid[i].fill(EMPTY_TILE_VALUE);
     }
-    this.emptyCellCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
-    this.createNewNonEmptyCells(2);
+    this.emptyTileCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
+    this.createNewTile(2);
   }
 
   public move(direction: MoveDirection): OperationMovements {
@@ -40,7 +41,7 @@ class Model {
       operationMovements.mergeMovements.length > 0 ||
       operationMovements.compactMovements.length > 0
     ) {
-      this.createNewNonEmptyCells(1);
+      this.createNewTile(1);
     }
 
     return operationMovements;
@@ -49,28 +50,28 @@ class Model {
   public moveWithoutCreatingNewTileForTesting(
     direction: MoveDirection,
   ): OperationMovements {
-    assertIsTest('moveWithoutCreatingNewNonEmptyCellForTesting');
+    assertIsTest('moveWithoutCreatingNewTileForTesting');
     return this.moveWithoutCreatingNewTile(direction);
   }
 
   /**
    * Checks if any moves are possible on the current grid.
-   * @returns true if there are empty cells or adjacent cells with same values that can be merged, false otherwise (game over)
+   * @returns true if there are empty tiles or adjacent tiles with same values that can be merged, false otherwise (game over)
    */
   public IsMovable(): boolean {
-    if (this.emptyCellCount > 0) {
+    if (this.emptyTileCount > 0) {
       return true;
     }
 
-    // Check if any adjacent cells can be merged
+    // Check if any adjacent tiles can be merged
     for (let row = 0; row < this.grid.length; row++) {
       for (let col = 0; col < this.grid[0].length; col++) {
-        const cellValue = this.grid[row][col];
+        const tileValue = this.grid[row][col];
 
         // Check right neighbor
         if (
           col < this.grid[0].length - 1 &&
-          this.grid[row][col + 1] === cellValue
+          this.grid[row][col + 1] === tileValue
         ) {
           return true;
         }
@@ -78,7 +79,7 @@ class Model {
         // Check bottom neighbor
         if (
           row < this.grid.length - 1 &&
-          this.grid[row + 1][col] === cellValue
+          this.grid[row + 1][col] === tileValue
         ) {
           return true;
         }
@@ -170,7 +171,7 @@ class Model {
       }
     }
 
-    this.emptyCellCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
+    this.emptyTileCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
   }
 
   public setGridStateForTesting(gridState: number[][]): void {
@@ -184,13 +185,13 @@ class Model {
       `All rows must have ${String(GRID_SIDE_LENGTH)} columns`,
     );
 
-    this.emptyCellCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
+    this.emptyTileCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
 
     for (let i = 0; i < GRID_SIDE_LENGTH; i++) {
       for (let j = 0; j < GRID_SIDE_LENGTH; j++) {
         this.grid[i][j] = gridState[i][j];
         if (this.grid[i][j] !== EMPTY_TILE_VALUE) {
-          this.emptyCellCount--;
+          this.emptyTileCount--;
         }
       }
     }
@@ -202,20 +203,9 @@ class Model {
     return GRID_SIDE_LENGTH;
   }
 
-  private createNewNonEmptyCells(count: number) {
-    assert(count > 0);
-    const emptyCells = this.getRandomEmptyCells(count);
-    assert(emptyCells?.length == count, 'No enough empty cells');
-    for (const {row, col} of emptyCells) {
-      this.grid[row][col] = Model.getRandomNewCellValue();
-    }
-    this.emptyCellCount -= count;
-  }
-
-  public getEmptyCellValueForTesting(): number {
-    assertIsTest('getEmptyCellValueForTesting');
-
-    return EMPTY_TILE_VALUE;
+  public getEmptyTileCountForTesting(): number {
+    assertIsTest('getEmptyTileCountForTesting');
+    return this.emptyTileCount;
   }
 
   private compactRow(rowIndex: number, toLeft: boolean): Movement[] {
@@ -272,6 +262,16 @@ class Model {
     return movements;
   }
 
+  private createNewTile(count: number) {
+    assert(count > 0);
+    const emptyTiles = this.getRandomEmptyTiles(count);
+    assert(emptyTiles?.length == count, 'No enough empty tiles');
+    for (const {row, col} of emptyTiles) {
+      this.grid[row][col] = Model.getRandomNewTileValue();
+    }
+    this.emptyTileCount -= count;
+  }
+
   private mergeRow(rowIndex: number, toLeft: boolean): Movement[] {
     const rowLength = this.grid[0].length;
     const colStart = toLeft ? 0 : rowLength - 1;
@@ -295,7 +295,7 @@ class Model {
         }
         if (this.grid[rowIndex][nextCol] === this.grid[rowIndex][col]) {
           this.grid[rowIndex][nextCol] = EMPTY_TILE_VALUE;
-          this.emptyCellCount++;
+          this.emptyTileCount++;
           this.grid[rowIndex][col] *= 2;
 
           movements.push({
@@ -304,7 +304,7 @@ class Model {
           });
           break;
         } else {
-          // Found different value, impossible to merge. Move to next cell.
+          // Found different value, impossible to merge. Move to next tile.
           break;
         }
       }
@@ -313,28 +313,28 @@ class Model {
   }
 
   /**
-   * Use reservoir sampling algorithm to randomly select empty cells.
-   * @param count Number of empty cells to select
-   * @returns Array of coordinates of empty cells {row, col}. If not enough empty cells, returns null.
+   * Use reservoir sampling algorithm to randomly select empty tiles.
+   * @param count Number of empty tiles to select
+   * @returns Array of coordinates of empty tiles {row, col}. If not enough empty tiles, returns null.
    */
-  private getRandomEmptyCells(count: number): Coordinate[] | null {
+  private getRandomEmptyTiles(count: number): Coordinate[] | null {
     assert(count > 0);
 
     const reservoir: Coordinate[] = [];
-    let totalEmptyCellCount = 0;
+    let totalEmptyTileCount = 0;
 
-    // First pass: use reservoir sampling to select count empty cells
+    // First pass: use reservoir sampling to select count empty tiles
     for (let row = 0; row < this.grid.length; row++) {
       for (let col = 0; col < this.grid[row].length; col++) {
         if (this.grid[row][col] === EMPTY_TILE_VALUE) {
-          totalEmptyCellCount++;
+          totalEmptyTileCount++;
 
           if (reservoir.length < count) {
             // Fill reservoir if not full
             reservoir.push({row, col});
           } else {
-            // Replace element with probability count/totalEmptyCellCount
-            const randomIndex = Math.floor(Math.random() * totalEmptyCellCount);
+            // Replace element with probability count/totalEmptyTileCount
+            const randomIndex = Math.floor(Math.random() * totalEmptyTileCount);
             if (randomIndex < count) {
               reservoir[randomIndex] = {row, col};
             }
@@ -343,19 +343,14 @@ class Model {
       }
     }
 
-    assert.equal(this.emptyCellCount, totalEmptyCellCount);
+    assert.equal(this.emptyTileCount, totalEmptyTileCount);
 
-    // Check if we have enough empty cells
-    if (totalEmptyCellCount < count) {
+    // Check if we have enough empty tiles
+    if (totalEmptyTileCount < count) {
       return null;
     }
 
     return reservoir;
-  }
-
-  public getEmptyCellCountForTesting(): number {
-    assertIsTest('getEmptyCellCountForTesting');
-    return this.emptyCellCount;
   }
 
   private mergeCol(colIndex: number, toUp: boolean): Movement[] {
@@ -381,7 +376,7 @@ class Model {
         }
         if (this.grid[nextRow][colIndex] === this.grid[row][colIndex]) {
           this.grid[nextRow][colIndex] = EMPTY_TILE_VALUE;
-          this.emptyCellCount++;
+          this.emptyTileCount++;
           this.grid[row][colIndex] *= 2;
 
           movements.push({
@@ -390,7 +385,7 @@ class Model {
           });
           break;
         } else {
-          // Found different value, impossible to merge. Move to next cell.
+          // Found different value, impossible to merge. Move to next tile.
           break;
         }
       }
