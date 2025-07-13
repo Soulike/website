@@ -2,21 +2,12 @@ import assert from 'node:assert';
 
 import {assertIsTest} from '@universal/test-helpers';
 
-import {pickRandomElement} from './helpers/random-helpers.js';
+import {pickRandomElement} from '@/helpers/random-helpers.js';
+
+import {MoveDirection} from './constants.js';
+import type {Coordinate, Movement, OperationMovements} from './types.js';
 
 type NewCellValue = 2 | 4;
-
-interface Coordinate {
-  row: number;
-  col: number;
-}
-
-export enum MoveDirection {
-  UP = 'up',
-  DOWN = 'down',
-  LEFT = 'left',
-  RIGHT = 'right',
-}
 
 class Model {
   private static GRID_SIDE_LENGTH = 4;
@@ -44,26 +35,23 @@ class Model {
     this.createNewNonEmptyCells(2);
   }
 
-  public move(direction: MoveDirection) {
-    assert(this.IsMovable(), 'Try to move when is not movable.');
-
-    switch (direction) {
-      case MoveDirection.UP:
-        this.moveUp();
-        break;
-      case MoveDirection.DOWN:
-        this.moveDown();
-        break;
-      case MoveDirection.LEFT:
-        this.moveLeft();
-        break;
-      case MoveDirection.RIGHT:
-        this.moveRight();
-        break;
-      default:
-        assert.fail(`Unexpected direction ${String(direction)}`);
+  public move(direction: MoveDirection): OperationMovements {
+    const operationMovements = this.moveWithoutCreatingNewTile(direction);
+    if (
+      operationMovements.mergeMovements.length > 0 ||
+      operationMovements.compactMovements.length > 0
+    ) {
+      this.createNewNonEmptyCells(1);
     }
-    this.createNewNonEmptyCells(1);
+
+    return operationMovements;
+  }
+
+  public moveWithoutCreatingNewTileForTesting(
+    direction: MoveDirection,
+  ): OperationMovements {
+    assertIsTest('moveWithoutCreatingNewNonEmptyCellForTesting');
+    return this.moveWithoutCreatingNewTile(direction);
   }
 
   /**
@@ -101,39 +89,86 @@ class Model {
     return false;
   }
 
-  private moveUp() {
+  private moveWithoutCreatingNewTile(direction: MoveDirection) {
+    assert(this.IsMovable(), 'Try to move after game is over.');
+
+    let operationMovements: OperationMovements | null = null;
+
+    switch (direction) {
+      case MoveDirection.UP:
+        operationMovements = this.moveUp();
+        break;
+      case MoveDirection.DOWN:
+        operationMovements = this.moveDown();
+        break;
+      case MoveDirection.LEFT:
+        operationMovements = this.moveLeft();
+        break;
+      case MoveDirection.RIGHT:
+        operationMovements = this.moveRight();
+        break;
+      default:
+        assert.fail(`Unexpected direction ${String(direction)}`);
+    }
+
+    return operationMovements;
+  }
+
+  private moveUp(): OperationMovements {
+    const mergeMovements: Movement[] = [];
+    const compactMovements: Movement[] = [];
+
     for (let col = 0; col < this.grid[0].length; col++) {
-      this.mergeCol(col, true);
-      this.compactCol(col, true);
+      mergeMovements.push(...this.mergeCol(col, true));
+      compactMovements.push(...this.compactCol(col, true));
     }
+
+    return {mergeMovements, compactMovements};
   }
 
-  private moveDown() {
+  private moveDown(): OperationMovements {
+    const mergeMovements: Movement[] = [];
+    const compactMovements: Movement[] = [];
+
     for (let col = 0; col < this.grid[0].length; col++) {
-      this.mergeCol(col, false);
-      this.compactCol(col, false);
+      mergeMovements.push(...this.mergeCol(col, false));
+      compactMovements.push(...this.compactCol(col, false));
     }
+
+    return {mergeMovements, compactMovements};
   }
 
-  private moveLeft() {
+  private moveLeft(): OperationMovements {
+    const mergeMovements: Movement[] = [];
+    const compactMovements: Movement[] = [];
+
     for (let row = 0; row < this.grid.length; row++) {
-      this.mergeRow(row, true);
-      this.compactRow(row, true);
+      mergeMovements.push(...this.mergeRow(row, true));
+      compactMovements.push(...this.compactRow(row, true));
     }
+
+    return {mergeMovements, compactMovements};
   }
 
-  private moveRight() {
+  private moveRight(): OperationMovements {
+    const mergeMovements: Movement[] = [];
+    const compactMovements: Movement[] = [];
+
     for (let row = 0; row < this.grid.length; row++) {
-      this.mergeRow(row, false);
-      this.compactRow(row, false);
+      mergeMovements.push(...this.mergeRow(row, false));
+      compactMovements.push(...this.compactRow(row, false));
     }
+
+    return {mergeMovements, compactMovements};
   }
 
-  private compactRow(rowIndex: number, toLeft: boolean): void {
+  private compactRow(rowIndex: number, toLeft: boolean): Movement[] {
     const rowLength = this.grid[0].length;
     const colStart = toLeft ? 0 : rowLength - 1;
     const colEnd = toLeft ? rowLength : -1;
     const colMoveStep = toLeft ? 1 : -1;
+
+    const movements: Movement[] = [];
 
     let writeCol = colStart;
     for (let readCol = colStart; readCol !== colEnd; readCol += colMoveStep) {
@@ -141,17 +176,26 @@ class Model {
         if (writeCol !== readCol) {
           this.grid[rowIndex][writeCol] = this.grid[rowIndex][readCol];
           this.grid[rowIndex][readCol] = Model.EMPTY_CELL_VALUE;
+
+          movements.push({
+            from: {row: rowIndex, col: readCol},
+            to: {row: rowIndex, col: writeCol},
+          });
         }
         writeCol += colMoveStep;
       }
     }
+
+    return movements;
   }
 
-  private compactCol(colIndex: number, toUp: boolean): void {
+  private compactCol(colIndex: number, toUp: boolean): Movement[] {
     const colLength = this.grid.length;
     const rowStart = toUp ? 0 : colLength - 1;
     const rowEnd = toUp ? colLength : -1;
     const rowMoveStep = toUp ? 1 : -1;
+
+    const movements: Movement[] = [];
 
     let writeRow = rowStart;
     for (let readRow = rowStart; readRow !== rowEnd; readRow += rowMoveStep) {
@@ -159,17 +203,26 @@ class Model {
         if (writeRow !== readRow) {
           this.grid[writeRow][colIndex] = this.grid[readRow][colIndex];
           this.grid[readRow][colIndex] = Model.EMPTY_CELL_VALUE;
+
+          movements.push({
+            from: {row: readRow, col: colIndex},
+            to: {row: writeRow, col: colIndex},
+          });
         }
         writeRow += rowMoveStep;
       }
     }
+
+    return movements;
   }
 
-  private mergeRow(rowIndex: number, toLeft: boolean): void {
+  private mergeRow(rowIndex: number, toLeft: boolean): Movement[] {
     const rowLength = this.grid[0].length;
     const colStart = toLeft ? 0 : rowLength - 1;
     const colEnd = toLeft ? rowLength : -1;
     const colMoveStep = toLeft ? 1 : -1;
+
+    const movements: Movement[] = [];
 
     for (let col = colStart; col !== colEnd; col += colMoveStep) {
       if (this.grid[rowIndex][col] === Model.EMPTY_CELL_VALUE) {
@@ -188,6 +241,11 @@ class Model {
           this.grid[rowIndex][nextCol] = Model.EMPTY_CELL_VALUE;
           this.emptyCellCount++;
           this.grid[rowIndex][col] *= 2;
+
+          movements.push({
+            from: {row: rowIndex, col: nextCol},
+            to: {row: rowIndex, col},
+          });
           break;
         } else {
           // Found different value, impossible to merge. Move to next cell.
@@ -195,38 +253,7 @@ class Model {
         }
       }
     }
-  }
-
-  private mergeCol(colIndex: number, toUp: boolean): void {
-    const colLength = this.grid.length;
-    const rowStart = toUp ? 0 : colLength - 1;
-    const rowEnd = toUp ? colLength : -1;
-    const rowMoveStep = toUp ? 1 : -1;
-
-    for (let row = rowStart; row !== rowEnd; row += rowMoveStep) {
-      if (this.grid[row][colIndex] === Model.EMPTY_CELL_VALUE) {
-        continue;
-      }
-
-      for (
-        let nextRow = row + rowMoveStep;
-        nextRow !== rowEnd;
-        nextRow += rowMoveStep
-      ) {
-        if (this.grid[nextRow][colIndex] === Model.EMPTY_CELL_VALUE) {
-          continue;
-        }
-        if (this.grid[nextRow][colIndex] === this.grid[row][colIndex]) {
-          this.grid[nextRow][colIndex] = Model.EMPTY_CELL_VALUE;
-          this.emptyCellCount++;
-          this.grid[row][colIndex] *= 2;
-          break;
-        } else {
-          // Found different value, impossible to merge. Move to next cell.
-          break;
-        }
-      }
-    }
+    return movements;
   }
 
   private createNewNonEmptyCells(count: number) {
@@ -338,28 +365,45 @@ class Model {
     return this.emptyCellCount;
   }
 
-  public moveWithoutCreatingNewNonEmptyCellForTesting(
-    direction: MoveDirection,
-  ): void {
-    assertIsTest('moveWithoutCreatingNewNonEmptyCellForTesting');
-    assert(this.IsMovable(), 'Try to move when is not movable.');
+  private mergeCol(colIndex: number, toUp: boolean): Movement[] {
+    const colLength = this.grid.length;
+    const rowStart = toUp ? 0 : colLength - 1;
+    const rowEnd = toUp ? colLength : -1;
+    const rowMoveStep = toUp ? 1 : -1;
 
-    switch (direction) {
-      case MoveDirection.UP:
-        this.moveUp();
-        break;
-      case MoveDirection.DOWN:
-        this.moveDown();
-        break;
-      case MoveDirection.LEFT:
-        this.moveLeft();
-        break;
-      case MoveDirection.RIGHT:
-        this.moveRight();
-        break;
-      default:
-        assert.fail(`Unexpected direction ${String(direction)}`);
+    const movements: Movement[] = [];
+
+    for (let row = rowStart; row !== rowEnd; row += rowMoveStep) {
+      if (this.grid[row][colIndex] === Model.EMPTY_CELL_VALUE) {
+        continue;
+      }
+
+      for (
+        let nextRow = row + rowMoveStep;
+        nextRow !== rowEnd;
+        nextRow += rowMoveStep
+      ) {
+        if (this.grid[nextRow][colIndex] === Model.EMPTY_CELL_VALUE) {
+          continue;
+        }
+        if (this.grid[nextRow][colIndex] === this.grid[row][colIndex]) {
+          this.grid[nextRow][colIndex] = Model.EMPTY_CELL_VALUE;
+          this.emptyCellCount++;
+          this.grid[row][colIndex] *= 2;
+
+          movements.push({
+            from: {row: nextRow, col: colIndex},
+            to: {row, col: colIndex},
+          });
+          break;
+        } else {
+          // Found different value, impossible to merge. Move to next cell.
+          break;
+        }
+      }
     }
+
+    return movements;
   }
 }
 

@@ -1,0 +1,3 @@
+export {MoveDirection} from './constants.js';
+export {model} from './model.js';
+export {type Coordinate} from './types.js';

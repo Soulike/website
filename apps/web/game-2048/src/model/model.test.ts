@@ -1,6 +1,7 @@
 import {beforeEach, describe, expect, it} from 'vitest';
 
-import {model, MoveDirection} from './model.js';
+import {MoveDirection} from './constants.js';
+import {model} from './model.js';
 
 describe('Model', () => {
   describe('init', () => {
@@ -77,13 +78,27 @@ describe('Model', () => {
           [0, 0, 0, 0],
         ]);
 
-        model.moveWithoutCreatingNewNonEmptyCellForTesting(MoveDirection.LEFT);
+        const movements = model.moveWithoutCreatingNewTileForTesting(
+          MoveDirection.LEFT,
+        );
 
         const newGrid = model.getGrid();
         expect(newGrid[0][0]).toBe(2);
         expect(newGrid[0][1]).toBe(4);
         expect(newGrid[0][2]).toBe(0);
         expect(newGrid[0][3]).toBe(0);
+
+        // Test movements
+        expect(movements.mergeMovements).toHaveLength(0);
+        expect(movements.compactMovements).toHaveLength(2);
+        expect(movements.compactMovements).toContainEqual({
+          from: {row: 0, col: 1},
+          to: {row: 0, col: 0},
+        });
+        expect(movements.compactMovements).toContainEqual({
+          from: {row: 0, col: 3},
+          to: {row: 0, col: 1},
+        });
       });
 
       it('should merge adjacent tiles with same value', () => {
@@ -95,13 +110,23 @@ describe('Model', () => {
           [0, 0, 0, 0],
         ]);
 
-        model.moveWithoutCreatingNewNonEmptyCellForTesting(MoveDirection.LEFT);
+        const movements = model.moveWithoutCreatingNewTileForTesting(
+          MoveDirection.LEFT,
+        );
 
         const newGrid = model.getGrid();
         expect(newGrid[0][0]).toBe(4);
         expect(newGrid[0][1]).toBe(0);
         expect(newGrid[0][2]).toBe(0);
         expect(newGrid[0][3]).toBe(0);
+
+        // Test movements
+        expect(movements.mergeMovements).toHaveLength(1);
+        expect(movements.compactMovements).toHaveLength(0);
+        expect(movements.mergeMovements[0]).toEqual({
+          from: {row: 0, col: 1},
+          to: {row: 0, col: 0},
+        });
       });
 
       it('should merge tiles and then slide', () => {
@@ -113,13 +138,35 @@ describe('Model', () => {
           [0, 0, 0, 0],
         ]);
 
-        model.moveWithoutCreatingNewNonEmptyCellForTesting(MoveDirection.LEFT);
+        const movements = model.moveWithoutCreatingNewTileForTesting(
+          MoveDirection.LEFT,
+        );
 
         const newGrid = model.getGrid();
         expect(newGrid[0][0]).toBe(4);
         expect(newGrid[0][1]).toBe(8);
         expect(newGrid[0][2]).toBe(0);
         expect(newGrid[0][3]).toBe(0);
+
+        // Test movements
+        expect(movements.mergeMovements).toHaveLength(2);
+        expect(movements.compactMovements).toHaveLength(1);
+
+        // Merge movements
+        expect(movements.mergeMovements).toContainEqual({
+          from: {row: 0, col: 1},
+          to: {row: 0, col: 0},
+        });
+        expect(movements.mergeMovements).toContainEqual({
+          from: {row: 0, col: 3},
+          to: {row: 0, col: 2},
+        });
+
+        // Compact movement (after merging, the second merged tile slides left)
+        expect(movements.compactMovements[0]).toEqual({
+          from: {row: 0, col: 2},
+          to: {row: 0, col: 1},
+        });
       });
     });
 
@@ -133,13 +180,27 @@ describe('Model', () => {
           [0, 0, 0, 0],
         ]);
 
-        model.moveWithoutCreatingNewNonEmptyCellForTesting(MoveDirection.RIGHT);
+        const movements = model.moveWithoutCreatingNewTileForTesting(
+          MoveDirection.RIGHT,
+        );
 
         const newGrid = model.getGrid();
         expect(newGrid[0][0]).toBe(0);
         expect(newGrid[0][1]).toBe(0);
         expect(newGrid[0][2]).toBe(2);
         expect(newGrid[0][3]).toBe(4);
+
+        // Test movements
+        expect(movements.mergeMovements).toHaveLength(0);
+        expect(movements.compactMovements).toHaveLength(2);
+        expect(movements.compactMovements).toContainEqual({
+          from: {row: 0, col: 0},
+          to: {row: 0, col: 2},
+        });
+        expect(movements.compactMovements).toContainEqual({
+          from: {row: 0, col: 2},
+          to: {row: 0, col: 3},
+        });
       });
 
       it('should merge tiles from right to left', () => {
@@ -151,13 +212,23 @@ describe('Model', () => {
           [0, 0, 0, 0],
         ]);
 
-        model.moveWithoutCreatingNewNonEmptyCellForTesting(MoveDirection.RIGHT);
+        const movements = model.moveWithoutCreatingNewTileForTesting(
+          MoveDirection.RIGHT,
+        );
 
         const newGrid = model.getGrid();
         expect(newGrid[0][0]).toBe(0);
         expect(newGrid[0][1]).toBe(0);
         expect(newGrid[0][2]).toBe(0);
         expect(newGrid[0][3]).toBe(4);
+
+        // Test movements
+        expect(movements.mergeMovements).toHaveLength(1);
+        expect(movements.compactMovements).toHaveLength(0);
+        expect(movements.mergeMovements[0]).toEqual({
+          from: {row: 0, col: 2},
+          to: {row: 0, col: 3},
+        });
       });
     });
 
@@ -171,13 +242,27 @@ describe('Model', () => {
           [4, 0, 0, 0],
         ]);
 
-        model.moveWithoutCreatingNewNonEmptyCellForTesting(MoveDirection.UP);
+        const movements = model.moveWithoutCreatingNewTileForTesting(
+          MoveDirection.UP,
+        );
 
         const newGrid = model.getGrid();
         expect(newGrid[0][0]).toBe(2);
         expect(newGrid[1][0]).toBe(4);
         expect(newGrid[2][0]).toBe(0);
         expect(newGrid[3][0]).toBe(0);
+
+        // Test movements
+        expect(movements.mergeMovements).toHaveLength(0);
+        expect(movements.compactMovements).toHaveLength(2);
+        expect(movements.compactMovements).toContainEqual({
+          from: {row: 1, col: 0},
+          to: {row: 0, col: 0},
+        });
+        expect(movements.compactMovements).toContainEqual({
+          from: {row: 3, col: 0},
+          to: {row: 1, col: 0},
+        });
       });
 
       it('should merge tiles vertically', () => {
@@ -189,13 +274,23 @@ describe('Model', () => {
           [0, 0, 0, 0],
         ]);
 
-        model.moveWithoutCreatingNewNonEmptyCellForTesting(MoveDirection.UP);
+        const movements = model.moveWithoutCreatingNewTileForTesting(
+          MoveDirection.UP,
+        );
 
         const newGrid = model.getGrid();
         expect(newGrid[0][0]).toBe(4);
         expect(newGrid[1][0]).toBe(0);
         expect(newGrid[2][0]).toBe(0);
         expect(newGrid[3][0]).toBe(0);
+
+        // Test movements
+        expect(movements.mergeMovements).toHaveLength(1);
+        expect(movements.compactMovements).toHaveLength(0);
+        expect(movements.mergeMovements[0]).toEqual({
+          from: {row: 1, col: 0},
+          to: {row: 0, col: 0},
+        });
       });
     });
 
@@ -209,13 +304,27 @@ describe('Model', () => {
           [0, 0, 0, 0],
         ]);
 
-        model.moveWithoutCreatingNewNonEmptyCellForTesting(MoveDirection.DOWN);
+        const movements = model.moveWithoutCreatingNewTileForTesting(
+          MoveDirection.DOWN,
+        );
 
         const newGrid = model.getGrid();
         expect(newGrid[0][0]).toBe(0);
         expect(newGrid[1][0]).toBe(0);
         expect(newGrid[2][0]).toBe(2);
         expect(newGrid[3][0]).toBe(4);
+
+        // Test movements
+        expect(movements.mergeMovements).toHaveLength(0);
+        expect(movements.compactMovements).toHaveLength(2);
+        expect(movements.compactMovements).toContainEqual({
+          from: {row: 0, col: 0},
+          to: {row: 2, col: 0},
+        });
+        expect(movements.compactMovements).toContainEqual({
+          from: {row: 2, col: 0},
+          to: {row: 3, col: 0},
+        });
       });
 
       it('should merge tiles from bottom up', () => {
@@ -227,20 +336,30 @@ describe('Model', () => {
           [2, 0, 0, 0],
         ]);
 
-        model.moveWithoutCreatingNewNonEmptyCellForTesting(MoveDirection.DOWN);
+        const movements = model.moveWithoutCreatingNewTileForTesting(
+          MoveDirection.DOWN,
+        );
 
         const newGrid = model.getGrid();
         expect(newGrid[0][0]).toBe(0);
         expect(newGrid[1][0]).toBe(0);
         expect(newGrid[2][0]).toBe(0);
         expect(newGrid[3][0]).toBe(4);
+
+        // Test movements
+        expect(movements.mergeMovements).toHaveLength(1);
+        expect(movements.compactMovements).toHaveLength(0);
+        expect(movements.mergeMovements[0]).toEqual({
+          from: {row: 2, col: 0},
+          to: {row: 3, col: 0},
+        });
       });
     });
 
     it('should spawn exactly one new tile after each move', () => {
       // Set up a grid with many empty cells
       model.setGridStateForTesting([
-        [2, 0, 0, 0],
+        [0, 2, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
@@ -249,7 +368,7 @@ describe('Model', () => {
       const initialNonEmptyCount = 1;
       const emptyCellValue = model.getEmptyCellValueForTesting();
 
-      model.move(MoveDirection.LEFT);
+      const movements = model.move(MoveDirection.LEFT);
 
       const newGrid = model.getGrid();
       let newNonEmptyCount = 0;
@@ -262,6 +381,45 @@ describe('Model', () => {
       }
 
       expect(newNonEmptyCount).toBe(initialNonEmptyCount + 1);
+
+      // Test movements - the tile should move from column 1 to column 0
+      expect(movements.mergeMovements).toHaveLength(0);
+      expect(movements.compactMovements).toHaveLength(1);
+      expect(movements.compactMovements[0]).toEqual({
+        from: {row: 0, col: 1},
+        to: {row: 0, col: 0},
+      });
+    });
+
+    it('should spawn no new tile if no tile is moved', () => {
+      // Set up a grid with many empty cells
+      model.setGridStateForTesting([
+        [0, 2, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+      ]);
+
+      const initialNonEmptyCount = 1;
+      const emptyCellValue = model.getEmptyCellValueForTesting();
+
+      const movements = model.move(MoveDirection.UP);
+
+      const newGrid = model.getGrid();
+      let newNonEmptyCount = 0;
+      for (const row of newGrid) {
+        for (const cell of row) {
+          if (cell !== emptyCellValue) {
+            newNonEmptyCount++;
+          }
+        }
+      }
+
+      expect(newNonEmptyCount).toBe(initialNonEmptyCount);
+
+      // Test movements - no movements should occur since the tile is already at the top
+      expect(movements.mergeMovements).toHaveLength(0);
+      expect(movements.compactMovements).toHaveLength(0);
     });
 
     it('should create new tiles with valid 2048 game values after move', () => {
@@ -271,13 +429,13 @@ describe('Model', () => {
       // Test multiple times to ensure randomness works properly
       for (let i = 0; i < 10; i++) {
         model.setGridStateForTesting([
-          [2, 0, 0, 0],
+          [0, 2, 0, 0],
           [0, 0, 0, 0],
           [0, 0, 0, 0],
           [0, 0, 0, 0],
         ]);
 
-        model.move(MoveDirection.LEFT);
+        const movements = model.move(MoveDirection.LEFT);
         const grid = model.getGrid();
 
         // Find the new tile that was added after the move
@@ -303,6 +461,14 @@ describe('Model', () => {
         if (newTileValue !== null) {
           expect(validValues).toContain(newTileValue);
         }
+
+        // Test movements - should have one compact movement
+        expect(movements.mergeMovements).toHaveLength(0);
+        expect(movements.compactMovements).toHaveLength(1);
+        expect(movements.compactMovements[0]).toEqual({
+          from: {row: 0, col: 1},
+          to: {row: 0, col: 0},
+        });
       }
     });
   });
@@ -322,13 +488,35 @@ describe('Model', () => {
         [0, 0, 0, 0],
       ]);
 
-      model.moveWithoutCreatingNewNonEmptyCellForTesting(MoveDirection.LEFT);
+      const movements = model.moveWithoutCreatingNewTileForTesting(
+        MoveDirection.LEFT,
+      );
 
       const newGrid = model.getGrid();
       expect(newGrid[0][0]).toBe(4);
       expect(newGrid[0][1]).toBe(8);
       expect(newGrid[0][2]).toBe(0);
       expect(newGrid[0][3]).toBe(0);
+
+      // Test movements - should have two merges and one compact
+      expect(movements.mergeMovements).toHaveLength(2);
+      expect(movements.compactMovements).toHaveLength(1);
+
+      // Check merge movements
+      expect(movements.mergeMovements).toContainEqual({
+        from: {row: 0, col: 1},
+        to: {row: 0, col: 0},
+      });
+      expect(movements.mergeMovements).toContainEqual({
+        from: {row: 0, col: 3},
+        to: {row: 0, col: 2},
+      });
+
+      // Check compact movement
+      expect(movements.compactMovements[0]).toEqual({
+        from: {row: 0, col: 2},
+        to: {row: 0, col: 1},
+      });
     });
 
     it('should not merge tiles twice in one move', () => {
@@ -340,13 +528,25 @@ describe('Model', () => {
         [0, 0, 0, 0],
       ]);
 
-      model.moveWithoutCreatingNewNonEmptyCellForTesting(MoveDirection.LEFT);
+      const movements = model.moveWithoutCreatingNewTileForTesting(
+        MoveDirection.LEFT,
+      );
 
       const newGrid = model.getGrid();
       expect(newGrid[0][0]).toBe(4);
       expect(newGrid[0][1]).toBe(4);
       expect(newGrid[0][2]).toBe(0);
       expect(newGrid[0][3]).toBe(0);
+
+      // Test movements - should have one merge and no compact
+      expect(movements.mergeMovements).toHaveLength(1);
+      expect(movements.compactMovements).toHaveLength(0);
+
+      // The two 2's merge together
+      expect(movements.mergeMovements[0]).toEqual({
+        from: {row: 0, col: 2},
+        to: {row: 0, col: 1},
+      });
     });
 
     it('should handle full grid scenarios', () => {
@@ -358,12 +558,16 @@ describe('Model', () => {
         [16, 32, 64, 0], // One empty cell
       ]);
 
-      model.move(MoveDirection.LEFT);
+      const movements = model.move(MoveDirection.RIGHT);
 
       // Verify that the move was processed and exactly one new tile was added
       const emptyCount = model.getEmptyCellCountForTesting();
 
       expect(emptyCount).toBe(0); // All cells should be filled after the move
+
+      // Test movements - no merges should happen with this configuration
+      expect(movements.mergeMovements).toHaveLength(0);
+      expect(movements.compactMovements).toHaveLength(3);
     });
   });
 
