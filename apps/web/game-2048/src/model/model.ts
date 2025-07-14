@@ -16,6 +16,7 @@ import type {
   GridType,
   Movement,
   OperationMovements,
+  TileCreation,
 } from './types.js';
 
 class Model {
@@ -46,8 +47,8 @@ class Model {
       operationMovements.mergeMovements.length > 0 ||
       operationMovements.compactMovements.length > 0
     ) {
-      this.createNewTile(1);
-      this.triggerGridChangeEventListeners();
+      const tileCreations = this.createNewTile(1);
+      this.triggerGridChangeEventListeners(operationMovements, tileCreations);
     }
 
     return operationMovements;
@@ -60,12 +61,19 @@ class Model {
       this.grid[i].fill(EMPTY_TILE_VALUE);
     }
     this.emptyTileCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
-    this.createNewTile(2);
+    const tileCreations = this.createNewTile(2);
+    this.triggerGridChangeEventListeners(
+      {mergeMovements: [], compactMovements: []},
+      tileCreations,
+    );
   }
 
-  private triggerGridChangeEventListeners() {
+  private triggerGridChangeEventListeners(
+    movements: OperationMovements,
+    creations: readonly TileCreation[],
+  ) {
     for (const listener of this.gridChangeEventListeners) {
-      listener(this.grid);
+      listener(this.grid, movements, creations);
     }
   }
 
@@ -284,14 +292,17 @@ class Model {
     return movements;
   }
 
-  private createNewTile(count: number) {
+  private createNewTile(count: number): TileCreation[] {
     assert(count > 0);
     const emptyTiles = this.getRandomEmptyTiles(count);
     assert(emptyTiles?.length == count, 'No enough empty tiles');
+    const creations: TileCreation[] = [];
     for (const {row, col} of emptyTiles) {
       this.grid[row][col] = Model.getRandomNewTileValue();
+      creations.push({coordinate: {row, col}, value: this.grid[row][col]});
     }
     this.emptyTileCount -= count;
+    return creations;
   }
 
   private mergeRow(rowIndex: number, toLeft: boolean): Movement[] {
