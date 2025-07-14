@@ -7,10 +7,11 @@ import {useViewModel} from './view-model.js';
 
 export interface TileProps {
   value: number;
+  newlyCreated: boolean;
 }
 
 export function Tile(props: TileProps) {
-  const {value} = props;
+  const {value, newlyCreated} = props;
   assert(isValid2048Value(value));
   const {backgroundColor, textColor, fontSize} = useViewModel(value);
 
@@ -20,6 +21,7 @@ export function Tile(props: TileProps) {
       backgroundColor={backgroundColor}
       textColor={textColor}
       fontSize={fontSize}
+      newlyCreated={newlyCreated}
     />
   );
 }

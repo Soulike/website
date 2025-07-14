@@ -10,10 +10,11 @@ import styles from './styles.module.css';
 
 export interface GridViewProps {
   grid: GridType;
+  isTileNewlyCreated: boolean[][];
 }
 
 export function GridView(props: GridViewProps) {
-  const {grid} = props;
+  const {grid, isTileNewlyCreated} = props;
   assert(grid.length === GRID_SIDE_LENGTH);
   assert(grid[0].length === GRID_SIDE_LENGTH);
 
@@ -22,12 +23,16 @@ export function GridView(props: GridViewProps) {
     for (let i = 0; i < GRID_SIDE_LENGTH; i++) {
       for (let j = 0; j < GRID_SIDE_LENGTH; j++) {
         tiles.push(
-          <Tile key={`${String(i)}-${String(j)}`} value={grid[i][j]} />,
+          <Tile
+            key={`${String(i)}-${String(j)}`}
+            value={grid[i][j]}
+            newlyCreated={isTileNewlyCreated[i][j]}
+          />,
         );
       }
     }
     return tiles;
-  }, [grid]);
+  }, [grid, isTileNewlyCreated]);
 
   return <div className={styles.Grid}>{...tileComponents}</div>;
 }
