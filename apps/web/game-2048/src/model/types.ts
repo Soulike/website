@@ -18,10 +18,17 @@ export interface TileCreation {
   value: number;
 }
 
+export type GridType = readonly (readonly number[])[];
+
 export type GridChangeEventListener = (
   grid: GridType,
   movements: Readonly<OperationMovements>,
   creations: readonly Readonly<TileCreation>[],
 ) => void;
 
-export type GridType = readonly (readonly number[])[];
+export type GameOverEventListener = (targetAccomplished: boolean) => void;
+
+export interface ModelEvents {
+  gridChange: Parameters<GridChangeEventListener>;
+  gameOver: Parameters<GameOverEventListener>;
+}

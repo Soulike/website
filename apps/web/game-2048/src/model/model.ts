@@ -1,4 +1,5 @@
 import assert from 'node:assert';
+import {EventEmitter} from 'node:events';
 
 import {assertIsTest} from '@universal/test-helpers';
 
@@ -12,18 +13,19 @@ import {pickRandomElement} from '@/helpers/random-helpers.js';
 import {MoveDirection} from './constants.js';
 import type {
   Coordinate,
-  GridChangeEventListener,
   GridType,
+  ModelEvents,
   Movement,
   OperationMovements,
   TileCreation,
 } from './types.js';
 
-class Model {
+class Model extends EventEmitter<ModelEvents> {
+  private static readonly MAX_TILE_VALUE = 2048;
   private emptyTileCount = -1;
+  private targetAccomplished = false;
 
   private grid: number[][] = [];
-  private gridChangeEventListeners = new Set<GridChangeEventListener>();
 
   private static getRandomNewTileValue() {
     return pickRandomElement(NEW_TILE_VALUES);
@@ -33,14 +35,6 @@ class Model {
     return this.grid;
   }
 
-  public onGridChange(listener: GridChangeEventListener) {
-    this.gridChangeEventListeners.add(listener);
-  }
-
-  public offGridChange(listener: GridChangeEventListener) {
-    this.gridChangeEventListeners.delete(listener);
-  }
-
   public move(direction: MoveDirection): OperationMovements {
     const operationMovements = this.moveWithoutCreatingNewTile(direction);
     if (
@@ -48,7 +42,7 @@ class Model {
       operationMovements.compactMovements.length > 0
     ) {
       const tileCreations = this.createNewTile(1);
-      this.triggerGridChangeEventListeners(operationMovements, tileCreations);
+      this.emitGridChangeEvent(operationMovements, tileCreations);
     }
 
     return operationMovements;
@@ -62,19 +56,21 @@ class Model {
     }
     this.emptyTileCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
     const tileCreations = this.createNewTile(2);
-    this.triggerGridChangeEventListeners(
+    this.emitGridChangeEvent(
       {mergeMovements: [], compactMovements: []},
       tileCreations,
     );
   }
 
-  private triggerGridChangeEventListeners(
+  private emitGridChangeEvent(
     movements: OperationMovements,
     creations: readonly TileCreation[],
   ) {
-    for (const listener of this.gridChangeEventListeners) {
-      listener(this.grid, movements, creations);
-    }
+    this.emit('gridChange', this.grid, movements, creations);
+  }
+
+  private emitGameOverEvent(targetAccomplished: boolean) {
+    this.emit('gameOver', targetAccomplished);
   }
 
   public moveWithoutCreatingNewTileForTesting(
@@ -139,6 +135,19 @@ class Model {
         break;
       default:
         assert.fail(`Unexpected direction ${String(direction)}`);
+    }
+
+    for (const {
+      to: {row, col},
+    } of operationMovements.mergeMovements) {
+      if (this.grid[row][col] === Model.MAX_TILE_VALUE) {
+        this.targetAccomplished = true;
+        break;
+      }
+    }
+
+    if (this.targetAccomplished || !this.isMovable()) {
+      this.emitGameOverEvent(this.targetAccomplished);
     }
 
     return operationMovements;
