@@ -27,6 +27,7 @@ export function GridView(props: GridViewProps) {
             key={`${String(i)}-${String(j)}`}
             value={grid[i][j]}
             newlyCreated={isTileNewlyCreated[i][j]}
+            updatedAtTimestamp={Date.now()}
           />,
         );
       }

@@ -8,10 +8,11 @@ import {useViewModel} from './view-model.js';
 export interface TileProps {
   value: number;
   newlyCreated: boolean;
+  updatedAtTimestamp: number;
 }
 
 export function Tile(props: TileProps) {
-  const {value, newlyCreated} = props;
+  const {value, newlyCreated, updatedAtTimestamp} = props;
   assert(isValid2048Value(value));
   const {backgroundColor, textColor, fontSize} = useViewModel(value);
 
@@ -22,6 +23,7 @@ export function Tile(props: TileProps) {
       textColor={textColor}
       fontSize={fontSize}
       newlyCreated={newlyCreated}
+      updatedAtTimestamp={updatedAtTimestamp}
     />
   );
 }
