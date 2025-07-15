@@ -31,6 +31,11 @@ class Model extends EventEmitter<ModelEvents> {
     return pickRandomElement(NEW_TILE_VALUES);
   }
 
+  constructor() {
+    super();
+    this.initEmptyGrid();
+  }
+
   public getGrid(): GridType {
     return this.grid;
   }
@@ -49,17 +54,21 @@ class Model extends EventEmitter<ModelEvents> {
   }
 
   public init() {
-    this.grid = new Array<number[]>(GRID_SIDE_LENGTH);
-    for (let i = 0; i < this.grid.length; i++) {
-      this.grid[i] = new Array<number>(GRID_SIDE_LENGTH);
-      this.grid[i].fill(EMPTY_TILE_VALUE);
-    }
+    this.initEmptyGrid();
     this.emptyTileCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
     const tileCreations = this.createNewTile(2);
     this.emitGridChangeEvent(
       {mergeMovements: [], compactMovements: []},
       tileCreations,
     );
+  }
+
+  private initEmptyGrid() {
+    this.grid = new Array<number[]>(GRID_SIDE_LENGTH);
+    for (let i = 0; i < this.grid.length; i++) {
+      this.grid[i] = new Array<number>(GRID_SIDE_LENGTH);
+      this.grid[i].fill(EMPTY_TILE_VALUE);
+    }
   }
 
   private emitGridChangeEvent(
