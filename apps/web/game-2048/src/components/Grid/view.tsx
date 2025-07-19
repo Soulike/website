@@ -9,6 +9,7 @@ import {
 } from '@/components/Grid/helpers/animation-helpers.js';
 import {getTileMovementPixelDisplacement} from '@/components/Grid/helpers/displacement-helpers.js';
 import {
+  TILE_CREATION_ANIMATION_DURATION,
   TILE_MOVE_ANIMATION_DURATION,
   TILE_POP_ANIMATION_DURATION,
 } from '@/constants/animation.js';
@@ -39,7 +40,7 @@ export function GridView(props: GridViewProps) {
   assert(grid[0].length === GRID_SIDE_LENGTH);
 
   const newlyCreatedAnimate: Animate = useCallback((element: HTMLElement) => {
-    return playTileCreationAnimation(element, TILE_POP_ANIMATION_DURATION);
+    return playTileCreationAnimation(element, TILE_CREATION_ANIMATION_DURATION);
   }, []);
 
   const mergedAnimate: Animate = useCallback((element: HTMLElement) => {
