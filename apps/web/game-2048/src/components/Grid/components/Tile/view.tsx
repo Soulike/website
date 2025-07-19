@@ -1,5 +1,8 @@
-import {useEffect, useMemo, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 
+import type {Coordinate} from '@/model/index.js';
+
+import {playTilePopAnimation} from './helpers/animation-helpers.js';
 import styles from './styles.module.css';
 
 export interface TileViewProps {
@@ -8,6 +11,8 @@ export interface TileViewProps {
   backgroundColor: string;
   fontSize: string;
   newlyCreated: boolean;
+  movedFrom: Coordinate | null;
+  movedTo: Coordinate | null;
   updatedAtTimestamp: number;
 }
 
@@ -22,26 +27,12 @@ export function TileView(props: TileViewProps) {
   } = props;
   const elementRef = useRef<HTMLDivElement>(null);
 
-  const animationKeyframes: Parameters<HTMLElement['animate']>[0] = useMemo(
-    () => [
-      {transform: 'scale(0)', opacity: 0},
-      {transform: 'scale(1.05)', opacity: 1, offset: 0.5},
-      {transform: 'scale(1)', opacity: 1},
-    ],
-    [],
-  );
-
   useEffect(() => {
-    requestAnimationFrame(() => {
-      if (!newlyCreated || !elementRef.current) {
-        return;
-      }
-      elementRef.current.animate(animationKeyframes, {
-        duration: 400,
-        easing: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-      });
-    });
-  }, [animationKeyframes, newlyCreated, updatedAtTimestamp]);
+    if (!newlyCreated || !elementRef.current) {
+      return;
+    }
+    void playTilePopAnimation(elementRef.current);
+  }, [newlyCreated, updatedAtTimestamp]);
 
   return (
     <div
