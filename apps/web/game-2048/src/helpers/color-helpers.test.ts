@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 
-import {TileBackgroundColor, TileTextColor} from '@/constants/colors.js';
+import {TileBackgroundColor, TileTextColor} from '@/constants/colors/index.js';
 
 import {getTileBackgroundColor, getTileTextColor} from './color-helpers.js';
 

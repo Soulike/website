@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 
-import {useEffect} from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 import {isValid2048Value} from '@/helpers/check-helpers.js';
 
@@ -15,20 +15,32 @@ export interface TileProps {
 
 export function Tile(props: TileProps) {
   const {value, animate, updatedAtTimestamp} = props;
-  const {backgroundColor, textColor, fontSize} = useViewModel(value);
+  const [internalValue, setInternalValue] = useState(0);
+  const {backgroundColor, textColor, fontSize} = useViewModel(internalValue);
+  const viewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     assert(isValid2048Value(value), 'Invalid 2048 tile value');
   }, [value]);
 
+  useEffect(() => {
+    if (!animate || !viewRef.current) {
+      setInternalValue(value);
+      return;
+    }
+    void animate(viewRef.current).then(() => {
+      setInternalValue(value);
+    });
+  }, [animate, value, updatedAtTimestamp]);
+
   return (
     <TileView
-      value={value}
+      ref={viewRef}
+      value={internalValue}
       backgroundColor={backgroundColor}
       textColor={textColor}
       fontSize={fontSize}
-      animate={animate}
-      updatedAtTimestamp={updatedAtTimestamp}
+      zIndex={internalValue === 0 ? 0 : 1000}
     />
   );
 }

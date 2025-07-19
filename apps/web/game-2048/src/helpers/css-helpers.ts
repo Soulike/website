@@ -1,10 +1,11 @@
-export function getCSSVariableValue(
+export function setCSSVariableValue(
   element: HTMLElement,
   variableName: string,
-): string {
-  return getComputedStyle(element).getPropertyValue(variableName).trim();
+  value: string,
+) {
+  element.style.setProperty(variableName, value);
 }
 
-export function getCSSVariableValueOnRootElement(variableName: string): string {
-  return getCSSVariableValue(document.documentElement, variableName);
+export function getCSSVariableValueExpression(variableName: string): string {
+  return `var(${variableName})`;
 }

@@ -1,9 +1,0 @@
-:root {
-  /* Tile */
-  /* One or two digit */
-  --tile-normal-font-size: 48px;
-  /* Two or three digits */
-  --tile-small-font-size: 40px;
-  /* Three or four fights */
-  --tile-smaller-font-size: 32px;
-}

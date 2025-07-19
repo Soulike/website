@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 
-import {TileBackgroundColor, TileTextColor} from '@/constants/colors.js';
+import {TileBackgroundColor, TileTextColor} from '@/constants/colors/index.js';
 import {EMPTY_TILE_VALUE} from '@/constants/configs.js';
 
 /**
