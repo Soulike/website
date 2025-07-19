@@ -11,9 +11,16 @@ import {
 export function useViewModel() {
   const grid = useGrid();
   const isTileNewlyCreated = useIsTileNewlyCreated();
-  const isTileMerged = useIsTileMerged();
+  const isTileMergeDestination = useIsTileMergeDestination();
+  const isTileMovementDestination = useIsTileMovementDestination();
   const tileMovements = useTileMovements();
-  return {grid, isTileNewlyCreated, isTileMerged, tileMovements};
+  return {
+    grid,
+    isTileNewlyCreated,
+    isTileMergeDestination,
+    isTileMovementDestination,
+    tileMovements,
+  };
 }
 
 function useGrid() {
@@ -75,28 +82,31 @@ function useIsTileNewlyCreated() {
   return isTileNewlyCreated;
 }
 
-function useIsTileMerged() {
-  const createIsTileMerged = useCallback(() => {
-    const isTileMerged: boolean[][] = new Array<boolean[]>(GRID_SIDE_LENGTH);
-    for (let i = 0; i < isTileMerged.length; i++) {
-      isTileMerged[i] = new Array<boolean>(GRID_SIDE_LENGTH);
+function useIsTileMergeDestination() {
+  const createIsTileMergeDestination = useCallback(() => {
+    const isTileMergeDestination: boolean[][] = new Array<boolean[]>(
+      GRID_SIDE_LENGTH,
+    );
+    for (let i = 0; i < isTileMergeDestination.length; i++) {
+      isTileMergeDestination[i] = new Array<boolean>(GRID_SIDE_LENGTH);
     }
-    return isTileMerged;
+    return isTileMergeDestination;
   }, []);
 
-  const [isTileMerged, setIsTileMerged] =
-    useState<boolean[][]>(createIsTileMerged());
+  const [isTileMergeDestination, setIsTileMergeDestination] = useState<
+    boolean[][]
+  >(createIsTileMergeDestination());
 
   const onGridChangeEventListener: GridChangeEventListener = useCallback(
     (_newGrid, movements) => {
-      const isTileMerged = createIsTileMerged();
+      const isTileMergeDestination = createIsTileMergeDestination();
 
       for (const {to} of movements.mergeMovements) {
-        isTileMerged[to.row][to.col] = true;
+        isTileMergeDestination[to.row][to.col] = true;
       }
-      setIsTileMerged(isTileMerged);
+      setIsTileMergeDestination(isTileMergeDestination);
     },
-    [createIsTileMerged],
+    [createIsTileMergeDestination],
   );
 
   useEffect(() => {
@@ -106,7 +116,45 @@ function useIsTileMerged() {
     };
   }, [onGridChangeEventListener]);
 
-  return isTileMerged;
+  return isTileMergeDestination;
+}
+
+function useIsTileMovementDestination() {
+  const createIsTileMovementDestination = useCallback(() => {
+    const isTileMovementDestination: boolean[][] = new Array<boolean[]>(
+      GRID_SIDE_LENGTH,
+    );
+    for (let i = 0; i < isTileMovementDestination.length; i++) {
+      isTileMovementDestination[i] = new Array<boolean>(GRID_SIDE_LENGTH);
+    }
+    return isTileMovementDestination;
+  }, []);
+
+  const [isTileMovementDestination, setIsTileMovementDestination] = useState<
+    boolean[][]
+  >(createIsTileMovementDestination());
+
+  const onGridChangeEventListener: GridChangeEventListener = useCallback(
+    (_newGrid, movements) => {
+      const isTileMovementDestination = createIsTileMovementDestination();
+
+      for (const movement of movements.compactMovements) {
+        isTileMovementDestination[movement.to.row][movement.to.col] = true;
+      }
+
+      setIsTileMovementDestination(isTileMovementDestination);
+    },
+    [createIsTileMovementDestination],
+  );
+
+  useEffect(() => {
+    model.addListener('gridChange', onGridChangeEventListener);
+    return () => {
+      model.removeListener('gridChange', onGridChangeEventListener);
+    };
+  }, [onGridChangeEventListener]);
+
+  return isTileMovementDestination;
 }
 
 function useTileMovements() {

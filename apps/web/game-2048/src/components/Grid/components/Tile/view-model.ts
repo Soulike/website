@@ -1,5 +1,7 @@
 import {useEffect, useState} from 'react';
 
+import {EMPTY_TILE_Z_INDEX, TILE_Z_INDEX} from '@/constants/animation.js';
+import {EMPTY_TILE_VALUE} from '@/constants/configs.js';
 import {
   getTileBackgroundColor,
   getTileTextColor,
@@ -10,11 +12,13 @@ export function useViewModel(tileValue: number) {
   const backgroundColor = useBackgroundColor(tileValue);
   const textColor = useTextColor(tileValue);
   const fontSize = useFontSize(tileValue);
+  const zIndex = useZIndex(tileValue);
 
   return {
     backgroundColor,
     textColor,
     fontSize,
+    zIndex,
   };
 }
 
@@ -46,4 +50,16 @@ export function useFontSize(tileValue: number) {
   }, [tileValue]);
 
   return fontSize;
+}
+
+export function useZIndex(tileValue: number) {
+  const [zIndex, setZIndex] = useState(TILE_Z_INDEX);
+  useEffect(() => {
+    if (tileValue === EMPTY_TILE_VALUE) {
+      setZIndex(EMPTY_TILE_Z_INDEX);
+    } else {
+      setZIndex(TILE_Z_INDEX);
+    }
+  }, [tileValue]);
+  return zIndex;
 }

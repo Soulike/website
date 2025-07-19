@@ -3,7 +3,6 @@ import assert from 'node:assert';
 import {type ReactElement, useCallback, useMemo} from 'react';
 
 import {
-  combineAnimateSequence,
   playTileCreationAnimation,
   playTileMoveAnimation,
   playTilePopAnimation,
@@ -23,12 +22,19 @@ import styles from './styles.module.css';
 export interface GridViewProps {
   grid: GridType;
   isTileNewlyCreated: boolean[][];
-  isTileMerged: boolean[][];
+  isTileMergeDestination: boolean[][];
+  isTileMovementDestination: boolean[][];
   tileMovements: (Movement | undefined)[][];
 }
 
 export function GridView(props: GridViewProps) {
-  const {grid, isTileNewlyCreated, isTileMerged, tileMovements} = props;
+  const {
+    grid,
+    isTileNewlyCreated,
+    isTileMergeDestination,
+    tileMovements,
+    isTileMovementDestination,
+  } = props;
   assert(grid.length === GRID_SIDE_LENGTH);
   assert(grid[0].length === GRID_SIDE_LENGTH);
 
@@ -63,26 +69,25 @@ export function GridView(props: GridViewProps) {
     const tiles: ReactElement[] = [];
     for (let i = 0; i < GRID_SIDE_LENGTH; i++) {
       for (let j = 0; j < GRID_SIDE_LENGTH; j++) {
-        const animates: Animate[] = [];
-
         const movement = tileMovements[i][j];
-        if (movement) {
-          animates.push(generateMovementAnimate(movement));
-        }
+        const movementAnimate = movement
+          ? generateMovementAnimate(movement)
+          : null;
 
-        if (isTileMerged[i][j]) {
-          animates.push(mergedAnimate);
-        }
+        const isMergeDestination = isTileMergeDestination[i][j];
+        const mergeAnimate = isMergeDestination ? mergedAnimate : null;
 
-        if (isTileNewlyCreated[i][j]) {
-          animates.push(newlyCreatedAnimate);
-        }
+        const isNewlyCreated = isTileNewlyCreated[i][j];
+        const creationAnimate = isNewlyCreated ? newlyCreatedAnimate : null;
 
         tiles.push(
           <Tile
             key={`${String(i)}-${String(j)}`}
             value={grid[i][j]}
-            animate={combineAnimateSequence(animates)}
+            movementAnimate={movementAnimate}
+            mergeAnimate={mergeAnimate}
+            creationAnimate={creationAnimate}
+            isMovementDestination={!!isTileMovementDestination[i][j]}
             updatedAtTimestamp={Date.now()}
           />,
         );
@@ -92,7 +97,7 @@ export function GridView(props: GridViewProps) {
   }, [
     generateMovementAnimate,
     grid,
-    isTileMerged,
+    isTileMergeDestination,
     isTileNewlyCreated,
     mergedAnimate,
     newlyCreatedAnimate,

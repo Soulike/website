@@ -2,13 +2,19 @@ import {GridView} from './view';
 import {useViewModel} from './view-model.js';
 
 export function Grid() {
-  const {grid, isTileNewlyCreated, tileMovements, isTileMerged} =
-    useViewModel();
+  const {
+    grid,
+    isTileNewlyCreated,
+    tileMovements,
+    isTileMergeDestination,
+    isTileMovementDestination,
+  } = useViewModel();
   return (
     <GridView
       grid={grid}
       isTileNewlyCreated={isTileNewlyCreated}
-      isTileMerged={isTileMerged}
+      isTileMergeDestination={isTileMergeDestination}
+      isTileMovementDestination={isTileMovementDestination}
       tileMovements={tileMovements}
     />
   );
