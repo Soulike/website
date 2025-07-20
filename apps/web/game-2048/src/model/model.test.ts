@@ -1,6 +1,7 @@
 import {beforeEach, describe, expect, it} from 'vitest';
 
 import {EMPTY_TILE_VALUE, NEW_TILE_VALUES} from '@/constants/configs.js';
+import {MovementType} from '@/model/types.js';
 
 import {MoveDirection} from './constants.js';
 import {model} from './model.js';
@@ -95,10 +96,12 @@ describe('Model', () => {
         expect(movements.compactMovements).toContainEqual({
           from: {row: 0, col: 1},
           to: {row: 0, col: 0},
+          type: MovementType.COMPACT,
         });
         expect(movements.compactMovements).toContainEqual({
           from: {row: 0, col: 3},
           to: {row: 0, col: 1},
+          type: MovementType.COMPACT,
         });
       });
 
@@ -127,6 +130,7 @@ describe('Model', () => {
         expect(movements.mergeMovements[0]).toEqual({
           from: {row: 0, col: 1},
           to: {row: 0, col: 0},
+          type: MovementType.MERGE,
         });
       });
 
@@ -151,22 +155,18 @@ describe('Model', () => {
 
         // Test movements
         expect(movements.mergeMovements).toHaveLength(2);
-        expect(movements.compactMovements).toHaveLength(1);
+        expect(movements.compactMovements).toHaveLength(0);
 
         // Merge movements
         expect(movements.mergeMovements).toContainEqual({
           from: {row: 0, col: 1},
           to: {row: 0, col: 0},
+          type: MovementType.MERGE,
         });
         expect(movements.mergeMovements).toContainEqual({
           from: {row: 0, col: 3},
-          to: {row: 0, col: 2},
-        });
-
-        // Compact movement (after merging, the second merged tile slides left)
-        expect(movements.compactMovements[0]).toEqual({
-          from: {row: 0, col: 2},
           to: {row: 0, col: 1},
+          type: MovementType.MERGE,
         });
       });
     });
@@ -197,10 +197,12 @@ describe('Model', () => {
         expect(movements.compactMovements).toContainEqual({
           from: {row: 0, col: 0},
           to: {row: 0, col: 2},
+          type: MovementType.COMPACT,
         });
         expect(movements.compactMovements).toContainEqual({
           from: {row: 0, col: 2},
           to: {row: 0, col: 3},
+          type: MovementType.COMPACT,
         });
       });
 
@@ -229,6 +231,7 @@ describe('Model', () => {
         expect(movements.mergeMovements[0]).toEqual({
           from: {row: 0, col: 2},
           to: {row: 0, col: 3},
+          type: MovementType.MERGE,
         });
       });
     });
@@ -259,10 +262,12 @@ describe('Model', () => {
         expect(movements.compactMovements).toContainEqual({
           from: {row: 1, col: 0},
           to: {row: 0, col: 0},
+          type: MovementType.COMPACT,
         });
         expect(movements.compactMovements).toContainEqual({
           from: {row: 3, col: 0},
           to: {row: 1, col: 0},
+          type: MovementType.COMPACT,
         });
       });
 
@@ -291,6 +296,7 @@ describe('Model', () => {
         expect(movements.mergeMovements[0]).toEqual({
           from: {row: 1, col: 0},
           to: {row: 0, col: 0},
+          type: MovementType.MERGE,
         });
       });
     });
@@ -321,10 +327,12 @@ describe('Model', () => {
         expect(movements.compactMovements).toContainEqual({
           from: {row: 0, col: 0},
           to: {row: 2, col: 0},
+          type: MovementType.COMPACT,
         });
         expect(movements.compactMovements).toContainEqual({
           from: {row: 2, col: 0},
           to: {row: 3, col: 0},
+          type: MovementType.COMPACT,
         });
       });
 
@@ -353,6 +361,7 @@ describe('Model', () => {
         expect(movements.mergeMovements[0]).toEqual({
           from: {row: 2, col: 0},
           to: {row: 3, col: 0},
+          type: MovementType.MERGE,
         });
       });
     });
@@ -388,6 +397,7 @@ describe('Model', () => {
       expect(movements.compactMovements[0]).toEqual({
         from: {row: 0, col: 1},
         to: {row: 0, col: 0},
+        type: MovementType.COMPACT,
       });
     });
 
@@ -464,6 +474,7 @@ describe('Model', () => {
         expect(movements.compactMovements[0]).toEqual({
           from: {row: 0, col: 1},
           to: {row: 0, col: 0},
+          type: MovementType.COMPACT,
         });
       }
     });
@@ -494,24 +505,20 @@ describe('Model', () => {
       expect(newGrid[0][2]).toBe(0);
       expect(newGrid[0][3]).toBe(0);
 
-      // Test movements - should have two merges and one compact
+      // Test movements
       expect(movements.mergeMovements).toHaveLength(2);
-      expect(movements.compactMovements).toHaveLength(1);
+      expect(movements.compactMovements).toHaveLength(0);
 
       // Check merge movements
       expect(movements.mergeMovements).toContainEqual({
         from: {row: 0, col: 1},
         to: {row: 0, col: 0},
+        type: MovementType.MERGE,
       });
       expect(movements.mergeMovements).toContainEqual({
         from: {row: 0, col: 3},
-        to: {row: 0, col: 2},
-      });
-
-      // Check compact movement
-      expect(movements.compactMovements[0]).toEqual({
-        from: {row: 0, col: 2},
         to: {row: 0, col: 1},
+        type: MovementType.MERGE,
       });
     });
 
@@ -542,6 +549,7 @@ describe('Model', () => {
       expect(movements.mergeMovements[0]).toEqual({
         from: {row: 0, col: 2},
         to: {row: 0, col: 1},
+        type: MovementType.MERGE,
       });
     });
 

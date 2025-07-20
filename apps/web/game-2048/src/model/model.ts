@@ -9,15 +9,18 @@ import {
   NEW_TILE_VALUES,
 } from '@/constants/configs.js';
 import {pickRandomElement} from '@/helpers/random-helpers.js';
+import {combineMovements} from '@/model/helpers/movement-helpers.js';
 
 import {MoveDirection} from './constants.js';
-import type {
-  Coordinate,
-  GridType,
-  ModelEvents,
-  Movement,
-  OperationMovements,
-  TileCreation,
+import {
+  type CompactMovement,
+  type Coordinate,
+  type GridType,
+  type MergeMovement,
+  type ModelEvents,
+  MovementType,
+  type OperationMovements,
+  type TileCreation,
 } from './types.js';
 
 class Model extends EventEmitter<ModelEvents> {
@@ -163,51 +166,51 @@ class Model extends EventEmitter<ModelEvents> {
   }
 
   private moveUp(): OperationMovements {
-    const mergeMovements: Movement[] = [];
-    const compactMovements: Movement[] = [];
+    const mergeMovements: MergeMovement[] = [];
+    const compactMovements: CompactMovement[] = [];
 
     for (let col = 0; col < this.grid[0].length; col++) {
       mergeMovements.push(...this.mergeCol(col, true));
       compactMovements.push(...this.compactCol(col, true));
     }
 
-    return {mergeMovements, compactMovements};
+    return combineMovements({mergeMovements, compactMovements});
   }
 
   private moveDown(): OperationMovements {
-    const mergeMovements: Movement[] = [];
-    const compactMovements: Movement[] = [];
+    const mergeMovements: MergeMovement[] = [];
+    const compactMovements: CompactMovement[] = [];
 
     for (let col = 0; col < this.grid[0].length; col++) {
       mergeMovements.push(...this.mergeCol(col, false));
       compactMovements.push(...this.compactCol(col, false));
     }
 
-    return {mergeMovements, compactMovements};
+    return combineMovements({mergeMovements, compactMovements});
   }
 
   private moveLeft(): OperationMovements {
-    const mergeMovements: Movement[] = [];
-    const compactMovements: Movement[] = [];
+    const mergeMovements: MergeMovement[] = [];
+    const compactMovements: CompactMovement[] = [];
 
     for (let row = 0; row < this.grid.length; row++) {
       mergeMovements.push(...this.mergeRow(row, true));
       compactMovements.push(...this.compactRow(row, true));
     }
 
-    return {mergeMovements, compactMovements};
+    return combineMovements({mergeMovements, compactMovements});
   }
 
   private moveRight(): OperationMovements {
-    const mergeMovements: Movement[] = [];
-    const compactMovements: Movement[] = [];
+    const mergeMovements: MergeMovement[] = [];
+    const compactMovements: CompactMovement[] = [];
 
     for (let row = 0; row < this.grid.length; row++) {
       mergeMovements.push(...this.mergeRow(row, false));
       compactMovements.push(...this.compactRow(row, false));
     }
 
-    return {mergeMovements, compactMovements};
+    return combineMovements({mergeMovements, compactMovements});
   }
 
   public clearGridForTesting(): void {
@@ -256,13 +259,13 @@ class Model extends EventEmitter<ModelEvents> {
     return this.emptyTileCount;
   }
 
-  private compactRow(rowIndex: number, toLeft: boolean): Movement[] {
+  private compactRow(rowIndex: number, toLeft: boolean): CompactMovement[] {
     const rowLength = this.grid[0].length;
     const colStart = toLeft ? 0 : rowLength - 1;
     const colEnd = toLeft ? rowLength : -1;
     const colMoveStep = toLeft ? 1 : -1;
 
-    const movements: Movement[] = [];
+    const movements: CompactMovement[] = [];
 
     let writeCol = colStart;
     for (let readCol = colStart; readCol !== colEnd; readCol += colMoveStep) {
@@ -274,6 +277,7 @@ class Model extends EventEmitter<ModelEvents> {
           movements.push({
             from: {row: rowIndex, col: readCol},
             to: {row: rowIndex, col: writeCol},
+            type: MovementType.COMPACT,
           });
         }
         writeCol += colMoveStep;
@@ -283,13 +287,13 @@ class Model extends EventEmitter<ModelEvents> {
     return movements;
   }
 
-  private compactCol(colIndex: number, toUp: boolean): Movement[] {
+  private compactCol(colIndex: number, toUp: boolean): CompactMovement[] {
     const colLength = this.grid.length;
     const rowStart = toUp ? 0 : colLength - 1;
     const rowEnd = toUp ? colLength : -1;
     const rowMoveStep = toUp ? 1 : -1;
 
-    const movements: Movement[] = [];
+    const movements: CompactMovement[] = [];
 
     let writeRow = rowStart;
     for (let readRow = rowStart; readRow !== rowEnd; readRow += rowMoveStep) {
@@ -301,6 +305,7 @@ class Model extends EventEmitter<ModelEvents> {
           movements.push({
             from: {row: readRow, col: colIndex},
             to: {row: writeRow, col: colIndex},
+            type: MovementType.COMPACT,
           });
         }
         writeRow += rowMoveStep;
@@ -323,13 +328,13 @@ class Model extends EventEmitter<ModelEvents> {
     return creations;
   }
 
-  private mergeRow(rowIndex: number, toLeft: boolean): Movement[] {
+  private mergeRow(rowIndex: number, toLeft: boolean): MergeMovement[] {
     const rowLength = this.grid[0].length;
     const colStart = toLeft ? 0 : rowLength - 1;
     const colEnd = toLeft ? rowLength : -1;
     const colMoveStep = toLeft ? 1 : -1;
 
-    const movements: Movement[] = [];
+    const movements: MergeMovement[] = [];
 
     for (let col = colStart; col !== colEnd; col += colMoveStep) {
       if (this.grid[rowIndex][col] === EMPTY_TILE_VALUE) {
@@ -352,6 +357,7 @@ class Model extends EventEmitter<ModelEvents> {
           movements.push({
             from: {row: rowIndex, col: nextCol},
             to: {row: rowIndex, col},
+            type: MovementType.MERGE,
           });
           break;
         } else {
@@ -404,13 +410,13 @@ class Model extends EventEmitter<ModelEvents> {
     return reservoir;
   }
 
-  private mergeCol(colIndex: number, toUp: boolean): Movement[] {
+  private mergeCol(colIndex: number, toUp: boolean): MergeMovement[] {
     const colLength = this.grid.length;
     const rowStart = toUp ? 0 : colLength - 1;
     const rowEnd = toUp ? colLength : -1;
     const rowMoveStep = toUp ? 1 : -1;
 
-    const movements: Movement[] = [];
+    const movements: MergeMovement[] = [];
 
     for (let row = rowStart; row !== rowEnd; row += rowMoveStep) {
       if (this.grid[row][colIndex] === EMPTY_TILE_VALUE) {
@@ -433,6 +439,7 @@ class Model extends EventEmitter<ModelEvents> {
           movements.push({
             from: {row: nextRow, col: colIndex},
             to: {row, col: colIndex},
+            type: MovementType.MERGE,
           });
           break;
         } else {

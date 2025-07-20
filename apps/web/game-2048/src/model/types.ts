@@ -3,14 +3,28 @@ export interface Coordinate {
   col: number;
 }
 
+export enum MovementType {
+  MERGE = 'merge',
+  COMPACT = 'compact',
+}
+
 export interface Movement {
   from: Readonly<Coordinate>;
   to: Readonly<Coordinate>;
+  type: MovementType;
+}
+
+export interface MergeMovement extends Movement {
+  type: MovementType.MERGE;
+}
+
+export interface CompactMovement extends Movement {
+  type: MovementType.COMPACT;
 }
 
 export interface OperationMovements {
-  mergeMovements: readonly Movement[];
-  compactMovements: readonly Movement[];
+  mergeMovements: readonly MergeMovement[];
+  compactMovements: readonly CompactMovement[];
 }
 
 export interface TileCreation {
