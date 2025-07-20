@@ -3,12 +3,6 @@ import assert from 'node:assert';
 import {type ReactElement, useCallback, useMemo} from 'react';
 
 import {
-  playTileCreationAnimation,
-  playTileMoveAnimation,
-  playTilePopAnimation,
-} from '@/components/Grid/helpers/animation-helpers.js';
-import {getTileMovementPixelDisplacement} from '@/components/Grid/helpers/displacement-helpers.js';
-import {
   TILE_CREATION_ANIMATION_DURATION,
   TILE_MOVE_ANIMATION_DURATION,
   TILE_POP_ANIMATION_DURATION,
@@ -18,6 +12,12 @@ import {TileGapInPixel} from '@/constants/sizes.js';
 import type {GridType, Movement} from '@/model/index.js';
 
 import {type Animate, Tile} from './components/Tile/index.js';
+import {
+  playTileCreationAnimation,
+  playTileMergeAnimation,
+  playTileMoveAnimation,
+} from './helpers/animation-helpers.js';
+import {getTileMovementPixelDisplacement} from './helpers/displacement-helpers.js';
 import styles from './styles.module.css';
 
 export interface GridViewProps {
@@ -44,7 +44,7 @@ export function GridView(props: GridViewProps) {
   }, []);
 
   const mergedAnimate: Animate = useCallback((element: HTMLElement) => {
-    return playTilePopAnimation(element, TILE_POP_ANIMATION_DURATION);
+    return playTileMergeAnimation(element, TILE_POP_ANIMATION_DURATION);
   }, []);
 
   const generateMovementAnimate: (movement: Movement) => Animate = useCallback(
