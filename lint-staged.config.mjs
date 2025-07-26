@@ -7,7 +7,7 @@
  * See https://github.com/lint-staged/lint-staged?tab=readme-ov-file#how-to-use-lint-staged-in-a-multi-package-monorepo.
  * */
 export const prettierConfig = Object.freeze({
-  '*': ['prettier --write --ignore-unknown'],
+  '*': ['prettier --write --ignore-unknown --no-error-on-unmatched-pattern'],
 });
 
 export const eslintConfig = Object.freeze({
