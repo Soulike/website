@@ -1,4 +1,5 @@
 import './main.css';
+import './constants/colors/ui-colors.js';
 
 import assert from 'node:assert';
 

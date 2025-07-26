@@ -1,10 +1,10 @@
 .Grid {
-  width: 500px;
+  height: 500px;
   aspect-ratio: 1;
   display: grid;
   grid-template: repeat(4, 1fr) / repeat(4, 1fr);
   gap: 10px;
-  padding: 20px;
+  padding: 10px;
   border-radius: 15px;
 
   background-color: var(--grid-background-color);

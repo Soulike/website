@@ -1,5 +1,3 @@
-import type {Animate} from '@/components/Grid/components/Tile/index.js';
-
 async function animate(
   element: HTMLElement,
   ...args: Parameters<HTMLElement['animate']>
@@ -76,12 +74,4 @@ export async function playTileMoveAnimation(
     easing,
     fill: 'none',
   });
-}
-
-export function combineAnimateSequence(animates: readonly Animate[]): Animate {
-  return async (element) => {
-    for (const animate of animates) {
-      await animate(element);
-    }
-  };
 }
