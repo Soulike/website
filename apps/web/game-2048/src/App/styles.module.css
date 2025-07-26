@@ -17,12 +17,13 @@
     .footerContainer {
       flex-grow: 0;
       flex-shrink: 0;
+      width: 100%;
     }
 
     .gridContainer {
       display: flex;
       justify-content: center;
-      align-items: stretch;
+      align-items: center;
       flex-grow: 1;
       flex-shrink: 1;
       width: 100%;

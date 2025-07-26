@@ -1,3 +1,4 @@
+import {Footer} from './components/Footer/index.js';
 import {Grid} from './components/Grid/index.js';
 import styles from './styles.module.css';
 
@@ -9,7 +10,9 @@ export function View() {
         <main className={styles.gridContainer}>
           <Grid />
         </main>
-        <footer className={styles.footerContainer}></footer>
+        <footer className={styles.footerContainer}>
+          <Footer />
+        </footer>
       </div>
     </div>
   );
