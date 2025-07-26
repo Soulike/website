@@ -1,0 +1,17 @@
+.Header {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .leftSection {
+    .gameTitle {
+      font-size: 3rem;
+      font-weight: bold;
+      font-family: 'Comic Sans MS', fantasy;
+      color: #756452;
+      user-select: none;
+    }
+  }
+}
