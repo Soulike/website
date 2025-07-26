@@ -52,13 +52,17 @@ export class Model extends EventEmitter<ModelEvents> {
     return this.scoreManager.getScore();
   }
 
+  public isGameOver() {
+    return this.gameChecker.isGameOver();
+  }
+
   public move(direction: MoveDirection): OperationMovements {
     return this.gameManager.move(direction);
   }
 
   private relayEvents() {
-    this.gameManager.addListener('gameOver', (...args) =>
-      this.emit('gameOver', ...args),
+    this.gameManager.addListener('gameStateChange', (...args) =>
+      this.emit('gameStateChange', ...args),
     );
     this.gameManager.addListener('gridChange', (...args) => {
       this.emit('gridChange', ...args);

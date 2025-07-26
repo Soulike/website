@@ -4,9 +4,10 @@ import {EventEmitter} from 'node:events';
 import {MoveDirection} from '../constants.js';
 import {combineMovements} from '../helpers/movement-helpers.js';
 import type {GameChecker} from '../interfaces/game-checker.js';
-import type {
-  GameManager,
-  GameManagerEvents,
+import {
+  type GameManager,
+  type GameManagerEvents,
+  GameState,
 } from '../interfaces/game-manager.js';
 import type {GridManager} from '../interfaces/grid-manager.js';
 import type {GridOperationManager} from '../interfaces/grid-operation-manager.js';
@@ -46,6 +47,7 @@ export class GameManagerImpl
   public resetGame() {
     this.gridManager.resetGrid();
     this.scoreManager.resetScore();
+    this.emit('gameStateChange', GameState.NORMAL);
     const tileCreations = this.gridOperationManager.createNewTile(2);
     this.emit(
       'gridChange',
@@ -76,7 +78,7 @@ export class GameManagerImpl
     }
 
     if (this.gameChecker.isGameOver()) {
-      this.emit('gameOver');
+      this.emit('gameStateChange', GameState.NEED_RESTART);
     }
 
     return operationMovements;

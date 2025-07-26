@@ -1,8 +1,9 @@
 export {MoveDirection} from './constants.js';
 export type {
-  GameOverEventListener,
+  GameStateChangeEventListener,
   GridChangeEventListener,
 } from './interfaces/game-manager.js';
+export {GameState} from './interfaces/game-manager.js';
 export type {ScoreChangeEventListener} from './interfaces/score-manager.js';
 export * from './types.js';
 

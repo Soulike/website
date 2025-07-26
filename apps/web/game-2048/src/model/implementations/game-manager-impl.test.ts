@@ -2,6 +2,7 @@ import {describe, expect, it, type Mock, vi} from 'vitest';
 
 import {GRID_SIDE_LENGTH} from '@/constants/configs.js';
 import type {GridChangeEventListener} from '@/model/index.js';
+import {GameState} from '@/model/interfaces/game-manager.js';
 
 import {MoveDirection} from '../constants.js';
 import {GameCheckerImpl} from './game-checker-impl.js';
@@ -173,9 +174,9 @@ describe('GameManagerImpl', () => {
       expect(gridChangeListener).not.toHaveBeenCalled();
     });
 
-    it('should emit gameOver when game ends', () => {
+    it('should emit gameStateChange', () => {
       const {gameManager, gridManager} = createManagers();
-      const gameOverListener = vi.fn();
+      const gameStateChangeListener = vi.fn();
 
       // Set up a game over state but with one move possible
       gridManager.setGridStateForTesting([
@@ -185,12 +186,17 @@ describe('GameManagerImpl', () => {
         [4, 2, 0, 16],
       ]);
 
-      gameManager.on('gameOver', gameOverListener);
+      gameManager.on('gameStateChange', gameStateChangeListener);
 
-      // This move should trigger game over check
+      // This move should trigger game state check
       gameManager.move(MoveDirection.LEFT);
 
-      expect(gameOverListener).toHaveBeenCalled();
+      expect(gameStateChangeListener).toHaveBeenCalledWith(
+        GameState.NEED_RESTART,
+      );
+
+      gameManager.resetGame();
+      expect(gameStateChangeListener).toHaveBeenCalledWith(GameState.NORMAL);
     });
 
     it('should throw when trying to move after game is over', () => {

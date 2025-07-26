@@ -18,9 +18,14 @@ export type GridChangeEventListener = (
   creations: readonly Readonly<TileCreation>[],
 ) => void;
 
-export type GameOverEventListener = () => void;
+export enum GameState {
+  NORMAL = 'normal',
+  NEED_RESTART = 'need restart',
+}
+
+export type GameStateChangeEventListener = (state: GameState) => void;
 
 export interface GameManagerEvents {
   gridChange: Parameters<GridChangeEventListener>;
-  gameOver: Parameters<GameOverEventListener>;
+  gameStateChange: Parameters<GameStateChangeEventListener>;
 }
