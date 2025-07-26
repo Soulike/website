@@ -3,9 +3,9 @@ import {useCallback, useEffect, useState} from 'react';
 import {GRID_SIDE_LENGTH} from '@/constants/configs.js';
 import {
   type GridChangeEventListener,
-  type GridType,
   model,
   type Movement,
+  type ReadOnlyGridType,
 } from '@/model/index.js';
 
 export function useViewModel() {
@@ -24,7 +24,7 @@ export function useViewModel() {
 }
 
 function useGrid() {
-  const [grid, setGrid] = useState<GridType>(model.getGrid());
+  const [grid, setGrid] = useState<ReadOnlyGridType>(model.getGrid());
 
   const onGridChangeEventListener: GridChangeEventListener = useCallback(
     (newGrid) => {

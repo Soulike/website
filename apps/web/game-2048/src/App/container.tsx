@@ -14,7 +14,7 @@ export function App() {
   });
 
   useEffect(() => {
-    model.init();
+    model.resetGame();
   }, []);
 
   return <View />;

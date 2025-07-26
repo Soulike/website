@@ -28,6 +28,7 @@ describe('movement-helpers', () => {
           from: {row: 0, col: 0},
           to: {row: 0, col: 1},
           type: MovementType.MERGE,
+          scoreChange: 4,
         },
       ];
 
@@ -68,6 +69,7 @@ describe('movement-helpers', () => {
           from: {row: 0, col: 0},
           to: {row: 0, col: 1},
           type: MovementType.MERGE,
+          scoreChange: 4,
         },
       ];
 
@@ -91,6 +93,7 @@ describe('movement-helpers', () => {
         from: {row: 0, col: 0},
         to: {row: 0, col: 2},
         type: MovementType.MERGE,
+        scoreChange: 4,
       });
       expect(result.compactMovements).toHaveLength(0);
     });
@@ -101,11 +104,13 @@ describe('movement-helpers', () => {
           from: {row: 0, col: 0},
           to: {row: 0, col: 1},
           type: MovementType.MERGE,
+          scoreChange: 4,
         },
         {
           from: {row: 1, col: 0},
           to: {row: 1, col: 1},
           type: MovementType.MERGE,
+          scoreChange: 8,
         },
       ];
 
@@ -129,11 +134,13 @@ describe('movement-helpers', () => {
         from: {row: 0, col: 0},
         to: {row: 0, col: 2},
         type: MovementType.MERGE,
+        scoreChange: 4,
       });
       expect(result.mergeMovements).toContainEqual({
         from: {row: 1, col: 0},
         to: {row: 1, col: 1},
         type: MovementType.MERGE,
+        scoreChange: 8,
       });
       expect(result.compactMovements).toHaveLength(0);
     });
@@ -144,6 +151,7 @@ describe('movement-helpers', () => {
           from: {row: 0, col: 0},
           to: {row: 0, col: 1},
           type: MovementType.MERGE,
+          scoreChange: 4,
         },
       ];
 
@@ -172,6 +180,7 @@ describe('movement-helpers', () => {
         from: {row: 0, col: 0},
         to: {row: 0, col: 2},
         type: MovementType.MERGE,
+        scoreChange: 4,
       });
       expect(result.compactMovements).toHaveLength(1);
       expect(result.compactMovements[0]).toEqual({
@@ -187,16 +196,19 @@ describe('movement-helpers', () => {
           from: {row: 0, col: 0},
           to: {row: 0, col: 1},
           type: MovementType.MERGE,
+          scoreChange: 4,
         },
         {
           from: {row: 1, col: 0},
           to: {row: 1, col: 1},
           type: MovementType.MERGE,
+          scoreChange: 8,
         },
         {
           from: {row: 2, col: 0},
           to: {row: 2, col: 1},
           type: MovementType.MERGE,
+          scoreChange: 16,
         },
       ];
 
@@ -230,16 +242,19 @@ describe('movement-helpers', () => {
         from: {row: 0, col: 0},
         to: {row: 0, col: 2},
         type: MovementType.MERGE,
+        scoreChange: 4,
       });
       expect(result.mergeMovements).toContainEqual({
         from: {row: 1, col: 0},
         to: {row: 1, col: 3},
         type: MovementType.MERGE,
+        scoreChange: 8,
       });
       expect(result.mergeMovements).toContainEqual({
         from: {row: 2, col: 0},
         to: {row: 2, col: 1},
         type: MovementType.MERGE,
+        scoreChange: 16,
       });
       expect(result.compactMovements).toHaveLength(1);
       expect(result.compactMovements[0]).toEqual({
@@ -255,11 +270,13 @@ describe('movement-helpers', () => {
           from: {row: 0, col: 0},
           to: {row: 0, col: 1},
           type: MovementType.MERGE,
+          scoreChange: 4,
         },
         {
           from: {row: 1, col: 0},
           to: {row: 0, col: 1},
           type: MovementType.MERGE,
+          scoreChange: 4,
         },
       ];
 
@@ -284,11 +301,13 @@ describe('movement-helpers', () => {
         from: {row: 0, col: 0},
         to: {row: 0, col: 2},
         type: MovementType.MERGE,
+        scoreChange: 4,
       });
       expect(result.mergeMovements).toContainEqual({
         from: {row: 1, col: 0},
         to: {row: 0, col: 2},
         type: MovementType.MERGE,
+        scoreChange: 4,
       });
       // The compact movement should not remain since it was used (marked as used)
       expect(result.compactMovements).toHaveLength(0);

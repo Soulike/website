@@ -25,6 +25,7 @@ export function combineMovements(
           from: mergeMovement.from,
           to: compactMovement.to,
           type: MovementType.MERGE,
+          scoreChange: mergeMovement.scoreChange,
         });
 
         usedCompactMovementIndexes.add(i);

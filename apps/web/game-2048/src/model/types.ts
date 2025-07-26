@@ -1,3 +1,6 @@
+import type {GameManagerEvents} from '@/model/interfaces/game-manager.js';
+import type {ScoreManagerEvents} from '@/model/interfaces/score-manager.js';
+
 export interface Coordinate {
   row: number;
   col: number;
@@ -16,6 +19,7 @@ export interface Movement {
 
 export interface MergeMovement extends Movement {
   type: MovementType.MERGE;
+  scoreChange: number;
 }
 
 export interface CompactMovement extends Movement {
@@ -32,20 +36,7 @@ export interface TileCreation {
   value: number;
 }
 
-export type GridType = readonly (readonly number[])[];
+export type GridType = number[][];
+export type ReadOnlyGridType = readonly (readonly number[])[];
 
-export type GridChangeEventListener = (
-  grid: GridType,
-  movements: Readonly<OperationMovements>,
-  creations: readonly Readonly<TileCreation>[],
-) => void;
-
-export type GameOverEventListener = (targetAccomplished: boolean) => void;
-
-export type ScoreChangeEventListener = (score: number) => void;
-
-export interface ModelEvents {
-  gridChange: Parameters<GridChangeEventListener>;
-  gameOver: Parameters<GameOverEventListener>;
-  scoreChange: Parameters<ScoreChangeEventListener>;
-}
+export type ModelEvents = GameManagerEvents | ScoreManagerEvents;

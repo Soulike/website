@@ -1,479 +1,70 @@
-import assert from 'node:assert';
 import {EventEmitter} from 'node:events';
 
-import {assertIsTest} from '@universal/test-helpers';
+import {MoveDirection} from '@/model/constants.js';
 
-import {
-  EMPTY_TILE_VALUE,
-  GRID_SIDE_LENGTH,
-  NEW_TILE_VALUES,
-} from '@/constants/configs.js';
-import {pickRandomElement} from '@/helpers/random-helpers.js';
-import {combineMovements} from '@/model/helpers/movement-helpers.js';
-
-import {MoveDirection} from './constants.js';
-import {
-  type CompactMovement,
-  type Coordinate,
-  type GridType,
-  type MergeMovement,
-  type ModelEvents,
-  MovementType,
-  type OperationMovements,
-  type TileCreation,
+import {GameCheckerImpl} from './implementations/game-checker-impl.js';
+import {GameManagerImpl} from './implementations/game-manager-impl.js';
+import {GridManagerImpl} from './implementations/grid-manager-impl.js';
+import {GridOperationManagerImpl} from './implementations/grid-operation-manager-impl.js';
+import {ScoreManagerImpl} from './implementations/score-manager-impl.js';
+import type {GameChecker} from './interfaces/game-checker.js';
+import type {GameManager} from './interfaces/game-manager.js';
+import type {GridManager} from './interfaces/grid-manager.js';
+import type {GridOperationManager} from './interfaces/grid-operation-manager.js';
+import type {ScoreManager} from './interfaces/score-manager.js';
+import type {
+  ModelEvents,
+  OperationMovements,
+  ReadOnlyGridType,
 } from './types.js';
 
-class Model extends EventEmitter<ModelEvents> {
-  private static readonly MAX_TILE_VALUE = 2048;
-  private emptyTileCount = -1;
-  private targetAccomplished = false;
-
-  private grid: number[][] = [];
-
-  // DO NOT set `internalScore` to change score. Use `this.score` setter to trigger `scoreChange` event.
-  private internalScore = 0;
-
-  private get score(): number {
-    return this.internalScore;
-  }
-
-  private set score(value: number) {
-    this.internalScore = value;
-    this.emitScoreChangeEvent(value);
-  }
-
-  private static getRandomNewTileValue() {
-    return pickRandomElement(NEW_TILE_VALUES);
-  }
+export class Model extends EventEmitter<ModelEvents> {
+  private readonly gridManager: GridManager;
+  private readonly gridOperationManager: GridOperationManager;
+  private readonly gameChecker: GameChecker;
+  private readonly gameManager: GameManager;
+  private readonly scoreManager: ScoreManager;
 
   constructor() {
     super();
-    this.initEmptyGrid();
+    this.gridManager = new GridManagerImpl();
+    this.gridOperationManager = new GridOperationManagerImpl(this.gridManager);
+    this.gameChecker = new GameCheckerImpl(this.gridManager);
+    this.scoreManager = new ScoreManagerImpl();
+    this.gameManager = new GameManagerImpl(
+      this.gridManager,
+      this.gridOperationManager,
+      this.gameChecker,
+      this.scoreManager,
+    );
+    this.relayEvents();
   }
 
-  public getGrid(): GridType {
-    return this.grid;
+  public resetGame() {
+    this.gameManager.resetGame();
+  }
+
+  public getGrid(): ReadOnlyGridType {
+    return this.gridManager.getGrid();
   }
 
   public getScore() {
-    return this.internalScore;
+    return this.scoreManager.getScore();
   }
 
   public move(direction: MoveDirection): OperationMovements {
-    const operationMovements = this.moveWithoutCreatingNewTile(direction);
-    if (
-      operationMovements.mergeMovements.length > 0 ||
-      operationMovements.compactMovements.length > 0
-    ) {
-      const tileCreations = this.createNewTile(1);
-      this.emitGridChangeEvent(operationMovements, tileCreations);
-    }
-
-    return operationMovements;
+    return this.gameManager.move(direction);
   }
 
-  public init() {
-    this.initEmptyGrid();
-    this.emptyTileCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
-    const tileCreations = this.createNewTile(2);
-    this.emitGridChangeEvent(
-      {mergeMovements: [], compactMovements: []},
-      tileCreations,
+  private relayEvents() {
+    this.gameManager.addListener('gameOver', (...args) =>
+      this.emit('gameOver', ...args),
     );
-    this.score = 0;
-  }
-
-  private initEmptyGrid() {
-    this.grid = new Array<number[]>(GRID_SIDE_LENGTH);
-    for (let i = 0; i < this.grid.length; i++) {
-      this.grid[i] = new Array<number>(GRID_SIDE_LENGTH);
-      this.grid[i].fill(EMPTY_TILE_VALUE);
-    }
-  }
-
-  private emitGridChangeEvent(
-    movements: OperationMovements,
-    creations: readonly TileCreation[],
-  ) {
-    this.emit('gridChange', this.grid, movements, creations);
-  }
-
-  private emitGameOverEvent(targetAccomplished: boolean) {
-    this.emit('gameOver', targetAccomplished);
-  }
-
-  private emitScoreChangeEvent(score: number) {
-    this.emit('scoreChange', score);
-  }
-
-  public moveWithoutCreatingNewTileForTesting(
-    direction: MoveDirection,
-  ): OperationMovements {
-    assertIsTest('moveWithoutCreatingNewTileForTesting');
-    return this.moveWithoutCreatingNewTile(direction);
-  }
-
-  /**
-   * Checks if any moves are possible on the current grid.
-   * @returns true if there are empty tiles or adjacent tiles with same values that can be merged, false otherwise (game over)
-   */
-  public isMovable(): boolean {
-    if (this.emptyTileCount > 0) {
-      return true;
-    }
-
-    // Check if any adjacent tiles can be merged
-    for (let row = 0; row < this.grid.length; row++) {
-      for (let col = 0; col < this.grid[0].length; col++) {
-        const tileValue = this.grid[row][col];
-
-        // Check right neighbor
-        if (
-          col < this.grid[0].length - 1 &&
-          this.grid[row][col + 1] === tileValue
-        ) {
-          return true;
-        }
-
-        // Check bottom neighbor
-        if (
-          row < this.grid.length - 1 &&
-          this.grid[row + 1][col] === tileValue
-        ) {
-          return true;
-        }
-      }
-    }
-
-    return false;
-  }
-
-  private moveWithoutCreatingNewTile(direction: MoveDirection) {
-    assert(this.isMovable(), 'Try to move after game is over.');
-
-    let operationMovements: OperationMovements | null = null;
-
-    switch (direction) {
-      case MoveDirection.UP:
-        operationMovements = this.moveUp();
-        break;
-      case MoveDirection.DOWN:
-        operationMovements = this.moveDown();
-        break;
-      case MoveDirection.LEFT:
-        operationMovements = this.moveLeft();
-        break;
-      case MoveDirection.RIGHT:
-        operationMovements = this.moveRight();
-        break;
-      default:
-        assert.fail(`Unexpected direction ${String(direction)}`);
-    }
-
-    for (const {
-      to: {row, col},
-    } of operationMovements.mergeMovements) {
-      if (this.grid[row][col] === Model.MAX_TILE_VALUE) {
-        this.targetAccomplished = true;
-        break;
-      }
-    }
-
-    if (this.targetAccomplished || !this.isMovable()) {
-      this.emitGameOverEvent(this.targetAccomplished);
-    }
-
-    return operationMovements;
-  }
-
-  private moveUp(): OperationMovements {
-    const mergeMovements: MergeMovement[] = [];
-    const compactMovements: CompactMovement[] = [];
-
-    for (let col = 0; col < this.grid[0].length; col++) {
-      mergeMovements.push(...this.mergeCol(col, true));
-      compactMovements.push(...this.compactCol(col, true));
-    }
-
-    return combineMovements({mergeMovements, compactMovements});
-  }
-
-  private moveDown(): OperationMovements {
-    const mergeMovements: MergeMovement[] = [];
-    const compactMovements: CompactMovement[] = [];
-
-    for (let col = 0; col < this.grid[0].length; col++) {
-      mergeMovements.push(...this.mergeCol(col, false));
-      compactMovements.push(...this.compactCol(col, false));
-    }
-
-    return combineMovements({mergeMovements, compactMovements});
-  }
-
-  private moveLeft(): OperationMovements {
-    const mergeMovements: MergeMovement[] = [];
-    const compactMovements: CompactMovement[] = [];
-
-    for (let row = 0; row < this.grid.length; row++) {
-      mergeMovements.push(...this.mergeRow(row, true));
-      compactMovements.push(...this.compactRow(row, true));
-    }
-
-    return combineMovements({mergeMovements, compactMovements});
-  }
-
-  private moveRight(): OperationMovements {
-    const mergeMovements: MergeMovement[] = [];
-    const compactMovements: CompactMovement[] = [];
-
-    for (let row = 0; row < this.grid.length; row++) {
-      mergeMovements.push(...this.mergeRow(row, false));
-      compactMovements.push(...this.compactRow(row, false));
-    }
-
-    return combineMovements({mergeMovements, compactMovements});
-  }
-
-  public clearGridForTesting(): void {
-    assertIsTest('clearGridForTesting');
-
-    for (let i = 0; i < GRID_SIDE_LENGTH; i++) {
-      for (let j = 0; j < GRID_SIDE_LENGTH; j++) {
-        this.grid[i][j] = EMPTY_TILE_VALUE;
-      }
-    }
-
-    this.emptyTileCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
-  }
-
-  public setGridStateForTesting(gridState: number[][]): void {
-    assertIsTest('setGridStateForTesting');
-    assert(
-      gridState.length === GRID_SIDE_LENGTH,
-      `Grid must be ${String(GRID_SIDE_LENGTH)}x${String(GRID_SIDE_LENGTH)}`,
-    );
-    assert(
-      gridState.every((row) => row.length === GRID_SIDE_LENGTH),
-      `All rows must have ${String(GRID_SIDE_LENGTH)} columns`,
-    );
-
-    this.emptyTileCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
-
-    for (let i = 0; i < GRID_SIDE_LENGTH; i++) {
-      for (let j = 0; j < GRID_SIDE_LENGTH; j++) {
-        this.grid[i][j] = gridState[i][j];
-        if (this.grid[i][j] !== EMPTY_TILE_VALUE) {
-          this.emptyTileCount--;
-        }
-      }
-    }
-  }
-
-  public getGridSideLengthForTesting(): number {
-    assertIsTest('getGridSideLengthForTesting');
-
-    return GRID_SIDE_LENGTH;
-  }
-
-  public getEmptyTileCountForTesting(): number {
-    assertIsTest('getEmptyTileCountForTesting');
-    return this.emptyTileCount;
-  }
-
-  private compactRow(rowIndex: number, toLeft: boolean): CompactMovement[] {
-    const rowLength = this.grid[0].length;
-    const colStart = toLeft ? 0 : rowLength - 1;
-    const colEnd = toLeft ? rowLength : -1;
-    const colMoveStep = toLeft ? 1 : -1;
-
-    const movements: CompactMovement[] = [];
-
-    let writeCol = colStart;
-    for (let readCol = colStart; readCol !== colEnd; readCol += colMoveStep) {
-      if (this.grid[rowIndex][readCol] !== EMPTY_TILE_VALUE) {
-        if (writeCol !== readCol) {
-          this.grid[rowIndex][writeCol] = this.grid[rowIndex][readCol];
-          this.grid[rowIndex][readCol] = EMPTY_TILE_VALUE;
-
-          movements.push({
-            from: {row: rowIndex, col: readCol},
-            to: {row: rowIndex, col: writeCol},
-            type: MovementType.COMPACT,
-          });
-        }
-        writeCol += colMoveStep;
-      }
-    }
-
-    return movements;
-  }
-
-  private compactCol(colIndex: number, toUp: boolean): CompactMovement[] {
-    const colLength = this.grid.length;
-    const rowStart = toUp ? 0 : colLength - 1;
-    const rowEnd = toUp ? colLength : -1;
-    const rowMoveStep = toUp ? 1 : -1;
-
-    const movements: CompactMovement[] = [];
-
-    let writeRow = rowStart;
-    for (let readRow = rowStart; readRow !== rowEnd; readRow += rowMoveStep) {
-      if (this.grid[readRow][colIndex] !== EMPTY_TILE_VALUE) {
-        if (writeRow !== readRow) {
-          this.grid[writeRow][colIndex] = this.grid[readRow][colIndex];
-          this.grid[readRow][colIndex] = EMPTY_TILE_VALUE;
-
-          movements.push({
-            from: {row: readRow, col: colIndex},
-            to: {row: writeRow, col: colIndex},
-            type: MovementType.COMPACT,
-          });
-        }
-        writeRow += rowMoveStep;
-      }
-    }
-
-    return movements;
-  }
-
-  private createNewTile(count: number): TileCreation[] {
-    assert(count > 0);
-    const emptyTiles = this.getRandomEmptyTiles(count);
-    assert(emptyTiles?.length == count, 'No enough empty tiles');
-    const creations: TileCreation[] = [];
-    for (const {row, col} of emptyTiles) {
-      this.grid[row][col] = Model.getRandomNewTileValue();
-      creations.push({coordinate: {row, col}, value: this.grid[row][col]});
-    }
-    this.emptyTileCount -= count;
-    return creations;
-  }
-
-  private mergeRow(rowIndex: number, toLeft: boolean): MergeMovement[] {
-    const rowLength = this.grid[0].length;
-    const colStart = toLeft ? 0 : rowLength - 1;
-    const colEnd = toLeft ? rowLength : -1;
-    const colMoveStep = toLeft ? 1 : -1;
-
-    const movements: MergeMovement[] = [];
-
-    for (let col = colStart; col !== colEnd; col += colMoveStep) {
-      if (this.grid[rowIndex][col] === EMPTY_TILE_VALUE) {
-        continue;
-      }
-
-      for (
-        let nextCol = col + colMoveStep;
-        nextCol !== colEnd;
-        nextCol += colMoveStep
-      ) {
-        if (this.grid[rowIndex][nextCol] === EMPTY_TILE_VALUE) {
-          continue;
-        }
-        if (this.grid[rowIndex][nextCol] === this.grid[rowIndex][col]) {
-          this.grid[rowIndex][nextCol] = EMPTY_TILE_VALUE;
-          this.emptyTileCount++;
-          this.grid[rowIndex][col] *= 2;
-          this.score += this.grid[rowIndex][col];
-
-          movements.push({
-            from: {row: rowIndex, col: nextCol},
-            to: {row: rowIndex, col},
-            type: MovementType.MERGE,
-          });
-          break;
-        } else {
-          // Found different value, impossible to merge. Move to next tile.
-          break;
-        }
-      }
-    }
-    return movements;
-  }
-
-  /**
-   * Use reservoir sampling algorithm to randomly select empty tiles.
-   * @param count Number of empty tiles to select
-   * @returns Array of coordinates of empty tiles {row, col}. If not enough empty tiles, returns null.
-   */
-  private getRandomEmptyTiles(count: number): Coordinate[] | null {
-    assert(count > 0);
-
-    const reservoir: Coordinate[] = [];
-    let totalEmptyTileCount = 0;
-
-    // First pass: use reservoir sampling to select count empty tiles
-    for (let row = 0; row < this.grid.length; row++) {
-      for (let col = 0; col < this.grid[row].length; col++) {
-        if (this.grid[row][col] === EMPTY_TILE_VALUE) {
-          totalEmptyTileCount++;
-
-          if (reservoir.length < count) {
-            // Fill reservoir if not full
-            reservoir.push({row, col});
-          } else {
-            // Replace element with probability count/totalEmptyTileCount
-            const randomIndex = Math.floor(Math.random() * totalEmptyTileCount);
-            if (randomIndex < count) {
-              reservoir[randomIndex] = {row, col};
-            }
-          }
-        }
-      }
-    }
-
-    assert.equal(this.emptyTileCount, totalEmptyTileCount);
-
-    // Check if we have enough empty tiles
-    if (totalEmptyTileCount < count) {
-      return null;
-    }
-
-    return reservoir;
-  }
-
-  private mergeCol(colIndex: number, toUp: boolean): MergeMovement[] {
-    const colLength = this.grid.length;
-    const rowStart = toUp ? 0 : colLength - 1;
-    const rowEnd = toUp ? colLength : -1;
-    const rowMoveStep = toUp ? 1 : -1;
-
-    const movements: MergeMovement[] = [];
-
-    for (let row = rowStart; row !== rowEnd; row += rowMoveStep) {
-      if (this.grid[row][colIndex] === EMPTY_TILE_VALUE) {
-        continue;
-      }
-
-      for (
-        let nextRow = row + rowMoveStep;
-        nextRow !== rowEnd;
-        nextRow += rowMoveStep
-      ) {
-        if (this.grid[nextRow][colIndex] === EMPTY_TILE_VALUE) {
-          continue;
-        }
-        if (this.grid[nextRow][colIndex] === this.grid[row][colIndex]) {
-          this.grid[nextRow][colIndex] = EMPTY_TILE_VALUE;
-          this.emptyTileCount++;
-          this.grid[row][colIndex] *= 2;
-          this.score += this.grid[row][colIndex];
-
-          movements.push({
-            from: {row: nextRow, col: colIndex},
-            to: {row, col: colIndex},
-            type: MovementType.MERGE,
-          });
-          break;
-        } else {
-          // Found different value, impossible to merge. Move to next tile.
-          break;
-        }
-      }
-    }
-
-    return movements;
+    this.gameManager.addListener('gridChange', (...args) => {
+      this.emit('gridChange', ...args);
+    });
+    this.scoreManager.addListener('scoreChange', (...args) => {
+      this.emit('scoreChange', ...args);
+    });
   }
 }
-
-export const model = new Model();

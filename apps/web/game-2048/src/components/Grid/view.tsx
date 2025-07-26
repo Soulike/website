@@ -9,7 +9,7 @@ import {
 } from '@/constants/animation.js';
 import {GRID_SIDE_LENGTH} from '@/constants/configs.js';
 import {TileGapInPixel} from '@/constants/sizes.js';
-import type {GridType, Movement} from '@/model/index.js';
+import type {Movement, ReadOnlyGridType} from '@/model/index.js';
 
 import {type Animate, Tile} from './components/Tile/index.js';
 import {
@@ -21,7 +21,7 @@ import {getTileMovementPixelDisplacement} from './helpers/displacement-helpers.j
 import styles from './styles.module.css';
 
 export interface GridViewProps {
-  grid: GridType;
+  grid: ReadOnlyGridType;
   isTileNewlyCreated: boolean[][];
   isTileMergeDestination: boolean[][];
   isTileMovementDestination: boolean[][];
