@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, it} from 'vitest';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
 
 import {EMPTY_TILE_VALUE, NEW_TILE_VALUES} from '@/constants/configs.js';
 import {MovementType} from '@/model/types.js';
@@ -687,6 +687,165 @@ describe('Model', () => {
       ]);
 
       expect(model.isMovable()).toBe(true);
+    });
+  });
+
+  describe('score tracking', () => {
+    beforeEach(() => {
+      model.init();
+      model.clearGridForTesting();
+    });
+
+    it('should initialize score to 0 on game init', () => {
+      model.init();
+      expect(model.getScore()).toBe(0);
+    });
+
+    it('should return current score via getScore method', () => {
+      model.init();
+      const score = model.getScore();
+      expect(typeof score).toBe('number');
+      expect(score).toBe(0);
+    });
+
+    it('should increase score when tiles merge horizontally', () => {
+      // Set up: [2, 2, 0, 0] - merging should add 4 to score
+      model.setGridStateForTesting([
+        [2, 2, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+      ]);
+
+      const initialScore = model.getScore();
+      model.moveWithoutCreatingNewTileForTesting(MoveDirection.LEFT);
+
+      expect(model.getScore()).toBe(initialScore + 4);
+    });
+
+    it('should increase score when tiles merge vertically', () => {
+      // Set up: vertical [4, 4] - merging should add 8 to score
+      model.setGridStateForTesting([
+        [4, E, E, E],
+        [4, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+      ]);
+
+      const initialScore = model.getScore();
+      model.moveWithoutCreatingNewTileForTesting(MoveDirection.UP);
+
+      expect(model.getScore()).toBe(initialScore + 8);
+    });
+
+    it('should accumulate score from multiple merges in one move', () => {
+      // Set up: [2, 2, 4, 4] - should merge to [4, 8] and add 4 + 8 = 12 to score
+      model.setGridStateForTesting([
+        [2, 2, 4, 4],
+        [E, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+      ]);
+
+      const initialScore = model.getScore();
+      model.moveWithoutCreatingNewTileForTesting(MoveDirection.LEFT);
+
+      expect(model.getScore()).toBe(initialScore + 12);
+    });
+
+    it('should not increase score when only compacting tiles', () => {
+      // Set up: [2, 0, 4, 0] - only sliding, no merging
+      model.setGridStateForTesting([
+        [2, E, 4, E],
+        [E, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+      ]);
+
+      const initialScore = model.getScore();
+      model.moveWithoutCreatingNewTileForTesting(MoveDirection.LEFT);
+
+      expect(model.getScore()).toBe(initialScore);
+    });
+
+    it('should emit scoreChange event when score increases', () => {
+      const mockListener = vi.fn();
+      model.on('scoreChange', mockListener);
+
+      model.setGridStateForTesting([
+        [2, 2, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+      ]);
+
+      model.moveWithoutCreatingNewTileForTesting(MoveDirection.LEFT);
+
+      expect(mockListener).toHaveBeenCalledWith(4);
+      model.off('scoreChange', mockListener);
+    });
+
+    it('should emit scoreChange event when score resets to 0', () => {
+      // First, increase score
+      model.setGridStateForTesting([
+        [2, 2, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+      ]);
+      model.moveWithoutCreatingNewTileForTesting(MoveDirection.LEFT);
+      expect(model.getScore()).toBe(4);
+
+      // Then test reset
+      const mockListener = vi.fn();
+      model.on('scoreChange', mockListener);
+
+      model.init();
+
+      expect(mockListener).toHaveBeenCalledWith(0);
+      expect(model.getScore()).toBe(0);
+      model.off('scoreChange', mockListener);
+    });
+
+    it('should handle large score values correctly', () => {
+      // Set up high-value tiles: [512, 512] - should add 1024 to score
+      model.setGridStateForTesting([
+        [512, 512, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+      ]);
+
+      const initialScore = model.getScore();
+      model.moveWithoutCreatingNewTileForTesting(MoveDirection.LEFT);
+
+      expect(model.getScore()).toBe(initialScore + 1024);
+    });
+
+    it('should maintain score across multiple moves', () => {
+      let expectedScore = 0;
+
+      // First merge: [2, 2] -> 4 points
+      model.setGridStateForTesting([
+        [2, 2, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+      ]);
+      model.moveWithoutCreatingNewTileForTesting(MoveDirection.LEFT);
+      expectedScore += 4;
+      expect(model.getScore()).toBe(expectedScore);
+
+      // Second merge: [4, 4] -> 8 more points
+      model.setGridStateForTesting([
+        [4, 4, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+        [E, E, E, E],
+      ]);
+      model.moveWithoutCreatingNewTileForTesting(MoveDirection.LEFT);
+      expectedScore += 8;
+      expect(model.getScore()).toBe(expectedScore);
     });
   });
 });

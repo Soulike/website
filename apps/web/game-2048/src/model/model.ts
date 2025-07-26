@@ -30,6 +30,18 @@ class Model extends EventEmitter<ModelEvents> {
 
   private grid: number[][] = [];
 
+  // DO NOT set `internalScore` to change score. Use `this.score` setter to trigger `scoreChange` event.
+  private internalScore = 0;
+
+  private get score(): number {
+    return this.internalScore;
+  }
+
+  private set score(value: number) {
+    this.internalScore = value;
+    this.emitScoreChangeEvent(value);
+  }
+
   private static getRandomNewTileValue() {
     return pickRandomElement(NEW_TILE_VALUES);
   }
@@ -41,6 +53,10 @@ class Model extends EventEmitter<ModelEvents> {
 
   public getGrid(): GridType {
     return this.grid;
+  }
+
+  public getScore() {
+    return this.internalScore;
   }
 
   public move(direction: MoveDirection): OperationMovements {
@@ -64,6 +80,7 @@ class Model extends EventEmitter<ModelEvents> {
       {mergeMovements: [], compactMovements: []},
       tileCreations,
     );
+    this.score = 0;
   }
 
   private initEmptyGrid() {
@@ -83,6 +100,10 @@ class Model extends EventEmitter<ModelEvents> {
 
   private emitGameOverEvent(targetAccomplished: boolean) {
     this.emit('gameOver', targetAccomplished);
+  }
+
+  private emitScoreChangeEvent(score: number) {
+    this.emit('scoreChange', score);
   }
 
   public moveWithoutCreatingNewTileForTesting(
@@ -353,6 +374,7 @@ class Model extends EventEmitter<ModelEvents> {
           this.grid[rowIndex][nextCol] = EMPTY_TILE_VALUE;
           this.emptyTileCount++;
           this.grid[rowIndex][col] *= 2;
+          this.score += this.grid[rowIndex][col];
 
           movements.push({
             from: {row: rowIndex, col: nextCol},
@@ -435,6 +457,7 @@ class Model extends EventEmitter<ModelEvents> {
           this.grid[nextRow][colIndex] = EMPTY_TILE_VALUE;
           this.emptyTileCount++;
           this.grid[row][colIndex] *= 2;
+          this.score += this.grid[row][colIndex];
 
           movements.push({
             from: {row: nextRow, col: colIndex},

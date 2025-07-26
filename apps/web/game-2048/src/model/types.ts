@@ -42,7 +42,10 @@ export type GridChangeEventListener = (
 
 export type GameOverEventListener = (targetAccomplished: boolean) => void;
 
+export type ScoreChangeEventListener = (score: number) => void;
+
 export interface ModelEvents {
   gridChange: Parameters<GridChangeEventListener>;
   gameOver: Parameters<GameOverEventListener>;
+  scoreChange: Parameters<ScoreChangeEventListener>;
 }
