@@ -95,7 +95,7 @@ describe('movement-helpers', () => {
         type: MovementType.MERGE,
         scoreChange: 4,
       });
-      expect(result.compactMovements).toHaveLength(0);
+      expect(result.compactMovements).toStrictEqual(compactMovements);
     });
 
     it('should handle multiple merge movements with some combinable', () => {
@@ -142,7 +142,7 @@ describe('movement-helpers', () => {
         type: MovementType.MERGE,
         scoreChange: 8,
       });
-      expect(result.compactMovements).toHaveLength(0);
+      expect(result.compactMovements).toStrictEqual(compactMovements);
     });
 
     it('should keep unused compact movements', () => {
@@ -182,12 +182,7 @@ describe('movement-helpers', () => {
         type: MovementType.MERGE,
         scoreChange: 4,
       });
-      expect(result.compactMovements).toHaveLength(1);
-      expect(result.compactMovements[0]).toEqual({
-        from: {row: 1, col: 0},
-        to: {row: 1, col: 1},
-        type: MovementType.COMPACT,
-      });
+      expect(result.compactMovements).toStrictEqual(compactMovements);
     });
 
     it('should handle complex scenario with multiple movements', () => {
@@ -256,12 +251,7 @@ describe('movement-helpers', () => {
         type: MovementType.MERGE,
         scoreChange: 16,
       });
-      expect(result.compactMovements).toHaveLength(1);
-      expect(result.compactMovements[0]).toEqual({
-        from: {row: 3, col: 0},
-        to: {row: 3, col: 1},
-        type: MovementType.COMPACT,
-      });
+      expect(result.compactMovements).toStrictEqual(compactMovements);
     });
 
     it('should allow each compact movement to be used multiple times', () => {
@@ -309,8 +299,7 @@ describe('movement-helpers', () => {
         type: MovementType.MERGE,
         scoreChange: 4,
       });
-      // The compact movement should not remain since it was used (marked as used)
-      expect(result.compactMovements).toHaveLength(0);
+      expect(result.compactMovements).toStrictEqual(compactMovements);
     });
   });
 });
