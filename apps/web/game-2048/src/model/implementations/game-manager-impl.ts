@@ -56,7 +56,17 @@ export class GameManagerImpl
   }
 
   public move(direction: MoveDirection): OperationMovements {
+    assert(!this.gameChecker.isGameOver(), 'Try to move after game is over.');
+
     const operationMovements = this.moveWithoutCreatingNewTile(direction);
+
+    const scoreChange = this.getScoreChangeFromMergeMovements(
+      operationMovements.mergeMovements,
+    );
+    if (scoreChange !== 0) {
+      this.scoreManager.addToScore(scoreChange);
+    }
+
     if (
       operationMovements.mergeMovements.length > 0 ||
       operationMovements.compactMovements.length > 0
@@ -94,11 +104,6 @@ export class GameManagerImpl
         assert.fail(`Unexpected direction ${String(direction)}`);
     }
 
-    const scoreChange = this.getScoreChangeFromMergeMovements(
-      operationMovements.mergeMovements,
-    );
-    this.scoreManager.addToScore(scoreChange);
-
     return operationMovements;
   }
 
@@ -114,6 +119,10 @@ export class GameManagerImpl
     return combineMovements({mergeMovements, compactMovements});
   }
 
+  public moveWithoutCreatingNewTileForTesting(direction: MoveDirection) {
+    return this.moveWithoutCreatingNewTile(direction);
+  }
+
   private moveDown(): OperationMovements {
     const mergeMovements: MergeMovement[] = [];
     const compactMovements: CompactMovement[] = [];
@@ -125,9 +134,7 @@ export class GameManagerImpl
       );
     }
 
-    const movements = combineMovements({mergeMovements, compactMovements});
-    this.emit('gridChange', this.grid, movements, []);
-    return movements;
+    return combineMovements({mergeMovements, compactMovements});
   }
 
   private moveLeft(): OperationMovements {
@@ -139,9 +146,17 @@ export class GameManagerImpl
       compactMovements.push(...this.gridOperationManager.compactRow(row, true));
     }
 
-    const movements = combineMovements({mergeMovements, compactMovements});
-    this.emit('gridChange', this.grid, movements, []);
-    return movements;
+    return combineMovements({mergeMovements, compactMovements});
+  }
+
+  private getScoreChangeFromMergeMovements(
+    mergeMovements: readonly MergeMovement[],
+  ) {
+    let scoreChangeSum = 0;
+    for (const {scoreChange} of mergeMovements) {
+      scoreChangeSum += scoreChange;
+    }
+    return scoreChangeSum;
   }
 
   private moveRight(): OperationMovements {
@@ -155,18 +170,6 @@ export class GameManagerImpl
       );
     }
 
-    const movements = combineMovements({mergeMovements, compactMovements});
-    this.emit('gridChange', this.grid, movements, []);
-    return movements;
-  }
-
-  private getScoreChangeFromMergeMovements(
-    mergeMovements: readonly MergeMovement[],
-  ) {
-    let scoreChangeSum = 0;
-    for (const {scoreChange} of mergeMovements) {
-      scoreChangeSum += scoreChange;
-    }
-    return scoreChangeSum;
+    return combineMovements({mergeMovements, compactMovements});
   }
 }
