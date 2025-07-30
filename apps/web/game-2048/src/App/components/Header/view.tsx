@@ -1,13 +1,9 @@
-import {Button, type ButtonProps} from '@mui/material';
+import {NewGameButton} from '@/components/NewGameButton/index.js';
 
 import {Score} from './components/Score/index.js';
 import styles from './styles.module.css';
 
-export interface HeaderViewProps {
-  onNewGameButtonClick: ButtonProps['onClick'];
-}
-
-export function View({onNewGameButtonClick}: HeaderViewProps) {
+export function View() {
   return (
     <div className={styles.Header}>
       <div className={styles.leftSection}>
@@ -17,14 +13,7 @@ export function View({onNewGameButtonClick}: HeaderViewProps) {
         <Score />
       </div>
       <div className={styles.rightSection}>
-        <Button
-          color={'inherit'}
-          variant={'outlined'}
-          size={'large'}
-          onClick={onNewGameButtonClick}
-        >
-          New Game
-        </Button>
+        <NewGameButton />
       </div>
     </div>
   );
