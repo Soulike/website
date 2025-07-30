@@ -1,3 +1,4 @@
+import {useModal} from '@website/hooks';
 import {useCallback, useEffect, useState} from 'react';
 
 import {
@@ -8,7 +9,25 @@ import {
 
 export function useViewModel() {
   const isGameOver = useIsGameOver();
-  return {isGameOver};
+  const {
+    visible: isGameOverModalOpen,
+    hide: hideGameOverModal,
+    show: showGameOverModal,
+  } = useModal();
+
+  useEffect(() => {
+    if (isGameOver) {
+      showGameOverModal();
+    } else {
+      hideGameOverModal();
+    }
+  }, [hideGameOverModal, isGameOver, showGameOverModal]);
+
+  return {
+    isGameOver,
+    isGameOverModalOpen,
+    onCloseGameOverModal: hideGameOverModal,
+  };
 }
 
 export function useIsGameOver() {

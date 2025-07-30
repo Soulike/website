@@ -7,7 +7,8 @@ import {View} from './view.js';
 import {useViewModel} from './view-model.js';
 
 export function App() {
-  const {isGameOver} = useViewModel();
+  const {isGameOver, isGameOverModalOpen, onCloseGameOverModal} =
+    useViewModel();
 
   useArrowKeys({
     onUp: () => {
@@ -36,5 +37,10 @@ export function App() {
     model.resetGame();
   }, []);
 
-  return <View />;
+  return (
+    <View
+      isGameOverModalOpen={isGameOverModalOpen}
+      onCloseGameOverModal={onCloseGameOverModal}
+    />
+  );
 }

@@ -1,9 +1,15 @@
+import {GameOverModal} from '../components/GameOverModal/index.js';
 import {Footer} from './components/Footer/index.js';
 import {Grid} from './components/Grid/index.js';
 import {Header} from './components/Header/index.js';
 import styles from './styles.module.css';
 
-export function View() {
+export interface ViewProps {
+  isGameOverModalOpen: boolean;
+  onCloseGameOverModal: () => void;
+}
+
+export function View({isGameOverModalOpen, onCloseGameOverModal}: ViewProps) {
   return (
     <div className={styles.App}>
       <div className={styles.gameContainer}>
@@ -17,6 +23,10 @@ export function View() {
           <Footer />
         </footer>
       </div>
+      <GameOverModal
+        open={isGameOverModalOpen}
+        onClose={onCloseGameOverModal}
+      />
     </div>
   );
 }
