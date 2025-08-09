@@ -140,6 +140,8 @@ export const Component = React.lazy(async () => {
 
 #### Component Importing
 
+#### Import Entry
+
 Always import the `index.ts` inside the component folder. `index.ts` should be the only file imported by other
 components.
 
@@ -150,6 +152,11 @@ import {Component} from 'path/to/Component/container.js';
 // ✅ Good.
 import {Component} from 'path/to/Component/index.js';
 ```
+
+#### Import Path
+
+- If you are importing a public module, for example, shared modules in `@/hooks`, `@/components`, use import alias.
+- If you are importing a component-internal module, for example, subcomponents, use relative imports.
 
 ---
 
