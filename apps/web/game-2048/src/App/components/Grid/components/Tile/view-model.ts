@@ -2,11 +2,13 @@ import {useEffect, useState} from 'react';
 
 import {EMPTY_TILE_Z_INDEX, TILE_Z_INDEX} from '@/constants/animation.js';
 import {EMPTY_TILE_VALUE} from '@/constants/configs.js';
+
 import {
   getTileBackgroundColor,
   getTileTextColor,
-} from '@/helpers/color-helpers.js';
-import {getTileFontSize} from '@/helpers/font-size-helpers.js';
+} from './helpers/color-helpers.js';
+import {getTileFontSize} from './helpers/font-size-helpers.js';
+import {useResponsiveTileFontSize} from './hooks/useResponsiveTileFontSize.js';
 
 export function useViewModel(tileValue: number) {
   const backgroundColor = useBackgroundColor(tileValue);
@@ -43,11 +45,13 @@ export function useTextColor(tileValue: number) {
 }
 
 export function useFontSize(tileValue: number) {
+  const {fontSizeCSS} = useResponsiveTileFontSize();
   const [fontSize, setFontSize] = useState('');
 
   useEffect(() => {
-    setFontSize(getTileFontSize(tileValue));
-  }, [tileValue]);
+    const sizeType = getTileFontSize(tileValue);
+    setFontSize(fontSizeCSS[sizeType]);
+  }, [tileValue, fontSizeCSS]);
 
   return fontSize;
 }

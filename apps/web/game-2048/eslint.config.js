@@ -14,6 +14,7 @@ export default [
         {allowConstantExport: true},
       ],
       '@typescript-eslint/prefer-for-of': 'warn',
+      '@typescript-eslint/restrict-template-expressions': 'off',
     },
   },
 ];

@@ -8,7 +8,6 @@ import {
   TILE_POP_ANIMATION_DURATION,
 } from '@/constants/animation.js';
 import {GRID_SIDE_LENGTH} from '@/constants/configs.js';
-import {TileGapInPixel} from '@/constants/sizes.js';
 import type {Movement, ReadOnlyGridType} from '@/model/index.js';
 
 import {type Animate, Tile} from './components/Tile/index.js';
@@ -18,6 +17,9 @@ import {
   playTileMoveAnimation,
 } from './helpers/animation-helpers.js';
 import {getTileMovementPixelDisplacement} from './helpers/displacement-helpers.js';
+import {useResponsiveBorderRadius} from './hooks/useResponsiveBorderRadius.js';
+import {useResponsiveGridSize} from './hooks/useResponsiveGridSize.js';
+import {useResponsiveTileGap} from './hooks/useResponsiveTileGap.js';
 import styles from './styles.module.css';
 
 export interface GridViewProps {
@@ -39,6 +41,10 @@ export function GridView(props: GridViewProps) {
   assert(grid.length === GRID_SIDE_LENGTH);
   assert(grid[0].length === GRID_SIDE_LENGTH);
 
+  const gridSize = useResponsiveGridSize();
+  const borderRadius = useResponsiveBorderRadius();
+  const {gapSizes} = useResponsiveTileGap();
+
   const newlyCreatedAnimate: Animate = useCallback((element: HTMLElement) => {
     return playTileCreationAnimation(element, TILE_CREATION_ANIMATION_DURATION);
   }, []);
@@ -53,8 +59,8 @@ export function GridView(props: GridViewProps) {
         const displacement = getTileMovementPixelDisplacement(
           element,
           movement,
-          TileGapInPixel.HORIZONTAL,
-          TileGapInPixel.VERTICAL,
+          gapSizes.horizontal,
+          gapSizes.vertical,
         );
         return playTileMoveAnimation(
           element,
@@ -63,7 +69,7 @@ export function GridView(props: GridViewProps) {
         );
       };
     },
-    [],
+    [gapSizes],
   );
 
   const tileComponents = useMemo(() => {
@@ -105,5 +111,17 @@ export function GridView(props: GridViewProps) {
     tileMovements,
   ]);
 
-  return <div className={styles.Grid}>{...tileComponents}</div>;
+  return (
+    <div
+      className={styles.Grid}
+      style={{
+        width: `${gridSize}px`,
+        gap: `${gapSizes.horizontal}px`,
+        padding: `${gapSizes.horizontal}px`,
+        borderRadius: `${borderRadius}px`,
+      }}
+    >
+      {...tileComponents}
+    </div>
+  );
 }
