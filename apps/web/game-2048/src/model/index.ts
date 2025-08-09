@@ -4,7 +4,10 @@ export type {
   GridChangeEventListener,
 } from './interfaces/game-manager.js';
 export {GameState} from './interfaces/game-manager.js';
-export type {ScoreChangeEventListener} from './interfaces/score-manager.js';
+export type {
+  HighestScoreChangeEventListener,
+  ScoreChangeEventListener,
+} from './interfaces/score-manager.js';
 export * from './types.js';
 
 const {Model} = await import('./model.js');

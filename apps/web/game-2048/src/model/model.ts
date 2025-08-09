@@ -52,6 +52,10 @@ export class Model extends EventEmitter<ModelEvents> {
     return this.scoreManager.getScore();
   }
 
+  public getHighestScore() {
+    return this.scoreManager.getHighestScore();
+  }
+
   public isGameOver() {
     return this.gameChecker.isGameOver();
   }
@@ -69,6 +73,9 @@ export class Model extends EventEmitter<ModelEvents> {
     });
     this.scoreManager.addListener('scoreChange', (...args) => {
       this.emit('scoreChange', ...args);
+    });
+    this.scoreManager.addListener('highestScoreChange', (...args) => {
+      this.emit('highestScoreChange', ...args);
     });
   }
 }

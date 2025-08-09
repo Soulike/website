@@ -4,7 +4,7 @@ This is a pnpm monorepo containing multiple types of projects.
 
 Before starting any work, you must first confirm:
 
-- What package manager is usd.
+- What package manager is used. Use correct package manager to run commands.
 - Configurations in packages.json files, both in project and in workspace.
 - Configurations for other tools, i.e., Vite, Vitest, ESLint, Prettier, etc.
 
@@ -106,15 +106,17 @@ Follow Google TypeScript guide unless specified. Detail: <https://google.github.
 
 #### File Structure
 
-Typical structure for a React component:
+All React components follow MVVM structure:
 
 ```text
 Component/
-  | index.tsx               // For exporting the component.
-  | container.tsx           // Optional
-  | view.tsx
-  | styles.module.css       // Part of view.tsx
   | assets/                 // Static assets needed
+  | components/             // Subcomponents
+  | index.ts                // For exporting the component. No TSX should be in this file.
+  | container.tsx           // Optional. Connect view model with view.
+  | view-model.tsx          // Optional. View model.
+  | view.tsx                // Stateless view component. Get all information with props.
+  | styles.module.css       // Part of view
 ```
 
 #### Component Exporting

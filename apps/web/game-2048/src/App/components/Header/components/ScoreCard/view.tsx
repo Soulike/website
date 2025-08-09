@@ -2,11 +2,12 @@ import {Button} from '@mui/material';
 
 import styles from './styles.module.css';
 
-export interface ScoreViewProps {
-  score: number;
+export interface ScoreCardProps {
+  label: string;
+  value: number;
 }
 
-export function View({score}: ScoreViewProps) {
+export function ScoreCard({label, value}: ScoreCardProps) {
   return (
     <Button
       variant={'outlined'}
@@ -15,8 +16,8 @@ export function View({score}: ScoreViewProps) {
       disabled={true}
     >
       <div className={styles.inner}>
-        <div>Score</div>
-        <div>{score}</div>
+        <div>{label}</div>
+        <div>{value}</div>
       </div>
     </Button>
   );

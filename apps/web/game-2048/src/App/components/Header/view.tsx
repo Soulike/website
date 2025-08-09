@@ -1,5 +1,6 @@
 import {NewGameButton} from '@/components/NewGameButton/index.js';
 
+import {HighestScore} from './components/HighestScore/index.js';
 import {Score} from './components/Score/index.js';
 import styles from './styles.module.css';
 
@@ -11,6 +12,7 @@ export function View() {
       </div>
       <div className={styles.middleSection}>
         <Score />
+        <HighestScore />
       </div>
       <div className={styles.rightSection}>
         <NewGameButton />

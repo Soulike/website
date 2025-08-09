@@ -4,4 +4,5 @@
   line-height: 1;
   gap: 3px;
   font-size: 1.1rem;
+  min-width: 5em;
 }

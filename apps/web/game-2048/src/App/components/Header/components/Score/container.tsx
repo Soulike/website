@@ -1,8 +1,8 @@
-import {View} from './view.js';
+import {ScoreCard} from '../ScoreCard/index.js';
 import {useViewModel} from './view-model.js';
 
 export function Score() {
   const {score} = useViewModel();
 
-  return <View score={score} />;
+  return <ScoreCard label='Score' value={score} />;
 }
