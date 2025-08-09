@@ -3,11 +3,11 @@
   padding: 16px;
   background: linear-gradient(
     135deg,
-    var(--ui-modal-achievement-primary-color),
-    var(--ui-modal-achievement-secondary-color)
+    var(--ui-game-over-achievement-primary-color),
+    var(--ui-game-over-achievement-secondary-color)
   );
   border-radius: 8px;
-  border: 2px solid var(--ui-modal-achievement-border-color);
+  border: 2px solid var(--ui-game-over-achievement-border-color);
 
   .emoji {
     font-size: 2rem;
@@ -16,9 +16,9 @@
   }
 
   .achievementText {
-    color: var(--ui-modal-achievement-text-color);
+    color: var(--ui-game-over-achievement-text-color);
     font-weight: bold;
     font-size: 1.1rem;
-    text-shadow: 1px 1px 2px var(--ui-modal-text-shadow-dark-color);
+    text-shadow: 1px 1px 2px var(--ui-game-over-text-shadow-dark-color);
   }
 }

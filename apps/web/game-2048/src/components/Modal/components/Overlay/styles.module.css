@@ -6,5 +6,5 @@
   bottom: 0;
   background: var(--ui-modal-overlay-color);
   backdrop-filter: blur(4px);
-  z-index: 999;
+  z-index: 999; /* Overlay below modal content */
 }

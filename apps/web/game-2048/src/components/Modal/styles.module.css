@@ -1,0 +1,14 @@
+/* Modal manages its own z-index hierarchy */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* Modal content above overlay */
+  background: var(--ui-modal-background-color);
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 400px;
+  text-align: center;
+  border: 2px solid var(--ui-modal-border-color);
+}
