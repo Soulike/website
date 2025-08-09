@@ -1,0 +1,10 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--ui-modal-overlay-color);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+}

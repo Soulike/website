@@ -1,8 +1,9 @@
-import {Dialog} from '@mui/material';
+import {Paper} from '@mui/material';
 
 import {AchievementSection} from './components/AchievementSection/index.js';
 import {ActionButtons} from './components/ActionButtons/index.js';
 import {GameStatistics} from './components/GameStatistics/index.js';
+import {Overlay} from './Overlay/index.js';
 import styles from './styles.module.css';
 
 export interface GameOverModalViewProps {
@@ -20,29 +21,26 @@ export function View({
   highestScore,
   isNewRecord,
 }: GameOverModalViewProps) {
+  if (!open) {
+    return null;
+  }
+
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      aria-labelledby='game-over-title'
-      className={styles.modal}
-      slotProps={{
-        paper: {
-          className: styles.modalContent,
-        },
-      }}
-    >
-      <div className={styles.title}>Game Over</div>
+    <div className={styles.GameOverModal}>
+      <Overlay onClick={onClose} />
+      <Paper className={styles.modal} elevation={8}>
+        <div className={styles.title}>Game Over</div>
 
-      <div className={styles.subtitle}>
-        No more moves available! But you put up a good fight.
-      </div>
+        <div className={styles.subtitle}>
+          No more moves available! But you put up a good fight.
+        </div>
 
-      <AchievementSection isNewRecord={isNewRecord} />
+        <AchievementSection isNewRecord={isNewRecord} />
 
-      <GameStatistics score={score} highestScore={highestScore} />
+        <GameStatistics score={score} highestScore={highestScore} />
 
-      <ActionButtons onClose={onClose} />
-    </Dialog>
+        <ActionButtons onClose={onClose} />
+      </Paper>
+    </div>
   );
 }
