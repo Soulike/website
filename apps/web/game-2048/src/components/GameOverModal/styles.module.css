@@ -1,27 +1,27 @@
 .modal {
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--ui-modal-overlay-color);
   backdrop-filter: blur(4px);
 
   .modalContent {
-    background: #faf8ef;
+    background: var(--ui-modal-background-color);
     border-radius: 12px;
     padding: 32px;
     max-width: 400px;
     text-align: center;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 2px solid #bbada0;
+    box-shadow: 0 8px 32px var(--ui-modal-shadow-color);
+    border: 2px solid var(--ui-modal-border-color);
 
     .title {
       font-size: 2.5rem;
       font-weight: bold;
-      color: #776e65;
+      color: var(--ui-modal-text-primary-color);
       margin-bottom: 16px;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      text-shadow: 1px 1px 2px var(--ui-modal-text-shadow-light-color);
     }
 
     .subtitle {
       font-size: 1.1rem;
-      color: #8f7a66;
+      color: var(--ui-modal-text-secondary-color);
       margin-bottom: 24px;
       line-height: 1.4;
     }
