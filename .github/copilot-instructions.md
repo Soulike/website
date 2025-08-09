@@ -1,10 +1,12 @@
----
-applyTo: '**'
----
-
 # Development Instructions
 
 This is a pnpm monorepo containing multiple types of projects.
+
+Before starting any work, you must first confirm:
+
+- What package manager is usd.
+- Configurations in packages.json files, both in project and in workspace.
+- Configurations for other tools, i.e., Vite, Vitest, ESLint, Prettier, etc.
 
 ---
 
