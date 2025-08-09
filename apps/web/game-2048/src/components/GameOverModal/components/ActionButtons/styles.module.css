@@ -1,0 +1,38 @@
+.actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+
+  .actionButton {
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    min-width: 120px;
+
+    &.primaryButton {
+      background: #8f7a66;
+      color: #faf8ef;
+
+      &:hover {
+        background: #9f8a76;
+        transform: translateY(-1px);
+      }
+    }
+
+    &.secondaryButton {
+      background: #eee4da;
+      color: #8f7a66;
+      border: 2px solid #bbada0;
+
+      &:hover {
+        background: #f4f1ea;
+        transform: translateY(-1px);
+      }
+    }
+  }
+}

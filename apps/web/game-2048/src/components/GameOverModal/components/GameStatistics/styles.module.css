@@ -1,0 +1,41 @@
+.statsContainer {
+  background: #eee4da;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 24px 0;
+  border: 1px solid #bbada0;
+
+  .statsTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #776e65;
+    margin-bottom: 16px;
+  }
+
+  .statsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+
+    .statItem {
+      background: #faf8ef;
+      border-radius: 6px;
+      padding: 12px;
+      border: 1px solid #bbada0;
+
+      .statLabel {
+        font-size: 0.9rem;
+        color: #8f7a66;
+        margin-bottom: 4px;
+        font-weight: 500;
+      }
+
+      .statValue {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #776e65;
+        line-height: 1;
+      }
+    }
+  }
+}

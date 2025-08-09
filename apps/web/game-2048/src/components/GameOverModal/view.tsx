@@ -1,34 +1,48 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Typography,
-} from '@mui/material';
+import {Dialog} from '@mui/material';
 
-import {NewGameButton} from '../NewGameButton/index.js';
+import {AchievementSection} from './components/AchievementSection/index.js';
+import {ActionButtons} from './components/ActionButtons/index.js';
+import {GameStatistics} from './components/GameStatistics/index.js';
+import styles from './styles.module.css';
 
 export interface GameOverModalViewProps {
   open: boolean;
   onClose: () => void;
+  score: number;
+  highestScore: number;
+  isNewRecord: boolean;
 }
 
-export function View({open, onClose}: GameOverModalViewProps) {
+export function View({
+  open,
+  onClose,
+  score,
+  highestScore,
+  isNewRecord,
+}: GameOverModalViewProps) {
   return (
-    <Dialog open={open} onClose={onClose} aria-labelledby='game-over-title'>
-      <DialogTitle id='game-over-title'>Game Over</DialogTitle>
-      <DialogContent>
-        <Typography>
-          No more moves available! Would you like to start a new game?
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color='primary'>
-          Close
-        </Button>
-        <NewGameButton />
-      </DialogActions>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby='game-over-title'
+      className={styles.modal}
+      slotProps={{
+        paper: {
+          className: styles.modalContent,
+        },
+      }}
+    >
+      <div className={styles.title}>Game Over</div>
+
+      <div className={styles.subtitle}>
+        No more moves available! But you put up a good fight.
+      </div>
+
+      <AchievementSection isNewRecord={isNewRecord} />
+
+      <GameStatistics score={score} highestScore={highestScore} />
+
+      <ActionButtons onClose={onClose} />
     </Dialog>
   );
 }

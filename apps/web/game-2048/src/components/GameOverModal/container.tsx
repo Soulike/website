@@ -1,4 +1,5 @@
 import {View} from './view.js';
+import {useViewModel} from './view-model.js';
 
 export interface GameOverModalProps {
   open: boolean;
@@ -6,5 +7,6 @@ export interface GameOverModalProps {
 }
 
 export function GameOverModal(props: GameOverModalProps) {
-  return <View {...props} />;
+  const viewModel = useViewModel();
+  return <View {...props} {...viewModel} />;
 }
