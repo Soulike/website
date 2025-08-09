@@ -1,7 +1,8 @@
-import {useEffect, useState} from 'react';
+import {useDeferredValue, useEffect, useState} from 'react';
 
 export function useViewportHeight(): number {
   const [height, setHeight] = useState(window.innerHeight);
+  const deferredHeight = useDeferredValue(height);
 
   useEffect(() => {
     const handleResize = () => {
@@ -9,8 +10,10 @@ export function useViewportHeight(): number {
     };
 
     window.addEventListener('resize', handleResize);
-    return () => { window.removeEventListener('resize', handleResize); };
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
-  return height;
+  return deferredHeight;
 }

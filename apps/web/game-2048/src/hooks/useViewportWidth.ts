@@ -1,7 +1,8 @@
-import {useEffect, useState} from 'react';
+import {useDeferredValue, useEffect, useState} from 'react';
 
 export function useViewportWidth(): number {
   const [width, setWidth] = useState(window.innerWidth);
+  const deferredWidth = useDeferredValue(width);
 
   useEffect(() => {
     const handleResize = () => {
@@ -9,8 +10,10 @@ export function useViewportWidth(): number {
     };
 
     window.addEventListener('resize', handleResize);
-    return () => { window.removeEventListener('resize', handleResize); };
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
-  return width;
+  return deferredWidth;
 }
