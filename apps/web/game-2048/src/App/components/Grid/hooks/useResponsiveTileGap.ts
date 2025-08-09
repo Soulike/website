@@ -7,18 +7,9 @@ export function useResponsiveTileGap() {
   const viewportWidth = useViewportWidth();
   const viewportHeight = useViewportHeight();
 
-  const gapSizes = useMemo(() => {
+  return useMemo(() => {
     const vw = viewportWidth / 100;
     const vh = viewportHeight / 100;
-    const gapSize = Math.min(2 * vw, 2 * vh, 10);
-
-    return {
-      horizontal: gapSize,
-      vertical: gapSize,
-    };
+    return Math.min(2 * vw, 2 * vh, 10);
   }, [viewportWidth, viewportHeight]);
-
-  return {
-    gapSizes,
-  };
 }

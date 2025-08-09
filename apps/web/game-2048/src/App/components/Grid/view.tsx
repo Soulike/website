@@ -45,7 +45,7 @@ export function GridView(props: GridViewProps) {
 
   const gridSize = useResponsiveGridSize();
   const borderRadius = useResponsiveBorderRadius();
-  const {gapSizes} = useResponsiveTileGap();
+  const gapSize = useResponsiveTileGap();
 
   const newlyCreatedAnimate: Animate = useCallback((element: HTMLElement) => {
     return playTileCreationAnimation(element, TILE_CREATION_ANIMATION_DURATION);
@@ -61,8 +61,8 @@ export function GridView(props: GridViewProps) {
         const displacement = getTileMovementPixelDisplacement(
           element,
           movement,
-          gapSizes.horizontal,
-          gapSizes.vertical,
+          gapSize,
+          gapSize,
         );
         return playTileMoveAnimation(
           element,
@@ -71,7 +71,7 @@ export function GridView(props: GridViewProps) {
         );
       };
     },
-    [gapSizes],
+    [gapSize],
   );
 
   const tileComponents = useMemo(() => {
@@ -120,8 +120,8 @@ export function GridView(props: GridViewProps) {
       className={styles.Grid}
       style={{
         width: `${gridSize}px`,
-        gap: `${gapSizes.horizontal}px`,
-        padding: `${gapSizes.horizontal}px`,
+        gap: `${gapSize}px`,
+        padding: `${gapSize}px`,
         borderRadius: `${borderRadius}px`,
       }}
     >
