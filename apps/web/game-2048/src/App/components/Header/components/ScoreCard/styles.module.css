@@ -1,8 +1,26 @@
-.inner {
+.card {
+  background: var(--ui-button-secondary-color);
+  border: 2px solid var(--ui-button-border-color);
+  border-radius: 6px;
+  padding: 12px 16px;
+  text-align: center;
+  min-width: 80px;
   display: flex;
   flex-direction: column;
-  line-height: 1;
-  gap: 3px;
-  font-size: 1.1rem;
-  min-width: 5em;
+  gap: 4px;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--ui-button-secondary-text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.8;
+}
+
+.value {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--ui-button-secondary-text-color);
 }

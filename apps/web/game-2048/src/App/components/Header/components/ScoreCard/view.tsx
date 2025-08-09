@@ -1,4 +1,4 @@
-import {Button} from '@mui/material';
+import {useEffect, useRef} from 'react';
 
 import styles from './styles.module.css';
 
@@ -8,17 +8,35 @@ export interface ScoreCardProps {
 }
 
 export function ScoreCard({label, value}: ScoreCardProps) {
+  const valueRef = useRef<HTMLDivElement>(null);
+  const prevValueRef = useRef(value);
+
+  useEffect(() => {
+    if (prevValueRef.current == value) {
+      return;
+    }
+    prevValueRef.current = value;
+    requestAnimationFrame(() => {
+      valueRef.current?.animate(
+        [
+          {transform: 'scale(1)'},
+          {transform: 'scale(1.2)'},
+          {transform: 'scale(1)'},
+        ],
+        {
+          duration: 200,
+          easing: 'ease-out',
+        },
+      );
+    });
+  }, [value]);
+
   return (
-    <Button
-      variant={'outlined'}
-      size={'large'}
-      color={'inherit'}
-      disabled={true}
-    >
-      <div className={styles.inner}>
-        <div>{label}</div>
-        <div>{value}</div>
+    <div className={styles.card}>
+      <div className={styles.label}>{label}</div>
+      <div ref={valueRef} className={styles.value}>
+        {value.toLocaleString()}
       </div>
-    </Button>
+    </div>
   );
 }
