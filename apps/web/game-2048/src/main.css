@@ -2,3 +2,8 @@ html,
 body {
   margin: 0;
 }
+
+body {
+  min-width: 350px;
+  background-color: var(--ui-background-color);
+}

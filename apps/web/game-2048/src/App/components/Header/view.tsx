@@ -11,8 +11,14 @@ export function View() {
         <div className={styles.gameTitle}>2048</div>
       </div>
       <div className={styles.middleSection}>
-        <Score />
-        <HighestScore />
+        <div className={styles.scoreSection}>
+          <Score />
+          <HighestScore />
+        </div>
+
+        <div className={styles.mobileSection}>
+          <NewGameButton />
+        </div>
       </div>
       <div className={styles.rightSection}>
         <NewGameButton />
