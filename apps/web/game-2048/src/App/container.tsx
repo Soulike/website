@@ -1,5 +1,6 @@
 import {useEffect} from 'react';
 
+import {UIColorValue} from '@/constants/colors/index.js';
 import {model} from '@/model/index.js';
 
 import {View} from './view.js';
@@ -13,9 +14,12 @@ export function App() {
   }, []);
 
   return (
-    <View
-      isGameOverModalOpen={isGameOverModalOpen}
-      onCloseGameOverModal={onCloseGameOverModal}
-    />
+    <>
+      <meta name='theme-color' content={UIColorValue.BACKGROUND} />
+      <View
+        isGameOverModalOpen={isGameOverModalOpen}
+        onCloseGameOverModal={onCloseGameOverModal}
+      />
+    </>
   );
 }
