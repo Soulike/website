@@ -1,6 +1,6 @@
-import type {ButtonProps} from '@mui/material';
 import {useCallback} from 'react';
 
+import {type ButtonProps} from '@/components/Button/index.js';
 import {model} from '@/model/index.js';
 
 export function useViewModel() {

@@ -3,36 +3,4 @@
   gap: 16px;
   justify-content: center;
   margin-top: 24px;
-
-  .actionButton {
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
-    min-width: 120px;
-
-    &.primaryButton {
-      background: var(--ui-modal-button-primary-color);
-      color: var(--ui-modal-background-color);
-
-      &:hover {
-        background: var(--ui-modal-button-primary-hover-color);
-        transform: translateY(-1px);
-      }
-    }
-
-    &.secondaryButton {
-      background: var(--ui-background-color);
-      color: var(--ui-modal-text-secondary-color);
-      border: 2px solid var(--ui-modal-border-color);
-
-      &:hover {
-        background: var(--ui-modal-button-secondary-hover-color);
-        transform: translateY(-1px);
-      }
-    }
-  }
 }

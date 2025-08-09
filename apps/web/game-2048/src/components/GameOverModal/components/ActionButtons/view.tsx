@@ -1,4 +1,6 @@
-import {NewGameButton} from '../../../NewGameButton/index.js';
+import {Button} from '@/components/Button/index.js';
+import {NewGameButton} from '@/components/NewGameButton/index.js';
+
 import styles from './styles.module.css';
 
 export interface ActionButtonsProps {
@@ -8,15 +10,10 @@ export interface ActionButtonsProps {
 export function ActionButtons({onClose}: ActionButtonsProps) {
   return (
     <div className={styles.actions}>
-      <button
-        onClick={onClose}
-        className={`${styles.actionButton} ${styles.secondaryButton}`}
-      >
+      <Button variant='secondary' onClick={onClose}>
         Close
-      </button>
-      <NewGameButton
-        className={`${styles.actionButton} ${styles.primaryButton}`}
-      />
+      </Button>
+      <NewGameButton />
     </div>
   );
 }

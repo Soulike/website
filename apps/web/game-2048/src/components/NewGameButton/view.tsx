@@ -1,4 +1,4 @@
-import {Button, type ButtonProps} from '@mui/material';
+import {Button, type ButtonProps} from '@/components/Button/index.js';
 
 export interface NewGameButtonViewProps {
   onClick: ButtonProps['onClick'];
@@ -7,13 +7,7 @@ export interface NewGameButtonViewProps {
 
 export function View({onClick, className}: NewGameButtonViewProps) {
   return (
-    <Button
-      color={'inherit'}
-      variant={'outlined'}
-      size={'large'}
-      onClick={onClick}
-      className={className}
-    >
+    <Button variant='primary' onClick={onClick} className={className}>
       New Game
     </Button>
   );
