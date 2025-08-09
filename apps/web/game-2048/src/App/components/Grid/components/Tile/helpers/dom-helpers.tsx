@@ -4,7 +4,7 @@ export function createInPlaceCloneElement<T extends HTMLElement>(
   const rect = element.getBoundingClientRect();
   const clone = element.cloneNode(true) as T;
   Object.assign(clone.style, {
-    position: 'fixed',
+    position: 'absolute',
     left: `${(rect.left + window.scrollX).toString()}px`,
     top: `${(rect.top + window.scrollY).toString()}px`,
     width: `${rect.width.toString()}px`,

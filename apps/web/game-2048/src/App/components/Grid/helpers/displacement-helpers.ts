@@ -14,9 +14,8 @@ export function getTileMovementPixelDisplacement(
 
   const tileWidth = tileElement.clientWidth;
   const tileHeight = tileElement.clientHeight;
-
   return {
-    x: colDiff * (tileHeight + verticalGap),
-    y: rowDiff * (tileWidth + horizontalGap),
+    x: colDiff * (tileWidth + horizontalGap),
+    y: rowDiff * (tileHeight + verticalGap),
   };
 }

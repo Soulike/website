@@ -1,3 +1,9 @@
+import {TILE_MOVE_ANIMATION_DURATION} from '@/constants/animation.js';
+import type {Movement} from '@/model/index.js';
+
+import type {Animate} from '../components/Tile/index.js';
+import {getTileMovementPixelDisplacement} from './displacement-helpers.js';
+
 async function animate(
   element: HTMLElement,
   ...args: Parameters<HTMLElement['animate']>
@@ -74,4 +80,24 @@ export async function playTileMoveAnimation(
     easing,
     fill: 'none',
   });
+}
+
+export function generateTileAnimateForMovement(
+  movement: Movement,
+  tileGapSize: number,
+): Animate {
+  const gapSize = tileGapSize;
+  return (element: HTMLElement) => {
+    const displacement = getTileMovementPixelDisplacement(
+      element,
+      movement,
+      gapSize,
+      gapSize,
+    );
+    return playTileMoveAnimation(
+      element,
+      displacement,
+      TILE_MOVE_ANIMATION_DURATION,
+    );
+  };
 }

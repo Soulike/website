@@ -4,7 +4,6 @@ import {type ReactElement, type RefObject, useCallback, useMemo} from 'react';
 
 import {
   TILE_CREATION_ANIMATION_DURATION,
-  TILE_MOVE_ANIMATION_DURATION,
   TILE_POP_ANIMATION_DURATION,
 } from '@/constants/animation.js';
 import {GRID_SIDE_LENGTH} from '@/constants/configs.js';
@@ -12,11 +11,10 @@ import type {Movement, ReadOnlyGridType} from '@/model/index.js';
 
 import {type Animate, Tile} from './components/Tile/index.js';
 import {
+  generateTileAnimateForMovement,
   playTileCreationAnimation,
   playTileMergeAnimation,
-  playTileMoveAnimation,
 } from './helpers/animation-helpers.js';
-import {getTileMovementPixelDisplacement} from './helpers/displacement-helpers.js';
 import {useResponsiveBorderRadius} from './hooks/useResponsiveBorderRadius.js';
 import {useResponsiveGridSize} from './hooks/useResponsiveGridSize.js';
 import {useResponsiveTileGap} from './hooks/useResponsiveTileGap.js';
@@ -55,32 +53,13 @@ export function GridView(props: GridViewProps) {
     return playTileMergeAnimation(element, TILE_POP_ANIMATION_DURATION);
   }, []);
 
-  const generateMovementAnimate: (movement: Movement) => Animate = useCallback(
-    (movement) => {
-      return (element) => {
-        const displacement = getTileMovementPixelDisplacement(
-          element,
-          movement,
-          gapSize,
-          gapSize,
-        );
-        return playTileMoveAnimation(
-          element,
-          displacement,
-          TILE_MOVE_ANIMATION_DURATION,
-        );
-      };
-    },
-    [gapSize],
-  );
-
   const tileComponents = useMemo(() => {
     const tiles: ReactElement[] = [];
     for (let i = 0; i < GRID_SIDE_LENGTH; i++) {
       for (let j = 0; j < GRID_SIDE_LENGTH; j++) {
         const movement = tileMovements[i][j];
         const movementAnimate = movement
-          ? generateMovementAnimate(movement)
+          ? generateTileAnimateForMovement(movement, gapSize)
           : null;
 
         const isMergeDestination = isTileMergeDestination[i][j];
@@ -104,7 +83,7 @@ export function GridView(props: GridViewProps) {
     }
     return tiles;
   }, [
-    generateMovementAnimate,
+    gapSize,
     grid,
     isTileMergeDestination,
     isTileMovementDestination,
