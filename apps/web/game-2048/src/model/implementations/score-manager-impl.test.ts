@@ -1,8 +1,21 @@
-import {describe, expect, it, vi} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
 import {ScoreManagerImpl} from './score-manager-impl.js';
 
 describe('ScoreManagerImpl', () => {
+  let originalLocalStorage: Storage;
+
+  beforeEach(() => {
+    originalLocalStorage = window.localStorage;
+    localStorage.clear();
+  });
+
+  afterEach(() => {
+    Object.defineProperty(window, 'localStorage', {
+      value: originalLocalStorage,
+      writable: true,
+    });
+  });
   describe('getScore', () => {
     it('should return initial score of 0', () => {
       const scoreManager = new ScoreManagerImpl();
@@ -124,6 +137,145 @@ describe('ScoreManagerImpl', () => {
       scoreManager.addToScore(5);
 
       expect(scores).toEqual([10, 25, 0, 5]);
+    });
+  });
+
+  describe('getHighestScore', () => {
+    it('should return initial highest score of 0 when no localStorage value', () => {
+      const scoreManager = new ScoreManagerImpl();
+
+      expect(scoreManager.getHighestScore()).toBe(0);
+    });
+
+    it('should load highest score from localStorage on initialization', () => {
+      localStorage.setItem('game-2048-highest-score', '150');
+      const scoreManager = new ScoreManagerImpl();
+
+      expect(scoreManager.getHighestScore()).toBe(150);
+    });
+
+    it('should update highest score when current score exceeds it', () => {
+      localStorage.setItem('game-2048-highest-score', '50');
+      const scoreManager = new ScoreManagerImpl();
+
+      scoreManager.addToScore(100);
+      expect(scoreManager.getHighestScore()).toBe(100);
+    });
+
+    it('should not update highest score when current score is lower', () => {
+      localStorage.setItem('game-2048-highest-score', '100');
+      const scoreManager = new ScoreManagerImpl();
+
+      scoreManager.addToScore(50);
+      expect(scoreManager.getHighestScore()).toBe(100);
+    });
+  });
+
+  describe('localStorage persistence', () => {
+    it('should save highest score to localStorage when updated', () => {
+      localStorage.setItem('game-2048-highest-score', '50');
+      const scoreManager = new ScoreManagerImpl();
+
+      scoreManager.addToScore(100);
+
+      expect(localStorage.getItem('game-2048-highest-score')).toBe('100');
+    });
+
+    it('should handle localStorage.getItem errors gracefully', () => {
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+
+      Object.defineProperty(window, 'localStorage', {
+        value: {
+          getItem: vi.fn().mockImplementation(() => {
+            throw new Error('localStorage unavailable');
+          }),
+          setItem: vi.fn(),
+          removeItem: vi.fn(),
+          clear: vi.fn(),
+        },
+        writable: true,
+      });
+
+      const scoreManager = new ScoreManagerImpl();
+
+      expect(scoreManager.getHighestScore()).toBe(0);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Failed to load highest score from localStorage, resetting to 0:',
+        expect.any(Error),
+      );
+
+      consoleSpy.mockRestore();
+    });
+
+    it('should handle localStorage.setItem errors gracefully', () => {
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+
+      const scoreManager = new ScoreManagerImpl();
+
+      Object.defineProperty(window, 'localStorage', {
+        value: {
+          getItem: vi.fn().mockReturnValue('50'),
+          setItem: vi.fn().mockImplementation(() => {
+            throw new Error('localStorage quota exceeded');
+          }),
+          removeItem: vi.fn(),
+          clear: vi.fn(),
+        },
+        writable: true,
+      });
+
+      scoreManager.addToScore(100);
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Failed to save highest score to localStorage:',
+        expect.any(Error),
+      );
+
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('highestScoreChange event', () => {
+    it('should emit highestScoreChange event when highest score is updated', () => {
+      localStorage.setItem('game-2048-highest-score', '50');
+      const scoreManager = new ScoreManagerImpl();
+      const listener = vi.fn();
+
+      scoreManager.on('highestScoreChange', listener);
+      scoreManager.addToScore(100);
+
+      expect(listener).toHaveBeenCalledWith(100);
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not emit highestScoreChange event when score does not exceed highest', () => {
+      localStorage.setItem('game-2048-highest-score', '100');
+      const scoreManager = new ScoreManagerImpl();
+      const listener = vi.fn();
+
+      scoreManager.on('highestScoreChange', listener);
+      scoreManager.addToScore(50);
+
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    it('should emit highestScoreChange event for multiple score updates', () => {
+      const scoreManager = new ScoreManagerImpl();
+      const listener = vi.fn();
+
+      scoreManager.on('highestScoreChange', listener);
+      scoreManager.addToScore(50);
+      scoreManager.addToScore(25); // Total 75
+      scoreManager.addToScore(50); // Total 125
+
+      expect(listener).toHaveBeenCalledTimes(3);
+      expect(listener).toHaveBeenNthCalledWith(1, 50);
+      expect(listener).toHaveBeenNthCalledWith(2, 75);
+      expect(listener).toHaveBeenNthCalledWith(3, 125);
     });
   });
 });
