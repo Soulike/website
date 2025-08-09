@@ -17,7 +17,10 @@ This is a pnpm monorepo containing multiple types of projects.
 
 ## Work Memory
 
-Before performing ANY actions or tasks, create a Markdown file as your work memory inside `.memory` folder. The content of the file should be concise, and it includes:
+If you are not GitHub Copilot, ignore this section.
+
+Before performing ANY actions or tasks, create a Markdown file as your work memory inside `.memory` folder. The content
+of the file should be concise, and it includes:
 
 1. Your plan and work status. Use checklist for steps, and update it after finishing a step.
 2. Your insights.
@@ -74,7 +77,9 @@ All apps share the same `Dockerfile` at project root.
 
 ## Code Style
 
-Check <https://google.github.io/styleguide/tsguide.html>.
+### Overall
+
+Follow Google TypeScript guide unless specified. Detail: <https://google.github.io/styleguide/tsguide.html>.
 
 ### Comments
 
@@ -90,6 +95,10 @@ Check <https://google.github.io/styleguide/tsguide.html>.
 - A file/folder containing a React component: **UpperCamelCase**.
 - A file containing a React hook: **camelCase**, and start with `use`, e.g., `useHello.ts`.
 - A file/folder containing a Web Component: **dash-case**.
+
+### Flow Control
+
+- Always use early-return style for `if` to reduce levels.
 
 ### React Specific
 
@@ -127,7 +136,8 @@ export const Component = React.lazy(async () => {
 
 #### Component Importing
 
-Always import the `index.ts` inside the component folder. `index.ts` should be the only file imported by other components.
+Always import the `index.ts` inside the component folder. `index.ts` should be the only file imported by other
+components.
 
 ```typescript
 // ❌ Not Good, as it accesses a internal file, and prevents lazy loading.
@@ -143,4 +153,5 @@ import {Component} from 'path/to/Component/index.js';
 
 - Create unit test only when user prompts.
 - When developing unit tests, develop based on API interfaces and DO NOT read implementations.
-- Can expose private methods and members required in testing with `xxxForTesting` methods. The test-only methods does not need test cases.
+- Can expose private methods and members required in testing with `xxxForTesting` methods. The test-only methods does
+  not need test cases.
