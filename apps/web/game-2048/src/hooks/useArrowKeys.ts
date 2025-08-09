@@ -2,7 +2,7 @@ import {useCallback, useEffect} from 'react';
 
 type ArrowKeyCallback = () => void;
 
-interface ArrowKeyHandlers {
+export interface ArrowKeyHandlers {
   onUp?: ArrowKeyCallback;
   onDown?: ArrowKeyCallback;
   onLeft?: ArrowKeyCallback;

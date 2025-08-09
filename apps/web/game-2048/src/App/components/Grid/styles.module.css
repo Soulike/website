@@ -3,4 +3,11 @@
   grid-template: repeat(4, 1fr) / repeat(4, 1fr);
   aspect-ratio: 1;
   background-color: var(--grid-background-color);
+
+  /* Prevent mobile browser behaviors only on grid */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }

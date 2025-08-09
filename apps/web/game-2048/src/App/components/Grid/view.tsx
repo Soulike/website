@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 
-import {type ReactElement, useCallback, useMemo} from 'react';
+import {type ReactElement, type RefObject, useCallback, useMemo} from 'react';
 
 import {
   TILE_CREATION_ANIMATION_DURATION,
@@ -28,6 +28,7 @@ export interface GridViewProps {
   isTileMergeDestination: boolean[][];
   isTileMovementDestination: boolean[][];
   tileMovements: (Movement | undefined)[][];
+  viewDomRef: RefObject<HTMLDivElement | null>;
 }
 
 export function GridView(props: GridViewProps) {
@@ -37,6 +38,7 @@ export function GridView(props: GridViewProps) {
     isTileMergeDestination,
     tileMovements,
     isTileMovementDestination,
+    viewDomRef,
   } = props;
   assert(grid.length === GRID_SIDE_LENGTH);
   assert(grid[0].length === GRID_SIDE_LENGTH);
@@ -105,6 +107,7 @@ export function GridView(props: GridViewProps) {
     generateMovementAnimate,
     grid,
     isTileMergeDestination,
+    isTileMovementDestination,
     isTileNewlyCreated,
     mergedAnimate,
     newlyCreatedAnimate,
@@ -113,6 +116,7 @@ export function GridView(props: GridViewProps) {
 
   return (
     <div
+      ref={viewDomRef}
       className={styles.Grid}
       style={{
         width: `${gridSize}px`,

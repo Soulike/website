@@ -1,19 +1,27 @@
-import {useCallback, useEffect, useState} from 'react';
+import {type RefObject, useCallback, useEffect, useState} from 'react';
 
 import {GRID_SIDE_LENGTH} from '@/constants/configs.js';
+import {type ArrowKeyHandlers, useArrowKeys} from '@/hooks/useArrowKeys.js';
+import {
+  type SwipeHandlers,
+  useSwipeGestures,
+} from '@/hooks/useSwipeGestures.js';
 import {
   type GridChangeEventListener,
   model,
+  MoveDirection,
   type Movement,
   type ReadOnlyGridType,
 } from '@/model/index.js';
 
-export function useViewModel() {
+export function useViewModel(viewDomRef: RefObject<HTMLDivElement | null>) {
   const grid = useGrid();
   const isTileNewlyCreated = useIsTileNewlyCreated();
   const isTileMergeDestination = useIsTileMergeDestination();
   const isTileMovementDestination = useIsTileMovementDestination();
   const tileMovements = useTileMovements();
+  useInputHandlers(viewDomRef);
+
   return {
     grid,
     isTileNewlyCreated,
@@ -21,6 +29,41 @@ export function useViewModel() {
     isTileMovementDestination,
     tileMovements,
   };
+}
+
+export function useInputHandlers(viewDomRef: RefObject<HTMLDivElement | null>) {
+  const handleMove = useCallback((direction: MoveDirection) => {
+    if (model.isGameOver()) {
+      return;
+    }
+
+    model.move(direction);
+  }, []);
+
+  const inputHandlers: ArrowKeyHandlers & SwipeHandlers = {
+    onUp: () => {
+      handleMove(MoveDirection.UP);
+    },
+    onDown: () => {
+      handleMove(MoveDirection.DOWN);
+    },
+    onLeft: () => {
+      handleMove(MoveDirection.LEFT);
+    },
+    onRight: () => {
+      handleMove(MoveDirection.RIGHT);
+    },
+  };
+
+  // Handle keyboard input
+  useArrowKeys(inputHandlers);
+
+  // Handle touch input
+  useSwipeGestures(inputHandlers, {
+    element: viewDomRef.current,
+  });
+
+  return inputHandlers;
 }
 
 function useGrid() {
