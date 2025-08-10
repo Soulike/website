@@ -1,0 +1,26 @@
+name: Game 2048 Docker Image Build and Push
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'apps/web/game-2048/**'
+      - 'packages/universal/**'
+      - 'packages/web/**'
+      - 'pnpm-lock.yaml'
+      - 'Dockerfile'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/docker-image-build-and-push.yml
+    secrets: inherit
+    with:
+      docker-file-path: ./Dockerfile
+      docker-build-target: game-2048
+      push-to-registry: true
