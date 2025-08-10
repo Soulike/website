@@ -17,7 +17,9 @@ export function useViewModel() {
 
   useEffect(() => {
     if (isGameOver) {
-      showGameOverModal();
+      setTimeout(() => {
+        showGameOverModal();
+      }, 1000);
     } else {
       hideGameOverModal();
     }
