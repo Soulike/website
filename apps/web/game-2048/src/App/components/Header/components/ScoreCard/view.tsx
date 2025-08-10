@@ -12,7 +12,7 @@ export function ScoreCard({label, value}: ScoreCardProps) {
   const prevValueRef = useRef(value);
 
   useEffect(() => {
-    if (prevValueRef.current == value) {
+    if (prevValueRef.current === value) {
       return;
     }
     prevValueRef.current = value;

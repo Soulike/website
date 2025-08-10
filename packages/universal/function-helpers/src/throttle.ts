@@ -10,7 +10,7 @@ export function throttle<ParamsT extends unknown[], ReturnT>(
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
   let lastReturnValue: ReturnT;
   return () => {
-    if (timeoutId != null) {
+    if (timeoutId !== null) {
       return lastReturnValue;
     }
     lastReturnValue = callback(...parameters);

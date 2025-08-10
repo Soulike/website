@@ -171,7 +171,7 @@ export class GridOperationManagerImpl implements GridOperationManager {
   public createNewTile(count: number): TileCreation[] {
     assert(count > 0);
     const emptyTiles = this.getRandomEmptyTiles(count);
-    assert(emptyTiles?.length == count, 'No enough empty tiles');
+    assert(emptyTiles?.length === count, 'No enough empty tiles');
     const creations: TileCreation[] = [];
     for (const {row, col} of emptyTiles) {
       this.setTileValue({row, col}, this.getRandomNewTileValue());
