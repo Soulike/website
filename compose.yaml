@@ -23,6 +23,11 @@ services:
       - auth-server
     networks:
       - admin
+  game-2048:
+    restart: always
+    image: 'soulike/game-2048:latest'
+    networks:
+      - game-2048
   auth-server:
     restart: always
     image: 'soulike/auth-server:latest'
@@ -73,6 +78,7 @@ services:
     depends_on:
       - blog
       - admin
+      - game-2048
       - blog-server
       - admin-server
     volumes:
@@ -84,6 +90,7 @@ services:
     networks:
       - blog
       - admin
+      - game-2048
   redis:
     restart: always
     image: redis:alpine
@@ -112,6 +119,7 @@ services:
 networks:
   blog:
   admin:
+  game-2048:
   database:
   redis:
 secrets:
