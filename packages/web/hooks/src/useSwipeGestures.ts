@@ -77,23 +77,22 @@ export function useSwipeGestures(
         return;
       }
 
+      // Prevent default behavior for valid swipe gestures
+      touchEvent.preventDefault();
+
       // Determine direction based on which axis has larger movement
       if (absDeltaX > absDeltaY) {
         // Horizontal swipe
         if (deltaX > 0) {
-          touchEvent.preventDefault();
           onRight?.();
         } else {
-          touchEvent.preventDefault();
           onLeft?.();
         }
       } else {
         // Vertical swipe
         if (deltaY > 0) {
-          touchEvent.preventDefault();
           onDown?.();
         } else {
-          touchEvent.preventDefault();
           onUp?.();
         }
       }
