@@ -1,0 +1,14 @@
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--ui-game-over-text-primary-color);
+  margin-bottom: 16px;
+  text-shadow: 1px 1px 2px var(--ui-game-over-text-shadow-light-color);
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--ui-game-over-text-secondary-color);
+  margin-bottom: 24px;
+  line-height: 1.4;
+}

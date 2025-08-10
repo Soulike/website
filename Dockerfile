@@ -38,6 +38,17 @@ COPY --from=admin-builder /website/apps/web/admin-vite/nginx.conf /etc/nginx/con
 WORKDIR /
 EXPOSE 3000
 
+# Build 2048
+FROM deps AS game-2048-builder
+RUN pnpm --filter "./apps/web/game-2048" build
+
+# Setup 2048 static server
+FROM nginx:stable-alpine AS game-2048
+COPY --from=game-2048-builder /website/apps/web/game-2048/dist /game-2048-dist
+COPY --from=game-2048-builder /website/apps/web/game-2048/nginx.conf /etc/nginx/conf.d/game-2048.conf
+WORKDIR /
+EXPOSE 3000
+
 # Build auth server
 FROM deps AS auth-server-builder
 RUN pnpm --filter "./apps/server/auth" build && \

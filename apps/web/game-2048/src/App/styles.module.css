@@ -1,0 +1,33 @@
+.App {
+  width: 100dvw;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  box-sizing: border-box;
+
+  .gameContainer {
+    margin-inline: auto;
+    width: 100%;
+    min-height: 100dvh;
+    max-width: 1536px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    .headerContainer,
+    .footerContainer {
+      flex-grow: 0;
+      flex-shrink: 0;
+      width: 100%;
+    }
+
+    .gridContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-grow: 1;
+      flex-shrink: 1;
+      width: 100%;
+    }
+  }
+}

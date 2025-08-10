@@ -1,0 +1,47 @@
+.Header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding-inline: 5%;
+  padding-block: 20px;
+
+  .leftSection {
+    .gameTitle {
+      font-size: 3rem;
+      font-weight: bold;
+      font-family: sans-serif;
+      color: #756452;
+      user-select: none;
+    }
+  }
+
+  .middleSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+
+    .scoreSection {
+      display: flex;
+      gap: 5px;
+    }
+
+    .mobileSection {
+      display: none;
+    }
+  }
+
+  @media (width <= 600px) {
+    .rightSection {
+      display: none;
+    }
+
+    .middleSection {
+      .mobileSection {
+        display: block;
+      }
+    }
+  }
+}

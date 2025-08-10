@@ -1,0 +1,15 @@
+export {MoveDirection} from './constants.js';
+export type {
+  GameStateChangeEventListener,
+  GridChangeEventListener,
+} from './interfaces/game-manager.js';
+export {GameState} from './interfaces/game-manager.js';
+export type {
+  HighestScoreChangeEventListener,
+  ScoreChangeEventListener,
+} from './interfaces/score-manager.js';
+export * from './types.js';
+
+const {Model} = await import('./model.js');
+const model = new Model();
+export {model};

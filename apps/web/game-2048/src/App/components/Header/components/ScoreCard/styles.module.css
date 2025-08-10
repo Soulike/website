@@ -1,0 +1,25 @@
+.card {
+  background: var(--ui-button-secondary-color);
+  border: 2px solid var(--ui-button-border-color);
+  border-radius: 6px;
+  padding: 2px 6px;
+  text-align: center;
+  min-width: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--ui-button-secondary-text-color);
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--ui-button-secondary-text-color);
+}

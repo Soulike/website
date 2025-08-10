@@ -1,0 +1,41 @@
+.statsContainer {
+  background: var(--ui-background-color);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 24px 0;
+  border: 1px solid var(--ui-modal-border-color);
+
+  .statsTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--ui-game-over-text-primary-color);
+    margin-bottom: 16px;
+  }
+
+  .statsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+
+    .statItem {
+      background: var(--ui-modal-background-color);
+      border-radius: 6px;
+      padding: 12px;
+      border: 1px solid var(--ui-modal-border-color);
+
+      .statLabel {
+        font-size: 0.9rem;
+        color: var(--ui-game-over-text-secondary-color);
+        margin-bottom: 4px;
+        font-weight: 500;
+      }
+
+      .statValue {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: var(--ui-game-over-text-primary-color);
+        line-height: 1;
+      }
+    }
+  }
+}

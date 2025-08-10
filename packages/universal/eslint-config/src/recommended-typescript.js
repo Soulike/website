@@ -17,6 +17,7 @@ export default [
     },
     rules: {
       '@typescript-eslint/no-extraneous-class': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
     },
   },
 ];
