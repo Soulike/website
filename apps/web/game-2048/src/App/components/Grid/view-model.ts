@@ -1,11 +1,12 @@
+import {
+  type ArrowKeyHandlers,
+  type SwipeHandlers,
+  useArrowKeys,
+  useSwipeGestures,
+} from '@website/hooks';
 import {type RefObject, useCallback, useEffect, useState} from 'react';
 
 import {GRID_SIDE_LENGTH} from '@/constants/configs.js';
-import {type ArrowKeyHandlers, useArrowKeys} from '@/hooks/useArrowKeys.js';
-import {
-  type SwipeHandlers,
-  useSwipeGestures,
-} from '@/hooks/useSwipeGestures.js';
 import {
   type GridChangeEventListener,
   model,
