@@ -22,7 +22,7 @@ export function calculateCSSValue(cssValue: string, property: string): number {
   const computedValue = parseFloat(computedStyle.getPropertyValue(property));
   document.body.removeChild(tempElement);
 
-  if (isNaN(computedValue)) {
+  if (Number.isNaN(computedValue)) {
     throw new Error(
       `Failed to calculate CSS value: '${cssValue}' for property '${property}'.`,
     );
