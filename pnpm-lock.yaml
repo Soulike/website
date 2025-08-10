@@ -301,7 +301,7 @@ importers:
         version: 7.2.0(@emotion/react@11.14.0(@types/react@19.1.8)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.8)(react@19.1.0))(@types/react@19.1.8)(react@19.1.0))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@website/hooks':
         specifier: workspace:*
-        version: file:packages/web/hooks(antd@5.25.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+        version: link:../../../packages/web/hooks
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -323,7 +323,7 @@ importers:
         version: 19.1.6(@types/react@19.1.8)
       '@universal/test-helpers':
         specifier: workspace:^
-        version: file:packages/universal/test-helpers
+        version: link:../../../packages/universal/test-helpers
       '@vitejs/plugin-react':
         specifier: ^4.4.1
         version: 4.4.1(vite@7.0.4(@types/node@22.15.21)(jiti@2.4.2)(yaml@2.8.0))
@@ -335,7 +335,7 @@ importers:
         version: 3.1.4(vitest@3.1.4(@types/node@22.15.21)(jiti@2.4.2)(jsdom@26.1.0)(yaml@2.8.0))
       '@website/eslint-config':
         specifier: workspace:^
-        version: file:packages/universal/eslint-config
+        version: link:../../../packages/universal/eslint-config
       browserslist-to-esbuild:
         specifier: ^2.1.1
         version: 2.1.1(browserslist@4.24.5)
@@ -523,7 +523,7 @@ importers:
         version: 9.27.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.31.1
-        version: 8.32.1(@typescript-eslint/parser@8.32.1(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)
+        version: 8.32.1(@typescript-eslint/parser@8.36.0(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)
       eslint-config-prettier:
         specifier: ^10.1.2
         version: 10.1.5(eslint@9.31.0(jiti@2.4.2))
@@ -539,6 +539,21 @@ importers:
       typescript-eslint:
         specifier: ^8.31.1
         version: 8.32.1(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)
+
+  packages/universal/function-helpers:
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: ^3.1.2
+        version: 3.1.4(vitest@3.1.4(@types/node@22.15.21)(jiti@2.4.2)(jsdom@26.1.0)(yaml@2.8.0))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../ts-config
+      vitest:
+        specifier: ^3.1.2
+        version: 3.1.4(@types/node@22.15.21)(jiti@2.4.2)(jsdom@26.1.0)(yaml@2.8.0)
 
   packages/universal/hitokoto-base:
     devDependencies:
@@ -3251,9 +3266,6 @@ packages:
       }
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@universal/test-helpers@file:packages/universal/test-helpers':
-    resolution: {directory: packages/universal/test-helpers, type: directory}
-
   '@vitejs/plugin-react-swc@3.10.2':
     resolution:
       {
@@ -3340,15 +3352,6 @@ packages:
       {
         integrity: sha512-yriMuO1cfFhmiGc8ataN51+9ooHRuURdfAZfwFd3usWynjzpLslZdYnRegTv32qdgtJTsj15FoeZe2g15fY1gg==,
       }
-
-  '@website/eslint-config@file:packages/universal/eslint-config':
-    resolution: {directory: packages/universal/eslint-config, type: directory}
-
-  '@website/hooks@file:packages/web/hooks':
-    resolution: {directory: packages/web/hooks, type: directory}
-    peerDependencies:
-      antd: '>=5.24.1'
-      react: '>=18.0.0'
 
   JSONStream@1.3.5:
     resolution:
@@ -9966,6 +9969,23 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@typescript-eslint/eslint-plugin@8.32.1(@typescript-eslint/parser@8.36.0(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)':
+    dependencies:
+      '@eslint-community/regexpp': 4.12.1
+      '@typescript-eslint/parser': 8.36.0(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)
+      '@typescript-eslint/scope-manager': 8.32.1
+      '@typescript-eslint/type-utils': 8.32.1(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)
+      '@typescript-eslint/utils': 8.32.1(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)
+      '@typescript-eslint/visitor-keys': 8.32.1
+      eslint: 9.31.0(jiti@2.4.2)
+      graphemer: 1.4.0
+      ignore: 7.0.4
+      natural-compare: 1.4.0
+      ts-api-utils: 2.1.0(typescript@5.8.3)
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - supports-color
+
   '@typescript-eslint/eslint-plugin@8.36.0(@typescript-eslint/parser@8.36.0(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.1
@@ -10152,8 +10172,6 @@ snapshots:
       '@typescript-eslint/types': 8.36.0
       eslint-visitor-keys: 4.2.1
 
-  '@universal/test-helpers@file:packages/universal/test-helpers': {}
-
   '@vitejs/plugin-react-swc@3.10.2(vite@7.0.4(@types/node@22.15.21)(jiti@2.4.2)(yaml@2.8.0))':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.11
@@ -10237,13 +10255,6 @@ snapshots:
       '@vitest/pretty-format': 3.1.4
       loupe: 3.1.3
       tinyrainbow: 2.0.0
-
-  '@website/eslint-config@file:packages/universal/eslint-config': {}
-
-  '@website/hooks@file:packages/web/hooks(antd@5.25.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)':
-    dependencies:
-      antd: 5.25.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react: 19.1.0
 
   JSONStream@1.3.5:
     dependencies:
