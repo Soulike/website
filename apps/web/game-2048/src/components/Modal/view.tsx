@@ -1,28 +1,22 @@
 import {Paper} from '@mui/material';
-import classNames from 'classnames';
-import {type ReactNode} from 'react';
+import {type ReactNode, type RefObject} from 'react';
 
-import {Overlay} from './components/Overlay/index.js';
+import {Overlay, type OverlayProps} from './components/Overlay/index.js';
 import styles from './styles.module.css';
 
-export interface ModalProps {
-  open: boolean;
-  onClose: () => void;
+export interface ModalViewProps {
+  viewRef: RefObject<HTMLDivElement | null>;
+  onOverlayClick: OverlayProps['onClick'];
   children: ReactNode;
-  className?: string;
 }
 
-export function Modal({open, onClose, children, className}: ModalProps) {
-  if (!open) {
-    return null;
-  }
-
+export function View({viewRef, onOverlayClick, children}: ModalViewProps) {
   return (
-    <>
-      <Overlay onClick={onClose} />
-      <Paper className={classNames(styles.modal, className)} elevation={8}>
+    <div className={styles.Modal} ref={viewRef}>
+      <Overlay onClick={onOverlayClick} />
+      <Paper className={styles.modalContent} elevation={8}>
         {children}
       </Paper>
-    </>
+    </div>
   );
 }

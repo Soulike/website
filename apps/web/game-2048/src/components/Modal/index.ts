@@ -1,2 +1,2 @@
-export type {ModalProps} from './view.js';
-export {Modal} from './view.js';
+export type {ModalProps} from './container.js';
+export {Modal} from './container.js';

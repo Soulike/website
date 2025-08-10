@@ -21,7 +21,7 @@ export function View({
   isNewRecord,
 }: GameOverModalViewProps) {
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onOverlayClick={onClose}>
       <div className={styles.title}>Game Over</div>
 
       <div className={styles.subtitle}>
