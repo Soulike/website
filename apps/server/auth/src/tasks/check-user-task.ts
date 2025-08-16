@@ -1,5 +1,5 @@
 import {UserTable} from '@server/database';
-import {PromiseTask} from '@universal/task-runner/dist/tasks/promise-task.js';
+import {PromiseTask} from '@universal/task-runner';
 import {User} from '@website/classes';
 
 /**
