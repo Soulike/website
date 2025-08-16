@@ -60,10 +60,18 @@ export abstract class SyncTaskRunner {
 
     try {
       const result = await taskRunPromise;
-      return {
-        error: null,
-        result,
-      };
+      if (result) {
+        return {
+          error: null,
+          result,
+        };
+      } else {
+        // Cancelled during execution.
+        return {
+          error: null,
+          result: null,
+        };
+      }
     } catch (error: unknown) {
       const outputError = new Error(`Error during task execution.`);
       outputError.cause = error;

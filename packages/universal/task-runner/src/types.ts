@@ -1,6 +1,6 @@
 interface TaskSuccessResult<T> {
   error: null;
-  result: T | null;
+  result: T;
 }
 
 interface TaskFailureResult {
