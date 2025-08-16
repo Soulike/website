@@ -1,4 +1,4 @@
-import {describe, expect, it, vi} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
 import {PromiseTask} from '@/tasks/promise-task.js';
 
@@ -18,13 +18,19 @@ class MockPromiseTask<T> extends PromiseTask<T> {
 }
 
 describe('ConcurrentPromiseTaskRunner', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
   describe('concurrent execution behavior', () => {
     it('should execute multiple functions concurrently', async () => {
       const runner = concurrentPromiseTaskRunner;
       const delay = (ms: number) =>
         new Promise((resolve) => setTimeout(resolve, ms));
 
-      const startTime = Date.now();
       const mockFunc1 = vi.fn(async () => {
         await delay(50);
         return 'result1';
@@ -43,15 +49,14 @@ describe('ConcurrentPromiseTaskRunner', () => {
       const promise2 = runner.push(mockFunc2);
       const promise3 = runner.push(mockFunc3);
 
+      // Fast-forward time to complete delays
+      await vi.advanceTimersByTimeAsync(50);
+
       const [result1, result2, result3] = await Promise.all([
         promise1,
         promise2,
         promise3,
       ]);
-      const endTime = Date.now();
-
-      // Should complete in roughly 50ms (concurrent) rather than 150ms (sequential)
-      expect(endTime - startTime).toBeLessThan(100);
 
       expect(mockFunc1).toHaveBeenCalledOnce();
       expect(mockFunc2).toHaveBeenCalledOnce();
@@ -67,7 +72,6 @@ describe('ConcurrentPromiseTaskRunner', () => {
       const delay = (ms: number) =>
         new Promise((resolve) => setTimeout(resolve, ms));
 
-      const startTime = Date.now();
       const mockRun1 = vi.fn(async () => {
         await delay(30);
         return 'task1';
@@ -84,11 +88,10 @@ describe('ConcurrentPromiseTaskRunner', () => {
       const promise1 = runner.push(task1);
       const promise2 = runner.push(task2);
 
-      const [result1, result2] = await Promise.all([promise1, promise2]);
-      const endTime = Date.now();
+      // Fast-forward time to complete delays
+      await vi.advanceTimersByTimeAsync(30);
 
-      // Should complete in roughly 30ms (concurrent) rather than 60ms (sequential)
-      expect(endTime - startTime).toBeLessThan(60);
+      const [result1, result2] = await Promise.all([promise1, promise2]);
 
       expect(mockRun1).toHaveBeenCalledOnce();
       expect(mockRun2).toHaveBeenCalledOnce();
@@ -102,7 +105,6 @@ describe('ConcurrentPromiseTaskRunner', () => {
       const delay = (ms: number) =>
         new Promise((resolve) => setTimeout(resolve, ms));
 
-      const startTime = Date.now();
       const mockFunc = vi.fn(async () => {
         await delay(40);
         return 'function';
@@ -118,14 +120,13 @@ describe('ConcurrentPromiseTaskRunner', () => {
       const functionPromise = runner.push(mockFunc);
       const taskPromise = runner.push(task);
 
+      // Fast-forward time to complete delays
+      await vi.advanceTimersByTimeAsync(40);
+
       const [functionResult, taskResult] = await Promise.all([
         functionPromise,
         taskPromise,
       ]);
-      const endTime = Date.now();
-
-      // Should complete in roughly 40ms (concurrent)
-      expect(endTime - startTime).toBeLessThan(80);
 
       expect(mockFunc).toHaveBeenCalledOnce();
       expect(mockRun).toHaveBeenCalledOnce();
@@ -174,19 +175,17 @@ describe('ConcurrentPromiseTaskRunner', () => {
         return 'slow';
       });
 
-      const startTime = Date.now();
-
       // Start slow task first
       const slowPromise = runner.push(slowFunc);
       // Start fast task immediately after
       const fastPromise = runner.push(fastFunc);
 
-      // Fast task should complete quickly
+      // Fast task should complete quickly (no delay)
       const fastResult = await fastPromise;
-      const fastEndTime = Date.now();
-
-      expect(fastEndTime - startTime).toBeLessThan(50);
       expect(fastResult).toEqual({error: null, result: 'fast'});
+
+      // Fast-forward time to complete slow task
+      await vi.advanceTimersByTimeAsync(100);
 
       // Slow task should still complete correctly
       const slowResult = await slowPromise;

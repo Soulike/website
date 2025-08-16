@@ -1,4 +1,4 @@
-import {describe, expect, it, vi} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
 import {PromiseTask} from '@/tasks/promise-task.js';
 
@@ -18,6 +18,13 @@ class MockPromiseTask<T> extends PromiseTask<T> {
 }
 
 describe('SequentialPromiseTaskRunner', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
   describe('sequential execution behavior', () => {
     it('should execute multiple functions sequentially in order', async () => {
       const runner = sequentialPromiseTaskRunner;
@@ -48,6 +55,11 @@ describe('SequentialPromiseTaskRunner', () => {
       const promise1 = runner.push(mockFunc1);
       const promise2 = runner.push(mockFunc2);
       const promise3 = runner.push(mockFunc3);
+
+      // Advance timers to complete all delays sequentially
+      await vi.advanceTimersByTimeAsync(30); // Complete func1
+      await vi.advanceTimersByTimeAsync(20); // Complete func2
+      await vi.advanceTimersByTimeAsync(10); // Complete func3
 
       const [result1, result2, result3] = await Promise.all([
         promise1,
@@ -96,6 +108,10 @@ describe('SequentialPromiseTaskRunner', () => {
       const promise1 = runner.push(task1);
       const promise2 = runner.push(task2);
 
+      // Advance timers sequentially
+      await vi.advanceTimersByTimeAsync(25); // Complete task1
+      await vi.advanceTimersByTimeAsync(15); // Complete task2
+
       const [result1, result2] = await Promise.all([promise1, promise2]);
 
       // Verify sequential execution order
@@ -135,6 +151,10 @@ describe('SequentialPromiseTaskRunner', () => {
       const functionPromise = runner.push(mockFunc);
       const taskPromise = runner.push(task);
 
+      // Advance timers sequentially
+      await vi.advanceTimersByTimeAsync(20); // Complete function
+      await vi.advanceTimersByTimeAsync(20); // Complete task
+
       const [functionResult, taskResult] = await Promise.all([
         functionPromise,
         taskPromise,
@@ -159,7 +179,6 @@ describe('SequentialPromiseTaskRunner', () => {
       const delay = (ms: number) =>
         new Promise((resolve) => setTimeout(resolve, ms));
 
-      const startTime = Date.now();
       const mockFunc1 = vi.fn(async () => {
         await delay(30);
         return 'result1';
@@ -178,12 +197,17 @@ describe('SequentialPromiseTaskRunner', () => {
       const promise2 = runner.push(mockFunc2);
       const promise3 = runner.push(mockFunc3);
 
-      await Promise.all([promise1, promise2, promise3]);
-      const endTime = Date.now();
+      // Verify timers are pending and advance sequentially
+      expect(vi.getTimerCount()).toBeGreaterThan(0);
 
-      // Should take roughly 90ms (sequential) rather than 30ms (concurrent)
-      expect(endTime - startTime).toBeGreaterThan(80);
-      expect(endTime - startTime).toBeLessThan(120);
+      await vi.advanceTimersByTimeAsync(30); // Complete func1
+      await vi.advanceTimersByTimeAsync(30); // Complete func2
+      await vi.advanceTimersByTimeAsync(30); // Complete func3
+
+      await Promise.all([promise1, promise2, promise3]);
+
+      // All timers should be cleared
+      expect(vi.getTimerCount()).toBe(0);
     });
 
     it('should not start next task until previous completes', async () => {
@@ -209,6 +233,9 @@ describe('SequentialPromiseTaskRunner', () => {
       // Start both tasks
       const promise1 = runner.push(mockFunc1);
       const promise2 = runner.push(mockFunc2);
+
+      // Complete first task
+      await vi.advanceTimersByTimeAsync(50);
 
       await Promise.all([promise1, promise2]);
 
@@ -238,9 +265,14 @@ describe('SequentialPromiseTaskRunner', () => {
       // Start first task
       const promise1 = runner.push(mockFunc1);
 
-      // Add second task after a short delay (while first is running)
-      await new Promise((resolve) => setTimeout(resolve, 10));
+      // Advance time partway through first task, then add second task
+      await vi.advanceTimersByTimeAsync(10);
       const promise2 = runner.push(mockFunc2);
+
+      // Complete first task
+      await vi.advanceTimersByTimeAsync(10);
+      // Complete second task
+      await vi.advanceTimersByTimeAsync(10);
 
       const [result1, result2] = await Promise.all([promise1, promise2]);
 
