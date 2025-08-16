@@ -11,6 +11,31 @@ class TempPromiseTask<ResultT> extends PromiseTask<ResultT> {
   }
 }
 
+/**
+ * Base promise task runner that executes a single task immediately.
+ * This is the fundamental building block used by other task runners.
+ *
+ * Use this when:
+ * - You need to execute a single task with proper error handling
+ * - You want to wrap a function or PromiseTask with consistent result handling
+ * - You're building higher-level task runners that need basic execution
+ *
+ * For most use cases, prefer SequentialPromiseTaskRunner or ConcurrentPromiseTaskRunner instead.
+ *
+ * @example
+ * ```typescript
+ * const runner = new PromiseTaskRunner();
+ *
+ * // Execute a single task
+ * const result = await runner.push(async () => await processData());
+ *
+ * if (result.error) {
+ *   console.error('Task failed:', result.error);
+ * } else {
+ *   console.log('Task result:', result.result);
+ * }
+ * ```
+ */
 export class PromiseTaskRunner {
   public async push<ResultT>(
     func: () => Promise<ResultT>,
