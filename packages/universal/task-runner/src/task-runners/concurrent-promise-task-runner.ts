@@ -31,7 +31,7 @@ import {PromiseTaskRunner} from './base/promise-task-runner.js';
  * const results = await Promise.all([promise1, promise2, promise3]);
  * ```
  */
-export class ConcurrentPromiseTaskRunner {
+class ConcurrentPromiseTaskRunner {
   public async push<ResultT>(
     func: () => Promise<ResultT>,
   ): Promise<TaskResult<ResultT>>;

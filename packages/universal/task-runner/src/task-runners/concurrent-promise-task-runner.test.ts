@@ -2,7 +2,7 @@ import {describe, expect, it, vi} from 'vitest';
 
 import {PromiseTask} from '@/tasks/promise-task.js';
 
-import {ConcurrentPromiseTaskRunner} from './concurrent-promise-task-runner.js';
+import {concurrentPromiseTaskRunner} from './concurrent-promise-task-runner.js';
 
 class MockPromiseTask<T> extends PromiseTask<T> {
   private readonly mockRun: () => Promise<T | null>;
@@ -20,7 +20,7 @@ class MockPromiseTask<T> extends PromiseTask<T> {
 describe('ConcurrentPromiseTaskRunner', () => {
   describe('concurrent execution behavior', () => {
     it('should execute multiple functions concurrently', async () => {
-      const runner = new ConcurrentPromiseTaskRunner();
+      const runner = concurrentPromiseTaskRunner;
       const delay = (ms: number) =>
         new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -63,7 +63,7 @@ describe('ConcurrentPromiseTaskRunner', () => {
     });
 
     it('should execute multiple tasks concurrently', async () => {
-      const runner = new ConcurrentPromiseTaskRunner();
+      const runner = concurrentPromiseTaskRunner;
       const delay = (ms: number) =>
         new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -98,7 +98,7 @@ describe('ConcurrentPromiseTaskRunner', () => {
     });
 
     it('should handle mixed function and task execution concurrently', async () => {
-      const runner = new ConcurrentPromiseTaskRunner();
+      const runner = concurrentPromiseTaskRunner;
       const delay = (ms: number) =>
         new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -137,7 +137,7 @@ describe('ConcurrentPromiseTaskRunner', () => {
 
   describe('error handling in concurrent execution', () => {
     it('should handle errors independently across concurrent tasks', async () => {
-      const runner = new ConcurrentPromiseTaskRunner();
+      const runner = concurrentPromiseTaskRunner;
 
       const successFunc = vi.fn(() => Promise.resolve('success'));
       const errorFunc = vi.fn(() => Promise.reject(new Error('error')));
@@ -164,7 +164,7 @@ describe('ConcurrentPromiseTaskRunner', () => {
 
   describe('performance characteristics', () => {
     it('should not block when one task is slow', async () => {
-      const runner = new ConcurrentPromiseTaskRunner();
+      const runner = concurrentPromiseTaskRunner;
       const delay = (ms: number) =>
         new Promise((resolve) => setTimeout(resolve, ms));
 
