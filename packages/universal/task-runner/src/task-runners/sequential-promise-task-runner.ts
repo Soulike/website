@@ -29,7 +29,7 @@ import {PromiseTaskRunner} from './base/promise-task-runner.js';
  * const results = await Promise.all([promise1, promise2, promise3]);
  * ```
  */
-class SequentialPromiseTaskRunner {
+export class SequentialPromiseTaskRunner {
   private taskQueue: (() => Promise<void>)[] = [];
   private isRunning = false;
 
