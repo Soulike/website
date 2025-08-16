@@ -1,11 +1,11 @@
 import {UserTable} from '@server/database';
-import {Task} from '@universal/task-runner';
+import {PromiseTask} from '@universal/task-runner/dist/tasks/promise-task.js';
 import {User} from '@website/classes';
 
 /**
  * Check if `user` matches the record in database.
  */
-export class CheckUserTask extends Task<boolean> {
+export class CheckUserTask extends PromiseTask<boolean> {
   private readonly user: User;
 
   constructor(user: User) {
