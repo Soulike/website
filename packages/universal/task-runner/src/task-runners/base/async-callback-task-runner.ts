@@ -4,20 +4,27 @@ import {Task} from '@/task.js';
 import {TaskRunner} from './task-runner.js';
 
 /**
- * Helper abstract class for creating task runners using async callbacks like queueMicroTask.
+ * Abstract class for task runners that execute tasks using async callback functions.
+ * Extends TaskRunner to provide a framework for implementing task execution in different
+ * async contexts (e.g., microtasks, timeouts, message channels).
  */
 export abstract class AsyncCallbackTaskRunner extends TaskRunner {
   /**
-   * Implement the getter to provide async callback.
+   * Returns the async callback function to use for task scheduling.
+   * Implementations should return functions like queueMicrotask, setTimeout, etc.
+   * @returns The async callback function for scheduling task execution
    */
   protected abstract get asyncCallbackFunction(): typeof queueMicrotask;
 
   /**
-   * Do not override this unless necessary.
+   * Creates a promise that wraps task execution in the async callback context.
+   * Handles task abortion before and during execution.
+   * Override only if custom promise handling is needed.
+   *
+   * @param task - The task to execute
+   * @returns Promise that resolves with the task result or null if aborted
    */
-  protected getTaskRunPromise<ResultT>(
-    task: Task<ResultT>,
-  ): Promise<ResultT | null> {
+  protected getTaskRunPromise<ResultT>(task: Task<ResultT>) {
     return new Promise<ResultT | null>((resolve, reject) => {
       this.asyncCallbackFunction(() => {
         if (task.hasAborted()) {
@@ -29,21 +36,19 @@ export abstract class AsyncCallbackTaskRunner extends TaskRunner {
           // Abort during run.
           resolve(null);
         });
-        task
-          .run()
-          .then((result) => {
-            if (task.hasAborted()) {
-              resolve(null);
-              return;
-            }
-            resolve(result);
-          })
-          .catch((error: unknown) => {
-            if (task.hasAborted()) {
-              return;
-            }
-            reject(createTaskHandlingError(error));
-          });
+        try {
+          const result = task.run();
+          if (task.hasAborted()) {
+            resolve(null);
+            return;
+          }
+          resolve(result);
+        } catch (e: unknown) {
+          if (task.hasAborted()) {
+            return;
+          }
+          reject(createTaskHandlingError(e));
+        }
       });
     });
   }
