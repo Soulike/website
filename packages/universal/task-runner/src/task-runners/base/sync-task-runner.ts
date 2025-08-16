@@ -1,4 +1,3 @@
-import {createTaskHandlingError} from '@/error-helpers.js';
 import {SyncTask} from '@/tasks/sync-task.js';
 import {TaskResult} from '@/types.js';
 
@@ -115,7 +114,8 @@ export abstract class SyncTaskRunner {
           if (task.hasAborted()) {
             return;
           }
-          reject(createTaskHandlingError(e));
+          // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+          reject(e);
         }
       });
     });
