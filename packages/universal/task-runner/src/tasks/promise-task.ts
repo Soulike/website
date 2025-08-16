@@ -1,4 +1,4 @@
-import {Task} from '@/tasks/task.js';
+import {Task} from './task.js';
 
 /**
  * Abstract task class for asynchronous operations that return promises.
