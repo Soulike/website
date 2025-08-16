@@ -77,7 +77,8 @@ describe('queueMacroTask', () => {
     expect(results).toEqual([1, 2, 3]);
   });
 
-  it('should work with async callbacks', async () => {
+  it('should work with async callbacks', () => {
+    vi.useFakeTimers();
     let promiseResolved = false;
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -90,10 +91,11 @@ describe('queueMacroTask', () => {
       });
     });
 
-    // Wait enough time for the promise to resolve
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    vi.advanceTimersByTime(10);
 
     expect(promiseResolved).toBe(true);
+    vi.restoreAllMocks();
+    vi.useRealTimers();
   });
 
   it('should work in both browser and Node.js environments', async () => {

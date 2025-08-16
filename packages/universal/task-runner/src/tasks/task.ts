@@ -1,11 +1,11 @@
-export abstract class Task<ResultT> {
+export abstract class Task<RunResultT> {
   private abortController: AbortController;
   private abortEventListeners: EventListener[];
 
   /**
    * Set up the task in constructor.
    */
-  constructor() {
+  protected constructor() {
     this.abortController = new AbortController();
     this.abortEventListeners = [];
   }
@@ -18,12 +18,7 @@ export abstract class Task<ResultT> {
     return this.abortController.signal;
   }
 
-  /**
-   * Actual task execution.
-   * Implementation should listen to `abort` event or use `this.signal` to abort execution.
-   * Must return `null` if the task is aborted during execution.
-   */
-  public abstract run(): Promise<ResultT | null>;
+  public abstract run(): RunResultT;
 
   /**
    * Perform cleanup work.
