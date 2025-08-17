@@ -1,3 +1,5 @@
+import {setTimeout} from 'node:timers/promises';
+
 import {sequentialPromiseTaskRunner} from '@universal/task-runner';
 import {
   type ArrowKeyHandlers,
@@ -43,9 +45,7 @@ export function useInputHandlers(viewDomRef: RefObject<HTMLDivElement | null>) {
 
       model.move(direction);
 
-      return new Promise<void>((resolve) => {
-        setTimeout(resolve, TILE_MOVE_ANIMATION_DURATION);
-      });
+      await setTimeout(TILE_MOVE_ANIMATION_DURATION);
     });
   }, []);
 
