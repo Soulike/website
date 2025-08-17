@@ -1,4 +1,4 @@
-import {sequentialPromiseTaskRunner} from '@universal/task-runner/dist/task-runners/sequential-promise-task-runner.js';
+import {sequentialPromiseTaskRunner} from '@universal/task-runner';
 import {
   type ArrowKeyHandlers,
   type SwipeHandlers,
