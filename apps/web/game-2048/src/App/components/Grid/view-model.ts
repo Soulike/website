@@ -1,3 +1,6 @@
+import {setTimeout} from 'node:timers/promises';
+
+import {sequentialPromiseTaskRunner} from '@universal/task-runner';
 import {
   type ArrowKeyHandlers,
   type SwipeHandlers,
@@ -6,6 +9,7 @@ import {
 } from '@website/hooks';
 import {type RefObject, useCallback, useEffect, useState} from 'react';
 
+import {TILE_MOVE_ANIMATION_DURATION} from '@/constants/animation.js';
 import {GRID_SIDE_LENGTH} from '@/constants/configs.js';
 import {
   type GridChangeEventListener,
@@ -34,11 +38,15 @@ export function useViewModel(viewDomRef: RefObject<HTMLDivElement | null>) {
 
 export function useInputHandlers(viewDomRef: RefObject<HTMLDivElement | null>) {
   const handleMove = useCallback((direction: MoveDirection) => {
-    if (model.isGameOver()) {
-      return;
-    }
+    void sequentialPromiseTaskRunner.push(async () => {
+      if (model.isGameOver()) {
+        return;
+      }
 
-    model.move(direction);
+      model.move(direction);
+
+      await setTimeout(TILE_MOVE_ANIMATION_DURATION);
+    });
   }, []);
 
   const inputHandlers: ArrowKeyHandlers & SwipeHandlers = {
