@@ -18,6 +18,6 @@
     "@types/jsdom": "^21.1.7",
     "@website/eslint-config": "workspace:^",
     "@website/ts-config": "workspace:^",
-    "esbuild": "^0.25.3"
+    "esbuild": "^0.25.9"
   }
 }

@@ -6,9 +6,9 @@
     "build": "rm -rf dist && tsc"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^3.2.4",
     "@website/eslint-config": "workspace:^",
     "@website/ts-config": "workspace:^",
-    "vitest": "^3.1.2",
-    "@vitest/coverage-v8": "^3.1.2"
+    "vitest": "^3.2.4"
   }
 }
