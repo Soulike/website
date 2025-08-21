@@ -13,7 +13,7 @@
   "devDependencies": {
     "@website/eslint-config": "workspace:^",
     "@website/ts-config": "workspace:^",
-    "esbuild": "^0.25.3"
+    "esbuild": "^0.25.9"
   },
   "scripts": {
     "build": "rm -rf dist && tsc && node esbuild.config.mjs"

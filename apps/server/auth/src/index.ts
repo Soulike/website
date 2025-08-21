@@ -1,8 +1,8 @@
 import crypto from 'node:crypto';
 
+import {bodyParser} from '@koa/bodyparser';
 import {Logger} from '@server/logger';
 import Koa from 'koa';
-import {koaBody} from 'koa-body';
 import session from 'koa-session';
 
 import {KOA_BODY_OPTIONS} from '@/configurations/koa-body-options.js';
@@ -24,7 +24,7 @@ const secret = crypto.randomBytes(128).toString('hex');
 app.keys = [secret];
 
 app.use(session(KOS_SESSION_OPTIONS, app));
-app.use(koaBody(KOA_BODY_OPTIONS));
+app.use(bodyParser(KOA_BODY_OPTIONS));
 app.use(dispatcher());
 
 app.listen(LISTEN_OPTIONS, () => {

@@ -7,12 +7,12 @@
   },
   "devDependencies": {
     "@types/signale": "^1.4.7",
-    "@vitest/coverage-v8": "^3.1.2",
+    "@vitest/coverage-v8": "^3.2.4",
     "@website/eslint-config": "workspace:^",
     "@website/ts-config": "workspace:^",
-    "tsc-alias": "^1.8.13",
-    "typescript": "^5.8.3",
-    "vitest": "^3.1.2"
+    "tsc-alias": "^1.8.16",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "signale": "^1.4.0"
