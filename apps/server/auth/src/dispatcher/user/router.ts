@@ -13,9 +13,9 @@ const router = new Router<DefaultState, Context>();
 
 router.get(SESSION, (ctx) => {
   if (!ctx.session) {
-    ctx.response.body = {username: null};
+    ctx.response.status = 404;
   } else {
-    ctx.response.body = {username: ctx.session.username};
+    ctx.response.body = ctx.session.data;
   }
 });
 
