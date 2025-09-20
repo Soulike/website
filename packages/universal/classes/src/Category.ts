@@ -1,3 +1,5 @@
+import {z} from 'zod';
+
 import {Nullable} from './types.js';
 
 export type CategoryIdToArticleAmount = Record<Category['id'], number>;
@@ -35,7 +37,21 @@ export class Category implements CategoryBase {
     this.name = name;
   }
 
-  static from(obj: Category): Category {
-    return new Category(obj.id, obj.name);
+  private static readonly schema = z.object({
+    id: z.number(),
+    name: z.string(),
+  });
+
+  static validate(value: unknown): value is Category {
+    const result = Category.schema.safeParse(value);
+    return result.success;
+  }
+
+  static from(obj: unknown): Category {
+    if (!Category.validate(obj)) {
+      throw new Error('Invalid Category');
+    }
+    const {id, name} = obj;
+    return new Category(id, name);
   }
 }
