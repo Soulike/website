@@ -1,15 +1,15 @@
 import {z} from 'zod';
 
-export class UserInfo {
+export class UserInfo implements z.infer<typeof UserInfo.schema> {
+  private static readonly schema = z.object({
+    username: z.string(),
+  });
+
   public username: string;
 
   constructor(username: string) {
     this.username = username;
   }
-
-  private static readonly schema = z.object({
-    username: z.string(),
-  });
 
   static validate(value: unknown): value is UserInfo {
     const result = UserInfo.schema.safeParse(value);

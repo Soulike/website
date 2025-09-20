@@ -1,6 +1,11 @@
 import {z} from 'zod';
 
 export class User implements z.infer<typeof User.schema> {
+  private static readonly schema = z.object({
+    username: z.string(),
+    password: z.string(),
+  });
+
   public username: string;
   public password: string;
 
@@ -8,11 +13,6 @@ export class User implements z.infer<typeof User.schema> {
     this.username = username;
     this.password = password;
   }
-
-  private static readonly schema = z.object({
-    username: z.string(),
-    password: z.string(),
-  });
 
   static from(obj: unknown): User {
     if (!User.validate(obj)) {

@@ -59,7 +59,18 @@ export class NewArticle implements ArticleBase {
 /**
  * Describe the properties of an article from database.
  */
-export class Article implements ArticleBase {
+export class Article implements ArticleBase, z.infer<typeof Article.schema> {
+  private static readonly schema = z.object({
+    id: z.number(),
+    title: z.string(),
+    content: z.string(),
+    category: z.number(),
+    publicationTime: z.string(),
+    modificationTime: z.string(),
+    pageViews: z.number(),
+    isVisible: z.boolean(),
+  });
+
   public id: number; // 自增主键
   public title: string; // 文章标题，唯一
   public content: string;
@@ -88,17 +99,6 @@ export class Article implements ArticleBase {
     this.pageViews = pageViews;
     this.isVisible = isVisible;
   }
-
-  private static readonly schema = z.object({
-    id: z.number(),
-    title: z.string(),
-    content: z.string(),
-    category: z.number(),
-    publicationTime: z.string(),
-    modificationTime: z.string(),
-    pageViews: z.number(),
-    isVisible: z.boolean(),
-  });
 
   static validate(value: unknown): value is Article {
     const result = Article.schema.safeParse(value);
