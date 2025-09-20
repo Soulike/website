@@ -1,0 +1,20 @@
+{
+  "name": "@universal/session-sdk",
+  "private": "true",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  },
+  "dependencies": {
+    "@website/classes": "workspace:^",
+    "http-status-codes": "^2.3.0"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^3.2.4",
+    "@website/eslint-config": "workspace:^",
+    "@website/ts-config": "workspace:^",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}
