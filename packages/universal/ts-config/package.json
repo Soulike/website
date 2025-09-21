@@ -1,7 +1,7 @@
 {
   "name": "@website/ts-config",
   "description": "TypeScript configuration for website",
-  "private": "true",
+  "private": true,
   "type": "module",
   "exports": {
     "./bundler": "./src/tsconfig.bundler.json",

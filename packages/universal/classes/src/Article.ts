@@ -1,3 +1,5 @@
+import {z} from 'zod';
+
 import type {Nullable} from './types.js';
 
 interface ArticleBase {
@@ -57,7 +59,18 @@ export class NewArticle implements ArticleBase {
 /**
  * Describe the properties of an article from database.
  */
-export class Article implements ArticleBase {
+export class Article implements ArticleBase, z.infer<typeof Article.schema> {
+  private static readonly schema = z.object({
+    id: z.number(),
+    title: z.string(),
+    content: z.string(),
+    category: z.number(),
+    publicationTime: z.string(),
+    modificationTime: z.string(),
+    pageViews: z.number(),
+    isVisible: z.boolean(),
+  });
+
   public id: number; // 自增主键
   public title: string; // 文章标题，唯一
   public content: string;
@@ -87,16 +100,31 @@ export class Article implements ArticleBase {
     this.isVisible = isVisible;
   }
 
-  static from(obj: Article): Article {
+  static validate(value: unknown): value is z.infer<typeof Article.schema> {
+    const result = Article.schema.safeParse(value);
+    return result.success;
+  }
+
+  static from(obj: z.infer<typeof Article.schema>): Article {
+    const {
+      id,
+      title,
+      content,
+      category,
+      publicationTime,
+      modificationTime,
+      pageViews,
+      isVisible,
+    } = obj;
     return new Article(
-      obj.id,
-      obj.title,
-      obj.content,
-      obj.category,
-      obj.publicationTime,
-      obj.modificationTime,
-      obj.pageViews,
-      obj.isVisible,
+      id,
+      title,
+      content,
+      category,
+      publicationTime,
+      modificationTime,
+      pageViews,
+      isVisible,
     );
   }
 }

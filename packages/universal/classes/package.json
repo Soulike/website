@@ -10,6 +10,6 @@
     "@website/ts-config": "workspace:^"
   },
   "dependencies": {
-    "joi": "^18.0.1"
+    "zod": "^4.1.9"
   }
 }

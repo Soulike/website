@@ -1,6 +1,6 @@
 {
   "name": "@website/object-helpers",
-  "private": "true",
+  "private": true,
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {

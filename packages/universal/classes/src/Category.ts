@@ -1,3 +1,5 @@
+import {z} from 'zod';
+
 import {Nullable} from './types.js';
 
 export type CategoryIdToArticleAmount = Record<Category['id'], number>;
@@ -26,7 +28,12 @@ export class NewCategory implements CategoryBase {
   }
 }
 
-export class Category implements CategoryBase {
+export class Category implements CategoryBase, z.infer<typeof Category.schema> {
+  private static readonly schema = z.object({
+    id: z.number(),
+    name: z.string(),
+  });
+
   public id: number; // 自增主键
   public name: string; // 分类名，唯一
 
@@ -35,7 +42,13 @@ export class Category implements CategoryBase {
     this.name = name;
   }
 
-  static from(obj: Category): Category {
-    return new Category(obj.id, obj.name);
+  static validate(value: unknown): value is z.infer<typeof Category.schema> {
+    const result = Category.schema.safeParse(value);
+    return result.success;
+  }
+
+  static from(obj: z.infer<typeof Category.schema>): Category {
+    const {id, name} = obj;
+    return new Category(id, name);
   }
 }

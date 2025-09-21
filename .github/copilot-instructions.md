@@ -2,18 +2,20 @@
 
 This is a pnpm monorepo containing multiple types of projects.
 
-Before starting any work, you must first confirm:
+## Task Preparation
+
+Before starting any task, you must first confirm:
 
 - What package manager is used. Use correct package manager to run commands.
 - Configurations in packages.json files, both in project and in workspace.
 - Configurations for other tools, i.e., Vite, Vitest, ESLint, Prettier, etc.
 
----
+## Task Confirmation
 
-## Work Style
+After you finish your task:
 
-- Output as less as possible.
-- All outputs should be concise.
+- If you can get IDE diagnoses, fix the errors and warnings in them.
+- If you can not, do nothing.
 
 ---
 
@@ -112,9 +114,9 @@ All React components follow MVVM structure:
 Component/
   | assets/                 // Static assets needed
   | components/             // Subcomponents
+  | hooks/                  // Hooks as view models.
   | index.ts                // For exporting the component. No TSX should be in this file.
-  | container.tsx           // Optional. Connect view model with view.
-  | view-model.tsx          // Optional. View model.
+  | container.tsx           // Optional. Connect view models with view.
   | view.tsx                // Stateless view component. Get all information with props.
   | styles.module.css       // Part of view
 ```

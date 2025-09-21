@@ -1,6 +1,6 @@
 import Router from '@koa/router';
 import {Logger} from '@server/logger';
-import {User, UserValidator} from '@website/classes';
+import {User} from '@website/classes';
 import {StatusCodes} from 'http-status-codes';
 import {DefaultState} from 'koa';
 
@@ -13,15 +13,15 @@ const router = new Router<DefaultState, Context>();
 
 router.get(SESSION, (ctx) => {
   if (!ctx.session) {
-    ctx.response.body = {username: null};
+    ctx.response.status = StatusCodes.NOT_FOUND;
   } else {
-    ctx.response.body = {username: ctx.session.username};
+    ctx.response.body = ctx.session.data;
   }
 });
 
 router.post(SESSION, async (ctx) => {
   const body: unknown = ctx.request.body;
-  if (!UserValidator.validate(body)) {
+  if (!User.validate(body)) {
     ctx.response.status = StatusCodes.BAD_REQUEST;
     return;
   }
