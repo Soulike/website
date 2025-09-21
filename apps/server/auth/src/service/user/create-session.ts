@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 
 import {concurrentPromiseTaskRunner} from '@universal/task-runner';
-import {User} from '@website/classes';
+import {User, UserInfo} from '@website/classes';
 
 import {Context} from '@/dispatcher/types.js';
 import {CheckUserTask} from '@/tasks/check-user-task.js';
@@ -15,8 +15,9 @@ export async function createSession(user: User, ctx: Context) {
   }
   assert(result !== null);
   if (result) {
-    ctx.session = {};
-    ctx.session.username = user.username;
+    ctx.session = {
+      data: new UserInfo(user.username),
+    };
   }
   return result;
 }
