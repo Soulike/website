@@ -22,7 +22,6 @@
     "react": ">=18.0.0"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc",
-    "test": "vitest"
+    "build": "rm -rf dist && tsc"
   }
 }
