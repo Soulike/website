@@ -47,10 +47,7 @@ export class Category implements CategoryBase, z.infer<typeof Category.schema> {
     return result.success;
   }
 
-  static from(obj: unknown): Category {
-    if (!Category.validate(obj)) {
-      throw new Error('Invalid Category');
-    }
+  static from(obj: z.infer<typeof Category.schema>): Category {
     const {id, name} = obj;
     return new Category(id, name);
   }

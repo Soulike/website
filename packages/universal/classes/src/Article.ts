@@ -105,10 +105,7 @@ export class Article implements ArticleBase, z.infer<typeof Article.schema> {
     return result.success;
   }
 
-  static from(obj: unknown): Article {
-    if (!Article.validate(obj)) {
-      throw new Error('Invalid Article');
-    }
+  static from(obj: z.infer<typeof Article.schema>): Article {
     const {
       id,
       title,

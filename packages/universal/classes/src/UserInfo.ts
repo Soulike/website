@@ -16,10 +16,7 @@ export class UserInfo implements z.infer<typeof UserInfo.schema> {
     return result.success;
   }
 
-  static from(obj: unknown): UserInfo {
-    if (!UserInfo.validate(obj)) {
-      throw new Error('Invalid UserInfo');
-    }
+  static from(obj: z.infer<typeof UserInfo.schema>): UserInfo {
     return new UserInfo(obj.username);
   }
 }

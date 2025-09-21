@@ -14,10 +14,7 @@ export class User implements z.infer<typeof User.schema> {
     this.password = password;
   }
 
-  static from(obj: unknown): User {
-    if (!User.validate(obj)) {
-      throw new Error('Invalid User');
-    }
+  static from(obj: z.infer<typeof User.schema>): User {
     return new User(obj.username, obj.password);
   }
 
