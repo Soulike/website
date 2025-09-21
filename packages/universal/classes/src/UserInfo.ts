@@ -11,7 +11,7 @@ export class UserInfo implements z.infer<typeof UserInfo.schema> {
     this.username = username;
   }
 
-  static validate(value: unknown): value is UserInfo {
+  static validate(value: unknown): value is z.infer<typeof UserInfo.schema> {
     const result = UserInfo.schema.safeParse(value);
     return result.success;
   }

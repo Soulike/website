@@ -100,7 +100,7 @@ export class Article implements ArticleBase, z.infer<typeof Article.schema> {
     this.isVisible = isVisible;
   }
 
-  static validate(value: unknown): value is Article {
+  static validate(value: unknown): value is z.infer<typeof Article.schema> {
     const result = Article.schema.safeParse(value);
     return result.success;
   }

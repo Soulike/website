@@ -42,7 +42,7 @@ export class Category implements CategoryBase, z.infer<typeof Category.schema> {
     this.name = name;
   }
 
-  static validate(value: unknown): value is Category {
+  static validate(value: unknown): value is z.infer<typeof Category.schema> {
     const result = Category.schema.safeParse(value);
     return result.success;
   }

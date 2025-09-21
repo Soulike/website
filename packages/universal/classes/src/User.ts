@@ -21,7 +21,7 @@ export class User implements z.infer<typeof User.schema> {
     return new User(obj.username, obj.password);
   }
 
-  static validate(value: unknown): value is User {
+  static validate(value: unknown): value is z.infer<typeof User.schema> {
     const result = User.schema.safeParse(value);
     return result.success;
   }
