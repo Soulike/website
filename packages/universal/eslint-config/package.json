@@ -1,7 +1,7 @@
 {
   "name": "@website/eslint-config",
   "description": "ESLint configuration for website",
-  "private": "true",
+  "private": true,
   "type": "module",
   "main": "src/index.js",
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "@universal/session-sdk",
-  "private": "true",
+  "private": true,
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {

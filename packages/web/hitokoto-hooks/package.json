@@ -1,6 +1,6 @@
 {
   "name": "@website/hitokoto-hooks",
-  "private": "true",
+  "private": true,
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {

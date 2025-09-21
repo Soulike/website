@@ -1,6 +1,6 @@
 {
   "name": "@universal/ts-type-helpers",
-  "private": "true",
+  "private": true,
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {
