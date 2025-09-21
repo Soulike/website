@@ -28,8 +28,8 @@ export function SessionProvider({children}: SessionProviderProps) {
   const lastReloadSessionIdRef = useRef(0);
 
   const reloadSession = useCallback(async () => {
-    const reloadSessionId = lastReloadSessionIdRef.current;
     lastReloadSessionIdRef.current++;
+    const reloadSessionId = lastReloadSessionIdRef.current;
     try {
       const userInfo = await getSession();
       if (reloadSessionId !== lastReloadSessionIdRef.current) {
