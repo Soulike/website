@@ -1,5 +1,5 @@
 {
-  "extends": "@library/ts-config/package",
+  "extends": "@config/typescript/package",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",

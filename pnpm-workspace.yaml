@@ -2,6 +2,7 @@ packages:
   - apps/**/*
   - modules/**/*
   - libraries/**/*
+  - configs/*
 
 onlyBuiltDependencies:
   - '@swc/core'

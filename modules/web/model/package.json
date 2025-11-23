@@ -14,13 +14,13 @@
   },
   "dependencies": {
     "@module/classes": "workspace:^",
-    "@library/eslint-config": "workspace:^",
+    "@config/eslint": "workspace:^",
     "@library/hooks": "workspace:^",
     "@library/request": "workspace:^"
   },
   "devDependencies": {
     "@types/react": "^19.1.10",
-    "@library/ts-config": "workspace:^",
+    "@config/typescript": "workspace:^",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.2"
   },

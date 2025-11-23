@@ -9,8 +9,8 @@
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^3.2.4",
-    "@library/eslint-config": "workspace:^",
-    "@library/ts-config": "workspace:^",
+    "@config/eslint": "workspace:^",
+    "@config/typescript": "workspace:^",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   }
