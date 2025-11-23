@@ -1,8 +1,7 @@
-import {STRING_KEY} from '@website/i18n-base';
-
 import {PLACEHOLDER_MARK} from '../constants.js';
 import {getPageTitle} from '../helpers/page-title-helpers.js';
-import {Strings} from './Strings.js';
+import {STRING_KEY} from '../string-key.js';
+import {Strings} from '../Strings.js';
 
 export const EN: Strings = Object.freeze({
   [STRING_KEY.TEST_STRING]: 'Test string',

@@ -1,3 +1,3 @@
-import {STRING_KEY} from '@website/i18n-base';
+import {STRING_KEY} from './string-key.js';
 
 export type Strings = Readonly<Record<STRING_KEY, string>>;

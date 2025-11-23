@@ -1,3 +1,2 @@
-export {getI18nString} from './get-i18n-string.js';
-export {useI18nString} from './useI18nString.js';
-export {STRING_KEY} from '@website/i18n-base';
+export {getI18nString, useI18nString} from './i18n-instance.js';
+export {STRING_KEY} from './string-key.js';
