@@ -15,7 +15,7 @@
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@website/classes": "workspace:^",
     "@website/hooks": "workspace:^",
-    "@website/i18n": "workspace:^",
+    "@website/blog-i18n": "workspace:^",
     "@website/model": "workspace:^",
     "@website/react-components": "workspace:^",
     "@website/request": "workspace:^",

@@ -1,4 +1,4 @@
-import {STRING_KEY, useI18nString} from '@website/i18n';
+import {STRING_KEY, useI18nString} from '@website/blog-i18n';
 import {useEffect} from 'react';
 
 import {ArticleList} from '@/components/ArticleList';

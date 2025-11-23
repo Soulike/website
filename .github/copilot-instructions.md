@@ -57,20 +57,23 @@ All apps share the same `Dockerfile` at project root.
 
 ### NPM Packages
 
-#### Web Packages
+Packages are organized into two top-level categories:
 
-- Under `packages/web`.
-- For web apps only.
+#### Business Modules
 
-#### Server Packages
+Business-specific packages containing domain logic and project-specific functionality.
 
-- Under `packages/server`.
-- For Node.js server apps only.
+- **Web Modules**: Under `modules/web` - Business logic for web apps only.
+- **Server Modules**: Under `modules/server` - Business logic for Node.js server apps only.
+- **Universal Modules**: Under `modules/universal` - Business logic usable to all types of apps.
 
-#### Universal Packages
+#### Reusable Libraries
 
-- Under `packages/universal`.
-- Usable to all types of apps.
+Universal, business-agnostic packages that can be extracted and reused across different projects.
+
+- **Web Libraries**: Under `libraries/web` - Utilities and helpers for web apps only.
+- **Server Libraries**: Under `libraries/server` - Utilities and helpers for Node.js server apps only.
+- **Universal Libraries**: Under `libraries/universal` - Utilities and helpers usable to all types of apps.
 
 ### NGINX
 
