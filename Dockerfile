@@ -14,7 +14,7 @@ COPY . .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm config set store-dir /pnpm/store && \
     pnpm install --prefer-offline --frozen-lockfile && \
-    pnpm build:packages
+    pnpm build:libraries && pnpm build:modules
 
 # Build blog
 FROM deps AS blog-builder
