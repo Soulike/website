@@ -1,5 +1,5 @@
 {
-  "name": "@website/i18n",
+  "name": "@website/blog-i18n",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {

@@ -1,4 +1,4 @@
-import {getI18nString, STRING_KEY} from '@website/i18n';
+import {getI18nString, STRING_KEY} from '@website/blog-i18n';
 import {ModelAccessDeniedError} from '@website/model';
 import {notification} from 'antd';
 

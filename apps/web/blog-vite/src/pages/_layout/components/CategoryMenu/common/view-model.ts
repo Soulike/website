@@ -1,4 +1,4 @@
-import {STRING_KEY, useI18nString} from '@website/i18n';
+import {STRING_KEY, useI18nString} from '@website/blog-i18n';
 import {CategoryModelHooks} from '@website/model/react/blog';
 
 import type {MenuItemLabels} from './menu-helpers.js';

@@ -1,6 +1,6 @@
+import {STRING_KEY, useI18nString} from '@website/blog-i18n';
 import {Article, Category} from '@website/classes';
 import {useLazyPromise} from '@website/hooks';
-import {STRING_KEY, useI18nString} from '@website/i18n';
 import {articleModel, categoryModel} from '@website/model/blog';
 import {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router';

@@ -114,15 +114,15 @@ importers:
       '@ant-design/v5-patch-for-react-19':
         specifier: ^1.0.3
         version: 1.0.3(antd@5.27.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@website/blog-i18n':
+        specifier: workspace:^
+        version: link:../../../modules/web/blog-i18n
       '@website/classes':
         specifier: workspace:^
         version: link:../../../modules/universal/classes
       '@website/hooks':
         specifier: workspace:^
         version: link:../../../libraries/web/hooks
-      '@website/i18n':
-        specifier: workspace:^
-        version: link:../../../modules/web/i18n
       '@website/model':
         specifier: workspace:^
         version: link:../../../modules/web/model
@@ -196,6 +196,9 @@ importers:
       '@ant-design/icons':
         specifier: ^6.0.0
         version: 6.0.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@website/blog-i18n':
+        specifier: workspace:^
+        version: link:../../../modules/web/blog-i18n
       '@website/classes':
         specifier: workspace:^
         version: link:../../../modules/universal/classes
@@ -205,9 +208,6 @@ importers:
       '@website/hooks':
         specifier: workspace:^
         version: link:../../../libraries/web/hooks
-      '@website/i18n':
-        specifier: workspace:^
-        version: link:../../../modules/web/i18n
       '@website/model':
         specifier: workspace:^
         version: link:../../../modules/web/model
@@ -906,7 +906,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
 
-  modules/web/i18n:
+  modules/web/blog-i18n:
     dependencies:
       '@website/i18n-base':
         specifier: workspace:^
