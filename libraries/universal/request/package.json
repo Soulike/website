@@ -10,8 +10,8 @@
   },
   "devDependencies": {
     "@types/assert": "^1.5.11",
-    "@library/eslint-config": "workspace:^",
-    "@library/ts-config": "workspace:^",
+    "@config/eslint": "workspace:^",
+    "@config/typescript": "workspace:^",
     "assert": "^2.1.0",
     "typescript": "^5.9.2"
   }

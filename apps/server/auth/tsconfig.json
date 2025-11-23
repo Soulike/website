@@ -1,5 +1,5 @@
 {
-  "extends": "@library/ts-config/node",
+  "extends": "@config/typescript/node",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",

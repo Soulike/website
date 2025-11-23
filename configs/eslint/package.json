@@ -1,5 +1,5 @@
 {
-  "name": "@library/eslint-config",
+  "name": "@config/eslint",
   "description": "ESLint configuration for website",
   "private": true,
   "type": "module",

@@ -6,8 +6,8 @@
     "build": "rm -rf dist && tsc"
   },
   "devDependencies": {
-    "@library/eslint-config": "workspace:^",
-    "@library/ts-config": "workspace:^"
+    "@config/eslint": "workspace:^",
+    "@config/typescript": "workspace:^"
   },
   "dependencies": {
     "zod": "^4.1.9"

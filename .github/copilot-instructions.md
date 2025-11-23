@@ -57,7 +57,13 @@ All apps share the same `Dockerfile` at project root.
 
 ### NPM Packages
 
-Packages are organized into two top-level categories:
+Packages are organized into three top-level categories:
+
+#### Configurations
+
+Shared configuration packages used across the monorepo.
+
+- Under `configs/` - Contains ESLint and TypeScript configurations.
 
 #### Business Modules
 

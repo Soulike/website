@@ -11,8 +11,8 @@
     "highlight.js": "^11.11.1"
   },
   "devDependencies": {
-    "@library/eslint-config": "workspace:^",
-    "@library/ts-config": "workspace:^",
+    "@config/eslint": "workspace:^",
+    "@config/typescript": "workspace:^",
     "esbuild": "^0.25.9"
   },
   "scripts": {
