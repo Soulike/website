@@ -43,22 +43,22 @@ importers:
         version: 14.0.0
       '@server/database':
         specifier: workspace:^
-        version: link:../../../packages/server/database
+        version: link:../../../modules/server/database
       '@server/koa-middlewares':
         specifier: workspace:^
-        version: link:../../../packages/server/koa-middlewares
+        version: link:../../../libraries/server/koa-middlewares
       '@server/logger':
         specifier: workspace:^
-        version: link:../../../packages/server/logger
+        version: link:../../../libraries/server/logger
       '@universal/task-runner':
         specifier: workspace:^
-        version: link:../../../packages/universal/task-runner
+        version: link:../../../libraries/universal/task-runner
       '@website/classes':
         specifier: workspace:^
-        version: link:../../../packages/universal/classes
+        version: link:../../../modules/universal/classes
       '@website/object-helpers':
         specifier: workspace:^
-        version: link:../../../packages/universal/object-helpers
+        version: link:../../../libraries/universal/object-helpers
       http-status-codes:
         specifier: ^2.3.0
         version: 2.3.0
@@ -92,10 +92,10 @@ importers:
         version: 3.2.4(vitest@3.2.4(@types/node@22.17.2)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1))
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../../../packages/universal/eslint-config
+        version: link:../../../libraries/universal/eslint-config
       '@website/ts-config':
         specifier: workspace:^
-        version: link:../../../packages/universal/ts-config
+        version: link:../../../libraries/universal/ts-config
       tsc-alias:
         specifier: ^1.8.16
         version: 1.8.16
@@ -116,22 +116,22 @@ importers:
         version: 1.0.3(antd@5.27.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@website/classes':
         specifier: workspace:^
-        version: link:../../../packages/universal/classes
+        version: link:../../../modules/universal/classes
       '@website/hooks':
         specifier: workspace:^
-        version: link:../../../packages/web/hooks
+        version: link:../../../libraries/web/hooks
       '@website/i18n':
         specifier: workspace:^
-        version: link:../../../packages/web/i18n
+        version: link:../../../modules/web/i18n
       '@website/model':
         specifier: workspace:^
-        version: link:../../../packages/web/model
+        version: link:../../../modules/web/model
       '@website/react-components':
         specifier: workspace:^
-        version: link:../../../packages/web/react-components
+        version: link:../../../libraries/web/react-components
       '@website/request':
         specifier: workspace:^
-        version: link:../../../packages/universal/request
+        version: link:../../../libraries/universal/request
       antd:
         specifier: ^5.27.1
         version: 5.27.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -156,7 +156,7 @@ importers:
         version: 4.0.1(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(yaml@2.8.1))
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../../../packages/universal/eslint-config
+        version: link:../../../libraries/universal/eslint-config
       browserslist-to-esbuild:
         specifier: ^2.1.1
         version: 2.1.1(browserslist@4.25.3)
@@ -198,25 +198,25 @@ importers:
         version: 6.0.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@website/classes':
         specifier: workspace:^
-        version: link:../../../packages/universal/classes
+        version: link:../../../modules/universal/classes
       '@website/hitokoto-hooks':
         specifier: workspace:^
-        version: link:../../../packages/web/hitokoto-hooks
+        version: link:../../../libraries/web/hitokoto-hooks
       '@website/hooks':
         specifier: workspace:^
-        version: link:../../../packages/web/hooks
+        version: link:../../../libraries/web/hooks
       '@website/i18n':
         specifier: workspace:^
-        version: link:../../../packages/web/i18n
+        version: link:../../../modules/web/i18n
       '@website/model':
         specifier: workspace:^
-        version: link:../../../packages/web/model
+        version: link:../../../modules/web/model
       '@website/react-components':
         specifier: workspace:^
-        version: link:../../../packages/web/react-components
+        version: link:../../../libraries/web/react-components
       '@website/request':
         specifier: workspace:^
-        version: link:../../../packages/universal/request
+        version: link:../../../libraries/universal/request
       antd:
         specifier: ^5.27.1
         version: 5.27.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -244,7 +244,7 @@ importers:
         version: 4.0.1(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(yaml@2.8.1))
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../../../packages/universal/eslint-config
+        version: link:../../../libraries/universal/eslint-config
       browserslist-to-esbuild:
         specifier: ^2.1.1
         version: 2.1.1(browserslist@4.25.3)
@@ -301,10 +301,10 @@ importers:
         version: 7.3.1(@emotion/react@11.14.0(@types/react@19.1.10)(react@19.1.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.10)(react@19.1.1))(@types/react@19.1.10)(react@19.1.1))(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@universal/task-runner':
         specifier: workspace:^
-        version: link:../../../packages/universal/task-runner
+        version: link:../../../libraries/universal/task-runner
       '@website/hooks':
         specifier: workspace:*
-        version: link:../../../packages/web/hooks
+        version: link:../../../libraries/web/hooks
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -326,7 +326,7 @@ importers:
         version: 19.1.7(@types/react@19.1.10)
       '@universal/test-helpers':
         specifier: workspace:^
-        version: link:../../../packages/universal/test-helpers
+        version: link:../../../libraries/universal/test-helpers
       '@vitejs/plugin-react':
         specifier: ^5.0.1
         version: 5.0.1(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(yaml@2.8.1))
@@ -338,7 +338,7 @@ importers:
         version: 3.2.4(vitest@3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1))
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../../../packages/universal/eslint-config
+        version: link:../../../libraries/universal/eslint-config
       browserslist-to-esbuild:
         specifier: ^2.1.1
         version: 2.1.1(browserslist@4.25.3)
@@ -379,44 +379,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
 
-  packages/server/database:
-    dependencies:
-      '@types/pg':
-        specifier: ^8.15.5
-        version: 8.15.5
-      '@website/classes':
-        specifier: workspace:^
-        version: link:../../universal/classes
-      '@website/object-helpers':
-        specifier: workspace:^
-        version: link:../../universal/object-helpers
-      pg:
-        specifier: ^8.16.3
-        version: 8.16.3
-    devDependencies:
-      '@universal/ts-type-helpers':
-        specifier: workspace:^
-        version: link:../../universal/ts-type-helpers
-      '@vitest/coverage-v8':
-        specifier: ^3.2.4
-        version: 3.2.4(vitest@3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1))
-      '@website/eslint-config':
-        specifier: workspace:^
-        version: link:../../universal/eslint-config
-      '@website/ts-config':
-        specifier: workspace:^
-        version: link:../../universal/ts-config
-      tsc-alias:
-        specifier: ^1.8.16
-        version: 1.8.16
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
-      vitest:
-        specifier: ^3.2.4
-        version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
-
-  packages/server/koa-middlewares:
+  libraries/server/koa-middlewares:
     dependencies:
       koa:
         specifier: '>=2.0.0'
@@ -444,7 +407,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
 
-  packages/server/logger:
+  libraries/server/logger:
     dependencies:
       signale:
         specifier: ^1.4.0
@@ -472,7 +435,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
 
-  packages/universal/async-helpers:
+  libraries/universal/async-helpers:
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^3.2.4
@@ -487,20 +450,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
 
-  packages/universal/classes:
-    dependencies:
-      zod:
-        specifier: ^4.1.9
-        version: 4.1.9
-    devDependencies:
-      '@website/eslint-config':
-        specifier: workspace:^
-        version: link:../eslint-config
-      '@website/ts-config':
-        specifier: workspace:^
-        version: link:../ts-config
-
-  packages/universal/dom-helpers:
+  libraries/universal/dom-helpers:
     dependencies:
       jsdom:
         specifier: ^26.1.0
@@ -519,7 +469,7 @@ importers:
         specifier: workspace:^
         version: link:../ts-config
 
-  packages/universal/eslint-config:
+  libraries/universal/eslint-config:
     devDependencies:
       '@eslint/js':
         specifier: ^9.33.0
@@ -543,7 +493,7 @@ importers:
         specifier: ^8.40.0
         version: 8.40.0(eslint@9.33.0(jiti@2.5.1))(typescript@5.9.2)
 
-  packages/universal/function-helpers:
+  libraries/universal/function-helpers:
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^3.2.4
@@ -558,25 +508,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
 
-  packages/universal/hitokoto-base:
-    devDependencies:
-      '@vitest/coverage-v8':
-        specifier: ^3.2.4
-        version: 3.2.4(vitest@3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1))
-      '@website/eslint-config':
-        specifier: workspace:^
-        version: link:../eslint-config
-      '@website/ts-config':
-        specifier: workspace:^
-        version: link:../ts-config
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
-      vitest:
-        specifier: ^3.2.4
-        version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
-
-  packages/universal/i18n-base:
+  libraries/universal/hitokoto-base:
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^3.2.4
@@ -594,7 +526,25 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
 
-  packages/universal/markdown-html-converter:
+  libraries/universal/i18n-base:
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: ^3.2.4
+        version: 3.2.4(vitest@3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../ts-config
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
+
+  libraries/universal/markdown-html-converter:
     dependencies:
       showdown:
         specifier: ^2.1.0
@@ -610,7 +560,7 @@ importers:
         specifier: workspace:^
         version: link:../ts-config
 
-  packages/universal/object-helpers:
+  libraries/universal/object-helpers:
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^3.2.4
@@ -628,11 +578,11 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
 
-  packages/universal/request:
+  libraries/universal/request:
     dependencies:
       '@website/classes':
         specifier: workspace:^
-        version: link:../classes
+        version: link:../../../modules/universal/classes
     devDependencies:
       '@types/assert':
         specifier: ^1.5.11
@@ -650,32 +600,7 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  packages/universal/session-sdk:
-    dependencies:
-      '@website/classes':
-        specifier: workspace:^
-        version: link:../classes
-      http-status-codes:
-        specifier: ^2.3.0
-        version: 2.3.0
-    devDependencies:
-      '@vitest/coverage-v8':
-        specifier: ^3.2.4
-        version: 3.2.4(vitest@3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1))
-      '@website/eslint-config':
-        specifier: workspace:^
-        version: link:../eslint-config
-      '@website/ts-config':
-        specifier: workspace:^
-        version: link:../ts-config
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
-      vitest:
-        specifier: ^3.2.4
-        version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
-
-  packages/universal/task-runner:
+  libraries/universal/task-runner:
     dependencies:
       '@universal/async-helpers':
         specifier: workspace:^
@@ -700,7 +625,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
 
-  packages/universal/test-helpers:
+  libraries/universal/test-helpers:
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^3.2.4
@@ -715,9 +640,9 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
 
-  packages/universal/ts-config: {}
+  libraries/universal/ts-config: {}
 
-  packages/universal/ts-type-helpers:
+  libraries/universal/ts-type-helpers:
     devDependencies:
       '@website/eslint-config':
         specifier: workspace:^
@@ -729,7 +654,7 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  packages/web/hitokoto-hooks:
+  libraries/web/hitokoto-hooks:
     dependencies:
       '@website/hitokoto-base':
         specifier: workspace:^
@@ -757,7 +682,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
 
-  packages/web/hooks:
+  libraries/web/hooks:
     dependencies:
       react:
         specifier: '>=18.0.0'
@@ -797,7 +722,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
 
-  packages/web/html-code-highlighter:
+  libraries/web/html-code-highlighter:
     dependencies:
       '@website/dom-helpers':
         specifier: workspace:^
@@ -816,47 +741,7 @@ importers:
         specifier: ^0.25.9
         version: 0.25.9
 
-  packages/web/i18n:
-    dependencies:
-      '@website/i18n-base':
-        specifier: workspace:^
-        version: link:../../universal/i18n-base
-      '@website/object-helpers':
-        specifier: workspace:^
-        version: link:../../universal/object-helpers
-      react:
-        specifier: '>=16.8.0'
-        version: 19.1.1
-    devDependencies:
-      '@testing-library/dom':
-        specifier: ^10.4.1
-        version: 10.4.1
-      '@testing-library/react':
-        specifier: ^16.3.0
-        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.1.7(@types/react@19.1.10))(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@types/react':
-        specifier: ^19.1.10
-        version: 19.1.10
-      '@vitejs/plugin-react':
-        specifier: ^5.0.1
-        version: 5.0.1(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(yaml@2.8.1))
-      '@vitest/coverage-v8':
-        specifier: ^3.2.4
-        version: 3.2.4(vitest@3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1))
-      '@website/eslint-config':
-        specifier: workspace:^
-        version: link:../../universal/eslint-config
-      '@website/ts-config':
-        specifier: workspace:^
-        version: link:../../universal/ts-config
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
-      vitest:
-        specifier: ^3.2.4
-        version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
-
-  packages/web/markdown-article-renderer:
+  libraries/web/markdown-article-renderer:
     dependencies:
       '@website/html-code-highlighter':
         specifier: workspace:^
@@ -881,44 +766,7 @@ importers:
         specifier: ^0.25.9
         version: 0.25.9
 
-  packages/web/model:
-    dependencies:
-      '@website/classes':
-        specifier: workspace:^
-        version: link:../../universal/classes
-      '@website/eslint-config':
-        specifier: workspace:^
-        version: link:../../universal/eslint-config
-      '@website/hooks':
-        specifier: workspace:^
-        version: link:../hooks
-      '@website/request':
-        specifier: workspace:^
-        version: link:../../universal/request
-      path-browserify:
-        specifier: '>=1.0.0'
-        version: 1.0.1
-      react:
-        specifier: '>=16.8.0'
-        version: 19.1.1
-      react-dom:
-        specifier: '>=16.8.0'
-        version: 19.1.1(react@19.1.1)
-    devDependencies:
-      '@types/react':
-        specifier: ^19.1.10
-        version: 19.1.10
-      '@website/ts-config':
-        specifier: workspace:^
-        version: link:../../universal/ts-config
-      tsc-alias:
-        specifier: ^1.8.16
-        version: 1.8.16
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
-
-  packages/web/react-components:
+  libraries/web/react-components:
     dependencies:
       '@website/hooks':
         specifier: workspace:^
@@ -955,7 +803,187 @@ importers:
         specifier: ^19.1.1
         version: 19.1.1(react@19.1.1)
 
-  packages/web/session-context:
+  libraries/web/tex-renderer:
+    dependencies:
+      '@types/katex':
+        specifier: ^0.16.7
+        version: 0.16.7
+      '@website/dom-helpers':
+        specifier: workspace:^
+        version: link:../../universal/dom-helpers
+      html-entities:
+        specifier: ^2.6.0
+        version: 2.6.0
+      katex:
+        specifier: ^0.16.22
+        version: 0.16.22
+    devDependencies:
+      '@types/jsdom':
+        specifier: ^21.1.7
+        version: 21.1.7
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../../universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../universal/ts-config
+      esbuild:
+        specifier: ^0.25.9
+        version: 0.25.9
+
+  modules/server/database:
+    dependencies:
+      '@types/pg':
+        specifier: ^8.15.5
+        version: 8.15.5
+      '@website/classes':
+        specifier: workspace:^
+        version: link:../../universal/classes
+      '@website/object-helpers':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/object-helpers
+      pg:
+        specifier: ^8.16.3
+        version: 8.16.3
+    devDependencies:
+      '@universal/ts-type-helpers':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/ts-type-helpers
+      '@vitest/coverage-v8':
+        specifier: ^3.2.4
+        version: 3.2.4(vitest@3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/ts-config
+      tsc-alias:
+        specifier: ^1.8.16
+        version: 1.8.16
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
+
+  modules/universal/classes:
+    dependencies:
+      zod:
+        specifier: ^4.1.9
+        version: 4.1.9
+    devDependencies:
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/ts-config
+
+  modules/universal/session-sdk:
+    dependencies:
+      '@website/classes':
+        specifier: workspace:^
+        version: link:../classes
+      http-status-codes:
+        specifier: ^2.3.0
+        version: 2.3.0
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: ^3.2.4
+        version: 3.2.4(vitest@3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/ts-config
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
+
+  modules/web/i18n:
+    dependencies:
+      '@website/i18n-base':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/i18n-base
+      '@website/object-helpers':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/object-helpers
+      react:
+        specifier: '>=16.8.0'
+        version: 19.1.1
+    devDependencies:
+      '@testing-library/dom':
+        specifier: ^10.4.1
+        version: 10.4.1
+      '@testing-library/react':
+        specifier: ^16.3.0
+        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.1.7(@types/react@19.1.10))(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@types/react':
+        specifier: ^19.1.10
+        version: 19.1.10
+      '@vitejs/plugin-react':
+        specifier: ^5.0.1
+        version: 5.0.1(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(yaml@2.8.1))
+      '@vitest/coverage-v8':
+        specifier: ^3.2.4
+        version: 3.2.4(vitest@3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1))
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/eslint-config
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/ts-config
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
+
+  modules/web/model:
+    dependencies:
+      '@website/classes':
+        specifier: workspace:^
+        version: link:../../universal/classes
+      '@website/eslint-config':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/eslint-config
+      '@website/hooks':
+        specifier: workspace:^
+        version: link:../../../libraries/web/hooks
+      '@website/request':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/request
+      path-browserify:
+        specifier: '>=1.0.0'
+        version: 1.0.1
+      react:
+        specifier: '>=16.8.0'
+        version: 19.1.1
+      react-dom:
+        specifier: '>=16.8.0'
+        version: 19.1.1(react@19.1.1)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.1.10
+        version: 19.1.10
+      '@website/ts-config':
+        specifier: workspace:^
+        version: link:../../../libraries/universal/ts-config
+      tsc-alias:
+        specifier: ^1.8.16
+        version: 1.8.16
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+
+  modules/web/session-context:
     dependencies:
       react:
         specifier: '>=18.0.0'
@@ -984,10 +1012,10 @@ importers:
         version: link:../../universal/classes
       '@website/eslint-config':
         specifier: workspace:^
-        version: link:../../universal/eslint-config
+        version: link:../../../libraries/universal/eslint-config
       '@website/ts-config':
         specifier: workspace:^
-        version: link:../../universal/ts-config
+        version: link:../../../libraries/universal/ts-config
       antd:
         specifier: ^5.27.1
         version: 5.27.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -1000,34 +1028,6 @@ importers:
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
-
-  packages/web/tex-renderer:
-    dependencies:
-      '@types/katex':
-        specifier: ^0.16.7
-        version: 0.16.7
-      '@website/dom-helpers':
-        specifier: workspace:^
-        version: link:../../universal/dom-helpers
-      html-entities:
-        specifier: ^2.6.0
-        version: 2.6.0
-      katex:
-        specifier: ^0.16.22
-        version: 0.16.22
-    devDependencies:
-      '@types/jsdom':
-        specifier: ^21.1.7
-        version: 21.1.7
-      '@website/eslint-config':
-        specifier: workspace:^
-        version: link:../../universal/eslint-config
-      '@website/ts-config':
-        specifier: workspace:^
-        version: link:../../universal/ts-config
-      esbuild:
-        specifier: ^0.25.9
-        version: 0.25.9
 
 packages:
   '@ampproject/remapping@2.3.0':
@@ -9408,7 +9408,7 @@ snapshots:
 
   '@types/jsdom@21.1.7':
     dependencies:
-      '@types/node': 24.3.0
+      '@types/node': 22.17.2
       '@types/tough-cookie': 4.0.5
       parse5: 7.3.0
 
@@ -9451,12 +9451,13 @@ snapshots:
   '@types/node@24.3.0':
     dependencies:
       undici-types: 7.10.0
+    optional: true
 
   '@types/parse-json@4.0.2': {}
 
   '@types/pg@8.15.5':
     dependencies:
-      '@types/node': 24.3.0
+      '@types/node': 22.17.2
       pg-protocol: 1.10.3
       pg-types: 2.2.0
 
@@ -9493,7 +9494,7 @@ snapshots:
 
   '@types/signale@1.4.7':
     dependencies:
-      '@types/node': 24.3.0
+      '@types/node': 22.17.2
 
   '@types/stylis@4.2.5': {}
 
@@ -12861,7 +12862,8 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici-types@7.10.0: {}
+  undici-types@7.10.0:
+    optional: true
 
   unicorn-magic@0.1.0: {}
 

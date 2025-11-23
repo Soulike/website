@@ -6,16 +6,15 @@ import {Category, ServerResponse} from '@website/classes';
 import {Request} from '@website/request';
 
 class CategoryModel {
+  private static readonly PATH = Object.freeze({
+    GET_ALL: CategoryModel.prependCategoryPrefix('/getAll'),
+    GET_BY_ID: CategoryModel.prependCategoryPrefix('/getById'),
+  });
   private allCategoriesCachedPromise: Promise<Category[]> | null = null;
   private idToCategoryCachedPromise = new Map<
     Category['id'],
     Promise<Category>
   >();
-
-  private static readonly PATH = Object.freeze({
-    GET_ALL: CategoryModel.prependCategoryPrefix('/getAll'),
-    GET_BY_ID: CategoryModel.prependCategoryPrefix('/getById'),
-  });
 
   private static prependCategoryPrefix(subPath: string): string {
     return prependServerPrefix(path.join('category', subPath));
