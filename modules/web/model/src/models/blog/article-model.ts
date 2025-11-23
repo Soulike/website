@@ -1,9 +1,9 @@
 import path from 'node:path';
 
+import {Request} from '@library/request';
 import {ModelAccessDeniedError} from '@models/model-access-error.js';
 import {prependServerPrefix} from '@models/path-helper.js';
-import {Article, ServerResponse} from '@website/classes';
-import {Request} from '@website/request';
+import {Article, ServerResponse} from '@module/classes';
 
 class ArticleModel {
   private static readonly PATH = Object.freeze({

@@ -1,5 +1,5 @@
 {
-  "name": "@universal/session-sdk",
+  "name": "@module/session-sdk",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
@@ -7,13 +7,13 @@
     "build": "rm -rf dist && tsc"
   },
   "dependencies": {
-    "@website/classes": "workspace:^",
+    "@module/classes": "workspace:^",
     "http-status-codes": "^2.3.0"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^3.2.4",
-    "@website/eslint-config": "workspace:^",
-    "@website/ts-config": "workspace:^",
+    "@library/eslint-config": "workspace:^",
+    "@library/ts-config": "workspace:^",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   }

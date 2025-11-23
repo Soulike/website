@@ -1,5 +1,5 @@
-import {Category} from '@website/classes';
-import {isObjectEmpty} from '@website/object-helpers';
+import {isObjectEmpty} from '@library/object-helpers';
+import {Category} from '@module/classes';
 
 import {OrderConfig} from '@/types.js';
 

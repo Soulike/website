@@ -1,4 +1,4 @@
-import eslintConfig from '@website/eslint-config';
+import eslintConfig from '@library/eslint-config';
 import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default [

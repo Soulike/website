@@ -1,5 +1,5 @@
-import {User} from '@website/classes';
-import {isObjectEmpty} from '@website/object-helpers';
+import {isObjectEmpty} from '@library/object-helpers';
+import {User} from '@module/classes';
 
 import {query} from '@/helpers/query-helpers.js';
 import {

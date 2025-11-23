@@ -1,5 +1,5 @@
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
-import {type Category} from '@website/classes';
+import {type Category} from '@module/classes';
 import {
   Button,
   type ButtonProps,

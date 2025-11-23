@@ -1,4 +1,4 @@
-import {MarkdownArticleRenderer} from '@website/markdown-article-renderer/ssr';
+import {MarkdownArticleRenderer} from '@library/markdown-article-renderer/ssr';
 
 import {MarkdownView} from '../../shared-views/MarkdownView/index.js';
 

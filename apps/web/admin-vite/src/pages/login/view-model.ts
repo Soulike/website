@@ -1,8 +1,8 @@
 import assert from 'node:assert';
 
-import {useTextInput} from '@website/hooks';
-import {AccountModel} from '@website/model/admin';
-import {AccountModelHooks} from '@website/model/react/admin';
+import {useTextInput} from '@library/hooks';
+import {AccountModel} from '@module/model/admin';
+import {AccountModelHooks} from '@module/model/react/admin';
 import {useCallback, useLayoutEffect, useMemo, useState} from 'react';
 
 export function useViewModel() {

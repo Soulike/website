@@ -1,4 +1,4 @@
-import {type Article} from '@website/classes';
+import {type Article} from '@module/classes';
 import type {PaginationConfig} from 'antd/lib/pagination';
 import {useCallback, useRef, useState} from 'react';
 

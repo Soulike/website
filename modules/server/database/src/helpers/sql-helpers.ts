@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 
-import {ValueType} from '@universal/ts-type-helpers';
-import {removeUndefinedFieldsShallow} from '@website/object-helpers';
+import {removeUndefinedFieldsShallow} from '@library/object-helpers';
+import {ValueType} from '@library/ts-type-helpers';
 
 import {OrderConfig} from '@/types.js';
 

@@ -1,4 +1,4 @@
-import type {Category} from '@website/classes';
+import type {Category} from '@module/classes';
 import {Menu, Spin} from 'antd';
 import {useMemo} from 'react';
 

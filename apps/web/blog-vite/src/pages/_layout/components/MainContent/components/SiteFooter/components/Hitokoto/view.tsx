@@ -1,4 +1,4 @@
-import {SentenceCategory, useHitokoto} from '@website/hitokoto-hooks';
+import {SentenceCategory, useHitokoto} from '@library/hitokoto-hooks';
 import {useMemo} from 'react';
 
 export function Hitokoto() {

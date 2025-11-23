@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 
-import {concurrentPromiseTaskRunner} from '@universal/task-runner';
-import {User, UserInfo} from '@website/classes';
+import {concurrentPromiseTaskRunner} from '@library/task-runner';
+import {User, UserInfo} from '@module/classes';
 
 import {Context} from '@/dispatcher/types.js';
 import {CheckUserTask} from '@/tasks/check-user-task.js';

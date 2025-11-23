@@ -1,4 +1,4 @@
-import '@website/markdown-article-renderer/style.css';
+import '@library/markdown-article-renderer/style.css';
 
 import {MarkdownArticle} from './components/MarkdownArticle/index.js';
 

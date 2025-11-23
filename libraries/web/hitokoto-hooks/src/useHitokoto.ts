@@ -1,4 +1,4 @@
-import {hitokoto, SentenceCategory} from '@website/hitokoto-base';
+import {hitokoto, SentenceCategory} from '@library/hitokoto-base';
 import {useEffect, useState} from 'react';
 
 export function useHitokoto(

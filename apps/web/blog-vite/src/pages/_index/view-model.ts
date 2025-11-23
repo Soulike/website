@@ -1,5 +1,5 @@
-import {STRING_KEY, useI18nString} from '@website/blog-i18n';
-import {ArticleModelHooks} from '@website/model/react/blog';
+import {STRING_KEY, useI18nString} from '@module/blog-i18n';
+import {ArticleModelHooks} from '@module/model/react/blog';
 
 export function useViewModel() {
   const {

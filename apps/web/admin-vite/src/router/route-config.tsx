@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import {ErrorBoundary} from '@website/react-components';
+import {ErrorBoundary} from '@library/react-components';
 import {Suspense} from 'react';
 import {Outlet, RouteObject} from 'react-router';
 

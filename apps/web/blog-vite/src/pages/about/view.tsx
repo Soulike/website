@@ -1,4 +1,4 @@
-import {Markdown, MarkdownProps} from '@website/react-components/csr';
+import {Markdown, MarkdownProps} from '@library/react-components/csr';
 import {Skeleton} from 'antd';
 
 import style from './style.module.css';

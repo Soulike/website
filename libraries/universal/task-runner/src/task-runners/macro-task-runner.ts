@@ -1,4 +1,4 @@
-import {queueMacroTask} from '@universal/async-helpers';
+import {queueMacroTask} from '@library/async-helpers';
 
 import {SyncTaskRunner} from './base/sync-task-runner.js';
 

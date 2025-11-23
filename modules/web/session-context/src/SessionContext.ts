@@ -1,5 +1,5 @@
-import {createSession, deleteSession} from '@universal/session-sdk';
-import {UserInfo} from '@website/classes';
+import {UserInfo} from '@module/classes';
+import {createSession, deleteSession} from '@module/session-sdk';
 import {createContext} from 'react';
 
 export interface SessionContextValue {

@@ -1,17 +1,17 @@
 {
-  "name": "@website/request",
+  "name": "@library/request",
   "main": "dist/index.js",
   "type": "module",
   "dependencies": {
-    "@website/classes": "workspace:^"
+    "@module/classes": "workspace:^"
   },
   "scripts": {
     "build": "rm -rf dist && tsc"
   },
   "devDependencies": {
     "@types/assert": "^1.5.11",
-    "@website/eslint-config": "workspace:^",
-    "@website/ts-config": "workspace:^",
+    "@library/eslint-config": "workspace:^",
+    "@library/ts-config": "workspace:^",
     "assert": "^2.1.0",
     "typescript": "^5.9.2"
   }

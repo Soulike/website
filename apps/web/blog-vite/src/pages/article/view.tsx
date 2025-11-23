@@ -1,6 +1,6 @@
 import {ClockCircleOutlined, TagOutlined} from '@ant-design/icons';
-import {Article, type Category} from '@website/classes';
-import {Markdown} from '@website/react-components/csr';
+import {Markdown} from '@library/react-components/csr';
+import {Article, type Category} from '@module/classes';
 import {Alert, Skeleton, Tag} from 'antd';
 
 import {getDateString} from '@/helpers/date-helpers.js';

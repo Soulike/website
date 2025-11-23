@@ -1,4 +1,4 @@
-import {Article as ArticleClass, Category} from '@website/classes';
+import {Article as ArticleClass, Category} from '@module/classes';
 import {useEffect, useMemo} from 'react';
 
 import {showErrorNotification} from '@/helpers/error-notification-helper.js';

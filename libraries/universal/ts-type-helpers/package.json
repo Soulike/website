@@ -1,5 +1,5 @@
 {
-  "name": "@universal/ts-type-helpers",
+  "name": "@library/ts-type-helpers",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
@@ -7,8 +7,8 @@
     "build": "rm -rf dist && tsc"
   },
   "devDependencies": {
-    "@website/eslint-config": "workspace:^",
-    "@website/ts-config": "workspace:^",
+    "@library/eslint-config": "workspace:^",
+    "@library/ts-config": "workspace:^",
     "typescript": "^5.9.2"
   }
 }

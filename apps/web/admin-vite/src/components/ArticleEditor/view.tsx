@@ -1,4 +1,4 @@
-import {Article, type Category, NewArticle} from '@website/classes';
+import {Article, type Category, NewArticle} from '@module/classes';
 import {
   Button,
   type ButtonProps,

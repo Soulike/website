@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 
 import {bodyParser} from '@koa/bodyparser';
-import {Logger} from '@server/logger';
+import {Logger} from '@library/logger';
 import Koa from 'koa';
 import session from 'koa-session';
 

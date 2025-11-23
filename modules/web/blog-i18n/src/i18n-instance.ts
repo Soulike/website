@@ -1,4 +1,4 @@
-import {createI18n} from '@website/i18n';
+import {createI18n} from '@library/i18n';
 
 import {PLACEHOLDER_MARK} from './constants.js';
 import {LanguageCode} from './language-code.js';

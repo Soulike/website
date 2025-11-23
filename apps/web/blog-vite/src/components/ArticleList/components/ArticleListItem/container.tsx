@@ -1,4 +1,4 @@
-import type {Article} from '@website/classes';
+import type {Article} from '@module/classes';
 import {List} from 'antd';
 import {useEffect} from 'react';
 

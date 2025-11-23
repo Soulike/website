@@ -1,6 +1,6 @@
-import {STRING_KEY, useI18nString} from '@website/blog-i18n';
-import {OptionModelHooks} from '@website/model/react/blog';
-import {useMarkdown} from '@website/react-components/csr';
+import {useMarkdown} from '@library/react-components/csr';
+import {STRING_KEY, useI18nString} from '@module/blog-i18n';
+import {OptionModelHooks} from '@module/model/react/blog';
 
 export function useViewModel() {
   const {about, loading: aboutLoading} = OptionModelHooks.useAbout();

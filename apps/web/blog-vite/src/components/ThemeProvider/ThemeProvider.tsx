@@ -1,6 +1,6 @@
 import './style.css';
 
-import {ColorScheme, useColorScheme} from '@website/hooks';
+import {ColorScheme, useColorScheme} from '@library/hooks';
 import {App, ConfigProvider, theme} from 'antd';
 import {JSX} from 'react';
 

@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 
-import {assertIsTest} from '@universal/test-helpers';
+import {assertIsTest} from '@library/test-helpers';
 
 import {EMPTY_TILE_VALUE, GRID_SIDE_LENGTH} from '@/constants/configs.js';
 

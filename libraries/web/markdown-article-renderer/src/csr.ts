@@ -3,9 +3,9 @@ export class MarkdownArticleRenderer {
     // For code split as they are huge packages
     const [{HtmlCodeHighlighter}, {MarkdownHtmlConverter}, {TeXRenderer}] =
       await Promise.all([
-        import('@website/html-code-highlighter/csr'),
-        import('@website/markdown-html-converter'),
-        import('@website/tex-renderer'),
+        import('@library/html-code-highlighter/csr'),
+        import('@library/markdown-html-converter'),
+        import('@library/tex-renderer'),
       ]);
     let html = MarkdownHtmlConverter.toHtml(markdown);
     html = HtmlCodeHighlighter.highlightAll(html);

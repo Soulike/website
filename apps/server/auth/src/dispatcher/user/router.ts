@@ -1,6 +1,6 @@
 import Router from '@koa/router';
-import {Logger} from '@server/logger';
-import {User} from '@website/classes';
+import {Logger} from '@library/logger';
+import {User} from '@module/classes';
 import {StatusCodes} from 'http-status-codes';
 import {DefaultState} from 'koa';
 

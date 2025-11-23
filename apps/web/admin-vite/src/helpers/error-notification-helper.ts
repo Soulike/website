@@ -1,5 +1,5 @@
-import {getI18nString, STRING_KEY} from '@website/blog-i18n';
-import {ModelAccessDeniedError} from '@website/model';
+import {getI18nString, STRING_KEY} from '@module/blog-i18n';
+import {ModelAccessDeniedError} from '@module/model';
 import {notification} from 'antd';
 
 export function showErrorNotification(error: unknown) {

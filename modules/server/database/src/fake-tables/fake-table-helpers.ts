@@ -1,4 +1,4 @@
-import {isObjectEmpty} from '@website/object-helpers';
+import {isObjectEmpty} from '@library/object-helpers';
 
 import {OrderConfig} from '@/types.js';
 

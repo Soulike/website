@@ -1,5 +1,5 @@
 {
-  "name": "@website/tex-renderer",
+  "name": "@library/tex-renderer",
   "type": "module",
   "exports": {
     ".": "./dist/TeXRenderer.js",
@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@types/katex": "^0.16.7",
-    "@website/dom-helpers": "workspace:^",
+    "@library/dom-helpers": "workspace:^",
     "html-entities": "^2.6.0",
     "katex": "^0.16.22"
   },
@@ -16,8 +16,8 @@
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
-    "@website/eslint-config": "workspace:^",
-    "@website/ts-config": "workspace:^",
+    "@library/eslint-config": "workspace:^",
+    "@library/ts-config": "workspace:^",
     "esbuild": "^0.25.9"
   }
 }

@@ -1,12 +1,12 @@
 import {setTimeout} from 'node:timers/promises';
 
-import {sequentialPromiseTaskRunner} from '@universal/task-runner';
 import {
   type ArrowKeyHandlers,
   type SwipeHandlers,
   useArrowKeys,
   useSwipeGestures,
-} from '@website/hooks';
+} from '@library/hooks';
+import {sequentialPromiseTaskRunner} from '@library/task-runner';
 import {type RefObject, useCallback, useEffect, useState} from 'react';
 
 import {TILE_MOVE_ANIMATION_DURATION} from '@/constants/animation.js';

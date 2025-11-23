@@ -1,5 +1,5 @@
 {
-  "name": "@website/react-components",
+  "name": "@library/react-components",
   "type": "module",
   "exports": {
     "./csr": "./dist/csr/index.js",
@@ -8,16 +8,16 @@
     ".": "./dist/universal/index.js"
   },
   "dependencies": {
-    "@website/hooks": "workspace:^",
-    "@website/markdown-article-renderer": "workspace:^",
+    "@library/hooks": "workspace:^",
+    "@library/markdown-article-renderer": "workspace:^",
     "dompurify": "^3.2.6",
     "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
-    "@website/eslint-config": "workspace:^",
-    "@website/ts-config": "workspace:^",
+    "@library/eslint-config": "workspace:^",
+    "@library/ts-config": "workspace:^",
     "esbuild": "^0.25.9",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
