@@ -1,4 +1,4 @@
-import {Article} from '@website/classes';
+import {Article} from '@module/classes';
 
 import {ArticleList} from '@/components/ArticleList';
 

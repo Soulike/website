@@ -1,6 +1,6 @@
-import {Category} from '@website/classes';
-import {useLazyPromise} from '@website/hooks';
-import {articleModel} from '@website/model/blog';
+import {useLazyPromise} from '@library/hooks';
+import {Category} from '@module/classes';
+import {articleModel} from '@module/model/blog';
 import {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router';
 

@@ -1,6 +1,6 @@
-import type {RejectCallback, ResolveCallback} from '@website/hooks';
-import {usePromise} from '@website/hooks';
-import {AccountModel} from '@website/model/admin';
+import type {RejectCallback, ResolveCallback} from '@library/hooks';
+import {usePromise} from '@library/hooks';
+import {AccountModel} from '@module/model/admin';
 import {useMemo} from 'react';
 
 export const AccountModelHooks = {

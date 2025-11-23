@@ -3,7 +3,7 @@ import {
   CreateSessionResult,
   deleteSession as deleteSessionApi,
   getSession,
-} from '@universal/session-sdk';
+} from '@module/session-sdk';
 import {
   ReactNode,
   useCallback,

@@ -1,4 +1,4 @@
-import {useTextInput} from '@website/hooks';
+import {useTextInput} from '@library/hooks';
 import {
   type ButtonProps,
   message,

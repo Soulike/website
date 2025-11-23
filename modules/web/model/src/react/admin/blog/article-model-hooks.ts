@@ -1,8 +1,8 @@
 import assert from 'node:assert';
 
+import {RejectCallback, ResolveCallback, usePromise} from '@library/hooks';
 import {ArticleModel} from '@models/admin/blog/article-model.js';
-import {Article} from '@website/classes';
-import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
+import {Article} from '@module/classes';
 import {useEffect, useMemo, useState} from 'react';
 
 export const ArticleModelHooks = {

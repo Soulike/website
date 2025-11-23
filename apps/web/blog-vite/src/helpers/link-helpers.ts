@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import {Article, Category} from '@website/classes';
+import {Article, Category} from '@module/classes';
 
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config';
 

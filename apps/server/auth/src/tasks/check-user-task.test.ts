@@ -1,10 +1,10 @@
-import {FakeUserTable} from '@server/database/fake';
-import {User} from '@website/classes';
+import {User} from '@module/classes';
+import {FakeUserTable} from '@module/database/fake';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
 import {CheckUserTask} from './check-user-task.js';
 
-vi.mock('@server/database', () => {
+vi.mock('@module/database', () => {
   return {
     UserTable: FakeUserTable,
   };

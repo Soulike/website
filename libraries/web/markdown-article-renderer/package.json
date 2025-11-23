@@ -1,5 +1,5 @@
 {
-  "name": "@website/markdown-article-renderer",
+  "name": "@library/markdown-article-renderer",
   "type": "module",
   "exports": {
     "./csr": "./dist/csr.js",
@@ -7,14 +7,14 @@
     "./style.css": "./dist/style.css"
   },
   "dependencies": {
-    "@website/html-code-highlighter": "workspace:^",
-    "@website/markdown-html-converter": "workspace:^",
-    "@website/tex-renderer": "workspace:^"
+    "@library/html-code-highlighter": "workspace:^",
+    "@library/markdown-html-converter": "workspace:^",
+    "@library/tex-renderer": "workspace:^"
   },
   "devDependencies": {
     "@types/showdown": "^2.0.6",
-    "@website/eslint-config": "workspace:^",
-    "@website/ts-config": "workspace:^",
+    "@library/eslint-config": "workspace:^",
+    "@library/ts-config": "workspace:^",
     "esbuild": "^0.25.9"
   },
   "scripts": {

@@ -3,8 +3,8 @@ import {
   EyeOutlined,
   TagsOutlined,
 } from '@ant-design/icons';
-import {type Category} from '@website/classes';
-import {Markdown} from '@website/react-components/csr';
+import {Markdown} from '@library/react-components/csr';
+import {type Category} from '@module/classes';
 import {Card, Tag} from 'antd';
 
 import {getDateString} from '@/helpers/date-helpers.js';

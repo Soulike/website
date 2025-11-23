@@ -1,5 +1,5 @@
 {
-  "name": "@website/model",
+  "name": "@module/model",
   "private": true,
   "type": "module",
   "exports": {
@@ -13,14 +13,14 @@
     "build": "rm -rf dist && tsc && tsc-alias"
   },
   "dependencies": {
-    "@website/classes": "workspace:^",
-    "@website/eslint-config": "workspace:^",
-    "@website/hooks": "workspace:^",
-    "@website/request": "workspace:^"
+    "@module/classes": "workspace:^",
+    "@library/eslint-config": "workspace:^",
+    "@library/hooks": "workspace:^",
+    "@library/request": "workspace:^"
   },
   "devDependencies": {
     "@types/react": "^19.1.10",
-    "@website/ts-config": "workspace:^",
+    "@library/ts-config": "workspace:^",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.2"
   },

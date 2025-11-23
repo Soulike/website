@@ -1,4 +1,4 @@
-import {type Category} from '@website/classes';
+import {type Category} from '@module/classes';
 import {Modal, type ModalProps} from 'antd';
 
 import {ArticleList} from '@/components/ArticleList';

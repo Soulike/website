@@ -1,4 +1,4 @@
-import {useModal} from '@website/hooks';
+import {useModal} from '@library/hooks';
 import {useCallback, useEffect, useState} from 'react';
 
 import {

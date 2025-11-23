@@ -1,6 +1,6 @@
-import {UserTable} from '@server/database';
-import {PromiseTask} from '@universal/task-runner';
-import {User} from '@website/classes';
+import {PromiseTask} from '@library/task-runner';
+import {User} from '@module/classes';
+import {UserTable} from '@module/database';
 
 /**
  * Check if `user` matches the record in database.

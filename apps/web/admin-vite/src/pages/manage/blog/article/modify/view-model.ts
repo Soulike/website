@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 
-import {Article, NewArticle} from '@website/classes';
-import {BlogModels} from '@website/model/admin';
+import {Article, NewArticle} from '@module/classes';
+import {BlogModels} from '@module/model/admin';
 import {useCallback, useLayoutEffect, useMemo, useState} from 'react';
 import {useNavigate, useSearchParams} from 'react-router';
 

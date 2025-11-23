@@ -1,6 +1,6 @@
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
-import {Article, Category} from '@website/classes';
-import {DateString} from '@website/react-components';
+import {DateString} from '@library/react-components';
+import {Article, Category} from '@module/classes';
 import {
   Button,
   ButtonProps,

@@ -1,4 +1,4 @@
-import {useModal} from '@website/hooks';
+import {useModal} from '@library/hooks';
 import {useMemo, useState} from 'react';
 import ReactDOM from 'react-dom';
 

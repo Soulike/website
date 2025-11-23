@@ -1,5 +1,5 @@
 {
-  "name": "@website/ts-config",
+  "name": "@library/ts-config",
   "description": "TypeScript configuration for website",
   "private": true,
   "type": "module",

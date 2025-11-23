@@ -1,4 +1,4 @@
-import {Article} from '@website/classes';
+import {Article} from '@module/classes';
 import {useEffect} from 'react';
 
 import {showErrorNotification} from '@/helpers/error-notification-helper.js';

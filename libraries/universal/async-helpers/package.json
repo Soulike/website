@@ -1,5 +1,5 @@
 {
-  "name": "@universal/async-helpers",
+  "name": "@library/async-helpers",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
@@ -8,8 +8,8 @@
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^3.2.4",
-    "@website/eslint-config": "workspace:^",
-    "@website/ts-config": "workspace:^",
+    "@library/eslint-config": "workspace:^",
+    "@library/ts-config": "workspace:^",
     "vitest": "^3.2.4"
   }
 }

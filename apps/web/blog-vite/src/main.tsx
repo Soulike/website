@@ -3,7 +3,7 @@ import './main.css';
 
 import assert from 'node:assert';
 
-import {ErrorBoundary} from '@website/react-components';
+import {ErrorBoundary} from '@library/react-components';
 import {StrictMode, Suspense} from 'react';
 import {createRoot} from 'react-dom/client';
 

@@ -15,7 +15,7 @@ export function Markdown(props: MarkdownProps) {
 
   const renderChildrenToHtml = useCallback(async () => {
     const {MarkdownArticleRenderer} = await import(
-      '@website/markdown-article-renderer/csr'
+      '@library/markdown-article-renderer/csr'
     );
     return MarkdownArticleRenderer.renderToHtml(children);
   }, [children]);

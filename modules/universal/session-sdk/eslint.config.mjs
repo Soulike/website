@@ -1,3 +1,3 @@
-import eslintConfig from '@website/eslint-config';
+import eslintConfig from '@library/eslint-config';
 
 export default [...eslintConfig.recommendedTypeScript];

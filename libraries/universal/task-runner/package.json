@@ -1,5 +1,5 @@
 {
-  "name": "@universal/task-runner",
+  "name": "@library/task-runner",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
@@ -7,12 +7,12 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@universal/async-helpers": "workspace:^"
+    "@library/async-helpers": "workspace:^"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^3.2.4",
-    "@website/eslint-config": "workspace:^",
-    "@website/ts-config": "workspace:^",
+    "@library/eslint-config": "workspace:^",
+    "@library/ts-config": "workspace:^",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"

@@ -1,5 +1,5 @@
 import reactRefresh from 'eslint-plugin-react-refresh';
-import eslintConfig from '@website/eslint-config';
+import eslintConfig from '@library/eslint-config';
 
 export default [
   ...eslintConfig.recommendedReactTs,

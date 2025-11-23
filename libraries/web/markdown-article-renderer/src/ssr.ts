@@ -1,6 +1,6 @@
-import {HtmlCodeHighlighter} from '@website/html-code-highlighter/ssr';
-import {MarkdownHtmlConverter} from '@website/markdown-html-converter';
-import {TeXRenderer} from '@website/tex-renderer';
+import {HtmlCodeHighlighter} from '@library/html-code-highlighter/ssr';
+import {MarkdownHtmlConverter} from '@library/markdown-html-converter';
+import {TeXRenderer} from '@library/tex-renderer';
 
 export class MarkdownArticleRenderer {
   public static async renderToHtml(markdown: string): Promise<string> {

@@ -1,8 +1,8 @@
 import assert from 'node:assert';
 
-import {Category, NewCategory} from '@website/classes';
-import {useTextInput} from '@website/hooks';
-import {BlogModels} from '@website/model/admin';
+import {useTextInput} from '@library/hooks';
+import {Category, NewCategory} from '@module/classes';
+import {BlogModels} from '@module/model/admin';
 import {useCallback, useMemo, useState} from 'react';
 
 export function useViewModel() {

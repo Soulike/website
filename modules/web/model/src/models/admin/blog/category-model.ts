@@ -1,13 +1,13 @@
 import path from 'node:path';
 
+import {Request} from '@library/request';
 import {ModelAccessDeniedError} from '@models/model-access-error.js';
 import {
   Category,
   CategoryIdToArticleAmount,
   NewCategory,
   ServerResponse,
-} from '@website/classes';
-import {Request} from '@website/request';
+} from '@module/classes';
 
 import {prependBlogPrefix} from './path-helper.js';
 

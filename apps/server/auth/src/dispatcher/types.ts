@@ -1,4 +1,4 @@
-import {UserInfo} from '@website/classes';
+import {UserInfo} from '@module/classes';
 import type {DefaultContext} from 'koa';
 
 export interface Context extends DefaultContext {

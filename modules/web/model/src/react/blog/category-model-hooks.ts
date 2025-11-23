@@ -1,6 +1,6 @@
+import {RejectCallback, ResolveCallback, usePromise} from '@library/hooks';
 import {categoryModel} from '@models/blog/index.js';
-import {Category} from '@website/classes';
-import {RejectCallback, ResolveCallback, usePromise} from '@website/hooks';
+import {Category} from '@module/classes';
 import {useMemo} from 'react';
 
 export const CategoryModelHooks = Object.freeze({
