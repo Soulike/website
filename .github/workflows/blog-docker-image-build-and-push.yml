@@ -6,8 +6,8 @@ on:
       - 'main'
     paths:
       - 'apps/web/blog-vite/**'
-      - 'packages/universal/**'
-      - 'packages/web/**'
+      - 'modules/**'
+      - 'libraries/**'
       - 'pnpm-lock.yaml'
       - 'Dockerfile'
   workflow_dispatch:

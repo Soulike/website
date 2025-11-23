@@ -4,8 +4,9 @@
   "type": "module",
   "scripts": {
     "prepare": "test -d node_modules/husky && husky",
-    "build:packages": "pnpm --filter \"./packages/**\" run -r build",
-    "prebuild:all": "pnpm build:packages",
+    "build:libraries": "pnpm --filter \"./libraries/**\" run -r build",
+    "build:modules": "pnpm --filter \"./modules/**\" run -r build",
+    "prebuild:all": "pnpm build:libraries && pnpm build:modules",
     "build:all": "pnpm --filter \"./apps/**\" run -r build",
     "test": "pnpm -r test",
     "start": "docker compose pull && docker compose down && docker compose up -d",

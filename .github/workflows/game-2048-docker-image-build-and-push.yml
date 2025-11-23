@@ -6,8 +6,7 @@ on:
       - 'main'
     paths:
       - 'apps/web/game-2048/**'
-      - 'packages/universal/**'
-      - 'packages/web/**'
+      - 'libraries/**'
       - 'pnpm-lock.yaml'
       - 'Dockerfile'
   workflow_dispatch:
