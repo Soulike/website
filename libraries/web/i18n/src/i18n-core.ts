@@ -35,6 +35,8 @@ export class I18nCore<
   >;
   private currentLanguageCode: string;
   private keyToString: KeyToString | null;
+  private loadingPromise: Promise<void> | null;
+  private loadingLanguageCode: string | null;
   private readonly languageLoaders: Record<
     string,
     (() => Promise<KeyToString>) | undefined
@@ -46,6 +48,8 @@ export class I18nCore<
     this.eventTypeToListeners = new Map();
     this.currentLanguageCode = navigator.language.toLowerCase();
     this.keyToString = null;
+    this.loadingPromise = null;
+    this.loadingLanguageCode = null;
     this.languageLoaders = config.languageLoaders;
     this.defaultLanguageCode = config.defaultLanguageCode;
     this.placeholderMark = config.placeholderMark;
@@ -72,22 +76,41 @@ export class I18nCore<
    */
   public async ensureStringsLoaded() {
     const languageCode = navigator.language.toLowerCase();
+
+    // If language hasn't changed and strings are loaded, return immediately
     if (languageCode === this.currentLanguageCode && this.keyToString) {
       return;
     }
 
-    const loader =
-      this.languageLoaders[languageCode] ??
-      this.languageLoaders[this.defaultLanguageCode];
-
-    if (!loader) {
-      throw new Error(
-        `No language loader found for ${languageCode} or default language ${this.defaultLanguageCode}`,
-      );
+    // If already loading for this language, return the existing promise
+    if (this.loadingPromise && languageCode === this.loadingLanguageCode) {
+      return this.loadingPromise;
     }
 
-    this.keyToString = await loader();
-    this.currentLanguageCode = languageCode;
+    // Start new loading process
+    this.loadingLanguageCode = languageCode;
+    this.loadingPromise = (async () => {
+      const loader =
+        this.languageLoaders[languageCode] ??
+        this.languageLoaders[this.defaultLanguageCode];
+
+      if (!loader) {
+        throw new Error(
+          `No language loader found for ${languageCode} or default language ${this.defaultLanguageCode}`,
+        );
+      }
+
+      this.keyToString = await loader();
+      this.currentLanguageCode = languageCode;
+    })();
+
+    try {
+      await this.loadingPromise;
+    } finally {
+      // Clear the loading promise when done (success or failure)
+      this.loadingPromise = null;
+      this.loadingLanguageCode = null;
+    }
   }
 
   /**
