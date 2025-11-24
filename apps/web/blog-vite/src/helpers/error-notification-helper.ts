@@ -1,6 +1,7 @@
-import {getI18nString, STRING_KEY} from '@module/blog-i18n';
 import {ModelAccessDeniedError} from '@module/model';
 import {notification} from 'antd';
+
+import {getI18nString, STRING_KEY} from '@/i18n/index.js';
 
 export function showErrorNotification(error: unknown) {
   console.error(error);

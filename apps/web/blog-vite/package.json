@@ -15,7 +15,7 @@
     "@module/classes": "workspace:^",
     "@library/hitokoto-hooks": "workspace:^",
     "@library/hooks": "workspace:^",
-    "@module/blog-i18n": "workspace:^",
+    "@library/i18n": "workspace:^",
     "@module/model": "workspace:^",
     "@library/react-components": "workspace:^",
     "@library/request": "workspace:^",

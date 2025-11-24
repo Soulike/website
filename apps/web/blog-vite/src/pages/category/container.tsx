@@ -1,8 +1,8 @@
-import {STRING_KEY, useI18nString} from '@module/blog-i18n';
 import {useEffect} from 'react';
 
 import {ArticleList} from '@/components/ArticleList';
 import {showErrorNotification} from '@/helpers/error-notification-helper.js';
+import {STRING_KEY, useI18nString} from '@/i18n/index.js';
 
 import {useViewModel} from './view-model.js';
 

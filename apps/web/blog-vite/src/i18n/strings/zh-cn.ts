@@ -4,10 +4,6 @@ import {STRING_KEY} from '../string-key.js';
 import {Strings} from '../Strings.js';
 
 export const ZH_CN: Strings = Object.freeze({
-  [STRING_KEY.TEST_STRING]: '测试字符串',
-  [STRING_KEY.TEST_TEMPLATE_STRING]: '甲{}丙{}戊',
-  [STRING_KEY.TEST_TEMPLATE_STRING_FILLED]: '甲乙丙丁戊',
-
   [STRING_KEY.SITE_TITLE]: `Soulike 的博客`,
   get [STRING_KEY.PAGE_TITLE_INDEX]() {
     return ZH_CN[STRING_KEY.SITE_TITLE];
