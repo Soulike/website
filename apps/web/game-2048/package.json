@@ -18,6 +18,7 @@
     "@mui/material": "^7.3.1",
     "@library/task-runner": "workspace:^",
     "@library/hooks": "workspace:*",
+    "@library/i18n": "workspace:^",
     "classnames": "^2.5.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"

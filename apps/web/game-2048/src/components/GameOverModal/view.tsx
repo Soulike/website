@@ -1,4 +1,5 @@
 import {Modal} from '@/components/Modal/index.js';
+import {STRING_KEY, useI18nString} from '@/i18n/index.js';
 
 import {AchievementSection} from './components/AchievementSection/index.js';
 import {ActionButtons} from './components/ActionButtons/index.js';
@@ -20,13 +21,14 @@ export function View({
   highestScore,
   isNewRecord,
 }: GameOverModalViewProps) {
+  const gameOverTitle = useI18nString(STRING_KEY.GAME_OVER_TITLE);
+  const gameOverSubtitle = useI18nString(STRING_KEY.GAME_OVER_SUBTITLE);
+
   return (
     <Modal open={open} onOverlayClick={onClose}>
-      <div className={styles.title}>Game Over</div>
+      <div className={styles.title}>{gameOverTitle}</div>
 
-      <div className={styles.subtitle}>
-        No more moves available! But you put up a good fight.
-      </div>
+      <div className={styles.subtitle}>{gameOverSubtitle}</div>
 
       <AchievementSection isNewRecord={isNewRecord} />
 

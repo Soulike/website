@@ -1,3 +1,5 @@
+import {STRING_KEY, useI18nString} from '@/i18n/index.js';
+
 import styles from './styles.module.css';
 
 export interface AchievementSectionProps {
@@ -5,6 +7,8 @@ export interface AchievementSectionProps {
 }
 
 export function AchievementSection({isNewRecord}: AchievementSectionProps) {
+  const newHighScoreText = useI18nString(STRING_KEY.NEW_HIGH_SCORE);
+
   if (!isNewRecord) {
     return null;
   }
@@ -12,7 +16,7 @@ export function AchievementSection({isNewRecord}: AchievementSectionProps) {
   return (
     <div className={styles.achievementSection}>
       <span className={styles.emoji}>🏆</span>
-      <div className={styles.achievementText}>New High Score!</div>
+      <div className={styles.achievementText}>{newHighScoreText}</div>
     </div>
   );
 }

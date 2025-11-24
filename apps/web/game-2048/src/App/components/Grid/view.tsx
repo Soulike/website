@@ -75,7 +75,7 @@ export function GridView(props: GridViewProps) {
             movementAnimate={movementAnimate}
             mergeAnimate={mergeAnimate}
             creationAnimate={creationAnimate}
-            isMovementDestination={!!isTileMovementDestination[i][j]}
+            isMovementDestination={isTileMovementDestination[i][j]}
             updatedAtTimestamp={Date.now()}
           />,
         );

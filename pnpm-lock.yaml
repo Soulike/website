@@ -296,6 +296,9 @@ importers:
       '@library/hooks':
         specifier: workspace:*
         version: link:../../../libraries/web/hooks
+      '@library/i18n':
+        specifier: workspace:^
+        version: link:../../../libraries/web/i18n
       '@library/task-runner':
         specifier: workspace:^
         version: link:../../../libraries/universal/task-runner
