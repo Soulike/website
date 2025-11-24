@@ -4,10 +4,6 @@ import {STRING_KEY} from '../string-key.js';
 import {Strings} from '../Strings.js';
 
 export const EN: Strings = Object.freeze({
-  [STRING_KEY.TEST_STRING]: 'Test string',
-  [STRING_KEY.TEST_TEMPLATE_STRING]: 'a{}c{}e',
-  [STRING_KEY.TEST_TEMPLATE_STRING_FILLED]: 'abcde',
-
   [STRING_KEY.SITE_TITLE]: `Soulike's Blog`,
   get [STRING_KEY.PAGE_TITLE_INDEX]() {
     return EN[STRING_KEY.SITE_TITLE];

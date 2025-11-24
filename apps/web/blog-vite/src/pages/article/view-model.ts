@@ -1,11 +1,11 @@
 import {useLazyPromise} from '@library/hooks';
-import {STRING_KEY, useI18nString} from '@module/blog-i18n';
 import {Article, Category} from '@module/classes';
 import {articleModel, categoryModel} from '@module/model/blog';
 import {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router';
 
 import {getDiffInDays} from '@/helpers/date-helpers.js';
+import {STRING_KEY, useI18nString} from '@/i18n/index.js';
 import {
   ArticlePathParams,
   PAGE_ID,
