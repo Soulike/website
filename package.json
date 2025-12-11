@@ -35,5 +35,11 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
-  }
+  },
+  "workspaces": [
+    "apps/**/*",
+    "modules/**/*",
+    "libraries/**/*",
+    "configs/*"
+  ]
 }
