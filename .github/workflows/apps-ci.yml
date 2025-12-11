@@ -24,7 +24,7 @@ jobs:
       - name: Validate PR
         run: bun validate:pr
       - name: Test
-        run: bun test
+        run: bun run test
   build:
     needs: [test]
     strategy:
