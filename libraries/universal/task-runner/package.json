@@ -10,10 +10,10 @@
     "@library/async-helpers": "workspace:^"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/coverage-v8": "catalog:",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
-    "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

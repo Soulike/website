@@ -14,12 +14,12 @@
     "styled-components": "^6.1.19"
   },
   "devDependencies": {
-    "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "peerDependencies": {
     "react": ">=16.8.0",

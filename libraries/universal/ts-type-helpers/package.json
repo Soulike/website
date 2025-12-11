@@ -9,6 +9,6 @@
   "devDependencies": {
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
-    "typescript": "^5.9.2"
+    "typescript": "catalog:"
   }
 }

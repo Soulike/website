@@ -19,9 +19,9 @@
     "@library/request": "workspace:^"
   },
   "devDependencies": {
-    "@types/react": "^19.1.10",
+    "@types/react": "catalog:",
     "@config/typescript": "workspace:^",
-    "typescript": "^5.9.2"
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "path-browserify": ">=1.0.0",
