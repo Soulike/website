@@ -7,7 +7,7 @@
     "./ssr": "./dist/ssr/index.js"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "jsdom": "^26.1.0"

@@ -4,11 +4,12 @@
   "type": "module",
   "scripts": {
     "prepare": "test -d node_modules/husky && husky",
-    "build:libraries": "pnpm --filter \"./libraries/**\" run -r build",
-    "build:modules": "pnpm --filter \"./modules/**\" run -r build",
-    "prebuild:all": "pnpm build:libraries && pnpm build:modules",
-    "build:all": "pnpm --filter \"./apps/**\" run -r build",
-    "test": "pnpm -r test",
+    "typecheck:libraries": "bun --filter '@library/*' typecheck",
+    "typecheck:modules": "bun --filter '@module/*' typecheck",
+    "typecheck:server": "bun --filter './apps/server/*' typecheck",
+    "build:web": "bun --filter './apps/web/*' build",
+    "validate:pr": "bun typecheck:libraries & bun typecheck:modules & bun typecheck:server & bun build:web & wait",
+    "test": "bun --filter '*' test",
     "start": "docker compose pull && docker compose down && docker compose up -d",
     "stop": "docker compose down",
     "update": "docker compose pull && docker compose up -d"

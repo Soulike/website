@@ -10,7 +10,7 @@
     "./react/blog": "./dist/react/blog/index.js"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc && tsc-alias"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@module/classes": "workspace:^",
@@ -21,7 +21,6 @@
   "devDependencies": {
     "@types/react": "^19.1.10",
     "@config/typescript": "workspace:^",
-    "tsc-alias": "^1.8.16",
     "typescript": "^5.9.2"
   },
   "peerDependencies": {

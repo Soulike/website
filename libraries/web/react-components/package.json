@@ -27,6 +27,6 @@
     "react-dom": ">=16.8.0"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "typecheck": "tsc --noEmit"
   }
 }

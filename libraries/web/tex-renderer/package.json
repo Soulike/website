@@ -12,7 +12,7 @@
     "katex": "^0.16.22"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc && node esbuild.config.mjs"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.7",

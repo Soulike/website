@@ -1,6 +1,6 @@
 # Development Instructions
 
-This is a pnpm monorepo containing multiple types of projects.
+This is a bun monorepo containing multiple types of projects.
 
 ## Task Preparation
 

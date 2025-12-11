@@ -16,6 +16,6 @@
     "esbuild": "^0.25.9"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc && node esbuild.config.mjs"
+    "typecheck": "tsc --noEmit"
   }
 }

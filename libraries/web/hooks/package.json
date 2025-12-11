@@ -20,7 +20,7 @@
     "react": ">=18.0.0"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc",
+    "typecheck": "tsc --noEmit",
     "test": "vitest"
   }
 }

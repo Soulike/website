@@ -11,6 +11,6 @@
     "@config/eslint": "workspace:^"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "typecheck": "tsc --noEmit"
   }
 }
