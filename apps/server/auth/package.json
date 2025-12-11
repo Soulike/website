@@ -3,7 +3,7 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile dist/auth-server",
+    "build": "bun build --compile --minify --sourcemap ./src/index.ts --outfile dist/auth-server",
     "typecheck": "tsc --noEmit",
     "test": "vitest"
   },

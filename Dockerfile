@@ -13,7 +13,7 @@ RUN bun install --frozen-lockfile
 
 # Build blog
 FROM deps AS blog-builder
-RUN bun --filter "./apps/web/blog-vite" run build
+RUN bun --filter "./apps/web/blog-vite" build
 
 # Setup blog static server
 FROM nginx:stable-alpine AS blog
@@ -24,7 +24,7 @@ EXPOSE 3000
 
 # Build admin
 FROM deps AS admin-builder
-RUN bun --filter "./apps/web/admin-vite" run build
+RUN bun --filter "./apps/web/admin-vite" build
 
 # Setup admin static server
 FROM nginx:stable-alpine AS admin
@@ -35,7 +35,7 @@ EXPOSE 3000
 
 # Build 2048
 FROM deps AS game-2048-builder
-RUN bun --filter "./apps/web/game-2048" run build
+RUN bun --filter "./apps/web/game-2048" build
 
 # Setup 2048 static server
 FROM nginx:stable-alpine AS game-2048
@@ -46,7 +46,7 @@ EXPOSE 3000
 
 # Build auth server
 FROM deps AS auth-server-builder
-RUN bun --filter "./apps/server/auth" run build
+RUN bun --filter "./apps/server/auth" build
 
 FROM alpine:latest AS auth-server
 COPY --from=auth-server-builder /website/apps/server/auth/dist/auth-server /auth/auth-server
