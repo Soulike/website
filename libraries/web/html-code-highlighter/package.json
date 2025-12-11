@@ -2,9 +2,9 @@
   "name": "@library/html-code-highlighter",
   "type": "module",
   "exports": {
-    "./csr": "./dist/csr.js",
-    "./ssr": "./dist/ssr.js",
-    "./style.css": "./dist/style.css"
+    "./csr": "./src/csr.ts",
+    "./ssr": "./src/ssr.ts",
+    "./style.css": "./src/style.css"
   },
   "dependencies": {
     "@library/dom-helpers": "workspace:^",
@@ -12,8 +12,7 @@
   },
   "devDependencies": {
     "@config/eslint": "workspace:^",
-    "@config/typescript": "workspace:^",
-    "esbuild": "^0.25.9"
+    "@config/typescript": "workspace:^"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

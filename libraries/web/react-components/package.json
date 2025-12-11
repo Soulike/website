@@ -2,10 +2,10 @@
   "name": "@library/react-components",
   "type": "module",
   "exports": {
-    "./csr": "./dist/csr/index.js",
-    "./ssr": "./dist/ssr/index.js",
-    "./next-js": "./dist/next-js/index.js",
-    ".": "./dist/universal/index.js"
+    "./csr": "./src/csr/index.ts",
+    "./ssr": "./src/ssr/index.ts",
+    "./next-js": "./src/next-js/index.ts",
+    ".": "./src/universal/index.ts"
   },
   "dependencies": {
     "@library/hooks": "workspace:^",
@@ -18,7 +18,6 @@
     "@types/react-dom": "^19.1.7",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
-    "esbuild": "^0.25.9",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },

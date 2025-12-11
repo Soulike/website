@@ -349,7 +349,6 @@
       "devDependencies": {
         "@config/eslint": "workspace:^",
         "@config/typescript": "workspace:^",
-        "esbuild": "^0.25.9",
       },
     },
     "libraries/web/i18n": {
@@ -383,7 +382,6 @@
         "@config/eslint": "workspace:^",
         "@config/typescript": "workspace:^",
         "@types/showdown": "^2.0.6",
-        "esbuild": "^0.25.9",
       },
     },
     "libraries/web/react-components": {
@@ -399,7 +397,6 @@
         "@config/typescript": "workspace:^",
         "@types/react": "^19.1.10",
         "@types/react-dom": "^19.1.7",
-        "esbuild": "^0.25.9",
         "react": "^19.1.1",
         "react-dom": "^19.1.1",
       },
@@ -420,7 +417,6 @@
         "@config/eslint": "workspace:^",
         "@config/typescript": "workspace:^",
         "@types/jsdom": "^21.1.7",
-        "esbuild": "^0.25.9",
       },
     },
     "modules/server/database": {
