@@ -38,9 +38,9 @@
     ]
   },
   "workspaces": [
-    "apps/**/*",
-    "modules/**/*",
-    "libraries/**/*",
+    "apps/*/*",
+    "modules/*/*",
+    "libraries/*/*",
     "configs/*"
   ],
   "catalog": {
