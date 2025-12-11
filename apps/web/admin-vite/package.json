@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "bunx --bun vite",
     "build": "tsc -b && bunx --bun vite build",
     "lint": "eslint ./src",
-    "preview": "vite preview",
-    "analyze": "vite-bundle-visualizer"
+    "preview": "bunx --bun vite preview",
+    "analyze": "bunx --bun vite-bundle-visualizer"
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
