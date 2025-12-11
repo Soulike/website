@@ -1,8 +1,7 @@
 import {isObjectEmpty} from '@library/object-helpers';
 import {Category} from '@module/classes';
 
-import {OrderConfig} from '@/types.js';
-
+import {OrderConfig} from '../types.js';
 import {FakeArticleTable} from './fake-article-table.js';
 import {sortEntities} from './fake-table-helpers.js';
 

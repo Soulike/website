@@ -1,5 +1,5 @@
-import {PromiseTask} from '@/tasks/promise-task.js';
-import {TaskResult} from '@/types.js';
+import {PromiseTask} from '../../tasks/promise-task.js';
+import type {TaskResult} from '../../types.js';
 
 class TempPromiseTask<ResultT> extends PromiseTask<ResultT> {
   public constructor() {

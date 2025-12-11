@@ -2,8 +2,8 @@
   "name": "@module/database",
   "type": "module",
   "exports": {
-    ".": "./dist/index.js",
-    "./fake": "./dist/fake-index.js"
+    ".": "./src/index.ts",
+    "./fake": "./src/fake-index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

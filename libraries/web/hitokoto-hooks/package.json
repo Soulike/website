@@ -2,7 +2,7 @@
   "name": "@library/hitokoto-hooks",
   "private": true,
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./src/index.ts",
   "scripts": {
     "typecheck": "tsc --noEmit"
   },

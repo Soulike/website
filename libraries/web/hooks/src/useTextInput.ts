@@ -1,4 +1,5 @@
-import {ChangeEventHandler, useCallback, useState} from 'react';
+import type {ChangeEventHandler} from 'react';
+import {useCallback, useState} from 'react';
 
 export function useTextInput(initialValue = '') {
   const [value, setValue] = useState(initialValue);

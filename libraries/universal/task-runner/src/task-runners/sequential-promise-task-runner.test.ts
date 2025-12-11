@@ -1,7 +1,6 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
-import {PromiseTask} from '@/tasks/promise-task.js';
-
+import {PromiseTask} from '../tasks/promise-task.js';
 import {sequentialPromiseTaskRunner} from './sequential-promise-task-runner.js';
 
 class MockPromiseTask<T> extends PromiseTask<T> {

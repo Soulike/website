@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import {removeUndefinedFieldsShallow} from '@library/object-helpers';
 import {ValueType} from '@library/ts-type-helpers';
 
-import {OrderConfig} from '@/types.js';
+import {OrderConfig} from '../types.js';
 
 /**
  * Generates an SQL ORDER BY statement from an OrderConfig object.

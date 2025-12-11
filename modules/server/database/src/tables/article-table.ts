@@ -1,14 +1,14 @@
 import {isObjectEmpty} from '@library/object-helpers';
 import {Article} from '@module/classes';
 
-import {query} from '@/helpers/query-helpers.js';
+import {query} from '../helpers/query-helpers.js';
 import {
   generateInsertStatement,
   generateOrderByClause,
   generateSetClause,
   generateWhereClause,
-} from '@/helpers/sql-helpers.js';
-import {OrderConfig} from '@/types.js';
+} from '../helpers/sql-helpers.js';
+import {OrderConfig} from '../types.js';
 
 export class ArticleTable {
   static async insert(article: Omit<Article, 'id'>): Promise<void> {

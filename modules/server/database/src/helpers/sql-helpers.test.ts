@@ -1,7 +1,6 @@
 import {describe, expect, it} from 'vitest';
 
-import {OrderConfig} from '@/types.js';
-
+import {OrderConfig} from '../types.js';
 import {
   generateInsertStatement,
   generateOrderByClause,

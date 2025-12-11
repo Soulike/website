@@ -2,9 +2,9 @@
   "name": "@library/dom-helpers",
   "type": "module",
   "exports": {
-    ".": "./dist/index.js",
-    "./csr": "./dist/csr/index.js",
-    "./ssr": "./dist/ssr/index.js"
+    ".": "./src/index.ts",
+    "./csr": "./src/csr/index.ts",
+    "./ssr": "./src/ssr/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

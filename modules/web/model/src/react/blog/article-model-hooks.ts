@@ -1,7 +1,8 @@
 import {RejectCallback, ResolveCallback, usePromise} from '@library/hooks';
-import {articleModel} from '@models/blog/index.js';
 import {Article, Category} from '@module/classes';
 import {useMemo} from 'react';
+
+import {articleModel} from '../../models/blog/index.js';
 
 export const ArticleModelHooks = {
   useAllArticlesWithAbstract,

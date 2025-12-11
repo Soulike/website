@@ -8,7 +8,7 @@
     "typecheck:modules": "bun --filter '@module/*' typecheck",
     "typecheck:server": "bun --filter './apps/server/*' typecheck",
     "build:web": "bun --filter './apps/web/*' build",
-    "validate:pr": "bun typecheck:libraries & bun typecheck:modules & bun typecheck:server & bun build:web & wait",
+    "validate:pr": "bun typecheck:libraries && bun typecheck:modules && bun typecheck:server && bun build:web",
     "test": "bun --filter '*' test",
     "start": "docker compose pull && docker compose down && docker compose up -d",
     "stop": "docker compose down",

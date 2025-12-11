@@ -3,11 +3,11 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./dist/models/index.js",
-    "./admin": "./dist/models/admin/index.js",
-    "./blog": "./dist/models/blog/index.js",
-    "./react/admin": "./dist/react/admin/index.js",
-    "./react/blog": "./dist/react/blog/index.js"
+    ".": "./src/models/index.ts",
+    "./admin": "./src/models/admin/index.ts",
+    "./blog": "./src/models/blog/index.ts",
+    "./react/admin": "./src/react/admin/index.ts",
+    "./react/blog": "./src/react/blog/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

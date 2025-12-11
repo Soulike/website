@@ -1,6 +1,7 @@
 import {RejectCallback, ResolveCallback, usePromise} from '@library/hooks';
-import {optionModel} from '@models/blog/index.js';
 import {useMemo} from 'react';
+
+import {optionModel} from '../../models/blog/index.js';
 
 export const OptionModelHooks = Object.freeze({
   useAbout,
