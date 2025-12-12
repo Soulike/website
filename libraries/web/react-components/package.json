@@ -19,7 +19,8 @@
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
