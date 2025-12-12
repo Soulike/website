@@ -18,6 +18,9 @@ export async function getSession(): Promise<UserInfo | null> {
     throw new Error(`Get session failed with HTTP status ${response.status}`);
   }
   const userInfo: unknown = await response.json();
+  if (!UserInfo.validate(userInfo)) {
+    throw new Error(`Invalid UserInfo`);
+  }
   return UserInfo.from(userInfo);
 }
 

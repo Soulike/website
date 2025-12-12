@@ -1,14 +1,14 @@
 import {isObjectEmpty} from '@library/object-helpers';
 import {User} from '@module/classes';
 
-import {query} from '@/helpers/query-helpers.js';
+import {query} from '../helpers/query-helpers.js';
 import {
   generateInsertStatement,
   generateOrderByClause,
   generateSetClause,
   generateWhereClause,
-} from '@/helpers/sql-helpers.js';
-import {OrderConfig} from '@/types.js';
+} from '../helpers/sql-helpers.js';
+import {OrderConfig} from '../types.js';
 
 export class UserTable {
   static async insert(user: User): Promise<void> {

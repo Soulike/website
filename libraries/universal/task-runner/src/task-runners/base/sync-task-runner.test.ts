@@ -1,7 +1,6 @@
 import {describe, expect, it, vi} from 'vitest';
 
-import {SyncTask} from '@/tasks/sync-task.js';
-
+import {SyncTask} from '../../tasks/sync-task.js';
 import {SyncTaskRunner} from './sync-task-runner.js';
 
 class TestSyncTaskRunner extends SyncTaskRunner {

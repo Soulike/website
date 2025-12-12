@@ -1,9 +1,10 @@
 import path from 'node:path';
 
 import {Request} from '@library/request';
-import {ModelAccessDeniedError} from '@models/model-access-error.js';
-import {prependServerPrefix} from '@models/path-helper.js';
 import {ServerResponse} from '@module/classes';
+
+import {ModelAccessDeniedError} from '../model-access-error.js';
+import {prependServerPrefix} from '../path-helper.js';
 
 class OptionModel {
   private static readonly PATH = Object.freeze({

@@ -4,21 +4,16 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/go/dockerfile-reference/
 
-FROM node:lts-alpine AS base
-RUN corepack enable \
-    && corepack prepare --activate pnpm@latest
+FROM oven/bun:alpine AS base
 
 FROM base AS deps
 WORKDIR /website
 COPY . .
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
-    pnpm config set store-dir /pnpm/store && \
-    pnpm install --prefer-offline --frozen-lockfile && \
-    pnpm build:libraries && pnpm build:modules
+RUN bun install --frozen-lockfile
 
 # Build blog
 FROM deps AS blog-builder
-RUN pnpm --filter "./apps/web/blog-vite" build
+RUN bun --filter "./apps/web/blog-vite" build
 
 # Setup blog static server
 FROM nginx:stable-alpine AS blog
@@ -29,7 +24,7 @@ EXPOSE 3000
 
 # Build admin
 FROM deps AS admin-builder
-RUN pnpm --filter "./apps/web/admin-vite" build
+RUN bun --filter "./apps/web/admin-vite" build
 
 # Setup admin static server
 FROM nginx:stable-alpine AS admin
@@ -40,7 +35,7 @@ EXPOSE 3000
 
 # Build 2048
 FROM deps AS game-2048-builder
-RUN pnpm --filter "./apps/web/game-2048" build
+RUN bun --filter "./apps/web/game-2048" build
 
 # Setup 2048 static server
 FROM nginx:stable-alpine AS game-2048
@@ -51,12 +46,15 @@ EXPOSE 3000
 
 # Build auth server
 FROM deps AS auth-server-builder
-RUN pnpm --filter "./apps/server/auth" build && \
-    pnpm --filter "./apps/server/auth" deploy --prod /auth
+RUN bun --filter "./apps/server/auth" build
 
-FROM node:lts-alpine AS auth-server
-COPY --from=auth-server-builder /auth/node_modules /auth/node_modules
-COPY --from=auth-server-builder /auth/dist /auth/dist
-WORKDIR /auth/dist
+FROM alpine:latest AS auth-server
+COPY --from=auth-server-builder /website/apps/server/auth/dist/auth-server /auth/auth-server
+RUN chmod +x /auth/auth-server \
+    && addgroup -S authgroup \
+    && adduser -S authuser -G authgroup \
+    && chown -R authuser:authgroup /auth
+WORKDIR /auth
 EXPOSE 4001
-CMD [ "node", "index.js" ]
+USER authuser
+CMD ["/auth/auth-server"]

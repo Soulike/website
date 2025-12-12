@@ -7,7 +7,7 @@ on:
     paths:
       - 'apps/web/game-2048/**'
       - 'libraries/**'
-      - 'pnpm-lock.yaml'
+      - 'bun.lock'
       - 'Dockerfile'
   workflow_dispatch:
 

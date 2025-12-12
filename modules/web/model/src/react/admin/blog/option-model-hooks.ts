@@ -1,6 +1,7 @@
 import {RejectCallback, ResolveCallback, usePromise} from '@library/hooks';
-import {OptionModel} from '@models/admin/blog/option-model.js';
 import {useMemo} from 'react';
+
+import {OptionModel} from '../../../models/admin/blog/option-model.js';
 
 export const OptionModelHooks = {
   useAbout,

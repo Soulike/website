@@ -8,7 +8,7 @@ on:
       - 'apps/web/blog-vite/**'
       - 'modules/**'
       - 'libraries/**'
-      - 'pnpm-lock.yaml'
+      - 'bun.lock'
       - 'Dockerfile'
   workflow_dispatch:
 

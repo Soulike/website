@@ -2,10 +2,10 @@
   "name": "@library/react-components",
   "type": "module",
   "exports": {
-    "./csr": "./dist/csr/index.js",
-    "./ssr": "./dist/ssr/index.js",
-    "./next-js": "./dist/next-js/index.js",
-    ".": "./dist/universal/index.js"
+    "./csr": "./src/csr/index.ts",
+    "./ssr": "./src/ssr/index.ts",
+    "./next-js": "./src/next-js/index.ts",
+    ".": "./src/universal/index.ts"
   },
   "dependencies": {
     "@library/hooks": "workspace:^",
@@ -14,19 +14,19 @@
     "styled-components": "^6.1.19"
   },
   "devDependencies": {
-    "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
-    "esbuild": "^0.25.9",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "typecheck": "tsc --noEmit"
   }
 }

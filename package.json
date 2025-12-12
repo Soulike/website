@@ -4,11 +4,12 @@
   "type": "module",
   "scripts": {
     "prepare": "test -d node_modules/husky && husky",
-    "build:libraries": "pnpm --filter \"./libraries/**\" run -r build",
-    "build:modules": "pnpm --filter \"./modules/**\" run -r build",
-    "prebuild:all": "pnpm build:libraries && pnpm build:modules",
-    "build:all": "pnpm --filter \"./apps/**\" run -r build",
-    "test": "pnpm -r test",
+    "typecheck:libraries": "bun --filter '@library/*' typecheck",
+    "typecheck:modules": "bun --filter '@module/*' typecheck",
+    "typecheck:server": "bun --filter './apps/server/*' typecheck",
+    "build:web": "bun --filter './apps/web/*' build",
+    "validate:pr": "bun run typecheck:libraries && bun run typecheck:modules && bun run typecheck:server && bun run build:web",
+    "test": "bun --filter '*' test",
     "start": "docker compose pull && docker compose down && docker compose up -d",
     "stop": "docker compose down",
     "update": "docker compose pull && docker compose up -d"
@@ -18,12 +19,12 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@types/node": "^22.17.2",
-    "eslint": "^9.33.0",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.5",
     "prettier": "^3.6.2",
-    "typescript": "^5.9.2"
+    "typescript": "catalog:"
   },
   "prettier": {
     "singleQuote": true,
@@ -35,5 +36,23 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
+  },
+  "workspaces": [
+    "apps/*/*",
+    "modules/*/*",
+    "libraries/*/*",
+    "configs/*"
+  ],
+  "catalog": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "typescript": "^5.9.2",
+    "@types/node": "^22.17.2",
+    "vitest": "^3.2.4",
+    "@vitest/coverage-v8": "^3.2.4",
+    "vite": "^7.1.3",
+    "eslint": "^9.33.0"
   }
 }

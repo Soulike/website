@@ -5,7 +5,7 @@ import {
   type QueryResultRow,
 } from 'pg';
 
-import {pool} from '@/pool/index.js';
+import {pool} from '../pool/index.js';
 
 export async function transaction<ReturnType>(
   queries: (client: Client | PoolClient) => Promise<ReturnType>,

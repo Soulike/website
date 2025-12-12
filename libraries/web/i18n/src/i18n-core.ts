@@ -1,12 +1,12 @@
 import assert from 'node:assert';
 
 import {format} from './helpers/string-helpers.js';
-import {
+import type {
   EventTypeToPayload,
   I18nConfig,
   I18nEventListener,
-  I18nEventType,
 } from './types.js';
+import {I18nEventType} from './types.js';
 
 /**
  * Core internationalization class that manages language loading, caching, and string retrieval.

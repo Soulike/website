@@ -7,6 +7,7 @@ export {ColorScheme, useColorScheme} from './useColorScheme.js';
 export {useLazyPromise} from './useLazyPromise.js';
 export * from './useMediaQuery.js';
 export {useModal} from './useModal.js';
-export {RejectCallback, ResolveCallback, usePromise} from './usePromise.js';
+export type {RejectCallback, ResolveCallback} from './usePromise.js';
+export {usePromise} from './usePromise.js';
 export * from './useSwipeGestures.js';
 export {useTextInput} from './useTextInput.js';

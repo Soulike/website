@@ -1,13 +1,14 @@
 {
   "name": "@module/classes",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@config/eslint": "workspace:^",
-    "@config/typescript": "workspace:^"
+    "@config/typescript": "workspace:^",
+    "typescript": "catalog:"
   },
   "dependencies": {
     "zod": "^4.1.9"

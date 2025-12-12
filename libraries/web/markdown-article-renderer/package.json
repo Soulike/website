@@ -2,9 +2,9 @@
   "name": "@library/markdown-article-renderer",
   "type": "module",
   "exports": {
-    "./csr": "./dist/csr.js",
-    "./ssr": "./dist/ssr.js",
-    "./style.css": "./dist/style.css"
+    "./csr": "./src/csr.ts",
+    "./ssr": "./src/ssr.ts",
+    "./style.css": "./src/style.css"
   },
   "dependencies": {
     "@library/html-code-highlighter": "workspace:^",
@@ -15,9 +15,9 @@
     "@types/showdown": "^2.0.6",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
-    "esbuild": "^0.25.9"
+    "typescript": "catalog:"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc && node esbuild.config.mjs"
+    "typecheck": "tsc --noEmit"
   }
 }

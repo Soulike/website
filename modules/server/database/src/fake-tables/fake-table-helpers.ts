@@ -1,6 +1,6 @@
 import {isObjectEmpty} from '@library/object-helpers';
 
-import {OrderConfig} from '@/types.js';
+import {OrderConfig} from '../types.js';
 
 /**
  * Generic sort function for entities in fake tables

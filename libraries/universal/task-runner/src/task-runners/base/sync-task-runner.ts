@@ -1,5 +1,5 @@
-import {SyncTask} from '@/tasks/sync-task.js';
-import {TaskResult} from '@/types.js';
+import {SyncTask} from '../../tasks/sync-task.js';
+import type {TaskResult} from '../../types.js';
 
 class TempSyncTask<ResultT> extends SyncTask<ResultT> {
   public constructor() {

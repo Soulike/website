@@ -1,6 +1,11 @@
 # Development Instructions
 
-This is a pnpm monorepo containing multiple types of projects.
+This is a bun monorepo containing multiple types of projects.
+
+## Bun Doc
+
+Since Bun is new, you may not know its latest functionalities. You can refer
+to [latest Bun doc](https://bun.com/docs/llms.txt) if you need information.
 
 ## Task Preparation
 

@@ -2,8 +2,8 @@
   "name": "@library/tex-renderer",
   "type": "module",
   "exports": {
-    ".": "./dist/TeXRenderer.js",
-    "./style.css": "./dist/style.css"
+    ".": "./src/TeXRenderer.ts",
+    "./style.css": "./src/style.css"
   },
   "dependencies": {
     "@types/katex": "^0.16.7",
@@ -12,12 +12,12 @@
     "katex": "^0.16.22"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc && node esbuild.config.mjs"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
-    "esbuild": "^0.25.9"
+    "typescript": "catalog:"
   }
 }

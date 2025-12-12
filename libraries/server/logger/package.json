@@ -1,18 +1,17 @@
 {
   "name": "@library/logger",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "build": "rm -rf dist && tsc && tsc-alias"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/signale": "^1.4.7",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/coverage-v8": "catalog:",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
-    "tsc-alias": "^1.8.16",
-    "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "dependencies": {
     "signale": "^1.4.0"

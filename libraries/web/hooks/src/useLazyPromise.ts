@@ -10,28 +10,31 @@ export function useLazyPromise<ResT, Args extends unknown[]>(
   const [resolvedValue, setResolvedValue] = useState<ResT | null>(null);
   const [rejectedError, setRejectedError] = useState<Error | null>(null);
 
-  const run = useCallback((...args: Args) => {
-    setPending(true);
-    setResolvedValue(null);
-    setRejectedError(null);
-    promiseFactory(...args)
-      .then((value) => {
-        setResolvedValue(value);
-      })
-      .catch((e: unknown) => {
-        let error: Error;
-        if (!(e instanceof Error)) {
-          error = new Error();
-          error.cause = error;
-        } else {
-          error = e;
-        }
-        setRejectedError(error);
-      })
-      .finally(() => {
-        setPending(false);
-      });
-  }, []);
+  const run = useCallback(
+    (...args: Args) => {
+      setPending(true);
+      setResolvedValue(null);
+      setRejectedError(null);
+      promiseFactory(...args)
+        .then((value) => {
+          setResolvedValue(value);
+        })
+        .catch((e: unknown) => {
+          let error: Error;
+          if (!(e instanceof Error)) {
+            error = new Error();
+            error.cause = e;
+          } else {
+            error = e;
+          }
+          setRejectedError(error);
+        })
+        .finally(() => {
+          setPending(false);
+        });
+    },
+    [promiseFactory],
+  );
 
   return {
     run,

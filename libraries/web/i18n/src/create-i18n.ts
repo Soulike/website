@@ -1,7 +1,8 @@
 import {useCallback, useEffect, useState} from 'react';
 
 import {I18nCore} from './i18n-core.js';
-import {I18nConfig, I18nEventType} from './types.js';
+import type {I18nConfig} from './types.js';
+import {I18nEventType} from './types.js';
 
 /**
  * Factory function that creates a type-safe i18n instance with React hooks and utilities.

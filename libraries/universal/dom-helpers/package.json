@@ -2,12 +2,12 @@
   "name": "@library/dom-helpers",
   "type": "module",
   "exports": {
-    ".": "./dist/index.js",
-    "./csr": "./dist/csr/index.js",
-    "./ssr": "./dist/ssr/index.js"
+    ".": "./src/index.ts",
+    "./csr": "./src/csr/index.ts",
+    "./ssr": "./src/ssr/index.ts"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "jsdom": "^26.1.0"
@@ -16,6 +16,7 @@
     "@types/assert": "^1.5.11",
     "@types/jsdom": "^21.1.7",
     "@config/eslint": "workspace:^",
-    "@config/typescript": "workspace:^"
+    "@config/typescript": "workspace:^",
+    "typescript": "catalog:"
   }
 }
