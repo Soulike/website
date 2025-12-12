@@ -226,6 +226,7 @@
         "@config/eslint": "workspace:^",
         "@config/typescript": "workspace:^",
         "@vitest/coverage-v8": "catalog:",
+        "typescript": "catalog:",
         "vitest": "catalog:",
       },
     },
@@ -292,6 +293,7 @@
         "@config/eslint": "workspace:^",
         "@config/typescript": "workspace:^",
         "@vitest/coverage-v8": "catalog:",
+        "typescript": "catalog:",
         "vitest": "catalog:",
       },
     },
@@ -349,6 +351,7 @@
       "devDependencies": {
         "@config/eslint": "workspace:^",
         "@config/typescript": "workspace:^",
+        "typescript": "catalog:",
       },
     },
     "libraries/web/i18n": {
@@ -382,6 +385,7 @@
         "@config/eslint": "workspace:^",
         "@config/typescript": "workspace:^",
         "@types/showdown": "^2.0.6",
+        "typescript": "catalog:",
       },
     },
     "libraries/web/react-components": {
@@ -417,6 +421,7 @@
         "@config/eslint": "workspace:^",
         "@config/typescript": "workspace:^",
         "@types/jsdom": "^21.1.7",
+        "typescript": "catalog:",
       },
     },
     "modules/server/database": {
@@ -444,6 +449,7 @@
       "devDependencies": {
         "@config/eslint": "workspace:^",
         "@config/typescript": "workspace:^",
+        "typescript": "catalog:",
       },
     },
     "modules/universal/session-sdk": {

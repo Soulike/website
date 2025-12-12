@@ -14,7 +14,8 @@
   "devDependencies": {
     "@types/showdown": "^2.0.6",
     "@config/eslint": "workspace:^",
-    "@config/typescript": "workspace:^"
+    "@config/typescript": "workspace:^",
+    "typescript": "catalog:"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

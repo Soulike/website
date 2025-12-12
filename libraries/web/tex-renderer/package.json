@@ -17,6 +17,7 @@
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
     "@config/eslint": "workspace:^",
-    "@config/typescript": "workspace:^"
+    "@config/typescript": "workspace:^",
+    "typescript": "catalog:"
   }
 }

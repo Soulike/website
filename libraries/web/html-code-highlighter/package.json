@@ -12,7 +12,8 @@
   },
   "devDependencies": {
     "@config/eslint": "workspace:^",
-    "@config/typescript": "workspace:^"
+    "@config/typescript": "workspace:^",
+    "typescript": "catalog:"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

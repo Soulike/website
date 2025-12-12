@@ -9,6 +9,7 @@
     "@vitest/coverage-v8": "catalog:",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
+    "typescript": "catalog:",
     "vitest": "catalog:"
   }
 }
