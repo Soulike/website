@@ -23,7 +23,7 @@ export function useLazyPromise<ResT, Args extends unknown[]>(
           let error: Error;
           if (!(e instanceof Error)) {
             error = new Error();
-            error.cause = error;
+            error.cause = e;
           } else {
             error = e;
           }

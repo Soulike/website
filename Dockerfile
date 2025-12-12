@@ -50,6 +50,7 @@ RUN bun --filter "./apps/server/auth" build
 
 FROM alpine:latest AS auth-server
 COPY --from=auth-server-builder /website/apps/server/auth/dist/auth-server /auth/auth-server
+RUN chmod +x /auth/auth-server
 WORKDIR /auth
 EXPOSE 4001
 CMD ["/auth/auth-server"]
