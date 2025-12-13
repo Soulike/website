@@ -32,26 +32,23 @@ export function useLazyPromise<ResT, Args extends unknown[]>(
     promiseFactoryRef
       .current(...args)
       .then((value) => {
-        if (promiseId === latestPromiseIdRef.current) {
-          setResolvedValue(value);
-        }
+        if (promiseId !== latestPromiseIdRef.current) return;
+        setResolvedValue(value);
       })
       .catch((e: unknown) => {
-        if (promiseId === latestPromiseIdRef.current) {
-          let error: Error;
-          if (!(e instanceof Error)) {
-            error = new Error();
-            error.cause = e;
-          } else {
-            error = e;
-          }
-          setRejectedError(error);
+        if (promiseId !== latestPromiseIdRef.current) return;
+        let error: Error;
+        if (!(e instanceof Error)) {
+          error = new Error();
+          error.cause = e;
+        } else {
+          error = e;
         }
+        setRejectedError(error);
       })
       .finally(() => {
-        if (promiseId === latestPromiseIdRef.current) {
-          setPending(false);
-        }
+        if (promiseId !== latestPromiseIdRef.current) return;
+        setPending(false);
       });
   }, []);
 

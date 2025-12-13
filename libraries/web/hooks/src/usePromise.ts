@@ -30,32 +30,29 @@ export function usePromise<T>(
     setRejectedError(null);
     promise
       .then((value: T) => {
-        if (promiseId === latestPromiseIdRef.current) {
-          setResolvedValue(value);
-          if (onResolve) {
-            void onResolve(value);
-          }
+        if (promiseId !== latestPromiseIdRef.current) return;
+        setResolvedValue(value);
+        if (onResolve) {
+          void onResolve(value);
         }
       })
       .catch((e: unknown) => {
-        if (promiseId === latestPromiseIdRef.current) {
-          let error: Error;
-          if (!(e instanceof Error)) {
-            error = new Error();
-            error.cause = e;
-          } else {
-            error = e;
-          }
-          setRejectedError(error);
-          if (onReject) {
-            void onReject(error);
-          }
+        if (promiseId !== latestPromiseIdRef.current) return;
+        let error: Error;
+        if (!(e instanceof Error)) {
+          error = new Error();
+          error.cause = e;
+        } else {
+          error = e;
+        }
+        setRejectedError(error);
+        if (onReject) {
+          void onReject(error);
         }
       })
       .finally(() => {
-        if (promiseId === latestPromiseIdRef.current) {
-          setPending(false);
-        }
+        if (promiseId !== latestPromiseIdRef.current) return;
+        setPending(false);
       });
   }, [promise, onResolve, onReject]);
 
