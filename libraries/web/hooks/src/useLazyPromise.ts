@@ -2,6 +2,9 @@ import {useCallback, useRef, useState} from 'react';
 
 /**
  * Similar to `usePromise`, but the promise is created lazily until `run` is called.
+ *
+ * This hook handles race conditions: if `run` is called multiple times before
+ * previous promises complete, only the result from the most recent call is used.
  */
 export function useLazyPromise<ResT, Args extends unknown[]>(
   promiseFactory: (...args: Args) => Promise<ResT>,
@@ -16,16 +19,24 @@ export function useLazyPromise<ResT, Args extends unknown[]>(
   const promiseFactoryRef = useRef(promiseFactory);
   promiseFactoryRef.current = promiseFactory;
 
+  // Track the latest promise ID to handle race conditions.
+  // When multiple promises are in flight, only the latest one should update state.
+  const latestPromiseIdRef = useRef(0);
+
   const run = useCallback((...args: Args) => {
+    const promiseId = ++latestPromiseIdRef.current;
+
     setPending(true);
     setResolvedValue(null);
     setRejectedError(null);
     promiseFactoryRef
       .current(...args)
       .then((value) => {
+        if (promiseId !== latestPromiseIdRef.current) return;
         setResolvedValue(value);
       })
       .catch((e: unknown) => {
+        if (promiseId !== latestPromiseIdRef.current) return;
         let error: Error;
         if (!(e instanceof Error)) {
           error = new Error();
@@ -36,6 +47,7 @@ export function useLazyPromise<ResT, Args extends unknown[]>(
         setRejectedError(error);
       })
       .finally(() => {
+        if (promiseId !== latestPromiseIdRef.current) return;
         setPending(false);
       });
   }, []);
