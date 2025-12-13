@@ -1,0 +1,18 @@
+.ArticleListItem {
+  .title {
+    cursor: pointer;
+  }
+
+  .tagContainer {
+    display: flex;
+    gap: 4px;
+  }
+
+  .switch {
+    margin-left: 20px;
+  }
+
+  .buttonWrapper {
+    margin-left: 20px;
+  }
+}
