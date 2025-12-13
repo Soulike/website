@@ -7,12 +7,12 @@ export function showErrorNotification(error: unknown) {
   console.error(error);
   if (error instanceof ModelAccessDeniedError) {
     // TODO: Use id to mark message for i18n
-    notification.error({message: error.message});
+    notification.error({title: error.message});
   } else {
     getI18nString(STRING_KEY.UI_MESSAGE_NETWORK_ERROR)
       .then((string) => {
         notification.error({
-          message: string,
+          title: string,
         });
       })
       .catch((e: unknown) => {

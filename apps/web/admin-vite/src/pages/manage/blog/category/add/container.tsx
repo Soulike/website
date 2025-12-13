@@ -18,10 +18,10 @@ export function Add() {
     handleNewCategorySubmit(
       categoryName,
       (message) => {
-        notification.error({message});
+        notification.error({title: message});
       },
       () => {
-        notification.success({message: 'Category created'});
+        notification.success({title: 'Category created'});
       },
       (error) => {
         showErrorNotification(error);

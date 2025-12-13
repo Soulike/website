@@ -82,7 +82,7 @@ export function Manage() {
       idOfCategoryToModify,
       {name: nameOfCategoryToModify},
       () => {
-        notification.success({message: 'Category modified'});
+        notification.success({title: 'Category modified'});
       },
       (e) => {
         showErrorNotification(e);
