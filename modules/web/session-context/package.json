@@ -12,7 +12,7 @@
     "@config/typescript": "workspace:^",
     "@module/classes": "workspace:^",
     "@module/session-sdk": "workspace:^",
-    "antd": "^5.27.1",
+    "antd": "catalog:",
     "eslint-plugin-react-hooks": "^5.2.0",
     "typescript": "catalog:",
     "vitest": "catalog:"

@@ -10,7 +10,7 @@
     "@vitest/coverage-v8": "catalog:",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
-    "antd": "^5.27.1",
+    "antd": "catalog:",
     "eslint-plugin-react-hooks": "^5.2.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
