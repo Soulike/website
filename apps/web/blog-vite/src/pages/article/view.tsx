@@ -45,7 +45,7 @@ export function ArticleView(props: Props) {
             className={style.alert}
             type={'warning'}
             banner={true}
-            message={outdatedWarningMessage}
+            title={outdatedWarningMessage}
           />
         )}
         <Markdown>{article.content}</Markdown>
