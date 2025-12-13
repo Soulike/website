@@ -22,6 +22,13 @@ export function usePromise<T>(
   // When multiple promises are in flight, only the latest one should update state.
   const latestPromiseIdRef = useRef(0);
 
+  // Use refs to access the latest callbacks without causing the effect to re-run.
+  // This prevents unnecessary promise re-execution when callbacks are recreated.
+  const onResolveRef = useRef(onResolve);
+  onResolveRef.current = onResolve;
+  const onRejectRef = useRef(onReject);
+  onRejectRef.current = onReject;
+
   useEffect(() => {
     const promiseId = ++latestPromiseIdRef.current;
 
@@ -32,8 +39,8 @@ export function usePromise<T>(
       .then((value: T) => {
         if (promiseId !== latestPromiseIdRef.current) return;
         setResolvedValue(value);
-        if (onResolve) {
-          void onResolve(value);
+        if (onResolveRef.current) {
+          void onResolveRef.current(value);
         }
       })
       .catch((e: unknown) => {
@@ -46,15 +53,15 @@ export function usePromise<T>(
           error = e;
         }
         setRejectedError(error);
-        if (onReject) {
-          void onReject(error);
+        if (onRejectRef.current) {
+          void onRejectRef.current(error);
         }
       })
       .finally(() => {
         if (promiseId !== latestPromiseIdRef.current) return;
         setPending(false);
       });
-  }, [promise, onResolve, onReject]);
+  }, [promise]);
 
   return {
     pending,
