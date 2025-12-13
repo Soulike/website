@@ -2,6 +2,9 @@ import {useCallback, useRef, useState} from 'react';
 
 /**
  * Similar to `usePromise`, but the promise is created lazily until `run` is called.
+ *
+ * This hook handles race conditions: if `run` is called multiple times before
+ * previous promises complete, only the result from the most recent call is used.
  */
 export function useLazyPromise<ResT, Args extends unknown[]>(
   promiseFactory: (...args: Args) => Promise<ResT>,
@@ -16,27 +19,39 @@ export function useLazyPromise<ResT, Args extends unknown[]>(
   const promiseFactoryRef = useRef(promiseFactory);
   promiseFactoryRef.current = promiseFactory;
 
+  // Track the latest promise ID to handle race conditions.
+  // When multiple promises are in flight, only the latest one should update state.
+  const latestPromiseIdRef = useRef(0);
+
   const run = useCallback((...args: Args) => {
+    const promiseId = ++latestPromiseIdRef.current;
+
     setPending(true);
     setResolvedValue(null);
     setRejectedError(null);
     promiseFactoryRef
       .current(...args)
       .then((value) => {
-        setResolvedValue(value);
+        if (promiseId === latestPromiseIdRef.current) {
+          setResolvedValue(value);
+        }
       })
       .catch((e: unknown) => {
-        let error: Error;
-        if (!(e instanceof Error)) {
-          error = new Error();
-          error.cause = e;
-        } else {
-          error = e;
+        if (promiseId === latestPromiseIdRef.current) {
+          let error: Error;
+          if (!(e instanceof Error)) {
+            error = new Error();
+            error.cause = e;
+          } else {
+            error = e;
+          }
+          setRejectedError(error);
         }
-        setRejectedError(error);
       })
       .finally(() => {
-        setPending(false);
+        if (promiseId === latestPromiseIdRef.current) {
+          setPending(false);
+        }
       });
   }, []);
 
