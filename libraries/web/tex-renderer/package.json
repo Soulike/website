@@ -9,7 +9,7 @@
     "@types/katex": "^0.16.7",
     "@library/dom-helpers": "workspace:^",
     "html-entities": "^2.6.0",
-    "katex": "^0.16.22"
+    "katex": "^0.16.27"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

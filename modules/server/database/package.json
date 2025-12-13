@@ -18,7 +18,7 @@
     "vitest": "catalog:"
   },
   "dependencies": {
-    "@types/pg": "^8.15.5",
+    "@types/pg": "^8.16.0",
     "@module/classes": "workspace:^",
     "@library/object-helpers": "workspace:^",
     "pg": "^8.16.3"
