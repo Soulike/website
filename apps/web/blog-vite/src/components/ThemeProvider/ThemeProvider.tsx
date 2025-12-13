@@ -18,7 +18,6 @@ export function ThemeProvider({children}: IThemeProviderProps) {
           colorScheme === ColorScheme.LIGHT
             ? theme.defaultAlgorithm
             : theme.darkAlgorithm,
-        cssVar: true,
       }}
     >
       <App>{children}</App>

@@ -29,10 +29,10 @@ export function Modify() {
       category,
       isVisible,
       (message: string) => {
-        notification.error({message});
+        notification.error({title: message});
       },
       () => {
-        notification.success({message: 'Article modified'});
+        notification.success({title: 'Article modified'});
       },
       (error) => {
         showErrorNotification(error);

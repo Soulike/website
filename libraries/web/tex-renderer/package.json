@@ -9,13 +9,13 @@
     "@types/katex": "^0.16.7",
     "@library/dom-helpers": "workspace:^",
     "html-entities": "^2.6.0",
-    "katex": "^0.16.22"
+    "katex": "^0.16.27"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/jsdom": "^21.1.7",
+    "@types/jsdom": "^27.0.0",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
     "typescript": "catalog:"

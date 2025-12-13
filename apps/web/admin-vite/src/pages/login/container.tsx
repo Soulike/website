@@ -47,10 +47,10 @@ export function Login() {
           username,
           password,
           (message) => {
-            notification.error({message});
+            notification.error({title: message});
           },
           () => {
-            notification.success({message: 'Successfully logged in'});
+            notification.success({title: 'Successfully logged in'});
           },
           (error) => {
             showErrorNotification(error);

@@ -21,10 +21,10 @@ export function Add() {
       category,
       isVisible,
       (message) => {
-        notification.error({message});
+        notification.error({title: message});
       },
       () => {
-        notification.success({message: 'Submitted'});
+        notification.success({title: 'Submitted'});
       },
       (error) => {
         showErrorNotification(error);

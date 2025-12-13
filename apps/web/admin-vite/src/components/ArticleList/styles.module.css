@@ -1,16 +1,3 @@
 .ArticleList {
   width: 100%;
-  min-height: 100%;
-
-  .title {
-    cursor: pointer;
-  }
-
-  .switch {
-    margin-left: 20px;
-  }
-
-  .buttonWrapper {
-    margin-left: 20px;
-  }
 }

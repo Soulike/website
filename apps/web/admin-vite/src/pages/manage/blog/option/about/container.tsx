@@ -28,10 +28,10 @@ export function About() {
     handleAboutModificationSubmit(
       aboutMarkdown,
       (message) => {
-        notification.error({message});
+        notification.error({title: message});
       },
       () => {
-        notification.success({message: 'About modified successfully'});
+        notification.success({title: 'About modified successfully'});
       },
       (error) => {
         showErrorNotification(error);

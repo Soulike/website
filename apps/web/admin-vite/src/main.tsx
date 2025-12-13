@@ -1,4 +1,3 @@
-import '@ant-design/v5-patch-for-react-19';
 import './main.css';
 
 import assert from 'node:assert';

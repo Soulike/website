@@ -10,7 +10,7 @@
   "dependencies": {
     "@library/hooks": "workspace:^",
     "@library/markdown-article-renderer": "workspace:^",
-    "dompurify": "^3.2.6",
+    "dompurify": "^3.3.1",
     "styled-components": "^6.1.19"
   },
   "devDependencies": {
