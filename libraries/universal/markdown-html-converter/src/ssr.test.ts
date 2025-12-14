@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'bun:test';
 
-import {MarkdownHtmlConverter} from './index.js';
+import {MarkdownHtmlConverter} from './ssr.js';
 
 describe('MarkdownHtmlConverter', () => {
   describe('task lists', () => {

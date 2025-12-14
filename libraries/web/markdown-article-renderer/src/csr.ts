@@ -4,7 +4,7 @@ export class MarkdownArticleRenderer {
     const [{HtmlCodeHighlighter}, {MarkdownHtmlConverter}, {TeXRenderer}] =
       await Promise.all([
         import('@library/html-code-highlighter/csr'),
-        import('@library/markdown-html-converter'),
+        import('@library/markdown-html-converter/csr'),
         import('@library/tex-renderer'),
       ]);
     let html = MarkdownHtmlConverter.toHtml(markdown);

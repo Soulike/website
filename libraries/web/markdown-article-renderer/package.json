@@ -12,7 +12,6 @@
     "@library/tex-renderer": "workspace:^"
   },
   "devDependencies": {
-    "@types/showdown": "^2.0.6",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
     "typescript": "catalog:"

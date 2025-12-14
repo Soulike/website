@@ -1,3 +1,6 @@
+import './types.d.js';
+
+import {HtmlSanitizer} from '@library/html-sanitizer/ssr';
 import MarkdownIt from 'markdown-it';
 import footnote from 'markdown-it-footnote';
 import taskLists from 'markdown-it-task-lists';
@@ -16,7 +19,8 @@ export class MarkdownHtmlConverter {
     MarkdownHtmlConverter.converter.validateLink = () => true;
   }
 
-  public static toHtml(markdown: string): string {
-    return this.converter.render(markdown);
+  public static toHtml(markdown: string) {
+    const html = this.converter.render(markdown);
+    return HtmlSanitizer.sanitize(html);
   }
 }

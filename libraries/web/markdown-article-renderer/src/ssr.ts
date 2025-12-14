@@ -1,5 +1,5 @@
 import {HtmlCodeHighlighter} from '@library/html-code-highlighter/ssr';
-import {MarkdownHtmlConverter} from '@library/markdown-html-converter';
+import {MarkdownHtmlConverter} from '@library/markdown-html-converter/ssr';
 import {TeXRenderer} from '@library/tex-renderer';
 
 export class MarkdownArticleRenderer {

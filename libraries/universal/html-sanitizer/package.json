@@ -1,0 +1,22 @@
+{
+  "name": "@library/html-sanitizer",
+  "type": "module",
+  "exports": {
+    "./csr": "./src/csr.ts",
+    "./ssr": "./src/ssr.ts"
+  },
+  "dependencies": {
+    "dompurify": "^3.2.4",
+    "jsdom": "^26.1.0"
+  },
+  "devDependencies": {
+    "@types/dompurify": "^3.2.0",
+    "@types/jsdom": "^21.1.7",
+    "@config/typescript": "workspace:^",
+    "@config/eslint": "workspace:^",
+    "typescript": "catalog:"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}
