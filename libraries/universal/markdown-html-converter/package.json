@@ -1,17 +1,24 @@
 {
   "name": "@library/markdown-html-converter",
-  "main": "src/index.ts",
   "type": "module",
+  "exports": {
+    "./csr": "./src/csr.ts",
+    "./ssr": "./src/ssr.ts"
+  },
   "dependencies": {
-    "showdown": "^2.1.0"
+    "@library/html-sanitizer": "workspace:^",
+    "markdown-it": "^14.1.0",
+    "markdown-it-footnote": "^4.0.0",
+    "markdown-it-task-lists": "^2.1.1"
   },
   "devDependencies": {
-    "@types/showdown": "^2.0.6",
+    "@types/markdown-it": "^14.1.2",
     "@config/typescript": "workspace:^",
     "@config/eslint": "workspace:^",
     "typescript": "catalog:"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "bun test --coverage"
   }
 }

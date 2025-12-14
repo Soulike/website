@@ -1,19 +1,20 @@
 {
-  "name": "@library/markdown-article-renderer",
+  "name": "@library/html-sanitizer",
   "type": "module",
   "exports": {
     "./csr": "./src/csr.ts",
     "./ssr": "./src/ssr.ts",
-    "./style.css": "./src/style.css"
+    "./types": "./src/types.ts"
   },
   "dependencies": {
-    "@library/html-code-highlighter": "workspace:^",
-    "@library/markdown-html-converter": "workspace:^",
-    "@library/tex-renderer": "workspace:^"
+    "dompurify": "^3.2.4",
+    "jsdom": "^26.1.0"
   },
   "devDependencies": {
-    "@config/eslint": "workspace:^",
+    "@types/dompurify": "^3.2.0",
+    "@types/jsdom": "^21.1.7",
     "@config/typescript": "workspace:^",
+    "@config/eslint": "workspace:^",
     "typescript": "catalog:"
   },
   "scripts": {
