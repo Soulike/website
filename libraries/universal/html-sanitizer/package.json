@@ -3,7 +3,8 @@
   "type": "module",
   "exports": {
     "./csr": "./src/csr.ts",
-    "./ssr": "./src/ssr.ts"
+    "./ssr": "./src/ssr.ts",
+    "./types": "./src/types.ts"
   },
   "dependencies": {
     "dompurify": "^3.2.4",

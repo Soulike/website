@@ -1,26 +1,14 @@
-import './types.d.js';
+import {htmlSanitizer} from '@library/html-sanitizer/ssr';
 
-import {HtmlSanitizer} from '@library/html-sanitizer/ssr';
-import MarkdownIt from 'markdown-it';
-import footnote from 'markdown-it-footnote';
-import taskLists from 'markdown-it-task-lists';
+import {MarkdownHtmlConverter} from './core/markdown-html-converter.js';
+import {IMarkdownHtmlConverter} from './core/types.js';
 
-export class MarkdownHtmlConverter {
-  private static readonly converter = new MarkdownIt({
-    html: true,
-    linkify: false,
-    typographer: false,
-  })
-    .use(footnote)
-    .use(taskLists);
+export class SsrMarkdownHtmlConverter implements IMarkdownHtmlConverter {
+  private static readonly converter = new MarkdownHtmlConverter(htmlSanitizer);
 
-  static {
-    // Disable link validation since it blocks inline data: images.
-    MarkdownHtmlConverter.converter.validateLink = () => true;
-  }
-
-  public static toHtml(markdown: string) {
-    const html = this.converter.render(markdown);
-    return HtmlSanitizer.sanitize(html);
+  public toHtml(markdown: string) {
+    return SsrMarkdownHtmlConverter.converter.toHtml(markdown);
   }
 }
+
+export const markdownHtmlConverter = new SsrMarkdownHtmlConverter();

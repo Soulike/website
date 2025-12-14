@@ -1,9 +1,13 @@
 import DOMPurify from 'dompurify';
 
+import type {HtmlSanitizer} from './types.js';
+
 const purify = DOMPurify(window);
 
-export class HtmlSanitizer {
-  public static sanitize(...args: Parameters<(typeof DOMPurify)['sanitize']>) {
+class CsrHtmlSanitizer implements HtmlSanitizer {
+  public sanitize(...args: Parameters<(typeof DOMPurify)['sanitize']>) {
     return purify.sanitize(...args);
   }
 }
+
+export const htmlSanitizer = new CsrHtmlSanitizer();
