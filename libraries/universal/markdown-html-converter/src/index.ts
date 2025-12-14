@@ -1,16 +1,22 @@
-import {Converter} from 'showdown';
+import MarkdownIt from 'markdown-it';
+import footnote from 'markdown-it-footnote';
+import taskLists from 'markdown-it-task-lists';
 
 export class MarkdownHtmlConverter {
-  private static readonly converter = new Converter({
-    parseImgDimensions: true,
-    strikethrough: true,
-    tables: true,
-    tasklists: true,
-    smoothLivePreview: true,
-    literalMidWordUnderscores: true, // avoid conflicting with latex
-  });
+  private static readonly converter = new MarkdownIt({
+    html: true,
+    linkify: false,
+    typographer: false,
+  })
+    .use(footnote)
+    .use(taskLists);
 
-  public static toHtml(markdown: string) {
-    return this.converter.makeHtml(markdown);
+  static {
+    // Disable link validation since it blocks inline data: images.
+    MarkdownHtmlConverter.converter.validateLink = () => true;
+  }
+
+  public static toHtml(markdown: string): string {
+    return this.converter.render(markdown);
   }
 }

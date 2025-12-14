@@ -3,10 +3,12 @@
   "main": "src/index.ts",
   "type": "module",
   "dependencies": {
-    "showdown": "^2.1.0"
+    "markdown-it": "^14.1.0",
+    "markdown-it-footnote": "^4.0.0",
+    "markdown-it-task-lists": "^2.1.1"
   },
   "devDependencies": {
-    "@types/showdown": "^2.0.6",
+    "@types/markdown-it": "^14.1.2",
     "@config/typescript": "workspace:^",
     "@config/eslint": "workspace:^",
     "typescript": "catalog:"
