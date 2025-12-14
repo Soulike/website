@@ -8,12 +8,14 @@
     "markdown-it-task-lists": "^2.1.1"
   },
   "devDependencies": {
+    "@types/bun": "catalog:",
     "@types/markdown-it": "^14.1.2",
     "@config/typescript": "workspace:^",
     "@config/eslint": "workspace:^",
     "typescript": "catalog:"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
   }
 }

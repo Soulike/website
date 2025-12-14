@@ -47,6 +47,7 @@
     "@ant-design/icons": "^6.1.0",
     "@koa/bodyparser": "^6.0.0",
     "@koa/router": "^15.1.0",
+    "@types/bun": "^1.2.14",
     "@types/node": "^24.10.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
