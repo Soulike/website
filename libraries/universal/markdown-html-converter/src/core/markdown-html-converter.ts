@@ -5,9 +5,7 @@ import MarkdownIt from 'markdown-it';
 import footnote from 'markdown-it-footnote';
 import taskLists from 'markdown-it-task-lists';
 
-import {IMarkdownHtmlConverter} from './types.js';
-
-export class MarkdownHtmlConverter implements IMarkdownHtmlConverter {
+export class MarkdownHtmlConverter {
   private static readonly converter = new MarkdownIt({
     html: true,
     linkify: false,
