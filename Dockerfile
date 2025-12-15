@@ -48,7 +48,7 @@ EXPOSE 3000
 FROM deps AS auth-server-builder
 RUN bun --filter "./apps/server/auth" build
 
-FROM debian:bookworm-slim AS auth-server
+FROM debian:stable-slim AS auth-server
 COPY --from=auth-server-builder /website/apps/server/auth/dist/auth-server /auth/auth-server
 RUN chmod +x /auth/auth-server \
     && addgroup --system authgroup \
@@ -63,7 +63,7 @@ CMD ["/auth/auth-server"]
 FROM deps AS database-server-builder
 RUN bun --filter "./apps/server/database-legacy" build
 
-FROM debian:bookworm-slim AS database-server
+FROM debian:stable-slim AS database-server
 COPY --from=database-server-builder /website/apps/server/database-legacy/dist/database-legacy-server /database/database-server
 RUN chmod +x /database/database-server \
     && addgroup --system databasegroup \
