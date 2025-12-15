@@ -63,7 +63,7 @@ CMD ["/auth/auth-server"]
 FROM deps AS database-server-builder
 RUN bun --filter "./apps/server/database-legacy" build
 
-FROM alpine:latest AS database
+FROM alpine:latest AS database-server
 COPY --from=database-server-builder /website/apps/server/database-legacy/dist/database-legacy-server /database/database-server
 RUN chmod +x /database/database-server \
     && addgroup -S databasegroup \
