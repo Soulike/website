@@ -51,8 +51,8 @@ RUN bun --filter "./apps/server/auth" build
 FROM debian:stable-slim AS auth-server
 COPY --from=auth-server-builder /website/apps/server/auth/dist/auth-server /auth/auth-server
 RUN chmod +x /auth/auth-server \
-    && addgroup --system authgroup \
-    && adduser --system --ingroup authgroup authuser \
+    && groupadd --system authgroup \
+    && useradd --system --gid authgroup authuser \
     && chown -R authuser:authgroup /auth
 WORKDIR /auth
 EXPOSE 4001
@@ -66,8 +66,8 @@ RUN bun --filter "./apps/server/database-legacy" build
 FROM debian:stable-slim AS database-server
 COPY --from=database-server-builder /website/apps/server/database-legacy/dist/database-legacy-server /database/database-server
 RUN chmod +x /database/database-server \
-    && addgroup --system databasegroup \
-    && adduser --system --ingroup databasegroup databaseuser \
+    && groupadd --system databasegroup \
+    && useradd --system --gid databasegroup databaseuser \
     && chown -R databaseuser:databasegroup /database
 WORKDIR /database
 EXPOSE 4000
