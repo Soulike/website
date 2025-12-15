@@ -58,3 +58,18 @@ WORKDIR /auth
 EXPOSE 4001
 USER authuser
 CMD ["/auth/auth-server"]
+
+# Build database-legacy server
+FROM deps AS database-server-builder
+RUN bun --filter "./apps/server/database-legacy" build
+
+FROM alpine:latest AS database
+COPY --from=database-server-builder /website/apps/server/database-legacy/dist/database-legacy-server /database/database-server
+RUN chmod +x /database/database-server \
+    && addgroup -S databasegroup \
+    && adduser -S databaseuser -G databasegroup \
+    && chown -R databaseuser:databasegroup /database
+WORKDIR /database
+EXPOSE 4000
+USER databaseuser
+CMD ["/database/database-server"]
