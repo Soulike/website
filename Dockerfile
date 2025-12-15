@@ -4,7 +4,7 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/go/dockerfile-reference/
 
-FROM oven/bun:alpine AS base
+FROM oven/bun:debian AS base
 
 FROM base AS deps
 WORKDIR /website
