@@ -48,11 +48,11 @@ EXPOSE 3000
 FROM deps AS auth-server-builder
 RUN bun --filter "./apps/server/auth" build
 
-FROM alpine:latest AS auth-server
+FROM debian:stable-slim AS auth-server
 COPY --from=auth-server-builder /website/apps/server/auth/dist/auth-server /auth/auth-server
 RUN chmod +x /auth/auth-server \
-    && addgroup -S authgroup \
-    && adduser -S authuser -G authgroup \
+    && groupadd --system authgroup \
+    && useradd --system --gid authgroup authuser \
     && chown -R authuser:authgroup /auth
 WORKDIR /auth
 EXPOSE 4001
@@ -63,11 +63,11 @@ CMD ["/auth/auth-server"]
 FROM deps AS database-server-builder
 RUN bun --filter "./apps/server/database-legacy" build
 
-FROM alpine:latest AS database-server
+FROM debian:stable-slim AS database-server
 COPY --from=database-server-builder /website/apps/server/database-legacy/dist/database-legacy-server /database/database-server
 RUN chmod +x /database/database-server \
-    && addgroup -S databasegroup \
-    && adduser -S databaseuser -G databasegroup \
+    && groupadd --system databasegroup \
+    && useradd --system --gid databasegroup databaseuser \
     && chown -R databaseuser:databasegroup /database
 WORKDIR /database
 EXPOSE 4000
