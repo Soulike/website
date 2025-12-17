@@ -2,7 +2,7 @@
   "name": "database-legacy",
   "type": "module",
   "scripts": {
-    "build": "bun build --compile --minify --sourcemap ./src/index.ts --outfile dist/database-legacy-server",
+    "build": "bun run build.ts",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests --forceExit"
   },
@@ -20,6 +20,7 @@
     "signale": "^1.4.0"
   },
   "devDependencies": {
+    "@config/bun": "workspace:^",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
     "@types/clone-deep": "^4.0.4",
