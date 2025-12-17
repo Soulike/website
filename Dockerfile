@@ -4,15 +4,13 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/go/dockerfile-reference/
 
-FROM oven/bun:debian AS base
-
-FROM base AS deps
+FROM oven/bun:alpine AS base
 WORKDIR /website
 COPY . .
 RUN bun install --frozen-lockfile
 
 # Build blog
-FROM deps AS blog-builder
+FROM base AS blog-builder
 RUN bun --filter "./apps/web/blog-vite" build
 
 # Setup blog static server
@@ -23,7 +21,7 @@ WORKDIR /
 EXPOSE 3000
 
 # Build admin
-FROM deps AS admin-builder
+FROM base AS admin-builder
 RUN bun --filter "./apps/web/admin-vite" build
 
 # Setup admin static server
@@ -34,7 +32,7 @@ WORKDIR /
 EXPOSE 3000
 
 # Build 2048
-FROM deps AS game-2048-builder
+FROM base AS game-2048-builder
 RUN bun --filter "./apps/web/game-2048" build
 
 # Setup 2048 static server
@@ -45,31 +43,29 @@ WORKDIR /
 EXPOSE 3000
 
 # Build auth server
-FROM deps AS auth-server-builder
+FROM base AS auth-server-builder
 RUN bun --filter "./apps/server/auth" build
 
-FROM debian:stable-slim AS auth-server
-COPY --from=auth-server-builder /website/apps/server/auth/dist/auth-server /auth/auth-server
-RUN chmod +x /auth/auth-server \
-    && groupadd --system authgroup \
-    && useradd --system --gid authgroup authuser \
+FROM oven/bun:alpine AS auth-server
+COPY --from=auth-server-builder /website/apps/server/auth/dist /auth/dist
+RUN addgroup -S authgroup \
+    && adduser -S -G authgroup authuser \
     && chown -R authuser:authgroup /auth
 WORKDIR /auth
 EXPOSE 4001
 USER authuser
-CMD ["/auth/auth-server"]
+CMD ["bun", "run", "dist/index.js"]
 
 # Build database-legacy server
-FROM deps AS database-server-builder
+FROM base AS database-server-builder
 RUN bun --filter "./apps/server/database-legacy" build
 
-FROM debian:stable-slim AS database-server
-COPY --from=database-server-builder /website/apps/server/database-legacy/dist/database-legacy-server /database/database-server
-RUN chmod +x /database/database-server \
-    && groupadd --system databasegroup \
-    && useradd --system --gid databasegroup databaseuser \
+FROM oven/bun:alpine AS database-server
+COPY --from=database-server-builder /website/apps/server/database-legacy/dist /database/dist
+RUN addgroup -S databasegroup \
+    && adduser -S -G databasegroup databaseuser \
     && chown -R databaseuser:databasegroup /database
 WORKDIR /database
 EXPOSE 4000
 USER databaseuser
-CMD ["/database/database-server"]
+CMD ["bun", "run", "dist/index.js"]

@@ -2,11 +2,12 @@
   "name": "auth",
   "type": "module",
   "scripts": {
-    "build": "bun build --compile --minify --sourcemap ./src/index.ts --outfile dist/auth-server",
+    "build": "bun run build.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest"
   },
   "devDependencies": {
+    "@config/bun": "workspace:^",
     "@types/koa": "^3.0.1",
     "@types/koa-compose": "^3.2.9",
     "@types/koa-session": "^6.4.5",
