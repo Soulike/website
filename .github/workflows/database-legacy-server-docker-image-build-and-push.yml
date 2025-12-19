@@ -22,5 +22,5 @@ jobs:
     secrets: inherit
     with:
       docker-file-path: ./Dockerfile
-      docker-build-target: database-server
+      docker-build-target: database-server-legacy
       push-to-registry: true

@@ -35,7 +35,7 @@ jobs:
             admin,
             game-2048,
             auth-server,
-            database-server,
+            database-server-legacy,
             auth-server-legacy,
           ]
     uses: ./.github/workflows/docker-image-build-and-push.yml
