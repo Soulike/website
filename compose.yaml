@@ -30,7 +30,7 @@ services:
       - game-2048
   auth-server:
     restart: always
-    image: 'soulike/auth-server:latest'
+    image: 'soulike/auth-server-legacy:latest'
     depends_on:
       - redis
       - database-server
@@ -62,7 +62,7 @@ services:
       - database
   database-server:
     restart: always
-    image: 'soulike/database-server:latest'
+    image: 'soulike/database-server-legacy:latest'
     secrets:
       - db-password
     environment:
