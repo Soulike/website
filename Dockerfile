@@ -69,3 +69,17 @@ WORKDIR /database
 EXPOSE 4000
 USER databaseuser
 CMD ["bun", "run", "dist/index.js"]
+
+# Build auth-legacy server
+FROM base AS auth-server-legacy-builder
+RUN bun --filter "./apps/server/auth-legacy" build
+
+FROM oven/bun:alpine AS auth-server-legacy
+COPY --from=auth-server-legacy-builder /website/apps/server/auth-legacy/dist /auth/dist
+RUN addgroup -S authgroup \
+    && adduser -S -G authgroup authuser \
+    && chown -R authuser:authgroup /auth
+WORKDIR /auth
+EXPOSE 4001
+USER authuser
+CMD ["bun", "run", "dist/index.js"]
