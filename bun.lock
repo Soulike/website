@@ -103,6 +103,35 @@
         "typescript": "catalog:",
       },
     },
+    "apps/server/blog-legacy": {
+      "name": "blog-legacy",
+      "dependencies": {
+        "@koa/router": "catalog:",
+        "@library/koa-middlewares": "workspace:^",
+        "@module/classes": "workspace:^",
+        "axios": "^1.8.4",
+        "ioredis": "^5.6.1",
+        "koa": "catalog:",
+        "koa-body": "^6.0.1",
+        "koa-compose": "catalog:",
+        "koa-session": "^7.0.2",
+        "signale": "^1.4.0",
+      },
+      "devDependencies": {
+        "@config/bun": "workspace:^",
+        "@config/eslint": "workspace:^",
+        "@config/typescript": "workspace:^",
+        "@types/jest": "^29.5.14",
+        "@types/koa": "catalog:",
+        "@types/koa-compose": "catalog:",
+        "@types/koa__router": "^12.0.4",
+        "@types/node": "catalog:",
+        "@types/signale": "^1.4.7",
+        "jest": "^29.7.0",
+        "ts-jest": "^29.3.2",
+        "typescript": "catalog:",
+      },
+    },
     "apps/server/database-legacy": {
       "name": "database-legacy",
       "dependencies": {
@@ -1495,6 +1524,8 @@
     "basic-auth": ["basic-auth@2.0.1", "", { "dependencies": { "safe-buffer": "5.1.2" } }, "sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg=="],
 
     "bidi-js": ["bidi-js@1.0.3", "", { "dependencies": { "require-from-string": "^2.0.2" } }, "sha512-RKshQI1R3YQ+n9YJz2QQ147P66ELpa1FQEg20Dk8oW9t2KgLbpDLLp9aGZ7y8WHSshDknG0bknqGw5/tyCs5tw=="],
+
+    "blog-legacy": ["blog-legacy@workspace:apps/server/blog-legacy"],
 
     "blog-vite": ["blog-vite@workspace:apps/web/blog-vite"],
 

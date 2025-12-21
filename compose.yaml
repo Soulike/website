@@ -52,13 +52,15 @@ services:
       - database
   blog-server:
     restart: always
-    image: 'soulike/blog-server:latest'
+    image: 'soulike/blog-server-legacy:latest'
     volumes:
       - $HOME/.blog-data:/.blog-data:ro
     depends_on:
+      - redis
       - database-server
     networks:
       - blog
+      - redis
       - database
   database-server:
     restart: always
