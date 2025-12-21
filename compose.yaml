@@ -40,7 +40,7 @@ services:
       - database
   admin-server:
     restart: always
-    image: 'soulike/admin-server:latest'
+    image: 'soulike/admin-server-legacy:latest'
     volumes:
       - $HOME/.blog-data:/.blog-data
     depends_on:
