@@ -9,7 +9,6 @@ on:
       - 'modules/**'
       - 'libraries/**'
       - 'bun.lock'
-      - 'Dockerfile'
   workflow_dispatch:
 
 concurrency:
@@ -21,6 +20,6 @@ jobs:
     uses: ./.github/workflows/docker-image-build-and-push.yml
     secrets: inherit
     with:
-      docker-file-path: ./Dockerfile
+      docker-file-path: ./apps/web/blog-vite/Dockerfile
       docker-build-target: blog
       push-to-registry: true
