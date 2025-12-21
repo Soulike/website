@@ -42,6 +42,10 @@ jobs:
             docker-file-path: ./apps/server/database-legacy/Dockerfile
           - docker-build-target: auth-server-legacy
             docker-file-path: ./apps/server/auth-legacy/Dockerfile
+          - docker-build-target: admin-server-legacy
+            docker-file-path: ./apps/server/admin-legacy/Dockerfile
+          - docker-build-target: blog-server-legacy
+            docker-file-path: ./apps/server/blog-legacy/Dockerfile
     uses: ./.github/workflows/docker-image-build-and-push.yml
     secrets: inherit
     with:
