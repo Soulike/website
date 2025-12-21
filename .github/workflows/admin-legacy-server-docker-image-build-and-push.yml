@@ -1,0 +1,25 @@
+name: Admin Legacy Server Docker Image Build and Push
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'apps/server/admin-legacy/**'
+      - 'modules/**'
+      - 'libraries/**'
+      - 'bun.lock'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/docker-image-build-and-push.yml
+    secrets: inherit
+    with:
+      docker-file-path: ./apps/server/admin-legacy/Dockerfile
+      docker-build-target: admin-server-legacy
+      push-to-registry: true
