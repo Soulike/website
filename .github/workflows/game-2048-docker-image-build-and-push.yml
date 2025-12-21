@@ -8,7 +8,6 @@ on:
       - 'apps/web/game-2048/**'
       - 'libraries/**'
       - 'bun.lock'
-      - 'Dockerfile'
   workflow_dispatch:
 
 concurrency:
@@ -20,6 +19,6 @@ jobs:
     uses: ./.github/workflows/docker-image-build-and-push.yml
     secrets: inherit
     with:
-      docker-file-path: ./Dockerfile
+      docker-file-path: ./apps/web/game-2048/Dockerfile
       docker-build-target: game-2048
       push-to-registry: true

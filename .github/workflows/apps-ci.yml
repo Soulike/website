@@ -29,19 +29,23 @@ jobs:
     needs: [test]
     strategy:
       matrix:
-        docker-build-target:
-          [
-            blog,
-            admin,
-            game-2048,
-            auth-server,
-            database-server-legacy,
-            auth-server-legacy,
-          ]
+        include:
+          - docker-build-target: blog
+            docker-file-path: ./apps/web/blog-vite/Dockerfile
+          - docker-build-target: admin
+            docker-file-path: ./apps/web/admin-vite/Dockerfile
+          - docker-build-target: game-2048
+            docker-file-path: ./apps/web/game-2048/Dockerfile
+          - docker-build-target: auth-server
+            docker-file-path: ./apps/server/auth/Dockerfile
+          - docker-build-target: database-server-legacy
+            docker-file-path: ./apps/server/database-legacy/Dockerfile
+          - docker-build-target: auth-server-legacy
+            docker-file-path: ./apps/server/auth-legacy/Dockerfile
     uses: ./.github/workflows/docker-image-build-and-push.yml
     secrets: inherit
     with:
-      docker-file-path: ./Dockerfile
+      docker-file-path: ${{ matrix.docker-file-path }}
       docker-build-target: ${{ matrix.docker-build-target }}
       push-to-registry: false
   ci-success:
