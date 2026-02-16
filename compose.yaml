@@ -85,7 +85,11 @@ services:
       - admin-server
     volumes:
       - $HOME/ssl:/ssl:ro
-      - ./nginx/logs:/var/log/nginx
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '5'
     ports:
       - 80:80
       - 443:443
