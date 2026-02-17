@@ -10,6 +10,7 @@ import {BODY, SERVER, SESSION} from './CONFIG/index.js';
 import dispatcher from './Dispatcher/index.js';
 
 const app = new Koa();
+app.proxy = true;
 
 app.on('error', (e: unknown) => {
   if (e instanceof Error)
