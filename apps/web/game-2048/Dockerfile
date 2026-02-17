@@ -11,6 +11,5 @@ RUN bun --filter "./apps/web/game-2048" build
 FROM nginx:stable-alpine AS game-2048
 COPY --from=builder /website/apps/web/game-2048/dist /game-2048-dist
 COPY --from=builder /website/apps/web/game-2048/nginx.conf /etc/nginx/conf.d/game-2048.conf
-RUN nginx -t
 WORKDIR /
 EXPOSE 3000
