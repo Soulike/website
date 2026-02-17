@@ -31,20 +31,32 @@ services:
   auth-server:
     restart: always
     image: 'soulike/auth-server-legacy:latest'
+    secrets:
+      - redis-password
+    environment:
+      - REDIS_PASSWORD_FILE=/run/secrets/redis-password
     depends_on:
+      - redis
       - database-server
     networks:
       - admin
+      - redis
       - database
   admin-server:
     restart: always
     image: 'soulike/admin-server-legacy:latest'
     volumes:
       - $HOME/.blog-data:/.blog-data
+    secrets:
+      - redis-password
+    environment:
+      - REDIS_PASSWORD_FILE=/run/secrets/redis-password
     depends_on:
+      - redis
       - database-server
     networks:
       - admin
+      - redis
       - database
   blog-server:
     restart: always
@@ -110,11 +122,22 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  redis:
+    restart: always
+    image: redis:alpine
+    secrets:
+      - redis-password
+    command: sh -c 'redis-server --requirepass "$$(cat /run/secrets/redis-password)"'
+    networks:
+      - redis
 networks:
   blog:
   admin:
   game-2048:
   database:
+  redis:
 secrets:
   db-password:
     file: $HOME/website-database/db-password
+  redis-password:
+    file: $HOME/website-database/redis-password
