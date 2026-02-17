@@ -11,7 +11,7 @@ WORKDIR /
 COPY ./nginx/configurations /etc/nginx
 
 FROM website-nginx AS website-nginx-test
-COPY ./nginx/generate-dummy-certs.sh /generate-dummy-certs.sh
-COPY ./nginx/replace-upstream-hosts.sh /replace-upstream-hosts.sh
+COPY ./nginx/ci-scripts/generate-dummy-certs.sh /generate-dummy-certs.sh
+COPY ./nginx/ci-scripts/replace-upstream-hosts.sh /replace-upstream-hosts.sh
 RUN apk add --no-cache openssl && sh /generate-dummy-certs.sh
 RUN sh /replace-upstream-hosts.sh && nginx -t
