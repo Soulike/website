@@ -5,8 +5,9 @@ export const SESSION: Partial<SessionOptions> = {
   maxAge: 60 * 60 * 1000,
   overwrite: true,
   httpOnly: true,
-  signed: false,
+  signed: true,
   rolling: false,
   renew: true,
   sameSite: 'strict',
+  secure: true,
 };

@@ -5,7 +5,7 @@ export const KOS_SESSION_OPTIONS: Partial<SessionOptions> = {
   maxAge: 60 * 60 * 1000,
   overwrite: true,
   httpOnly: true,
-  signed: false,
+  signed: true,
   rolling: false,
   renew: true,
   sameSite: 'strict',

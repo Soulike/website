@@ -1,3 +1,5 @@
+import crypto from 'node:crypto';
+
 import {requestLogger} from '@library/koa-middlewares';
 import Koa from 'koa';
 import {koaBody} from 'koa-body';
@@ -15,6 +17,7 @@ app.on('error', (e: unknown) => {
   else signale.error(`未捕获的错误：\n${JSON.stringify(e)}`);
 });
 
+app.keys = [crypto.randomBytes(128).toString('hex')];
 app.use(session(SESSION, app));
 app.use(koaBody(BODY));
 app.use(requestLogger(signale.info));
