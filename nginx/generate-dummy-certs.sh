@@ -2,7 +2,7 @@
 # Generate dummy certificates for nginx config validation.
 # Creates self-signed certs at paths referenced in security.conf.
 
-set -eux
+set -eu
 
 CONF="/etc/nginx/security.conf"
 mkdir -p /ssl
