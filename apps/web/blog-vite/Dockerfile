@@ -11,5 +11,6 @@ RUN bun --filter "./apps/web/blog-vite" build
 FROM nginx:stable-alpine AS blog
 COPY --from=builder /website/apps/web/blog-vite/dist /blog-dist
 COPY --from=builder /website/apps/web/blog-vite/nginx.conf /etc/nginx/conf.d/blog.conf
+RUN nginx -t
 WORKDIR /
 EXPOSE 3000

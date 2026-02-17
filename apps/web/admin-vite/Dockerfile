@@ -11,5 +11,6 @@ RUN bun --filter "./apps/web/admin-vite" build
 FROM nginx:stable-alpine AS admin
 COPY --from=builder /website/apps/web/admin-vite/dist /admin-dist
 COPY --from=builder /website/apps/web/admin-vite/nginx.conf /etc/nginx/conf.d/admin.conf
+RUN nginx -t
 WORKDIR /
 EXPOSE 3000
