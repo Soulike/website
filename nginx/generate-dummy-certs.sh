@@ -2,7 +2,7 @@
 # Generate dummy certificates for nginx config validation.
 # Creates self-signed certs at paths referenced in security.conf.
 
-set -eu
+set -eux
 
 CONF="/etc/nginx/security.conf"
 mkdir -p /ssl
@@ -13,10 +13,10 @@ PATHS=$(awk '{for(i=1;i<=NF;i++) if($i ~ /^\/ssl\//) {gsub(/;$/,"",$i); print $i
 # Generate a single self-signed cert and key
 openssl req -x509 -newkey rsa:2048 \
     -keyout /ssl/_dummy.key -out /ssl/_dummy.crt \
-    -days 1 -nodes -subj "/CN=test" 2>/dev/null
+    -days 1 -nodes -subj "/CN=test"
 
 # Generate DH parameters
-openssl dhparam -out /ssl/_dummy.dhparam 256 2>/dev/null
+openssl dhparam -out /ssl/_dummy.dhparam 512
 
 # Create copies for each referenced path
 for P in $PATHS; do
