@@ -9,3 +9,9 @@ FROM nginx:stable-alpine AS base
 FROM base AS website-nginx
 WORKDIR /
 COPY ./nginx/configurations /etc/nginx
+
+FROM website-nginx AS website-nginx-test
+COPY ./nginx/ci-scripts/generate-dummy-certs.sh /generate-dummy-certs.sh
+COPY ./nginx/ci-scripts/replace-upstream-hosts.sh /replace-upstream-hosts.sh
+RUN apk add --no-cache openssl && sh /generate-dummy-certs.sh
+RUN sh /replace-upstream-hosts.sh && nginx -t

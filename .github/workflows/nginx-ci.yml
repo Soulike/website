@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'nginx/configurations/**'
+      - 'nginx/ci-scripts/**'
       - 'nginx/Dockerfile'
   workflow_dispatch:
 
@@ -19,5 +20,5 @@ jobs:
     secrets: inherit
     with:
       docker-file-path: ./nginx/Dockerfile
-      docker-build-target: website-nginx
+      docker-build-target: website-nginx-test
       push-to-registry: false
