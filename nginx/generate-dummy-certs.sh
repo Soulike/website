@@ -16,7 +16,7 @@ openssl req -x509 -newkey rsa:2048 \
     -days 1 -nodes -subj "/CN=test"
 
 # Generate DH parameters
-openssl dhparam -out /ssl/_dummy.dhparam 512
+openssl dhparam -out /ssl/_dummy.dhparam 2048
 
 # Create copies for each referenced path
 for P in $PATHS; do
