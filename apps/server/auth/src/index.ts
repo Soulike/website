@@ -1,5 +1,3 @@
-import crypto from 'node:crypto';
-
 import {bodyParser} from '@koa/bodyparser';
 import {Logger} from '@library/logger';
 import Koa from 'koa';
@@ -20,9 +18,6 @@ app.on('error', (e: unknown) => {
     Logger.error(`Uncaught error：\n${JSON.stringify(e)}`);
   }
 });
-
-const secret = crypto.randomBytes(128).toString('hex');
-app.keys = [secret];
 
 app.use(session(KOS_SESSION_OPTIONS, app));
 app.use(bodyParser(KOA_BODY_OPTIONS));
