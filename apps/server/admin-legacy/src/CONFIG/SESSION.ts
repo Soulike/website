@@ -15,10 +15,14 @@ export const SESSION: Partial<SessionOptions> = {
   store: {
     get: async (key) => {
       const value = await ioredis.get(key);
-      if (value !== null) {
+      if (value === null) {
+        return null;
+      }
+      try {
         return JSON.parse(value);
-      } else {
-        return value;
+      } catch {
+        await ioredis.del(key);
+        return null;
       }
     },
     set: async (key, sess, maxAge) => {
