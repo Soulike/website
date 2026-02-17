@@ -32,11 +32,9 @@ services:
     restart: always
     image: 'soulike/auth-server-legacy:latest'
     depends_on:
-      - redis
       - database-server
     networks:
       - admin
-      - redis
       - database
   admin-server:
     restart: always
@@ -44,11 +42,9 @@ services:
     volumes:
       - $HOME/.blog-data:/.blog-data
     depends_on:
-      - redis
       - database-server
     networks:
       - admin
-      - redis
       - database
   blog-server:
     restart: always
@@ -56,11 +52,9 @@ services:
     volumes:
       - $HOME/.blog-data:/.blog-data:ro
     depends_on:
-      - redis
       - database-server
     networks:
       - blog
-      - redis
       - database
   database-server:
     restart: always
@@ -70,7 +64,6 @@ services:
     environment:
       - DB_PASSWORD_FILE=/run/secrets/db-password
     depends_on:
-      - redis
       - db
     networks:
       - database # Database shall never be exposed with other networks for safety
@@ -91,17 +84,12 @@ services:
         max-size: '10m'
         max-file: '5'
     ports:
-      - 80:80
-      - 443:443
+      - '80:80'
+      - '443:443'
     networks:
       - blog
       - admin
       - game-2048
-  redis:
-    restart: always
-    image: redis:alpine
-    networks:
-      - redis # Redis shall never be exposed with other networks for safety
   db:
     image: postgres:16-alpine
     restart: always
@@ -114,7 +102,7 @@ services:
       - POSTGRES_DB=website
       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
     ports:
-      - 5432:5432
+      - '127.0.0.1:5432:5432'
     networks:
       - database
     healthcheck:
@@ -127,7 +115,6 @@ networks:
   admin:
   game-2048:
   database:
-  redis:
 secrets:
   db-password:
     file: $HOME/website-database/db-password
