@@ -11,6 +11,7 @@ import {LISTEN_OPTIONS} from '@/configurations/listen-options.js';
 import {dispatcher} from '@/dispatcher/index.js';
 
 const app = new Koa();
+app.proxy = true;
 
 app.on('error', (e: unknown) => {
   if (e instanceof Error) {
