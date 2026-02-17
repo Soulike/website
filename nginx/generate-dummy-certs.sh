@@ -1,29 +1,28 @@
 #!/bin/sh
 # Generate dummy certificates for nginx config validation.
-# Reads certificate paths from security.conf and creates self-signed certs.
+# Creates self-signed certs at paths referenced in security.conf.
 
-set -e
+set -eu
 
 CONF="/etc/nginx/security.conf"
 mkdir -p /ssl
 
-# Extract certificate key and cert paths from config
-ECC_KEY=$(grep 'ssl_certificate_key.*_ecc' "$CONF" | awk '{print $2}' | tr -d ';')
-ECC_CERT=$(grep 'ssl_certificate[^_].*_ecc' "$CONF" | awk '{print $2}' | tr -d ';')
-RSA_KEY=$(grep 'ssl_certificate_key' "$CONF" | grep -v '_ecc' | awk '{print $2}' | tr -d ';')
-RSA_CERT=$(grep 'ssl_certificate[^_]' "$CONF" | grep -v '_ecc' | head -1 | awk '{print $2}' | tr -d ';')
-DH_PARAM=$(grep 'ssl_dhparam' "$CONF" | awk '{print $2}' | tr -d ';')
-TRUSTED_CERT=$(grep 'ssl_trusted_certificate' "$CONF" | awk '{print $2}' | tr -d ';')
+# Extract all unique file paths under /ssl from the config
+PATHS=$(awk '{for(i=1;i<=NF;i++) if($i ~ /^\/ssl\//) {gsub(/;$/,"",$i); print $i}}' "$CONF" | sort -u)
 
-openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 \
-    -keyout "$ECC_KEY" -out "$ECC_CERT" \
-    -days 1 -nodes -subj "/CN=test" 2>/dev/null
-
+# Generate a single self-signed cert and key
 openssl req -x509 -newkey rsa:2048 \
-    -keyout "$RSA_KEY" -out "$RSA_CERT" \
+    -keyout /ssl/_dummy.key -out /ssl/_dummy.crt \
     -days 1 -nodes -subj "/CN=test" 2>/dev/null
 
-openssl dhparam -out "$DH_PARAM" 256 2>/dev/null
+# Generate DH parameters
+openssl dhparam -out /ssl/_dummy.dhparam 256 2>/dev/null
 
-# trusted_certificate can reuse the RSA cert
-cp "$RSA_CERT" "$TRUSTED_CERT" 2>/dev/null || true
+# Create copies for each referenced path
+for P in $PATHS; do
+    case "$P" in
+        *dhparam*) cp /ssl/_dummy.dhparam "$P" ;;
+        *.key)     cp /ssl/_dummy.key "$P" ;;
+        *)         cp /ssl/_dummy.crt "$P" ;;
+    esac
+done
