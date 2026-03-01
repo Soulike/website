@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 
 import {PromiseTask} from '@library/task-runner';
+import {assertIsTest} from '@library/test-helpers';
 import {User} from '@module/classes';
 import {UserTable} from '@module/database';
 
@@ -44,6 +45,7 @@ export class CheckUserTask extends PromiseTask<boolean> {
     username: string,
     password: string,
   ): string {
+    assertIsTest('getSaltedPasswordForTesting');
     return CheckUserTask.getSaltedPassword(username, password);
   }
 }
