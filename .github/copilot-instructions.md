@@ -182,3 +182,5 @@ import {Component} from 'path/to/Component/index.js';
 - When developing unit tests, develop based on API interfaces and DO NOT read implementations.
 - Can expose private methods and members required in testing with `xxxForTesting` methods. The test-only methods does
   not need test cases.
+- All `xxxForTesting` methods must call `assertIsTest` from `@library/test-helpers` at the start to prevent
+  production usage.
