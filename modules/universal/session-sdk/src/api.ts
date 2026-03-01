@@ -1,4 +1,4 @@
-import {Session,User} from '@module/classes';
+import {Session, User} from '@module/classes';
 import {StatusCodes} from 'http-status-codes';
 
 import {CreateSessionResult} from './types.js';
