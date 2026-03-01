@@ -107,7 +107,7 @@ function useIsTileNewlyCreated() {
   }, []);
 
   const [isTileNewlyCreated, setIsTileNewlyCreated] = useState<boolean[][]>(
-    createIsTileNewlyCreated(),
+    () => createIsTileNewlyCreated(),
   );
 
   const onGridChangeEventListener: GridChangeEventListener = useCallback(
@@ -147,7 +147,7 @@ function useIsTileMergeDestination() {
 
   const [isTileMergeDestination, setIsTileMergeDestination] = useState<
     boolean[][]
-  >(createIsTileMergeDestination());
+  >(() => createIsTileMergeDestination());
 
   const onGridChangeEventListener: GridChangeEventListener = useCallback(
     (_newGrid, movements) => {
@@ -184,7 +184,7 @@ function useIsTileMovementDestination() {
 
   const [isTileMovementDestination, setIsTileMovementDestination] = useState<
     boolean[][]
-  >(createIsTileMovementDestination());
+  >(() => createIsTileMovementDestination());
 
   const onGridChangeEventListener: GridChangeEventListener = useCallback(
     (_newGrid, movements) => {
@@ -222,7 +222,7 @@ function useTileMovements() {
 
   const [tileMovements, setTileMovements] = useState<
     (Movement | undefined)[][]
-  >(createTileMovements());
+  >(() => createTileMovements());
 
   const onGridChangeEventListener: GridChangeEventListener = useCallback(
     (_newGrid, movements) => {
