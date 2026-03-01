@@ -25,7 +25,6 @@ export function ModifyModal(props: Props) {
       <div className={styles.ModifyModal}>
         <Input
           className={styles.categoryNameInput}
-          addonBefore={'Category'}
           onChange={onCategoryNameInputChange}
           value={categoryName}
         />
