@@ -10,7 +10,8 @@ import {LayoutView} from './view.js';
 import {useViewModel} from './view-model.js';
 
 export function Layout() {
-  const {logout, logoutLoading, session, isLoadingSession} = useViewModel();
+  const {logout, logoutLoading, session, sessionError, isLoadingSession} =
+    useViewModel();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,6 +19,12 @@ export function Layout() {
       void navigate(PAGE_ID_TO_PATH[PAGE_ID.LOGIN], {replace: true});
     }
   }, [session, isLoadingSession, navigate]);
+
+  useEffect(() => {
+    if (sessionError) {
+      showErrorNotification(sessionError);
+    }
+  }, [sessionError]);
 
   const onExitModalOkButtonClick: ModalFuncProps['onOk'] = useCallback(() => {
     logout(

@@ -1,5 +1,10 @@
 import {notification} from 'antd';
-import {type DOMAttributes, useCallback, useLayoutEffect} from 'react';
+import {
+  type DOMAttributes,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
 import {useNavigate} from 'react-router';
 
 import {showErrorNotification} from '@/helpers/error-notification-helper.js';
@@ -13,6 +18,7 @@ export function Login() {
     login,
     loginLoading,
     session,
+    sessionError,
     isLoadingSession,
     username,
     onUsernameInputChange,
@@ -26,6 +32,12 @@ export function Login() {
       void navigate(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.INDEX], {replace: true});
     }
   }, [session, isLoadingSession, navigate]);
+
+  useEffect(() => {
+    if (sessionError) {
+      showErrorNotification(sessionError);
+    }
+  }, [sessionError]);
 
   const onLoginFormSubmit: DOMAttributes<HTMLFormElement>['onSubmit'] =
     useCallback<Exclude<DOMAttributes<HTMLFormElement>['onSubmit'], undefined>>(

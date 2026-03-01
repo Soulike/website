@@ -4,6 +4,7 @@ import {createContext} from 'react';
 
 export interface SessionContextValue {
   session: Session | null;
+  sessionError: Error | null;
   isLoadingSession: boolean;
   reloadSession: () => Promise<void>;
   createSession: typeof createSession;

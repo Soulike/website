@@ -2,11 +2,12 @@ import {useSession} from '@module/session-context';
 import {useCallback, useState} from 'react';
 
 export function useViewModel() {
-  const {session, isLoadingSession, deleteSession} = useSession();
+  const {session, sessionError, isLoadingSession, deleteSession} = useSession();
   const {logout, logoutLoading} = useLogoutViewModel(deleteSession);
 
   return {
     session,
+    sessionError,
     isLoadingSession,
     logout,
     logoutLoading,

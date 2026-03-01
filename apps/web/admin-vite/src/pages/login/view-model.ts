@@ -7,7 +7,7 @@ import {CreateSessionResult} from '@module/session-sdk';
 import {useCallback, useState} from 'react';
 
 export function useViewModel() {
-  const {session, isLoadingSession, createSession} = useSession();
+  const {session, sessionError, isLoadingSession, createSession} = useSession();
   const {login, loginLoading} = useLogin(createSession);
 
   const {value: username, onChange: onUsernameInputChange} = useTextInput();
@@ -17,6 +17,7 @@ export function useViewModel() {
     login,
     loginLoading,
     session,
+    sessionError,
     isLoadingSession,
     username,
     onUsernameInputChange,
