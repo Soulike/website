@@ -1,7 +1,7 @@
 import {useLazyPromise} from '@library/hooks';
 import {Article, Category} from '@module/classes';
 import {articleModel, categoryModel} from '@module/model/blog';
-import {useEffect} from 'react';
+import {useEffect, useMemo} from 'react';
 import {useNavigate, useParams} from 'react-router';
 
 import {getDiffInDays} from '@/helpers/date-helpers.js';
@@ -108,12 +108,12 @@ function useOutdatedWarningMessage(article: Article | null): string {
 }
 
 function useShouldShowOutdatedWarningMessage(article: Article | null) {
-  if (!article) {
-    return false;
-  }
-  const diffInDays = getDiffInDays(
-    new Date(),
-    new Date(article.publicationTime),
-  );
+  const diffInDays = useMemo(() => {
+    if (!article) {
+      return 0;
+    }
+    return getDiffInDays(new Date(), new Date(article.publicationTime));
+  }, [article]);
+
   return diffInDays > 30;
 }
