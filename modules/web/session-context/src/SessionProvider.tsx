@@ -74,6 +74,7 @@ export function SessionProvider({children}: SessionProviderProps) {
     async (...args: Parameters<typeof deleteSessionApi>) => {
       await deleteSessionApi(...args);
       setSession(null);
+      setSessionError(null);
     },
     [],
   );
