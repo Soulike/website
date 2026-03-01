@@ -20,10 +20,9 @@ interface SessionProviderProps {
 }
 
 export function SessionProvider({children}: SessionProviderProps) {
-  const [userInfo, setUserInfo] =
+  const [session, setSession] =
     useState<Awaited<ReturnType<typeof getSession>>>(null);
-  const [isLoadingUserInfoOnMount, setIsLoadingUserInfoOnMount] =
-    useState(false);
+  const [isLoadingSessionOnMount, setIsLoadingSessionOnMount] = useState(false);
 
   const lastReloadSessionIdRef = useRef(0);
 
@@ -31,12 +30,12 @@ export function SessionProvider({children}: SessionProviderProps) {
     lastReloadSessionIdRef.current++;
     const reloadSessionId = lastReloadSessionIdRef.current;
     try {
-      const userInfo = await getSession();
+      const session = await getSession();
       if (reloadSessionId !== lastReloadSessionIdRef.current) {
         // Outdated. Abandon.
         return;
       }
-      setUserInfo(userInfo);
+      setSession(session);
     } catch (e: unknown) {
       console.error(e);
     }
@@ -44,9 +43,9 @@ export function SessionProvider({children}: SessionProviderProps) {
 
   // Load session on mounted.
   useEffect(() => {
-    setIsLoadingUserInfoOnMount(true);
+    setIsLoadingSessionOnMount(true);
     void reloadSession().finally(() => {
-      setIsLoadingUserInfoOnMount(false);
+      setIsLoadingSessionOnMount(false);
     });
   }, [reloadSession]);
 
@@ -64,23 +63,23 @@ export function SessionProvider({children}: SessionProviderProps) {
   const wrappedDeleteSession = useCallback(
     async (...args: Parameters<typeof deleteSessionApi>) => {
       await deleteSessionApi(...args);
-      setUserInfo(null);
+      setSession(null);
     },
     [],
   );
 
   const contextValue = useMemo(
     () => ({
-      userInfo,
-      isLoadingUserInfo: isLoadingUserInfoOnMount,
+      session,
+      isLoadingSession: isLoadingSessionOnMount,
       reloadSession,
       createSession: wrappedCreateSession,
       deleteSession: wrappedDeleteSession,
     }),
     [
-      isLoadingUserInfoOnMount,
+      isLoadingSessionOnMount,
       reloadSession,
-      userInfo,
+      session,
       wrappedCreateSession,
       wrappedDeleteSession,
     ],

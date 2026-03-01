@@ -1,4 +1,4 @@
-import {User, UserInfo} from '@module/classes';
+import {Session, User} from '@module/classes';
 import {StatusCodes} from 'http-status-codes';
 
 import {CreateSessionResult} from './types.js';
@@ -6,7 +6,7 @@ import {CreateSessionResult} from './types.js';
 // Sync with auth server.
 export const AUTH_URL = new URL('https://auth.soulike.tech/session');
 
-export async function getSession(): Promise<UserInfo | null> {
+export async function getSession(): Promise<Session | null> {
   const response = await fetch(AUTH_URL, {
     method: 'GET',
     credentials: 'include',
@@ -17,11 +17,11 @@ export async function getSession(): Promise<UserInfo | null> {
   if (!response.ok) {
     throw new Error(`Get session failed with HTTP status ${response.status}`);
   }
-  const userInfo: unknown = await response.json();
-  if (!UserInfo.validate(userInfo)) {
-    throw new Error(`Invalid UserInfo`);
+  const session: unknown = await response.json();
+  if (!Session.validate(session)) {
+    throw new Error(`Invalid Session`);
   }
-  return UserInfo.from(userInfo);
+  return Session.from(session);
 }
 
 export async function createSession(user: User): Promise<CreateSessionResult> {
