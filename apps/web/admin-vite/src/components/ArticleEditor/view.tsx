@@ -69,7 +69,7 @@ export function ArticleEditorView(props: ArticleEditorViewProps) {
   return (
     <div className={styles.ArticleEditor}>
       <Space.Compact
-        direction={'vertical'}
+        orientation={'vertical'}
         size={'large'}
         className={styles.inputGroup}
       >

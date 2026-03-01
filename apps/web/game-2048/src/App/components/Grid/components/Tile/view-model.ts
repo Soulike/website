@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useMemo} from 'react';
 
 import {EMPTY_TILE_Z_INDEX, TILE_Z_INDEX} from '@/constants/animation.js';
 import {EMPTY_TILE_VALUE} from '@/constants/configs.js';
@@ -25,45 +25,24 @@ export function useViewModel(tileValue: number) {
 }
 
 export function useBackgroundColor(tileValue: number) {
-  const [backgroundColor, setBackgroundColor] = useState('');
-
-  useEffect(() => {
-    setBackgroundColor(getTileBackgroundColor(tileValue));
-  }, [tileValue]);
-
-  return backgroundColor;
+  return useMemo(() => getTileBackgroundColor(tileValue), [tileValue]);
 }
 
 export function useTextColor(tileValue: number) {
-  const [textColor, setTextColor] = useState('');
-
-  useEffect(() => {
-    setTextColor(getTileTextColor(tileValue));
-  }, [tileValue]);
-
-  return textColor;
+  return useMemo(() => getTileTextColor(tileValue), [tileValue]);
 }
 
 export function useFontSize(tileValue: number) {
   const {fontSizeCSS} = useResponsiveTileFontSize();
-  const [fontSize, setFontSize] = useState('');
-
-  useEffect(() => {
+  return useMemo(() => {
     const sizeType = getTileFontSize(tileValue);
-    setFontSize(fontSizeCSS[sizeType]);
+    return fontSizeCSS[sizeType];
   }, [tileValue, fontSizeCSS]);
-
-  return fontSize;
 }
 
 export function useZIndex(tileValue: number) {
-  const [zIndex, setZIndex] = useState(TILE_Z_INDEX);
-  useEffect(() => {
-    if (tileValue === EMPTY_TILE_VALUE) {
-      setZIndex(EMPTY_TILE_Z_INDEX);
-    } else {
-      setZIndex(TILE_Z_INDEX);
-    }
-  }, [tileValue]);
-  return zIndex;
+  return useMemo(
+    () => (tileValue === EMPTY_TILE_VALUE ? EMPTY_TILE_Z_INDEX : TILE_Z_INDEX),
+    [tileValue],
+  );
 }

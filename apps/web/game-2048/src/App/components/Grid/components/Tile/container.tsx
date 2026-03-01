@@ -40,6 +40,9 @@ export function Tile(props: TileProps) {
   }, [value]);
 
   useEffect(() => {
+    let mergeTimeoutId: ReturnType<typeof setTimeout> | undefined;
+    let movementDestTimeoutId: ReturnType<typeof setTimeout> | undefined;
+
     if (!viewRef.current) {
       setInternalValue(value);
       return;
@@ -66,13 +69,13 @@ export function Tile(props: TileProps) {
     }
     if (mergeAnimate) {
       const viewElement = viewRef.current;
-      setTimeout(() => {
+      mergeTimeoutId = setTimeout(() => {
         setInternalValue(value);
         void mergeAnimate(viewElement);
       }, TILE_MOVE_ANIMATION_DURATION);
     }
     if (isMovementDestination) {
-      setTimeout(() => {
+      movementDestTimeoutId = setTimeout(() => {
         setInternalValue(value);
       }, TILE_MOVE_ANIMATION_DURATION - 20); // Slightly earlier to prevent flickering.
     }
@@ -80,6 +83,11 @@ export function Tile(props: TileProps) {
       setInternalValue(value);
       void creationAnimate(viewRef.current);
     }
+
+    return () => {
+      clearTimeout(mergeTimeoutId);
+      clearTimeout(movementDestTimeoutId);
+    };
   }, [
     creationAnimate,
     mergeAnimate,

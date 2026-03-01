@@ -16,13 +16,17 @@ export function useViewModel() {
   } = useModal();
 
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     if (isGameOver) {
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         showGameOverModal();
       }, 1000);
     } else {
       hideGameOverModal();
     }
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [hideGameOverModal, isGameOver, showGameOverModal]);
 
   return {

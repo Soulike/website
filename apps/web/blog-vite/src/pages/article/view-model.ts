@@ -26,8 +26,7 @@ export function useViewModel() {
     category,
   } = useLoadCategory();
 
-  const shouldShowOutdatedMessage =
-    useShouldShowOutdatedWarningMessage(article);
+  const shouldShowOutdatedMessage = shouldShowOutdatedWarningMessage(article);
   const outdatedWarningMessage = useOutdatedWarningMessage(article);
 
   const loadingString = useI18nString(STRING_KEY.UI_LABEL_LOADING);
@@ -107,7 +106,7 @@ function useOutdatedWarningMessage(article: Article | null): string {
   );
 }
 
-function useShouldShowOutdatedWarningMessage(article: Article | null) {
+function shouldShowOutdatedWarningMessage(article: Article | null) {
   if (!article) {
     return false;
   }
