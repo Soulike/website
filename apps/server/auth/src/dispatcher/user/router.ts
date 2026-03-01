@@ -15,7 +15,7 @@ router.get(SESSION, (ctx) => {
   if (!ctx.session) {
     ctx.response.status = StatusCodes.NOT_FOUND;
   } else {
-    ctx.response.body = ctx.session.data;
+    ctx.response.body = ctx.session;
   }
 });
 
@@ -26,8 +26,9 @@ router.post(SESSION, async (ctx) => {
     return;
   }
   try {
-    const result = await createSession(User.from(body), ctx);
-    if (result) {
+    const session = await createSession(User.from(body));
+    if (session) {
+      ctx.session = session;
       ctx.response.status = StatusCodes.NO_CONTENT;
     } else {
       ctx.response.status = StatusCodes.UNAUTHORIZED;

@@ -1,12 +1,11 @@
 import assert from 'node:assert';
 
 import {concurrentPromiseTaskRunner} from '@library/task-runner';
-import {User, UserInfo} from '@module/classes';
+import {Session, User} from '@module/classes';
 
-import {Context} from '@/dispatcher/types.js';
 import {CheckUserTask} from '@/tasks/check-user-task.js';
 
-export async function createSession(user: User, ctx: Context) {
+export async function createSession(user: User): Promise<Session | null> {
   const {result, error} = await concurrentPromiseTaskRunner.push(
     new CheckUserTask(user),
   );
@@ -15,9 +14,7 @@ export async function createSession(user: User, ctx: Context) {
   }
   assert(result !== null);
   if (result) {
-    ctx.session = {
-      data: new UserInfo(user.username),
-    };
+    return new Session(user.username);
   }
-  return result;
+  return null;
 }
