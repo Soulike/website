@@ -15,6 +15,7 @@
     "@vitest/coverage-v8": "catalog:",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
+    "@library/test-helpers": "workspace:^",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

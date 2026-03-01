@@ -65,6 +65,7 @@
         "@config/bun": "workspace:^",
         "@config/eslint": "workspace:^",
         "@config/typescript": "workspace:^",
+        "@library/test-helpers": "workspace:^",
         "@types/koa": "^3.0.1",
         "@types/koa-compose": "^3.2.9",
         "@types/koa-session": "^6.4.5",

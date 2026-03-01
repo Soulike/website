@@ -20,32 +20,40 @@ describe('CheckUserTask', () => {
   });
 
   it('should return true when user credentials match', async () => {
-    const validUser = new User('testuser', 'password123');
-    await FakeUserTable.insert(validUser);
+    const username = 'testuser';
+    const password = 'password123';
+    const saltedPassword = CheckUserTask.getSaltedPasswordForTesting(
+      username,
+      password,
+    );
+    await FakeUserTable.insert(new User(username, saltedPassword));
 
-    const task = new CheckUserTask(validUser);
+    const task = new CheckUserTask(new User(username, password));
     const result = await task.run();
     expect(result).toBe(true);
   });
 
   it('should return false when password does not match', async () => {
-    const storedUser = new User('testuser', 'password123');
-    await FakeUserTable.insert(storedUser);
+    const username = 'testuser';
+    const saltedPassword = CheckUserTask.getSaltedPasswordForTesting(
+      username,
+      'password123',
+    );
+    await FakeUserTable.insert(new User(username, saltedPassword));
 
-    const invalidUser = new User('testuser', 'wrongpassword');
-    const task = new CheckUserTask(invalidUser);
-
+    const task = new CheckUserTask(new User(username, 'wrongpassword'));
     const result = await task.run();
     expect(result).toBe(false);
   });
 
   it('should return false when username does not exist', async () => {
-    const storedUser = new User('existinguser', 'password123');
-    await FakeUserTable.insert(storedUser);
+    const saltedPassword = CheckUserTask.getSaltedPasswordForTesting(
+      'existinguser',
+      'password123',
+    );
+    await FakeUserTable.insert(new User('existinguser', saltedPassword));
 
-    const nonExistentUser = new User('nonexistentuser', 'password123');
-    const task = new CheckUserTask(nonExistentUser);
-
+    const task = new CheckUserTask(new User('nonexistentuser', 'password123'));
     const result = await task.run();
     expect(result).toBe(false);
   });
