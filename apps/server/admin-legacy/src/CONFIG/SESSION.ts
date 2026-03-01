@@ -5,11 +5,12 @@ import {ioredis} from '../Singleton/index.js';
 export const SESSION: Partial<SessionOptions> = {
   key: 'sess',
   maxAge: 60 * 60 * 1000,
-  overwrite: true,
+  overwrite: false,
   httpOnly: true,
   signed: false,
   rolling: false,
-  renew: true,
+  renew: false,
+  autoCommit: false,
   sameSite: 'strict',
   secure: true,
   store: {
@@ -25,11 +26,11 @@ export const SESSION: Partial<SessionOptions> = {
         return null;
       }
     },
-    set: async (key, sess, maxAge) => {
-      await ioredis.set(key, JSON.stringify(sess), 'PX', maxAge);
+    set: async () => {
+      // Read-only: session management is handled by the auth server.
     },
-    destroy: async (key) => {
-      await ioredis.del(key);
+    destroy: async () => {
+      // Read-only: session management is handled by the auth server.
     },
   },
 };
