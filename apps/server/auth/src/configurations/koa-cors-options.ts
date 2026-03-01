@@ -4,11 +4,7 @@ function isAllowedOrigin(origin: string): boolean {
   try {
     const url = new URL(origin);
     const hostname = url.hostname;
-    return (
-      hostname === 'localhost' ||
-      hostname === 'soulike.tech' ||
-      hostname.endsWith('.soulike.tech')
-    );
+    return hostname === 'soulike.tech' || hostname.endsWith('.soulike.tech');
   } catch {
     return false;
   }
