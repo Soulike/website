@@ -98,8 +98,9 @@ export function SessionProvider({children}: SessionProviderProps) {
   );
 
   return (
-    <SessionContext value={contextValue}>
+    // eslint-disable-next-line @eslint-react/no-context-provider
+    <SessionContext.Provider value={contextValue}>
       {children}
-    </SessionContext>
+    </SessionContext.Provider>
   );
 }
