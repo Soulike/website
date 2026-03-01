@@ -10,26 +10,14 @@ import {LayoutView} from './view.js';
 import {useViewModel} from './view-model.js';
 
 export function Layout() {
-  const {
-    logout,
-    logoutLoading,
-    isLoggedIn,
-    isLoggedInLoading,
-    isLoggedInError,
-  } = useViewModel();
+  const {logout, logoutLoading, session, isLoadingSession} = useViewModel();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoggedInLoading && !isLoggedIn) {
+    if (!isLoadingSession && !session) {
       void navigate(PAGE_ID_TO_PATH[PAGE_ID.LOGIN], {replace: true});
     }
-  }, [isLoggedIn, isLoggedInLoading, navigate]);
-
-  useEffect(() => {
-    if (isLoggedInError) {
-      showErrorNotification(isLoggedInError);
-    }
-  }, [isLoggedInError]);
+  }, [session, isLoadingSession, navigate]);
 
   const onExitModalOkButtonClick: ModalFuncProps['onOk'] = useCallback(() => {
     logout(
@@ -60,8 +48,8 @@ export function Layout() {
 
   return (
     <>
-      {(isLoggedInLoading || logoutLoading) && <Loading />}
-      {!isLoggedInLoading && (
+      {(isLoadingSession || logoutLoading) && <Loading />}
+      {!isLoadingSession && (
         <LayoutView onExitButtonClick={onExitButtonClick}>
           <Outlet />
         </LayoutView>

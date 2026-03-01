@@ -16,6 +16,8 @@
     "@library/hooks": "workspace:^",
     "@library/i18n": "workspace:^",
     "@module/model": "workspace:^",
+    "@module/session-context": "workspace:^",
+    "@module/session-sdk": "workspace:^",
     "@library/react-components": "workspace:^",
     "@library/request": "workspace:^",
     "antd": "catalog:",

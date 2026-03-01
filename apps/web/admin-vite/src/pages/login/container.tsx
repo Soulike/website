@@ -1,10 +1,5 @@
 import {notification} from 'antd';
-import {
-  type DOMAttributes,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-} from 'react';
+import {type DOMAttributes, useCallback, useLayoutEffect} from 'react';
 import {useNavigate} from 'react-router';
 
 import {showErrorNotification} from '@/helpers/error-notification-helper.js';
@@ -17,9 +12,8 @@ export function Login() {
   const {
     login,
     loginLoading,
-    isLoggedIn,
-    isLoggedInLoading,
-    isLoggedInError,
+    session,
+    isLoadingSession,
     username,
     onUsernameInputChange,
     password,
@@ -28,16 +22,10 @@ export function Login() {
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
-    if (!isLoggedInLoading && isLoggedIn) {
+    if (!isLoadingSession && session) {
       void navigate(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.INDEX], {replace: true});
     }
-  }, [isLoggedIn, isLoggedInLoading, navigate]);
-
-  useEffect(() => {
-    if (isLoggedInError) {
-      showErrorNotification(isLoggedInError);
-    }
-  }, [isLoggedInError]);
+  }, [session, isLoadingSession, navigate]);
 
   const onLoginFormSubmit: DOMAttributes<HTMLFormElement>['onSubmit'] =
     useCallback<Exclude<DOMAttributes<HTMLFormElement>['onSubmit'], undefined>>(
@@ -62,7 +50,7 @@ export function Login() {
 
   return (
     <LoginView
-      loading={isLoggedInLoading}
+      loading={isLoadingSession}
       isLoggingIn={loginLoading}
       username={username}
       password={password}

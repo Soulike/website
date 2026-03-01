@@ -1,9 +1,11 @@
 import {bodyParser} from '@koa/bodyparser';
+import cors from '@koa/cors';
 import {Logger} from '@library/logger';
 import Koa from 'koa';
 import session from 'koa-session';
 
 import {KOA_BODY_OPTIONS} from '@/configurations/koa-body-options.js';
+import {KOA_CORS_OPTIONS} from '@/configurations/koa-cors-options.js';
 import {KOS_SESSION_OPTIONS} from '@/configurations/koa-session-options.js';
 import {LISTEN_OPTIONS} from '@/configurations/listen-options.js';
 import {dispatcher} from '@/dispatcher/index.js';
@@ -19,6 +21,7 @@ app.on('error', (e: unknown) => {
   }
 });
 
+app.use(cors(KOA_CORS_OPTIONS));
 app.use(session(KOS_SESSION_OPTIONS, app));
 app.use(bodyParser(KOA_BODY_OPTIONS));
 app.use(dispatcher());
