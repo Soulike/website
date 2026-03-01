@@ -24,7 +24,7 @@
     "react-dom": "catalog:"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^10.0.1",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@library/test-helpers": "workspace:^",
@@ -34,11 +34,10 @@
     "@config/eslint": "workspace:^",
     "browserslist-to-esbuild": "^2.1.1",
     "eslint": "catalog:",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.24",
+    "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^16.5.0",
     "typescript": "catalog:",
-    "typescript-eslint": "^8.49.0",
+    "typescript-eslint": "^8.56.1",
     "vite": "catalog:",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-image-optimizer": "^2.0.3",
