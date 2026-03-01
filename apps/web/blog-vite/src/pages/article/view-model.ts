@@ -1,7 +1,7 @@
 import {useLazyPromise} from '@library/hooks';
 import {Article, Category} from '@module/classes';
 import {articleModel, categoryModel} from '@module/model/blog';
-import {useEffect, useMemo} from 'react';
+import {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router';
 
 import {getDiffInDays} from '@/helpers/date-helpers.js';
@@ -26,8 +26,7 @@ export function useViewModel() {
     category,
   } = useLoadCategory();
 
-  const shouldShowOutdatedMessage =
-    useShouldShowOutdatedWarningMessage(article);
+  const shouldShowOutdatedMessage = shouldShowOutdatedWarningMessage(article);
   const outdatedWarningMessage = useOutdatedWarningMessage(article);
 
   const loadingString = useI18nString(STRING_KEY.UI_LABEL_LOADING);
@@ -107,13 +106,13 @@ function useOutdatedWarningMessage(article: Article | null): string {
   );
 }
 
-function useShouldShowOutdatedWarningMessage(article: Article | null) {
-  const diffInDays = useMemo(() => {
-    if (!article) {
-      return 0;
-    }
-    return getDiffInDays(new Date(), new Date(article.publicationTime));
-  }, [article]);
-
+function shouldShowOutdatedWarningMessage(article: Article | null) {
+  if (!article) {
+    return false;
+  }
+  const diffInDays = getDiffInDays(
+    new Date(),
+    new Date(article.publicationTime),
+  );
   return diffInDays > 30;
 }
