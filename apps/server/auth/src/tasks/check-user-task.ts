@@ -23,7 +23,7 @@ export class CheckUserTask extends PromiseTask<boolean> {
     }
     const {password: expectedPassword} = expectedUser;
     const saltedPassword = CheckUserTask.getSaltedPassword(username, password);
-    return saltedPassword === expectedPassword;
+    return CheckUserTask.timingSafeEqualHex(saltedPassword, expectedPassword);
   }
 
   private static getSaltedPassword(username: string, password: string): string {
@@ -31,6 +31,13 @@ export class CheckUserTask extends PromiseTask<boolean> {
       .createHash('sha512')
       .update(username + password, 'utf8')
       .digest('hex');
+  }
+
+  private static timingSafeEqualHex(a: string, b: string): boolean {
+    if (a.length !== b.length) {
+      return false;
+    }
+    return crypto.timingSafeEqual(Buffer.from(a, 'hex'), Buffer.from(b, 'hex'));
   }
 
   static getSaltedPasswordForTesting(
