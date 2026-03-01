@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-bun lint-staged
+bun lint-staged --concurrent false
