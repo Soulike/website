@@ -1,6 +1,6 @@
 import Router from '@koa/router';
 import {Logger} from '@library/logger';
-import {User} from '@module/classes';
+import {Session, User} from '@module/classes';
 import {StatusCodes} from 'http-status-codes';
 import {DefaultState} from 'koa';
 
@@ -12,6 +12,10 @@ import {SESSION} from './path.js';
 const router = new Router<DefaultState, Context>();
 
 router.get(SESSION, (ctx) => {
+  if (!Session.validate(ctx.session)) {
+    ctx.session = null;
+  }
+
   if (!ctx.session) {
     ctx.response.status = StatusCodes.NOT_FOUND;
   } else {
