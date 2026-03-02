@@ -25,27 +25,88 @@ jobs:
         run: bun validate:pr
       - name: Test
         run: bun run test
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      matrix: ${{ steps.build-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            blog:
+              - 'apps/web/blog-vite/**'
+              - 'modules/**'
+              - 'libraries/**'
+              - 'configs/**'
+              - 'bun.lock'
+            admin:
+              - 'apps/web/admin-vite/**'
+              - 'modules/**'
+              - 'libraries/**'
+              - 'configs/**'
+              - 'bun.lock'
+            game-2048:
+              - 'apps/web/game-2048/**'
+              - 'libraries/**'
+              - 'configs/**'
+              - 'bun.lock'
+            auth-server:
+              - 'apps/server/auth/**'
+              - 'modules/**'
+              - 'libraries/**'
+              - 'configs/**'
+              - 'bun.lock'
+            auth-server-legacy:
+              - 'apps/server/auth-legacy/**'
+              - 'modules/**'
+              - 'libraries/**'
+              - 'configs/**'
+              - 'bun.lock'
+            admin-server-legacy:
+              - 'apps/server/admin-legacy/**'
+              - 'modules/**'
+              - 'libraries/**'
+              - 'configs/**'
+              - 'bun.lock'
+            blog-server-legacy:
+              - 'apps/server/blog-legacy/**'
+              - 'modules/**'
+              - 'libraries/**'
+              - 'configs/**'
+              - 'bun.lock'
+            database-server-legacy:
+              - 'apps/server/database-legacy/**'
+              - 'modules/**'
+              - 'libraries/**'
+              - 'configs/**'
+              - 'bun.lock'
+      - name: Build matrix
+        id: build-matrix
+        run: |
+          matrix='[]'
+          add() { matrix=$(echo "$matrix" | jq -c --arg t "$1" --arg p "$2" '. + [{"docker-build-target": $t, "docker-file-path": $p}]'); }
+
+          [ "${{ steps.filter.outputs.blog }}" = "true" ] && add blog ./apps/web/blog-vite/Dockerfile
+          [ "${{ steps.filter.outputs.admin }}" = "true" ] && add admin ./apps/web/admin-vite/Dockerfile
+          [ "${{ steps.filter.outputs.game-2048 }}" = "true" ] && add game-2048 ./apps/web/game-2048/Dockerfile
+          [ "${{ steps.filter.outputs.auth-server }}" = "true" ] && add auth-server ./apps/server/auth/Dockerfile
+          [ "${{ steps.filter.outputs.auth-server-legacy }}" = "true" ] && add auth-server-legacy ./apps/server/auth-legacy/Dockerfile
+          [ "${{ steps.filter.outputs.admin-server-legacy }}" = "true" ] && add admin-server-legacy ./apps/server/admin-legacy/Dockerfile
+          [ "${{ steps.filter.outputs.blog-server-legacy }}" = "true" ] && add blog-server-legacy ./apps/server/blog-legacy/Dockerfile
+          [ "${{ steps.filter.outputs.database-server-legacy }}" = "true" ] && add database-server-legacy ./apps/server/database-legacy/Dockerfile
+
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
   build:
-    needs: [test]
+    needs: [test, changes]
+    if: needs.changes.outputs.matrix != '[]'
     strategy:
       matrix:
-        include:
-          - docker-build-target: blog
-            docker-file-path: ./apps/web/blog-vite/Dockerfile
-          - docker-build-target: admin
-            docker-file-path: ./apps/web/admin-vite/Dockerfile
-          - docker-build-target: game-2048
-            docker-file-path: ./apps/web/game-2048/Dockerfile
-          - docker-build-target: auth-server
-            docker-file-path: ./apps/server/auth/Dockerfile
-          - docker-build-target: database-server-legacy
-            docker-file-path: ./apps/server/database-legacy/Dockerfile
-          - docker-build-target: auth-server-legacy
-            docker-file-path: ./apps/server/auth-legacy/Dockerfile
-          - docker-build-target: admin-server-legacy
-            docker-file-path: ./apps/server/admin-legacy/Dockerfile
-          - docker-build-target: blog-server-legacy
-            docker-file-path: ./apps/server/blog-legacy/Dockerfile
+        include: ${{ fromJSON(needs.changes.outputs.matrix) }}
     uses: ./.github/workflows/docker-image-build-and-push.yml
     secrets: inherit
     with:
@@ -54,6 +115,13 @@ jobs:
       push-to-registry: false
   ci-success:
     runs-on: ubuntu-latest
-    needs: build
+    if: always()
+    needs:
+      - test
+      - changes
+      - build
     steps:
+      - name: Check for failures
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
       - run: echo Done!
