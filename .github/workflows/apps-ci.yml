@@ -28,6 +28,7 @@ jobs:
   changes:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: read
     outputs:
       matrix: ${{ steps.build-matrix.outputs.matrix }}
@@ -41,40 +42,48 @@ jobs:
               - 'apps/web/blog-vite/**'
               - 'modules/**'
               - 'libraries/**'
+              - 'configs/**'
               - 'bun.lock'
             admin:
               - 'apps/web/admin-vite/**'
               - 'modules/**'
               - 'libraries/**'
+              - 'configs/**'
               - 'bun.lock'
             game-2048:
               - 'apps/web/game-2048/**'
               - 'libraries/**'
+              - 'configs/**'
               - 'bun.lock'
             auth-server:
               - 'apps/server/auth/**'
               - 'modules/**'
               - 'libraries/**'
+              - 'configs/**'
               - 'bun.lock'
             auth-server-legacy:
               - 'apps/server/auth-legacy/**'
               - 'modules/**'
               - 'libraries/**'
+              - 'configs/**'
               - 'bun.lock'
             admin-server-legacy:
               - 'apps/server/admin-legacy/**'
               - 'modules/**'
               - 'libraries/**'
+              - 'configs/**'
               - 'bun.lock'
             blog-server-legacy:
               - 'apps/server/blog-legacy/**'
               - 'modules/**'
               - 'libraries/**'
+              - 'configs/**'
               - 'bun.lock'
             database-server-legacy:
               - 'apps/server/database-legacy/**'
               - 'modules/**'
               - 'libraries/**'
+              - 'configs/**'
               - 'bun.lock'
       - name: Build matrix
         id: build-matrix
@@ -107,7 +116,10 @@ jobs:
   ci-success:
     runs-on: ubuntu-latest
     if: always()
-    needs: build
+    needs:
+      - test
+      - changes
+      - build
     steps:
       - name: Check for failures
         if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
