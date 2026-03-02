@@ -14,6 +14,6 @@ RUN addgroup -S authgroup \
     && adduser -S -G authgroup authuser \
     && chown -R authuser:authgroup /auth
 WORKDIR /auth
-EXPOSE 4001
+EXPOSE 3000
 USER authuser
 CMD ["bun", "run", "dist/index.js"]

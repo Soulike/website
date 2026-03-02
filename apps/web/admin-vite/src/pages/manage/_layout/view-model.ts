@@ -1,42 +1,33 @@
-import {AccountModel} from '@module/model/admin';
-import {AccountModelHooks} from '@module/model/react/admin';
-import {useCallback, useMemo, useState} from 'react';
+import {useSession} from '@module/session-context';
+import {useCallback, useState} from 'react';
 
 export function useViewModel() {
-  const {logout, logoutLoading} = useLogoutViewModel();
-
-  const {
-    loading: isLoggedInLoading,
-    isLoggedIn,
-    error: isLoggedInError,
-  } = AccountModelHooks.useIsLoggedIn();
+  const {session, sessionError, isLoadingSession, deleteSession} = useSession();
+  const {logout, logoutLoading} = useLogoutViewModel(deleteSession);
 
   return {
-    isLoggedIn,
-    isLoggedInLoading,
-    isLoggedInError,
+    session,
+    sessionError,
+    isLoadingSession,
     logout,
     logoutLoading,
   };
 }
 
-function useLogoutViewModel() {
+function useLogoutViewModel(deleteSession: () => Promise<void>) {
   const [logoutLoading, setLogoutLoading] = useState(false);
-
-  const accountModel = useMemo(() => new AccountModel(), []);
 
   const logout = useCallback(
     (onSuccess: () => void, onError: (e: Error) => void) => {
       setLogoutLoading(true);
-      accountModel
-        .logout()
+      deleteSession()
         .then(onSuccess)
         .catch(onError)
         .finally(() => {
           setLogoutLoading(false);
         });
     },
-    [accountModel],
+    [deleteSession],
   );
 
   return {

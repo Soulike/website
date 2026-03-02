@@ -1,16 +1,14 @@
 import assert from 'node:assert';
 
 import {useTextInput} from '@library/hooks';
-import {AccountModel} from '@module/model/admin';
-import {AccountModelHooks} from '@module/model/react/admin';
-import {useCallback, useLayoutEffect, useMemo, useState} from 'react';
+import {User} from '@module/classes';
+import {useSession} from '@module/session-context';
+import {CreateSessionResult} from '@module/session-sdk';
+import {useCallback, useState} from 'react';
 
 export function useViewModel() {
-  const {isLoggedIn, isLoggedInError, isLoggedInLoading, setIsLoggedIn} =
-    useIsLoggedIn();
-  const {login, loginLoading} = useLogin(() => {
-    setIsLoggedIn(true);
-  });
+  const {session, sessionError, isLoadingSession, createSession} = useSession();
+  const {login, loginLoading} = useLogin(createSession);
 
   const {value: username, onChange: onUsernameInputChange} = useTextInput();
   const {value: password, onChange: onPasswordInputChange} = useTextInput();
@@ -18,9 +16,9 @@ export function useViewModel() {
   return {
     login,
     loginLoading,
-    isLoggedIn,
-    isLoggedInLoading,
-    isLoggedInError,
+    session,
+    sessionError,
+    isLoadingSession,
     username,
     onUsernameInputChange,
     password,
@@ -28,28 +26,8 @@ export function useViewModel() {
   };
 }
 
-function useIsLoggedIn() {
-  const [isLoggedInCache, setIsLoggedInCache] = useState<boolean | null>(null);
-  const {
-    isLoggedIn,
-    loading: isLoggedInLoading,
-    error: isLoggedInError,
-  } = AccountModelHooks.useIsLoggedIn();
-  useLayoutEffect(() => {
-    setIsLoggedInCache(isLoggedIn);
-  }, [isLoggedIn]);
-
-  return {
-    isLoggedIn: isLoggedInCache,
-    setIsLoggedIn: setIsLoggedInCache,
-    isLoggedInLoading,
-    isLoggedInError,
-  };
-}
-
-function useLogin(afterLoggedIn?: () => void) {
+function useLogin(createSession: (user: User) => Promise<CreateSessionResult>) {
   const [loginLoading, setLoginLoading] = useState(false);
-  const accountModel = useMemo(() => new AccountModel(), []);
 
   const login = useCallback(
     (
@@ -68,12 +46,12 @@ function useLogin(afterLoggedIn?: () => void) {
         return;
       }
       setLoginLoading(true);
-      accountModel
-        .login(username, password)
-        .then(() => {
-          if (onSuccess) {
-            onSuccess();
-            afterLoggedIn?.();
+      createSession(new User(username, password))
+        .then((result) => {
+          if (result === CreateSessionResult.SUCCESS) {
+            onSuccess?.();
+          } else {
+            onError?.(new Error('Wrong username or password'));
           }
         })
         .catch((e: unknown) => {
@@ -86,7 +64,7 @@ function useLogin(afterLoggedIn?: () => void) {
           setLoginLoading(false);
         });
     },
-    [accountModel, afterLoggedIn],
+    [createSession],
   );
 
   return {

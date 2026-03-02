@@ -3,6 +3,7 @@ import './main.css';
 import assert from 'node:assert';
 
 import {ErrorBoundary} from '@library/react-components';
+import {SessionProvider} from '@module/session-context';
 import {ConfigProvider} from 'antd';
 import enUS from 'antd/locale/en_US.js';
 import {StrictMode, Suspense} from 'react';
@@ -21,9 +22,11 @@ reactRoot.render(
   <StrictMode>
     <ConfigProvider locale={enUS}>
       <ErrorBoundary fallback={<NotFound />}>
-        <Suspense fallback={<Loading />}>
-          <Router />
-        </Suspense>
+        <SessionProvider>
+          <Suspense fallback={<Loading />}>
+            <Router />
+          </Suspense>
+        </SessionProvider>
       </ErrorBoundary>
     </ConfigProvider>
   </StrictMode>,

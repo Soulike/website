@@ -22,6 +22,7 @@ interface SessionProviderProps {
 export function SessionProvider({children}: SessionProviderProps) {
   const [session, setSession] =
     useState<Awaited<ReturnType<typeof getSession>>>(null);
+  const [sessionError, setSessionError] = useState<Error | null>(null);
   const [isLoadingSessionOnMount, setIsLoadingSessionOnMount] = useState(false);
 
   const lastReloadSessionIdRef = useRef(0);
@@ -36,8 +37,17 @@ export function SessionProvider({children}: SessionProviderProps) {
         return;
       }
       setSession(session);
+      setSessionError(null);
     } catch (e: unknown) {
-      console.error(e);
+      if (reloadSessionId !== lastReloadSessionIdRef.current) {
+        // Outdated. Abandon.
+        return;
+      }
+      if (e instanceof Error) {
+        setSessionError(e);
+      } else {
+        setSessionError(new Error(String(e)));
+      }
     }
   }, []);
 
@@ -64,6 +74,7 @@ export function SessionProvider({children}: SessionProviderProps) {
     async (...args: Parameters<typeof deleteSessionApi>) => {
       await deleteSessionApi(...args);
       setSession(null);
+      setSessionError(null);
     },
     [],
   );
@@ -71,6 +82,7 @@ export function SessionProvider({children}: SessionProviderProps) {
   const contextValue = useMemo(
     () => ({
       session,
+      sessionError,
       isLoadingSession: isLoadingSessionOnMount,
       reloadSession,
       createSession: wrappedCreateSession,
@@ -80,12 +92,14 @@ export function SessionProvider({children}: SessionProviderProps) {
       isLoadingSessionOnMount,
       reloadSession,
       session,
+      sessionError,
       wrappedCreateSession,
       wrappedDeleteSession,
     ],
   );
 
   return (
+    // eslint-disable-next-line @eslint-react/no-context-provider
     <SessionContext.Provider value={contextValue}>
       {children}
     </SessionContext.Provider>

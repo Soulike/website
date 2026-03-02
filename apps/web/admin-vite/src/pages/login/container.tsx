@@ -17,9 +17,9 @@ export function Login() {
   const {
     login,
     loginLoading,
-    isLoggedIn,
-    isLoggedInLoading,
-    isLoggedInError,
+    session,
+    sessionError,
+    isLoadingSession,
     username,
     onUsernameInputChange,
     password,
@@ -28,16 +28,16 @@ export function Login() {
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
-    if (!isLoggedInLoading && isLoggedIn) {
+    if (!isLoadingSession && session) {
       void navigate(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.INDEX], {replace: true});
     }
-  }, [isLoggedIn, isLoggedInLoading, navigate]);
+  }, [session, isLoadingSession, navigate]);
 
   useEffect(() => {
-    if (isLoggedInError) {
-      showErrorNotification(isLoggedInError);
+    if (sessionError) {
+      showErrorNotification(sessionError);
     }
-  }, [isLoggedInError]);
+  }, [sessionError]);
 
   const onLoginFormSubmit: DOMAttributes<HTMLFormElement>['onSubmit'] =
     useCallback<Exclude<DOMAttributes<HTMLFormElement>['onSubmit'], undefined>>(
@@ -62,7 +62,7 @@ export function Login() {
 
   return (
     <LoginView
-      loading={isLoggedInLoading}
+      loading={isLoadingSession}
       isLoggingIn={loginLoading}
       username={username}
       password={password}
