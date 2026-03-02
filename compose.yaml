@@ -32,8 +32,10 @@ services:
     image: 'soulike/auth-server:latest'
     secrets:
       - redis-password
+      - db-password
     environment:
       - REDIS_PASSWORD_FILE=/run/secrets/redis-password
+      - DB_PASSWORD_FILE=/run/secrets/db-password
     depends_on:
       - redis
       - database-server
