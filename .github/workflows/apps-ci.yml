@@ -61,12 +61,6 @@ jobs:
               - 'libraries/**'
               - 'configs/**'
               - 'bun.lock'
-            auth-server-legacy:
-              - 'apps/server/auth-legacy/**'
-              - 'modules/**'
-              - 'libraries/**'
-              - 'configs/**'
-              - 'bun.lock'
             admin-server-legacy:
               - 'apps/server/admin-legacy/**'
               - 'modules/**'
@@ -95,7 +89,6 @@ jobs:
           [ "${{ steps.filter.outputs.admin }}" = "true" ] && add admin ./apps/web/admin-vite/Dockerfile
           [ "${{ steps.filter.outputs.game-2048 }}" = "true" ] && add game-2048 ./apps/web/game-2048/Dockerfile
           [ "${{ steps.filter.outputs.auth-server }}" = "true" ] && add auth-server ./apps/server/auth/Dockerfile
-          [ "${{ steps.filter.outputs.auth-server-legacy }}" = "true" ] && add auth-server-legacy ./apps/server/auth-legacy/Dockerfile
           [ "${{ steps.filter.outputs.admin-server-legacy }}" = "true" ] && add admin-server-legacy ./apps/server/admin-legacy/Dockerfile
           [ "${{ steps.filter.outputs.blog-server-legacy }}" = "true" ] && add blog-server-legacy ./apps/server/blog-legacy/Dockerfile
           [ "${{ steps.filter.outputs.database-server-legacy }}" = "true" ] && add database-server-legacy ./apps/server/database-legacy/Dockerfile
