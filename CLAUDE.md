@@ -1,6 +1,6 @@
 # Development Instructions
 
-This is a bun monorepo containing multiple types of projects.
+This is a Bun monorepo containing multiple types of projects.
 
 ## Bun Doc
 
@@ -35,8 +35,8 @@ Follow Google TypeScript guide unless specified. Detail: <https://google.github.
 
 ### Comments
 
-- Add comments when code can not explain itself.
-- Consider make code more self-descriptive when you want to add comments.
+- Add comments when code cannot explain itself.
+- Consider making the code more self-descriptive when you want to add comments.
 
 ### File Naming
 
@@ -57,7 +57,7 @@ Follow Google TypeScript guide unless specified. Detail: <https://google.github.
 ## Unit Tests
 
 - Create unit test only when user prompts.
-- Can expose private methods and members required in testing with `xxxForTesting` methods. The test-only methods does
+- Can expose private methods and members required in testing with `xxxForTesting` methods. The test-only methods do
   not need test cases.
 - All `xxxForTesting` methods must call `assertIsTest` from `@library/test-helpers` at the start to prevent
   production usage.

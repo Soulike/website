@@ -2,7 +2,7 @@
 
 - Use TypeScript, React and Vite.
 - Use Vitest for testing.
-- Built with docker. Nginx is included in docker image for static file serving.
+- Built with Docker. Nginx is included in Docker image for static file serving.
 
 ---
 
