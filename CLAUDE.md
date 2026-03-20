@@ -12,14 +12,14 @@ to [latest Bun doc](https://bun.com/docs/llms.txt) if you need information.
 Before starting any task, you must first confirm:
 
 - What package manager is used. Use correct package manager to run commands.
-- Configurations in packages.json files, both in project and in workspace.
+- Configurations in package.json files, both in project and in workspace.
 - Configurations for other tools, i.e., Vite, Vitest, ESLint, Prettier, etc.
 
 ---
 
 ## Projects
 
-- `apps/` - Web and server applications. All apps share the same `Dockerfile` at project root.
+- `apps/` - Web and server applications. Each app has its own `Dockerfile`.
 - `configs/` - Shared configuration packages (ESLint, TypeScript, etc.).
 - `modules/` - Business-specific packages containing domain logic.
 - `libraries/` - Reusable, business-agnostic packages.

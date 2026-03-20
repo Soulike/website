@@ -33,7 +33,7 @@ If the component is not for a page, use
 export {Component} from './container.js';
 ```
 
-if not, consider using `React.lazy()` to export for better code-splitting.
+If the component is for a page, consider using `React.lazy()` to export it for better code-splitting.
 
 ```typescript
 export const Component = React.lazy(async () => {
@@ -50,7 +50,7 @@ Always import the `index.ts` inside the component folder. `index.ts` should be t
 components.
 
 ```typescript
-// ❌ Not Good, as it accesses a internal file, and prevents lazy loading.
+// ❌ Not Good, as it accesses an internal file, and prevents lazy loading.
 import {Component} from 'path/to/Component/container.js';
 
 // ✅ Good.
