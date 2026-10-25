@@ -101,11 +101,16 @@ initialize_smoke() {
   response_file="$secret_directory/response.json"
   trap cleanup EXIT
 
-  printf '%s' "$database_password" >"$secret_directory/database-password"
-  printf '%s' "$redis_password" >"$secret_directory/redis-password"
-
   docker image inspect "$image" >/dev/null
   docker network create "$network" >/dev/null
+}
+
+write_database_secret() {
+  printf '%s' "$database_password" >"$secret_directory/database-password"
+}
+
+write_redis_secret() {
+  printf '%s' "$redis_password" >"$secret_directory/redis-password"
 }
 
 start_postgres() {
@@ -189,6 +194,8 @@ start_application() {
 
 smoke_auth_server() {
   initialize_smoke
+  write_database_secret
+  write_redis_secret
   start_postgres
   start_redis
   start_application 'Auth server' 3000 \
@@ -210,6 +217,7 @@ smoke_auth_server() {
 
 smoke_database_server() {
   initialize_smoke
+  write_database_secret
   start_postgres "$database_schema"
   start_application 'Database server' 4000 \
     --env DB_PASSWORD_FILE=/run/secrets/database-password \
@@ -229,6 +237,7 @@ smoke_database_server() {
 
 smoke_admin_server() {
   initialize_smoke
+  write_redis_secret
   start_redis
   start_application 'Admin server' 4003 \
     --env REDIS_PASSWORD_FILE=/run/secrets/redis-password \
@@ -238,6 +247,14 @@ smoke_admin_server() {
   wait_for_http 'Admin server HTTP readiness' 404 \
     "http://127.0.0.1:$host_port/smoke-not-found" \
     --cookie 'sess=smoke-session'
+}
+
+smoke_standalone_server() {
+  initialize_smoke
+  start_application 'Standalone server' 4004
+
+  wait_for_http 'Standalone server HTTP readiness' 404 \
+    "http://127.0.0.1:$host_port/smoke-not-found"
 }
 
 case "$profile" in
@@ -252,6 +269,9 @@ case "$profile" in
     ;;
   redis-server)
     smoke_admin_server
+    ;;
+  standalone-server)
+    smoke_standalone_server
     ;;
   *)
     echo "Unknown smoke profile: $profile" >&2

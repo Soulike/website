@@ -284,9 +284,9 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
     devDependencies:
-      '@config/bun':
+      '@config/esbuild':
         specifier: workspace:^
-        version: link:../../../configs/bun
+        version: link:../../../configs/esbuild
       '@config/eslint':
         specifier: workspace:^
         version: link:../../../configs/eslint

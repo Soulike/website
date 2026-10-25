@@ -92,7 +92,7 @@ jobs:
             add game-2048 ./apps/web/game-2048/Dockerfile
             add auth-server ./apps/server/auth/Dockerfile postgres-redis-server
             add admin-server-legacy ./apps/server/admin-legacy/Dockerfile redis-server
-            add blog-server-legacy ./apps/server/blog-legacy/Dockerfile
+            add blog-server-legacy ./apps/server/blog-legacy/Dockerfile standalone-server
             add database-server-legacy ./apps/server/database-legacy/Dockerfile postgres-server
           else
             [ "${{ steps.filter.outputs.blog }}" = "true" ] && add blog ./apps/web/blog-vite/Dockerfile
@@ -100,7 +100,7 @@ jobs:
             [ "${{ steps.filter.outputs.game-2048 }}" = "true" ] && add game-2048 ./apps/web/game-2048/Dockerfile
             [ "${{ steps.filter.outputs.auth-server }}" = "true" ] && add auth-server ./apps/server/auth/Dockerfile postgres-redis-server
             [ "${{ steps.filter.outputs.admin-server-legacy }}" = "true" ] && add admin-server-legacy ./apps/server/admin-legacy/Dockerfile redis-server
-            [ "${{ steps.filter.outputs.blog-server-legacy }}" = "true" ] && add blog-server-legacy ./apps/server/blog-legacy/Dockerfile
+            [ "${{ steps.filter.outputs.blog-server-legacy }}" = "true" ] && add blog-server-legacy ./apps/server/blog-legacy/Dockerfile standalone-server
             [ "${{ steps.filter.outputs.database-server-legacy }}" = "true" ] && add database-server-legacy ./apps/server/database-legacy/Dockerfile postgres-server
           fi
 
