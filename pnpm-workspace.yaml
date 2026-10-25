@@ -8,7 +8,6 @@ catalog:
   '@ant-design/icons': '^6.1.0'
   '@koa/bodyparser': '^6.0.0'
   '@koa/router': '^15.1.0'
-  '@types/bun': '^1.2.14'
   '@types/koa': '^3.0.0'
   '@types/koa-compose': '^3.2.9'
   '@types/node': '^24.10.3'

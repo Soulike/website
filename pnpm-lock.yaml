@@ -15,9 +15,6 @@ catalogs:
     '@koa/router':
       specifier: ^15.1.0
       version: 15.7.0
-    '@types/bun':
-      specifier: ^1.2.14
-      version: 1.4.4
     '@types/koa':
       specifier: ^3.0.0
       version: 3.0.3
@@ -83,9 +80,6 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^20.2.0
         version: 20.5.3
-      '@types/bun':
-        specifier: 'catalog:'
-        version: 1.4.4
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.2
@@ -663,18 +657,6 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 4.1.12(@types/node@24.19.2)(@vitest/coverage-v8@4.1.12)(jsdom@27.4.0(@noble/hashes@1.8.0)(supports-color@8.1.1))(vite@7.3.7(@types/node@24.19.2)(jiti@2.6.1)(yaml@2.9.1))
-
-  configs/bun:
-    devDependencies:
-      '@config/eslint':
-        specifier: workspace:^
-        version: link:../eslint
-      '@config/typescript':
-        specifier: workspace:^
-        version: link:../typescript
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
 
   configs/esbuild:
     devDependencies:
@@ -3053,9 +3035,6 @@ packages:
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
 
-  '@types/bun@1.4.4':
-    resolution: {integrity: sha512-9wkRDXUXK124pEnAutE6n/l18j+i9GC5IAHK8TmX/2nlySETmky0OU6yL5U8pW1AoKh++AN9auDCr647BfurjQ==}
-
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
 
@@ -3571,9 +3550,6 @@ packages:
 
   builtin-status-codes@3.0.0:
     resolution: {integrity: sha512-HpGFw18DgFWlncDfjTa2rcQ4W88O1mC8e8yZ2AvQY5KDaktSTwo+KRf6nHK6FRI5FyRyb/5T6+TSxfP7QyGsmQ==}
-
-  bun-types@1.4.4:
-    resolution: {integrity: sha512-yjrJh5oGX7mMPKGd19YXyIjmEuj4G4zNC30bs7PM9Az7NQ3ndF3j6hbeRdvJTRQEhJ/FYQwW0a2moweEi2hMxQ==}
 
   bytes@3.1.2:
     resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
@@ -6020,9 +5996,6 @@ packages:
   undici-types@7.24.6:
     resolution: {integrity: sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==}
 
-  undici-types@8.12.3:
-    resolution: {integrity: sha512-EXE4ydL3S76dFb27UFjNVZHTyv/TLdATj/KUe29ptdcg6qXL48J2tZ3126E5kICj5jn781OR+XlVH1N6Mz8jbA==}
-
   unpipe@1.0.0:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
@@ -8040,10 +8013,6 @@ snapshots:
       '@types/connect': 3.4.38
       '@types/node': 24.19.2
 
-  '@types/bun@1.4.4':
-    dependencies:
-      bun-types: 1.4.4
-
   '@types/chai@5.2.3':
     dependencies:
       '@types/deep-eql': 4.0.2
@@ -8762,11 +8731,6 @@ snapshots:
       ieee754: 1.2.1
 
   builtin-status-codes@3.0.0: {}
-
-  bun-types@1.4.4:
-    dependencies:
-      '@types/node': 24.19.2
-      undici-types: 8.12.3
 
   bytes@3.1.2: {}
 
@@ -11549,8 +11513,6 @@ snapshots:
     optional: true
 
   undici-types@7.24.6: {}
-
-  undici-types@8.12.3: {}
 
   unpipe@1.0.0: {}
 
