@@ -82,6 +82,35 @@ test('bounds a response that never completes', async () => {
   }
 });
 
+test('does not request after the running-state check exhausts the deadline', async (context) => {
+  let fetchCalls = 0;
+  context.mock.method(globalThis, 'fetch', async () => {
+    fetchCalls += 1;
+    throw new Error('fetch should not be called');
+  });
+
+  const waitArray = new Int32Array(
+    new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT),
+  );
+
+  await assert.rejects(
+    waitForHttp({
+      description: 'expired-budget server',
+      url: 'http://127.0.0.1:1',
+      expectedStatus: 200,
+      isApplicationRunning: () => {
+        Atomics.wait(waitArray, 0, 0, 20);
+        return true;
+      },
+      deadlineMs: 5,
+      requestTimeoutMs: 500,
+    }),
+    /Timed out waiting for expired-budget server/,
+  );
+
+  assert.equal(fetchCalls, 0);
+});
+
 test('does not follow redirects when checking a status oracle', async () => {
   const server = createServer((request, response) => {
     if (request.url === '/redirect') {
@@ -95,17 +124,16 @@ test('does not follow redirects when checking a status oracle', async () => {
 
   try {
     const url = await listen(server);
-    await assert.rejects(
-      waitForHttp({
-        description: 'redirecting server',
-        url: `${url}/redirect`,
-        expectedStatus: 404,
-        isApplicationRunning: () => true,
-        deadlineMs: 1_500,
-        requestTimeoutMs: 500,
-      }),
-      /last HTTP status: 302/,
-    );
+    const response = await waitForHttp({
+      description: 'redirecting server',
+      url: `${url}/redirect`,
+      expectedStatus: 302,
+      isApplicationRunning: () => true,
+      deadlineMs: 1_000,
+      requestTimeoutMs: 500,
+    });
+
+    assert.equal(response.status, 302);
   } finally {
     await close(server);
   }

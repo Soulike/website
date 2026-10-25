@@ -67,8 +67,12 @@ export async function waitForHttp({
       throw new Error(`${description} exited before becoming ready.`);
     }
 
-    const remainingMs = Math.max(1, deadline - performance.now());
-    const boundedRequestMs = Math.ceil(Math.min(requestTimeoutMs, remainingMs));
+    const remainingMs = deadline - performance.now();
+    if (remainingMs <= 0) break;
+    const boundedRequestMs = Math.max(
+      1,
+      Math.ceil(Math.min(requestTimeoutMs, remainingMs)),
+    );
     const requestHeaders = new Headers(headers);
     if (basicAuth) {
       requestHeaders.set(
