@@ -1,10 +1,10 @@
 # Development Instructions
 
-This monorepo uses pnpm for dependency management, workspace commands, validation, and tests. Server bundling and application Docker images still use Bun during the staged toolchain migration.
+This monorepo uses pnpm for dependency management, workspace commands, validation, and tests. Some server bundles and application Docker images still use Bun during the staged toolchain migration.
 
 ## Toolchain documentation
 
-Use the [pnpm documentation](https://pnpm.io/) for dependency and workspace tasks. Refer to the [Bun documentation](https://bun.com/docs/llms.txt) only for the remaining server-build and image paths.
+Use the [pnpm documentation](https://pnpm.io/) for dependency and workspace tasks. Refer to the [Bun documentation](https://bun.com/docs/llms.txt) only for server-build and image paths that have not migrated yet.
 
 ## Task Preparation
 

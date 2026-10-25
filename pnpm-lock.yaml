@@ -39,6 +39,9 @@ catalogs:
     antd:
       specifier: ^6.1.0
       version: 6.6.7
+    esbuild:
+      specifier: ^0.28.2
+      version: 0.28.2
     eslint:
       specifier: ^10.0.2
       version: 10.13.0
@@ -217,9 +220,9 @@ importers:
         specifier: 'catalog:'
         version: 7.0.2
     devDependencies:
-      '@config/bun':
+      '@config/esbuild':
         specifier: workspace:^
-        version: link:../../../configs/bun
+        version: link:../../../configs/esbuild
       '@config/eslint':
         specifier: workspace:^
         version: link:../../../configs/eslint
@@ -669,6 +672,21 @@ importers:
       '@config/typescript':
         specifier: workspace:^
         version: link:../typescript
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
+  configs/esbuild:
+    devDependencies:
+      '@config/eslint':
+        specifier: workspace:^
+        version: link:../eslint
+      '@config/typescript':
+        specifier: workspace:^
+        version: link:../typescript
+      esbuild:
+        specifier: 'catalog:'
+        version: 0.28.2
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
