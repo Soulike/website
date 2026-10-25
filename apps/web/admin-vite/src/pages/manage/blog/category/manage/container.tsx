@@ -71,6 +71,11 @@ export function Manage() {
     setIsArticleListModalVisible(false);
   };
 
+  const onArticleListModalCancel: ModalProps['onCancel'] = (e) => {
+    e.preventDefault();
+    setIsArticleListModalVisible(false);
+  };
+
   const onModifyModalOk: ModalProps['onOk'] = (e) => {
     e.preventDefault();
     if (nameOfCategoryToModify.length === 0) {
@@ -144,7 +149,7 @@ export function Manage() {
       categoryIdOfArticleListModal={categoryIdOfArticleListModal}
       onArticleAmountTagClick={onArticleAmountTagClick}
       onArticleListModalOk={onArticleListModalOk}
-      onArticleListModalCancel={onArticleListModalOk}
+      onArticleListModalCancel={onArticleListModalCancel}
       onDeleteCategoryButtonClick={onDeleteCategoryButtonClick}
       onDeleteCategoryConfirm={onDeleteCategoryConfirm}
       isModifyModalVisible={isModifyModalVisible}

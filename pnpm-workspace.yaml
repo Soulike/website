@@ -1,0 +1,33 @@
+packages:
+  - 'apps/*/*'
+  - 'modules/*/*'
+  - 'libraries/*/*'
+  - 'configs/*'
+
+catalog:
+  '@ant-design/icons': '^6.1.0'
+  '@koa/bodyparser': '^6.0.0'
+  '@koa/router': '^15.1.0'
+  '@types/bun': '^1.2.14'
+  '@types/koa': '^3.0.0'
+  '@types/koa-compose': '^3.2.9'
+  '@types/node': '^24.10.3'
+  '@types/react': '^19.2.7'
+  '@types/react-dom': '^19.2.3'
+  '@vitest/coverage-v8': '^4.0.15'
+  antd: '^6.1.0'
+  eslint: '^10.0.2'
+  koa: '^3.1.1'
+  koa-compose: '^4.1.0'
+  koa-session: '^7.0.2'
+  react: '^19.2.3'
+  react-dom: '^19.2.3'
+  react-router: '^7.10.1'
+  typescript: '^5.9.3'
+  vite: '^7.2.7'
+  vitest: '^4.0.15'
+
+allowBuilds:
+  '@swc/core': true
+  esbuild: true
+  sharp: true
