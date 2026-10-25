@@ -11,7 +11,7 @@ on:
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
-      - '.github/scripts/smoke-image.sh'
+      - '.github/scripts/smoke/**'
       - '.github/workflows/docker-image-build-and-push.yml'
   workflow_dispatch:
 
@@ -26,5 +26,5 @@ jobs:
     with:
       docker-file-path: ./apps/web/game-2048/Dockerfile
       docker-build-target: game-2048
-      smoke-profile: web
+      smoke-script: .github/scripts/smoke/game-2048-web.ts
       push-to-registry: true

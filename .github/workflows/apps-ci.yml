@@ -57,7 +57,7 @@ jobs:
               - 'package.json'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
-              - '.github/scripts/smoke-image.sh'
+              - '.github/scripts/smoke/**'
               - '.github/workflows/apps-ci.yml'
               - '.github/workflows/*docker-image-build-and-push.yml'
             blog:
@@ -80,31 +80,17 @@ jobs:
             database-server-legacy:
               - 'apps/server/database-legacy/**'
               - 'modules/**'
+      - name: Setup Node.js for matrix
+        uses: actions/setup-node@v7
+        with:
+          node-version: 'lts/*'
+          check-latest: true
       - name: Build matrix
         id: build-matrix
+        env:
+          FILTER_RESULTS: ${{ toJSON(steps.filter.outputs) }}
         run: |
-          matrix='[]'
-          add() { matrix=$(echo "$matrix" | jq -c --arg t "$1" --arg p "$2" --arg s "${3:-none}" '. + [{"docker-build-target": $t, "docker-file-path": $p, "smoke-profile": $s}]'); }
-
-          if [ "${{ steps.filter.outputs.shared }}" = "true" ]; then
-            add blog ./apps/web/blog-vite/Dockerfile web
-            add admin ./apps/web/admin-vite/Dockerfile web
-            add game-2048 ./apps/web/game-2048/Dockerfile web
-            add auth-server ./apps/server/auth/Dockerfile postgres-redis-server
-            add admin-server-legacy ./apps/server/admin-legacy/Dockerfile redis-server
-            add blog-server-legacy ./apps/server/blog-legacy/Dockerfile standalone-server
-            add database-server-legacy ./apps/server/database-legacy/Dockerfile postgres-server
-          else
-            [ "${{ steps.filter.outputs.blog }}" = "true" ] && add blog ./apps/web/blog-vite/Dockerfile web
-            [ "${{ steps.filter.outputs.admin }}" = "true" ] && add admin ./apps/web/admin-vite/Dockerfile web
-            [ "${{ steps.filter.outputs.game-2048 }}" = "true" ] && add game-2048 ./apps/web/game-2048/Dockerfile web
-            [ "${{ steps.filter.outputs.auth-server }}" = "true" ] && add auth-server ./apps/server/auth/Dockerfile postgres-redis-server
-            [ "${{ steps.filter.outputs.admin-server-legacy }}" = "true" ] && add admin-server-legacy ./apps/server/admin-legacy/Dockerfile redis-server
-            [ "${{ steps.filter.outputs.blog-server-legacy }}" = "true" ] && add blog-server-legacy ./apps/server/blog-legacy/Dockerfile standalone-server
-            [ "${{ steps.filter.outputs.database-server-legacy }}" = "true" ] && add database-server-legacy ./apps/server/database-legacy/Dockerfile postgres-server
-          fi
-
-          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          echo "matrix=$(node .github/scripts/smoke/build-matrix.ts)" >> "$GITHUB_OUTPUT"
   build:
     needs: [test, changes]
     if: needs.changes.outputs.matrix != '[]'
@@ -116,7 +102,7 @@ jobs:
     with:
       docker-file-path: ${{ matrix.docker-file-path }}
       docker-build-target: ${{ matrix.docker-build-target }}
-      smoke-profile: ${{ matrix.smoke-profile }}
+      smoke-script: ${{ matrix.smoke-script }}
       push-to-registry: false
   ci-success:
     runs-on: ubuntu-latest

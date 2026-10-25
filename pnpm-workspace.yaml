@@ -1,4 +1,5 @@
 packages:
+  - '.github/scripts/smoke'
   - 'apps/*/*'
   - 'modules/*/*'
   - 'libraries/*/*'

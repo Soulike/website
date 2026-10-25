@@ -1,0 +1,125 @@
+import assert from 'node:assert/strict';
+import {createServer, type Server} from 'node:http';
+import test from 'node:test';
+
+import {waitForHttp} from './http.ts';
+
+async function listen(server: Server): Promise<string> {
+  await new Promise<void>((resolve, reject) => {
+    server.once('error', reject);
+    server.listen(0, '127.0.0.1', () => resolve());
+  });
+  const address = server.address();
+  assert(address && typeof address === 'object');
+  return `http://127.0.0.1:${address.port}`;
+}
+
+async function close(server: Server): Promise<void> {
+  server.closeAllConnections();
+  await new Promise<void>((resolve, reject) => {
+    server.close((error) => (error ? reject(error) : resolve()));
+  });
+}
+
+test('returns the expected HTTP response', async () => {
+  const server = createServer((_request, response) => {
+    response.writeHead(200, {'content-type': 'text/html'});
+    response.end('<!doctype html><html></html>');
+  });
+
+  try {
+    const url = await listen(server);
+    const response = await waitForHttp({
+      description: 'test server',
+      url,
+      expectedStatus: 200,
+      isApplicationRunning: () => true,
+      deadlineMs: 1_000,
+      requestTimeoutMs: 500,
+    });
+
+    assert.equal(response.status, 200);
+    assert.match(response.body, /<!doctype html>/i);
+  } finally {
+    await close(server);
+  }
+});
+
+test('bounds a response that never completes', async () => {
+  const server = createServer((_request, response) => {
+    response.writeHead(200, {'content-type': 'text/plain'});
+    response.write('partial response');
+    // Keep the body open to reproduce a stalled application.
+  });
+
+  try {
+    const url = await listen(server);
+    const startedAt = performance.now();
+
+    await assert.rejects(
+      waitForHttp({
+        description: 'stalled server',
+        url,
+        expectedStatus: 200,
+        isApplicationRunning: () => true,
+        deadlineMs: 300,
+        requestTimeoutMs: 100,
+      }),
+      (error: unknown) => {
+        assert(error instanceof Error);
+        assert.match(error.message, /Timed out waiting for stalled server/);
+        assert.match(error.message, /last HTTP status: 200/);
+        assert.match(error.message, /partial response/);
+        return true;
+      },
+    );
+
+    const elapsedMs = performance.now() - startedAt;
+    assert(elapsedMs >= 250, `deadline fired too early: ${elapsedMs}ms`);
+    assert(elapsedMs < 1_500, `deadline was not bounded: ${elapsedMs}ms`);
+  } finally {
+    await close(server);
+  }
+});
+
+test('does not follow redirects when checking a status oracle', async () => {
+  const server = createServer((request, response) => {
+    if (request.url === '/redirect') {
+      response.writeHead(302, {location: '/missing'});
+      response.end();
+      return;
+    }
+    response.writeHead(404);
+    response.end('missing');
+  });
+
+  try {
+    const url = await listen(server);
+    await assert.rejects(
+      waitForHttp({
+        description: 'redirecting server',
+        url: `${url}/redirect`,
+        expectedStatus: 404,
+        isApplicationRunning: () => true,
+        deadlineMs: 1_500,
+        requestTimeoutMs: 500,
+      }),
+      /last HTTP status: 302/,
+    );
+  } finally {
+    await close(server);
+  }
+});
+
+test('fails immediately when the application exits', async () => {
+  await assert.rejects(
+    waitForHttp({
+      description: 'exited server',
+      url: 'http://127.0.0.1:1',
+      expectedStatus: 200,
+      isApplicationRunning: () => false,
+      deadlineMs: 1_000,
+    }),
+    /exited server exited before becoming ready/,
+  );
+});

@@ -1,0 +1,11 @@
+/* TypeScript files executed directly by Node.js type stripping. */
+{
+  "extends": "./tsconfig.node.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true
+  }
+}

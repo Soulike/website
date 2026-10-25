@@ -99,6 +99,18 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
+  .github/scripts/smoke:
+    devDependencies:
+      '@config/typescript':
+        specifier: workspace:^
+        version: link:../../../configs/typescript
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
   apps/server/admin-legacy:
     dependencies:
       '@koa/router':

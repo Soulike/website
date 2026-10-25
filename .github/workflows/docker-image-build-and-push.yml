@@ -12,10 +12,10 @@ on:
       push-to-registry:
         required: true
         type: boolean
-      smoke-profile:
+      smoke-script:
         required: false
         type: string
-        default: none
+        default: ''
 
 jobs:
   build:
@@ -42,9 +42,17 @@ jobs:
           tags: ${{ env.LOCAL_IMAGE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Setup Node.js for smoke
+        if: inputs.smoke-script != ''
+        uses: actions/setup-node@v7
+        with:
+          node-version: 'lts/*'
+          check-latest: true
       - name: Smoke image
-        if: inputs.smoke-profile != 'none'
-        run: .github/scripts/smoke-image.sh "${{ inputs.smoke-profile }}" "$LOCAL_IMAGE"
+        if: inputs.smoke-script != ''
+        env:
+          SMOKE_SCRIPT: ${{ inputs.smoke-script }}
+        run: node "$SMOKE_SCRIPT" "$LOCAL_IMAGE"
       - name: Login to Docker Hub
         if: inputs.push-to-registry
         uses: docker/login-action@v3

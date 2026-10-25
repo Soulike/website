@@ -12,7 +12,7 @@ on:
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
-      - '.github/scripts/smoke-image.sh'
+      - '.github/scripts/smoke/**'
       - '.github/workflows/docker-image-build-and-push.yml'
   workflow_dispatch:
 
@@ -27,5 +27,5 @@ jobs:
     with:
       docker-file-path: ./apps/server/admin-legacy/Dockerfile
       docker-build-target: admin-server-legacy
-      smoke-profile: redis-server
+      smoke-script: .github/scripts/smoke/admin-server.ts
       push-to-registry: true
