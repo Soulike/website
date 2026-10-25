@@ -121,7 +121,7 @@
         "signale": "^1.4.0",
       },
       "devDependencies": {
-        "@config/bun": "workspace:^",
+        "@config/esbuild": "workspace:^",
         "@config/eslint": "workspace:^",
         "@config/typescript": "workspace:^",
         "@types/clone-deep": "^4.0.4",

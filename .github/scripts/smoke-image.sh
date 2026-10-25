@@ -4,25 +4,17 @@ set -euo pipefail
 
 profile=${1:?Smoke profile is required.}
 image=${2:?Image tag is required.}
-
-if [[ "$profile" == 'none' ]]; then
-  exit 0
-fi
-
-if [[ "$profile" != 'postgres-redis-server' ]]; then
-  echo "Unknown smoke profile: $profile" >&2
-  exit 1
-fi
-
 suffix="${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-${RANDOM}"
 network="website-smoke-$suffix"
 postgres="website-smoke-postgres-$suffix"
 redis="website-smoke-redis-$suffix"
 application="website-smoke-app-$suffix"
-secret_directory=$(mktemp -d)
-response_file="$secret_directory/response.json"
+secret_directory=''
+response_file=''
+database_schema="$PWD/apps/server/database-legacy/src/Database/database.sql"
 database_password='smoke-database-password'
 redis_password='smoke-redis-password'
+host_port=''
 
 print_diagnostics() {
   for container in "$application" "$postgres" "$redis"; do
@@ -38,7 +30,7 @@ print_diagnostics() {
 }
 
 cleanup() {
-  status=$?
+  local status=$?
   set +e
 
   if [[ $status -ne 0 ]]; then
@@ -47,14 +39,16 @@ cleanup() {
 
   docker rm --force --volumes "$application" "$postgres" "$redis" >/dev/null 2>&1
   docker network rm "$network" >/dev/null 2>&1
-  rm -rf "$secret_directory"
+  if [[ -n "$secret_directory" ]]; then
+    rm -rf "$secret_directory"
+  fi
 
   trap - EXIT
   exit "$status"
 }
 
 wait_for() {
-  description=$1
+  local description=$1
   shift
 
   for _ in $(seq 1 60); do
@@ -69,11 +63,11 @@ wait_for() {
 }
 
 wait_for_http() {
-  description=$1
-  expected_status=$2
-  url=$3
+  local description=$1
+  local expected_status=$2
+  local url=$3
   shift 3
-  last_status='unreachable'
+  local last_status='unreachable'
 
   for _ in $(seq 1 60); do
     if [[ $(docker inspect --format '{{.State.Running}}' "$application") != 'true' ]]; then
@@ -98,68 +92,153 @@ wait_for_http() {
   return 1
 }
 
-trap cleanup EXIT
+postgres_initialization_complete() {
+  docker logs "$postgres" 2>&1 | grep -q 'PostgreSQL init process complete'
+}
 
-printf '%s' "$database_password" >"$secret_directory/database-password"
-printf '%s' "$redis_password" >"$secret_directory/redis-password"
+initialize_smoke() {
+  secret_directory=$(mktemp -d)
+  response_file="$secret_directory/response.json"
+  trap cleanup EXIT
 
-docker image inspect "$image" >/dev/null
-docker network create "$network" >/dev/null
+  printf '%s' "$database_password" >"$secret_directory/database-password"
+  printf '%s' "$redis_password" >"$secret_directory/redis-password"
 
-docker run --detach \
-  --name "$postgres" \
-  --network "$network" \
-  --network-alias db \
-  --env POSTGRES_USER=soulike \
-  --env POSTGRES_DB=website \
-  --env POSTGRES_PASSWORD="$database_password" \
-  postgres:16-alpine >/dev/null
+  docker image inspect "$image" >/dev/null
+  docker network create "$network" >/dev/null
+}
 
-wait_for 'Postgres readiness' \
-  docker exec "$postgres" pg_isready --username soulike --dbname website
+start_postgres() {
+  local schema=${1:-}
+  local -a postgres_arguments=(
+    docker run --detach
+    --name "$postgres"
+    --network "$network"
+    --network-alias db
+    --env POSTGRES_USER=soulike
+    --env POSTGRES_DB=website
+    --env POSTGRES_PASSWORD="$database_password"
+  )
 
-docker run --detach \
-  --name "$redis" \
-  --network "$network" \
-  --network-alias redis \
-  redis:alpine \
-  redis-server --requirepass "$redis_password" >/dev/null
+  if [[ -n "$schema" ]]; then
+    test -f "$schema"
+    postgres_arguments+=(
+      --volume "$schema:/docker-entrypoint-initdb.d/database.sql:ro"
+    )
+  fi
 
-wait_for 'Redis readiness' \
-  docker exec "$redis" redis-cli --no-auth-warning --pass "$redis_password" ping
+  postgres_arguments+=(postgres:16-alpine)
+  "${postgres_arguments[@]}" >/dev/null
 
-docker exec "$redis" redis-cli --no-auth-warning --pass "$redis_password" \
-  set smoke-session '{"username":"smoke"}' >/dev/null
+  wait_for 'Postgres initialization' postgres_initialization_complete
+  wait_for 'Postgres readiness' \
+    docker exec "$postgres" pg_isready --username soulike --dbname website
 
-docker run --detach \
-  --name "$application" \
-  --network "$network" \
-  --publish 127.0.0.1::3000 \
-  --env DB_PASSWORD_FILE=/run/secrets/database-password \
-  --env REDIS_PASSWORD_FILE=/run/secrets/redis-password \
-  --volume "$secret_directory/database-password:/run/secrets/database-password:ro" \
-  --volume "$secret_directory/redis-password:/run/secrets/redis-password:ro" \
-  "$image" >/dev/null
+  if [[ -n "$schema" ]]; then
+    wait_for 'database schema readiness' \
+      docker exec "$postgres" psql --username soulike --dbname website \
+      --tuples-only --command 'SELECT count(*) FROM "categories";'
+  fi
+}
 
-if [[ $(docker inspect --format '{{.State.Running}}' "$application") != 'true' ]]; then
-  echo 'Auth server exited before becoming ready.' >&2
-  exit 1
-fi
+start_redis() {
+  docker run --detach \
+    --name "$redis" \
+    --network "$network" \
+    --network-alias redis \
+    redis:alpine \
+    redis-server --requirepass "$redis_password" >/dev/null
 
-host_port=$(docker port "$application" 3000/tcp 2>/dev/null | head -n 1 | sed 's/.*://' || true)
-if [[ -z "$host_port" ]]; then
-  echo 'Auth server did not publish port 3000.' >&2
-  exit 1
-fi
+  wait_for 'Redis readiness' \
+    docker exec "$redis" redis-cli --no-auth-warning --pass "$redis_password" ping
 
-wait_for_http 'auth server HTTP readiness' 200 \
-  "http://127.0.0.1:$host_port/session" \
-  --cookie 'sess=smoke-session'
+  docker exec "$redis" redis-cli --no-auth-warning --pass "$redis_password" \
+    set smoke-session '{"username":"smoke"}' >/dev/null
+}
 
-if ! jq --exit-status '.username == "smoke"' "$response_file" >/dev/null; then
-  echo 'Auth server returned an unexpected session response:' >&2
-  cat "$response_file" >&2
-  exit 1
-fi
+start_application() {
+  local description=$1
+  local application_port=$2
+  shift 2
+  local -a application_arguments=(
+    docker run --detach
+    --name "$application"
+    --network "$network"
+    --publish "127.0.0.1::$application_port"
+    --env DB_PASSWORD_FILE=/run/secrets/database-password
+    --volume "$secret_directory/database-password:/run/secrets/database-password:ro"
+  )
+
+  application_arguments+=("$@")
+  application_arguments+=("$image")
+  "${application_arguments[@]}" >/dev/null
+
+  if [[ $(docker inspect --format '{{.State.Running}}' "$application") != 'true' ]]; then
+    echo "$description exited before becoming ready." >&2
+    exit 1
+  fi
+
+  host_port=$(docker port "$application" "$application_port/tcp" 2>/dev/null | head -n 1 | sed 's/.*://' || true)
+  if [[ -z "$host_port" ]]; then
+    if [[ $(docker inspect --format '{{.State.Running}}' "$application") != 'true' ]]; then
+      echo "$description exited before publishing port $application_port." >&2
+    else
+      echo "$description did not publish port $application_port." >&2
+    fi
+    exit 1
+  fi
+}
+
+smoke_auth_server() {
+  initialize_smoke
+  start_postgres
+  start_redis
+  start_application 'Auth server' 3000 \
+    --env REDIS_PASSWORD_FILE=/run/secrets/redis-password \
+    --volume "$secret_directory/redis-password:/run/secrets/redis-password:ro"
+
+  wait_for_http 'Auth server HTTP readiness' 200 \
+    "http://127.0.0.1:$host_port/session" \
+    --cookie 'sess=smoke-session'
+
+  if ! jq --exit-status '.username == "smoke"' "$response_file" >/dev/null; then
+    echo 'Auth server returned an unexpected session response:' >&2
+    cat "$response_file" >&2
+    exit 1
+  fi
+}
+
+smoke_database_server() {
+  initialize_smoke
+  start_postgres "$database_schema"
+  start_application 'Database server' 4000
+
+  wait_for_http 'Database server HTTP readiness' 200 \
+    "http://127.0.0.1:$host_port/category/getAll" \
+    --user 'Soulike:Soulike@Database'
+
+  if ! jq --exit-status \
+    '.isSuccessful == true and .data == []' "$response_file" >/dev/null; then
+    echo 'Database server returned an unexpected category response:' >&2
+    cat "$response_file" >&2
+    exit 1
+  fi
+}
+
+case "$profile" in
+  none)
+    exit 0
+    ;;
+  postgres-redis-server)
+    smoke_auth_server
+    ;;
+  postgres-server)
+    smoke_database_server
+    ;;
+  *)
+    echo "Unknown smoke profile: $profile" >&2
+    exit 1
+    ;;
+esac
 
 echo "Smoke passed for $image ($profile)."

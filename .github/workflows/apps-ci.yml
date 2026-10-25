@@ -93,7 +93,7 @@ jobs:
             add auth-server ./apps/server/auth/Dockerfile postgres-redis-server
             add admin-server-legacy ./apps/server/admin-legacy/Dockerfile
             add blog-server-legacy ./apps/server/blog-legacy/Dockerfile
-            add database-server-legacy ./apps/server/database-legacy/Dockerfile
+            add database-server-legacy ./apps/server/database-legacy/Dockerfile postgres-server
           else
             [ "${{ steps.filter.outputs.blog }}" = "true" ] && add blog ./apps/web/blog-vite/Dockerfile
             [ "${{ steps.filter.outputs.admin }}" = "true" ] && add admin ./apps/web/admin-vite/Dockerfile
@@ -101,7 +101,7 @@ jobs:
             [ "${{ steps.filter.outputs.auth-server }}" = "true" ] && add auth-server ./apps/server/auth/Dockerfile postgres-redis-server
             [ "${{ steps.filter.outputs.admin-server-legacy }}" = "true" ] && add admin-server-legacy ./apps/server/admin-legacy/Dockerfile
             [ "${{ steps.filter.outputs.blog-server-legacy }}" = "true" ] && add blog-server-legacy ./apps/server/blog-legacy/Dockerfile
-            [ "${{ steps.filter.outputs.database-server-legacy }}" = "true" ] && add database-server-legacy ./apps/server/database-legacy/Dockerfile
+            [ "${{ steps.filter.outputs.database-server-legacy }}" = "true" ] && add database-server-legacy ./apps/server/database-legacy/Dockerfile postgres-server
           fi
 
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
