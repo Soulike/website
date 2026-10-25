@@ -45,38 +45,56 @@ test('returns the expected HTTP response', async () => {
   }
 });
 
-test('bounds a response that never completes', async () => {
+test('bounds a response that never completes', {timeout: 5_000}, async () => {
+  const {promise: partialResponseSent, resolve: markPartialResponseSent} =
+    Promise.withResolvers<void>();
   const server = createServer((_request, response) => {
     response.writeHead(200, {'content-type': 'text/plain'});
     response.write('partial response');
+    markPartialResponseSent();
     // Keep the body open to reproduce a stalled application.
   });
 
   try {
     const url = await listen(server);
     const startedAt = performance.now();
+    const waiting = waitForHttp({
+      description: 'stalled server',
+      url,
+      expectedStatus: 200,
+      isApplicationRunning: () => true,
+      deadlineMs: 1_000,
+      requestTimeoutMs: 1_000,
+    });
 
-    await assert.rejects(
-      waitForHttp({
-        description: 'stalled server',
-        url,
-        expectedStatus: 200,
-        isApplicationRunning: () => true,
-        deadlineMs: 300,
-        requestTimeoutMs: 100,
-      }),
-      (error: unknown) => {
-        assert(error instanceof Error);
-        assert.match(error.message, /Timed out waiting for stalled server/);
-        assert.match(error.message, /last HTTP status: 200/);
-        assert.match(error.message, /partial response/);
-        return true;
-      },
-    );
+    await Promise.race([
+      partialResponseSent,
+      waiting.then(
+        () => {
+          throw new Error(
+            'HTTP wait completed before the partial response was sent.',
+          );
+        },
+        (error: unknown) => {
+          throw new Error(
+            'HTTP wait failed before the partial response was sent.',
+            {cause: error},
+          );
+        },
+      ),
+    ]);
+
+    await assert.rejects(waiting, (error: unknown) => {
+      assert(error instanceof Error);
+      assert.match(error.message, /Timed out waiting for stalled server/);
+      assert.match(error.message, /last HTTP status: 200/);
+      assert.match(error.message, /partial response/);
+      return true;
+    });
 
     const elapsedMs = performance.now() - startedAt;
-    assert(elapsedMs >= 250, `deadline fired too early: ${elapsedMs}ms`);
-    assert(elapsedMs < 1_500, `deadline was not bounded: ${elapsedMs}ms`);
+    assert(elapsedMs >= 750, `deadline fired too early: ${elapsedMs}ms`);
+    assert(elapsedMs < 3_000, `deadline was not bounded: ${elapsedMs}ms`);
   } finally {
     await close(server);
   }
