@@ -2,7 +2,7 @@
   "name": "admin-legacy",
   "type": "module",
   "scripts": {
-    "build": "bun run build.ts",
+    "build": "node build.ts",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests --forceExit"
   },
@@ -19,7 +19,7 @@
     "signale": "^1.4.0"
   },
   "devDependencies": {
-    "@config/bun": "workspace:^",
+    "@config/esbuild": "workspace:^",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
     "@types/jest": "^29.5.14",

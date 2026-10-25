@@ -165,8 +165,6 @@ start_application() {
     --name "$application"
     --network "$network"
     --publish "127.0.0.1::$application_port"
-    --env DB_PASSWORD_FILE=/run/secrets/database-password
-    --volume "$secret_directory/database-password:/run/secrets/database-password:ro"
   )
 
   application_arguments+=("$@")
@@ -194,6 +192,8 @@ smoke_auth_server() {
   start_postgres
   start_redis
   start_application 'Auth server' 3000 \
+    --env DB_PASSWORD_FILE=/run/secrets/database-password \
+    --volume "$secret_directory/database-password:/run/secrets/database-password:ro" \
     --env REDIS_PASSWORD_FILE=/run/secrets/redis-password \
     --volume "$secret_directory/redis-password:/run/secrets/redis-password:ro"
 
@@ -211,7 +211,9 @@ smoke_auth_server() {
 smoke_database_server() {
   initialize_smoke
   start_postgres "$database_schema"
-  start_application 'Database server' 4000
+  start_application 'Database server' 4000 \
+    --env DB_PASSWORD_FILE=/run/secrets/database-password \
+    --volume "$secret_directory/database-password:/run/secrets/database-password:ro"
 
   wait_for_http 'Database server HTTP readiness' 200 \
     "http://127.0.0.1:$host_port/category/getAll" \
@@ -225,6 +227,19 @@ smoke_database_server() {
   fi
 }
 
+smoke_admin_server() {
+  initialize_smoke
+  start_redis
+  start_application 'Admin server' 4003 \
+    --env REDIS_PASSWORD_FILE=/run/secrets/redis-password \
+    --volume "$secret_directory/redis-password:/run/secrets/redis-password:ro"
+
+  # A valid Redis session reaches the unmatched route; session rejection does not.
+  wait_for_http 'Admin server HTTP readiness' 404 \
+    "http://127.0.0.1:$host_port/smoke-not-found" \
+    --cookie 'sess=smoke-session'
+}
+
 case "$profile" in
   none)
     exit 0
@@ -234,6 +249,9 @@ case "$profile" in
     ;;
   postgres-server)
     smoke_database_server
+    ;;
+  redis-server)
+    smoke_admin_server
     ;;
   *)
     echo "Unknown smoke profile: $profile" >&2

@@ -31,7 +31,7 @@
         "signale": "^1.4.0",
       },
       "devDependencies": {
-        "@config/bun": "workspace:^",
+        "@config/esbuild": "workspace:^",
         "@config/eslint": "workspace:^",
         "@config/typescript": "workspace:^",
         "@types/jest": "^29.5.14",
