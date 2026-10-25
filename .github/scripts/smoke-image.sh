@@ -68,19 +68,33 @@ wait_for_http() {
   local url=$3
   shift 3
   local last_status='unreachable'
+  local deadline=$((SECONDS + 60))
+  local remaining
+  local request_timeout
+  local connect_timeout
 
-  for _ in $(seq 1 60); do
+  while ((SECONDS < deadline)); do
     if [[ $(docker inspect --format '{{.State.Running}}' "$application") != 'true' ]]; then
       echo "$description exited before becoming ready." >&2
       return 1
     fi
 
+    remaining=$((deadline - SECONDS))
+    request_timeout=$((remaining < 5 ? remaining : 5))
+    connect_timeout=$((request_timeout < 2 ? request_timeout : 2))
+
     if last_status=$(curl --silent --show-error \
+      --connect-timeout "$connect_timeout" \
+      --max-time "$request_timeout" \
       --output "$response_file" \
       --write-out '%{http_code}' \
       "$@" \
       "$url" 2>/dev/null) && [[ "$last_status" == "$expected_status" ]]; then
       return 0
+    fi
+
+    if ((SECONDS >= deadline)); then
+      break
     fi
     sleep 1
   done
