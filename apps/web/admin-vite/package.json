@@ -32,7 +32,7 @@
     "@config/eslint": "workspace:^",
     "browserslist-to-esbuild": "^2.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.5",
     "svgo": "^4.0.0",
     "typescript": "catalog:",
     "typescript-eslint": "^8.56.1",

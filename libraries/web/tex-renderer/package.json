@@ -6,10 +6,9 @@
     "./style.css": "./src/style.css"
   },
   "dependencies": {
-    "@types/katex": "^0.16.7",
     "@library/dom-helpers": "workspace:^",
     "html-entities": "^2.6.0",
-    "katex": "^0.16.27"
+    "katex": "^0.18.2"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
