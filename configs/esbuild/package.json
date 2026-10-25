@@ -1,13 +1,17 @@
 {
-  "name": "@config/bun",
+  "name": "@config/esbuild",
   "type": "module",
   "private": true,
   "exports": {
     "./server": "./src/server.ts"
   },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "devDependencies": {
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
+    "esbuild": "catalog:",
     "typescript": "catalog:"
   }
 }

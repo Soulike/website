@@ -1,14 +1,15 @@
 # syntax=docker/dockerfile:1
 
-FROM oven/bun:alpine AS base
+FROM node:lts-alpine AS base
 WORKDIR /website
 COPY . .
-RUN bun install --frozen-lockfile
+RUN npm install --global --ignore-scripts pnpm@latest \
+    && HUSKY=0 pnpm install --frozen-lockfile
 
 FROM base AS builder
-RUN bun --filter "./apps/server/database-legacy" build
+RUN pnpm --filter "./apps/server/database-legacy" build
 
-FROM oven/bun:alpine AS database-server-legacy
+FROM node:lts-alpine AS database-server-legacy
 COPY --from=builder /website/apps/server/database-legacy/dist /database/dist
 RUN addgroup -S databasegroup \
     && adduser -S -G databasegroup databaseuser \
@@ -16,4 +17,4 @@ RUN addgroup -S databasegroup \
 WORKDIR /database
 EXPOSE 4000
 USER databaseuser
-CMD ["bun", "run", "dist/index.js"]
+CMD ["node", "dist/index.mjs"]

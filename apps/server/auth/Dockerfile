@@ -1,14 +1,15 @@
 # syntax=docker/dockerfile:1
 
-FROM oven/bun:alpine AS base
+FROM node:lts-alpine AS base
 WORKDIR /website
 COPY . .
-RUN bun install --frozen-lockfile
+RUN npm install --global --ignore-scripts pnpm@latest \
+    && HUSKY=0 pnpm install --frozen-lockfile
 
 FROM base AS builder
-RUN bun --filter "./apps/server/auth" build
+RUN pnpm --filter "./apps/server/auth" build
 
-FROM oven/bun:alpine AS auth-server
+FROM node:lts-alpine AS auth-server
 COPY --from=builder /website/apps/server/auth/dist /auth/dist
 RUN addgroup -S authgroup \
     && adduser -S -G authgroup authuser \
@@ -16,4 +17,4 @@ RUN addgroup -S authgroup \
 WORKDIR /auth
 EXPOSE 3000
 USER authuser
-CMD ["bun", "run", "dist/index.js"]
+CMD ["node", "dist/index.mjs"]

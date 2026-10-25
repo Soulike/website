@@ -1,12 +1,13 @@
 # syntax=docker/dockerfile:1
 
-FROM oven/bun:alpine AS base
+FROM node:lts-alpine AS base
 WORKDIR /website
 COPY . .
-RUN bun install --frozen-lockfile
+RUN npm install --global --ignore-scripts pnpm@latest \
+    && HUSKY=0 pnpm install --frozen-lockfile
 
 FROM base AS builder
-RUN bun --filter "./apps/web/admin-vite" build
+RUN pnpm --filter "./apps/web/admin-vite" build
 
 FROM nginx:stable-alpine AS admin
 COPY --from=builder /website/apps/web/admin-vite/dist /admin-dist

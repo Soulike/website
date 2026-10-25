@@ -7,7 +7,7 @@ describe('ScoreManagerImpl', () => {
 
   beforeEach(() => {
     originalLocalStorage = window.localStorage;
-    localStorage.clear();
+    window.localStorage.clear();
   });
 
   afterEach(() => {
@@ -148,14 +148,14 @@ describe('ScoreManagerImpl', () => {
     });
 
     it('should load highest score from localStorage on initialization', () => {
-      localStorage.setItem('game-2048-highest-score', '150');
+      window.localStorage.setItem('game-2048-highest-score', '150');
       const scoreManager = new ScoreManagerImpl();
 
       expect(scoreManager.getHighestScore()).toBe(150);
     });
 
     it('should update highest score when current score exceeds it', () => {
-      localStorage.setItem('game-2048-highest-score', '50');
+      window.localStorage.setItem('game-2048-highest-score', '50');
       const scoreManager = new ScoreManagerImpl();
 
       scoreManager.addToScore(100);
@@ -163,7 +163,7 @@ describe('ScoreManagerImpl', () => {
     });
 
     it('should not update highest score when current score is lower', () => {
-      localStorage.setItem('game-2048-highest-score', '100');
+      window.localStorage.setItem('game-2048-highest-score', '100');
       const scoreManager = new ScoreManagerImpl();
 
       scoreManager.addToScore(50);
@@ -173,12 +173,14 @@ describe('ScoreManagerImpl', () => {
 
   describe('localStorage persistence', () => {
     it('should save highest score to localStorage when updated', () => {
-      localStorage.setItem('game-2048-highest-score', '50');
+      window.localStorage.setItem('game-2048-highest-score', '50');
       const scoreManager = new ScoreManagerImpl();
 
       scoreManager.addToScore(100);
 
-      expect(localStorage.getItem('game-2048-highest-score')).toBe('100');
+      expect(window.localStorage.getItem('game-2048-highest-score')).toBe(
+        '100',
+      );
     });
 
     it('should handle localStorage.getItem errors gracefully', () => {
@@ -241,7 +243,7 @@ describe('ScoreManagerImpl', () => {
 
   describe('highestScoreChange event', () => {
     it('should emit highestScoreChange event when highest score is updated', () => {
-      localStorage.setItem('game-2048-highest-score', '50');
+      window.localStorage.setItem('game-2048-highest-score', '50');
       const scoreManager = new ScoreManagerImpl();
       const listener = vi.fn();
 
@@ -253,7 +255,7 @@ describe('ScoreManagerImpl', () => {
     });
 
     it('should not emit highestScoreChange event when score does not exceed highest', () => {
-      localStorage.setItem('game-2048-highest-score', '100');
+      window.localStorage.setItem('game-2048-highest-score', '100');
       const scoreManager = new ScoreManagerImpl();
       const listener = vi.fn();
 

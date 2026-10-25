@@ -29,7 +29,7 @@ Repository variables 已设置为 `AI_REVIEW_MODEL=gpt-6.1-sol` 和 `AI_REVIEW_R
 | 当前 branch protection | `main` 只要求 GitHub Actions 的 `ci-success`；strict；要求解决对话；0 个 approval | 兼容。先部署并验证，再增加 AI gate，不会形成初始化死锁 |
 | 原生 Copilot review | Auto-review ruleset 已关闭 | 不会与共享 workflow 重复发布 review |
 | 模型配置 | `AI_REVIEW_MODEL=gpt-6.1-sol`；`AI_REVIEW_REASONING_EFFORT=xhigh` | 已配置；本仓库托管执行待验证 |
-| 本仓库技术栈 | Bun monorepo；普通候选 CI 使用 `pull_request`，共享 review 不要求 consumer 安装 pnpm/gh-aw | 兼容。应用语言、Bun 和 Docker 构建不影响 reusable workflow 接口 |
+| 本仓库技术栈 | pnpm + Node.js LTS monorepo；普通候选 CI 使用 `pull_request`，共享 review 不要求 consumer 安装 gh-aw | 兼容。应用语言、包管理器和 Docker 构建不影响 reusable workflow 接口 |
 | 上游当前可运行性 | `knowledge-base` run `39351969803` 在当前上游 SHA `4a70b0c...` 上完成 Agent、发布、verdict 与 gate | 没有发现当前共享实现的普遍运行 blocker |
 
 ## 当前接入状态与剩余步骤

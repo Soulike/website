@@ -39,7 +39,7 @@ export class ScoreManagerImpl
 
   private loadHighestScore() {
     try {
-      const stored = localStorage.getItem(this.storageKey);
+      const stored = window.localStorage.getItem(this.storageKey);
       if (stored !== null) {
         this.highestScore = Number.parseInt(stored, 10);
       } else {
@@ -52,7 +52,7 @@ export class ScoreManagerImpl
       );
       this.highestScore = 0;
       try {
-        localStorage.setItem(this.storageKey, '0');
+        window.localStorage.setItem(this.storageKey, '0');
       } catch (saveError) {
         console.error(
           'Failed to reset highest score in localStorage:',
@@ -73,7 +73,10 @@ export class ScoreManagerImpl
 
   private saveHighestScore() {
     try {
-      localStorage.setItem(this.storageKey, this.highestScore.toString());
+      window.localStorage.setItem(
+        this.storageKey,
+        this.highestScore.toString(),
+      );
     } catch (error) {
       console.error('Failed to save highest score to localStorage:', error);
     }

@@ -11,7 +11,7 @@
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
     "antd": "catalog:",
-    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

@@ -6,7 +6,8 @@
   "exports": {
     "./bundler": "./src/tsconfig.bundler.json",
     "./node": "./src/tsconfig.node.json",
-    "./package": "./src/tsconfig.package.json"
+    "./package": "./src/tsconfig.package.json",
+    "./script": "./src/tsconfig.script.json"
   },
   "scripts": {
     "build": "echo \"ts-config is not required to build.\""

@@ -2,16 +2,15 @@
   "name": "auth",
   "type": "module",
   "scripts": {
-    "build": "bun run build.ts",
+    "build": "node build.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest"
   },
   "devDependencies": {
-    "@config/bun": "workspace:^",
+    "@config/esbuild": "workspace:^",
     "@types/koa": "^3.0.1",
     "@types/koa__cors": "^5.0.1",
     "@types/koa-compose": "^3.2.9",
-    "@types/koa-session": "^6.4.5",
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "@config/eslint": "workspace:^",

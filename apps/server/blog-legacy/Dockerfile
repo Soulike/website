@@ -1,14 +1,15 @@
 # syntax=docker/dockerfile:1
 
-FROM oven/bun:alpine AS base
+FROM node:lts-alpine AS base
 WORKDIR /website
 COPY . .
-RUN bun install --frozen-lockfile
+RUN npm install --global --ignore-scripts pnpm@latest \
+    && HUSKY=0 pnpm install --frozen-lockfile
 
 FROM base AS builder
-RUN bun --filter "./apps/server/blog-legacy" build
+RUN pnpm --filter "./apps/server/blog-legacy" build
 
-FROM oven/bun:alpine AS blog-server-legacy
+FROM node:lts-alpine AS blog-server-legacy
 COPY --from=builder /website/apps/server/blog-legacy/dist /blog/dist
 RUN addgroup -S bloggroup \
     && adduser -S -G bloggroup bloguser \
@@ -16,4 +17,4 @@ RUN addgroup -S bloggroup \
 WORKDIR /blog
 EXPOSE 4004
 USER bloguser
-CMD ["bun", "run", "dist/index.js"]
+CMD ["node", "dist/index.mjs"]

@@ -1,4 +1,3 @@
-import {buildServer, createServerBuildConfig} from '@config/bun/server';
+import {buildServer} from '@config/esbuild/server';
 
-const config = createServerBuildConfig(['./src/index.ts']);
-await buildServer(config);
+await buildServer(['./src/index.ts']);

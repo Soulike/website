@@ -1,19 +1,18 @@
 # Development Instructions
 
-This is a Bun monorepo containing multiple types of projects.
+This monorepo uses pnpm for dependency management and workspace commands, Node.js LTS for application builds and server runtimes, and Nginx for Web runtimes.
 
-## Bun Doc
+## Toolchain documentation
 
-Since Bun is new, you may not know its latest functionalities. You can refer
-to [latest Bun doc](https://bun.com/docs/llms.txt) if you need information.
+Use the [pnpm documentation](https://pnpm.io/) for dependency and workspace tasks. Check the [Node.js release status](https://nodejs.org/en/about/previous-releases) for the LTS selected by CI and Docker, then use that release's API documentation for runtime behavior.
 
-## Task Preparation
+## Task preparation
 
-Before starting any task, you must first confirm:
+Before starting any task:
 
-- What package manager is used. Use correct package manager to run commands.
-- Configurations in package.json files, both in project and in workspace.
-- Configurations for other tools, i.e., Vite, Vitest, ESLint, Prettier, etc.
+- Use pnpm for dependency and workspace commands.
+- Review the relevant root and workspace `package.json` files.
+- Review the relevant Vite, Vitest, ESLint, Prettier, and other tool configurations.
 
 ## Agent skills
 
