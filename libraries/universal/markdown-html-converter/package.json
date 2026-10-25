@@ -13,12 +13,14 @@
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
+    "@vitest/coverage-v8": "catalog:",
     "@config/typescript": "workspace:^",
     "@config/eslint": "workspace:^",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "bun test --coverage"
+    "test": "vitest --coverage"
   }
 }

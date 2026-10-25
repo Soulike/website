@@ -22,6 +22,8 @@ const viteConfig = defineConfig({
 const vitestConfig = defineTestConfig({
   test: {
     environment: 'jsdom',
+    // Let jsdom own browser storage instead of Node 26's experimental global.
+    execArgv: ['--no-experimental-webstorage'],
     coverage: {
       enabled: true,
     },

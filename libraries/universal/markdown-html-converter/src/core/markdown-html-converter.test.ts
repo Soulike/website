@@ -1,5 +1,5 @@
 import {htmlSanitizer} from '@library/html-sanitizer/ssr';
-import {describe, expect, it} from 'bun:test';
+import {describe, expect, it} from 'vitest';
 
 import {MarkdownHtmlConverter} from './markdown-html-converter.js';
 
