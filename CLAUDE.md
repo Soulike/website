@@ -15,6 +15,20 @@ Before starting any task, you must first confirm:
 - Configurations in package.json files, both in project and in workspace.
 - Configurations for other tools, i.e., Vite, Vitest, ESLint, Prettier, etc.
 
+## Agent skills
+
+### Issue tracker
+
+Issues and specs live in GitHub Issues. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use the canonical triage label vocabulary. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+This repository uses a single-context domain documentation layout. See `docs/agents/domain.md`.
+
 ---
 
 ## Projects
