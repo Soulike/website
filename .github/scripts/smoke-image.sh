@@ -257,6 +257,24 @@ smoke_standalone_server() {
     "http://127.0.0.1:$host_port/smoke-not-found"
 }
 
+smoke_web_image() {
+  initialize_smoke
+  # Nginx resolves configured proxy upstreams while loading its configuration.
+  start_application 'Web image' 3000 \
+    --add-host admin-server:127.0.0.1 \
+    --add-host blog-server:127.0.0.1
+
+  wait_for_http 'Web image HTTP readiness' 200 \
+    "http://127.0.0.1:$host_port/"
+
+  if ! grep --ignore-case --extended-regexp \
+    '<!doctype html|<html' "$response_file" >/dev/null; then
+    echo 'Web image returned a non-HTML root response:' >&2
+    cat "$response_file" >&2
+    exit 1
+  fi
+}
+
 case "$profile" in
   none)
     exit 0
@@ -272,6 +290,9 @@ case "$profile" in
     ;;
   standalone-server)
     smoke_standalone_server
+    ;;
+  web)
+    smoke_web_image
     ;;
   *)
     echo "Unknown smoke profile: $profile" >&2

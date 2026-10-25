@@ -1,12 +1,13 @@
 # syntax=docker/dockerfile:1
 
-FROM oven/bun:alpine AS base
+FROM node:lts-alpine AS base
 WORKDIR /website
 COPY . .
-RUN bun install --frozen-lockfile
+RUN npm install --global --ignore-scripts pnpm@latest \
+    && HUSKY=0 pnpm install --frozen-lockfile
 
 FROM base AS builder
-RUN bun --filter "./apps/web/game-2048" build
+RUN pnpm --filter "./apps/web/game-2048" build
 
 FROM nginx:stable-alpine AS game-2048
 COPY --from=builder /website/apps/web/game-2048/dist /game-2048-dist

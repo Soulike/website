@@ -1,10 +1,10 @@
 # Development Instructions
 
-This monorepo uses pnpm for dependency management, workspace commands, validation, and tests. Some server bundles and application Docker images still use Bun during the staged toolchain migration.
+This monorepo uses pnpm for dependency management and workspace commands, Node.js LTS for application builds and server runtimes, and Nginx for Web runtimes. Obsolete Bun migration artifacts remain until final cleanup.
 
 ## Toolchain documentation
 
-Use the [pnpm documentation](https://pnpm.io/) for dependency and workspace tasks. Refer to the [Bun documentation](https://bun.com/docs/llms.txt) only for server-build and image paths that have not migrated yet.
+Use the [pnpm documentation](https://pnpm.io/) for dependency and workspace tasks. Check the [Node.js release status](https://nodejs.org/en/about/previous-releases) for the LTS selected by CI and Docker, then use that release's API documentation for runtime behavior.
 
 ## Task Preparation
 

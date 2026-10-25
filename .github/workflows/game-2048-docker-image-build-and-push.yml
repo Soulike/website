@@ -7,7 +7,12 @@ on:
     paths:
       - 'apps/web/game-2048/**'
       - 'libraries/**'
-      - 'bun.lock'
+      - 'configs/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/scripts/smoke-image.sh'
+      - '.github/workflows/docker-image-build-and-push.yml'
   workflow_dispatch:
 
 concurrency:
@@ -21,4 +26,5 @@ jobs:
     with:
       docker-file-path: ./apps/web/game-2048/Dockerfile
       docker-build-target: game-2048
+      smoke-profile: web
       push-to-registry: true

@@ -87,17 +87,17 @@ jobs:
           add() { matrix=$(echo "$matrix" | jq -c --arg t "$1" --arg p "$2" --arg s "${3:-none}" '. + [{"docker-build-target": $t, "docker-file-path": $p, "smoke-profile": $s}]'); }
 
           if [ "${{ steps.filter.outputs.shared }}" = "true" ]; then
-            add blog ./apps/web/blog-vite/Dockerfile
-            add admin ./apps/web/admin-vite/Dockerfile
-            add game-2048 ./apps/web/game-2048/Dockerfile
+            add blog ./apps/web/blog-vite/Dockerfile web
+            add admin ./apps/web/admin-vite/Dockerfile web
+            add game-2048 ./apps/web/game-2048/Dockerfile web
             add auth-server ./apps/server/auth/Dockerfile postgres-redis-server
             add admin-server-legacy ./apps/server/admin-legacy/Dockerfile redis-server
             add blog-server-legacy ./apps/server/blog-legacy/Dockerfile standalone-server
             add database-server-legacy ./apps/server/database-legacy/Dockerfile postgres-server
           else
-            [ "${{ steps.filter.outputs.blog }}" = "true" ] && add blog ./apps/web/blog-vite/Dockerfile
-            [ "${{ steps.filter.outputs.admin }}" = "true" ] && add admin ./apps/web/admin-vite/Dockerfile
-            [ "${{ steps.filter.outputs.game-2048 }}" = "true" ] && add game-2048 ./apps/web/game-2048/Dockerfile
+            [ "${{ steps.filter.outputs.blog }}" = "true" ] && add blog ./apps/web/blog-vite/Dockerfile web
+            [ "${{ steps.filter.outputs.admin }}" = "true" ] && add admin ./apps/web/admin-vite/Dockerfile web
+            [ "${{ steps.filter.outputs.game-2048 }}" = "true" ] && add game-2048 ./apps/web/game-2048/Dockerfile web
             [ "${{ steps.filter.outputs.auth-server }}" = "true" ] && add auth-server ./apps/server/auth/Dockerfile postgres-redis-server
             [ "${{ steps.filter.outputs.admin-server-legacy }}" = "true" ] && add admin-server-legacy ./apps/server/admin-legacy/Dockerfile redis-server
             [ "${{ steps.filter.outputs.blog-server-legacy }}" = "true" ] && add blog-server-legacy ./apps/server/blog-legacy/Dockerfile standalone-server
