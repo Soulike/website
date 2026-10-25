@@ -7,6 +7,9 @@ on:
       - develop
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -106,6 +109,7 @@ jobs:
       push-to-registry: false
   ci-success:
     runs-on: ubuntu-latest
+    permissions: {}
     if: always()
     needs:
       - test
