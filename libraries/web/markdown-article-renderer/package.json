@@ -4,7 +4,10 @@
   "exports": {
     "./csr": "./src/csr.ts",
     "./ssr": "./src/ssr.ts",
-    "./style.css": "./src/style.css"
+    "./style.css": {
+      "types": "./src/style.css.d.ts",
+      "default": "./src/style.css"
+    }
   },
   "dependencies": {
     "@library/html-code-highlighter": "workspace:^",

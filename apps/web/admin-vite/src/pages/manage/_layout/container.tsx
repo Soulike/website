@@ -30,7 +30,7 @@ export function Layout() {
     logout(
       () => {
         notification.success({
-          message: 'Logged out',
+          title: 'Logged out',
         });
         void navigate(PAGE_ID_TO_PATH[PAGE_ID.LOGIN], {replace: true});
       },
