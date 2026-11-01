@@ -13,6 +13,8 @@ on:
       - 'pnpm-workspace.yaml'
       - '.github/scripts/smoke/**'
       - '.github/workflows/docker-image-build-and-push.yml'
+      - '!**/AGENTS.md'
+      - '!**/CLAUDE.md'
   workflow_dispatch:
 
 permissions:
