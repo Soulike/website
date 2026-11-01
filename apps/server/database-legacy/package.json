@@ -4,7 +4,7 @@
   "scripts": {
     "build": "node build.ts",
     "typecheck": "tsc --noEmit",
-    "test": "jest --passWithNoTests --forceExit"
+    "test": "vitest run"
   },
   "dependencies": {
     "@koa/router": "catalog:",
@@ -24,22 +24,14 @@
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
     "@types/clone-deep": "^4.0.4",
-    "@types/jest": "^29.5.14",
     "@types/koa": "catalog:",
     "@types/koa-basic-auth": "^2.0.6",
     "@types/koa-compose": "catalog:",
     "@types/node": "catalog:",
     "@types/pg": "^8.11.13",
     "@types/signale": "^1.4.7",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.3.2",
-    "typescript": "catalog:"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "moduleNameMapper": {
-      "^(\\.{1,2}/.*)\\.js$": "$1"
-    }
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "signale": {
     "displayDate": true,

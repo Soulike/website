@@ -69,6 +69,7 @@ Follow Google TypeScript guide unless specified. Detail: <https://google.github.
 
 ## Unit Tests
 
+- Use Vitest as the test runner.
 - Create unit test only when user prompts.
 - Can expose private methods and members required in testing with `xxxForTesting` methods. The test-only methods do
   not need test cases.

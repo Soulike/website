@@ -4,11 +4,12 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "node --test"
+    "test": "vitest run"
   },
   "devDependencies": {
     "@config/typescript": "workspace:^",
     "@types/node": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }
