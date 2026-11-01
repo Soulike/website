@@ -17,7 +17,7 @@
 | `blog-legacy`     | `blog-server-legacy`     | 4004     | `node --enable-source-maps dist/index.mjs` |
 | `database-legacy` | `database-server-legacy` | 4000     | `node --enable-source-maps dist/index.mjs` |
 
-四个 [Dockerfile](../../apps/server/auth/Dockerfile) 使用相同结构：在 `node:lts-alpine` 中复制仓库、安装完整 pnpm workspace、构建目标 app；最终阶段复制整个 `dist`，以非 root 用户执行 Node.js。最终镜像没有复制 `node_modules`。目前各 app 的 `build.ts` 调用统一的 [Rolldown 配置](../../configs/rolldown/src/server.ts)，语法目标为 Node.js 26。以下是迁移前的 [esbuild 配置](https://github.com/Soulike/website/blob/bd977bf9707b6ceba8bc10710f3a577744ce20d3/configs/esbuild/src/server.ts)，保留为初始调研证据：
+四个 [Dockerfile](../../apps/server/auth/Dockerfile) 使用相同结构：在由 [`.node-version`](../../.node-version) 生成的 `node:26-alpine` 中复制仓库、安装完整 pnpm workspace、构建目标 app；最终阶段复制整个 `dist`，以非 root 用户执行 Node.js。最终镜像没有复制 `node_modules`。目前各 app 的 `build.ts` 调用统一的 [Rolldown 配置](../../configs/rolldown/src/server.ts)，语法目标为 Node.js 26。以下是迁移前的 [esbuild 配置](https://github.com/Soulike/website/blob/bd977bf9707b6ceba8bc10710f3a577744ce20d3/configs/esbuild/src/server.ts)，保留为初始调研证据：
 
 ```ts
 bundle: true,
@@ -32,7 +32,7 @@ outExtension: {'.js': '.mjs'},
 
 初始 esbuild 配置还用 `createRequire(import.meta.url)` 为打包的 CommonJS 依赖提供动态 `require`。`linked` 会生成旁边的 `.map` 和 `sourceMappingURL` 注释；Docker 复制整个 `dist` 时也复制 `.map`。[esbuild：Sourcemap](https://esbuild.github.io/api/#sourcemap)
 
-[CI](../../.github/workflows/apps-ci.yml) 使用 `lts/*` 和最新 pnpm；[镜像工作流](../../.github/workflows/docker-image-build-and-push.yml) 构建 `linux/amd64`，先运行 smoke，再按需发布 `latest`。Node.js 官方页面在调研时列出 Node.js 26 为最新 LTS，Node.js 24、22 也处于 LTS；本次运行时行为采用 [Node.js 26 文档](https://nodejs.org/docs/latest-v26.x/api/)。esbuild 的 `target: 'node24'` 是输出语法兼容目标，不能证明实际容器运行的是 Node.js 24。[Node.js release status](https://nodejs.org/en/about/previous-releases)
+初始调研基线的 [CI](../../.github/workflows/apps-ci.yml) 使用 `lts/*`，Docker 使用 `node:lts-alpine`；当前由 [Node toolchain](../../README.md#node-toolchain) 从 `.node-version` 生成明确的 CI major `26` 和 `node:26-alpine` 标签。[镜像工作流](../../.github/workflows/docker-image-build-and-push.yml) 构建 `linux/amd64`，先运行 smoke，再按需发布 `latest`。Node.js 官方页面在调研时列出 Node.js 26 为最新 LTS，Node.js 24、22 也处于 LTS；本次运行时行为采用 [Node.js 26 文档](https://nodejs.org/docs/latest-v26.x/api/)。迁移前 esbuild 的 `target: 'node24'` 是输出语法兼容目标，不能证明实际容器运行的是 Node.js 24。[Node.js release status](https://nodejs.org/en/about/previous-releases)
 
 ## 错误日志的信息在哪里丢失
 
@@ -113,7 +113,7 @@ Node.js 官方展示了 `node --import=tsx your-file.ts` 作为第三方 loader 
 
 若开始复制生产 `node_modules`，依赖必须为目标 Linux、架构和 C 库安装。当前 CI 目标是 `linux/amd64`，不能复制 macOS 本地依赖。Alpine 使用 musl，Debian 使用 glibc；有原生依赖时应让 builder 与 runtime 的平台和 ABI 兼容。`node:lts-slim` 是可选的 Debian 运行环境，不是修复堆栈的必要条件。[Node.js Docker：Image variants](https://github.com/nodejs/docker-node#image-variants)
 
-继续使用当前滚动 LTS/latest 发布策略时，应记录构建和 smoke 实际使用的 Node.js/pnpm 版本及镜像信息。Node.js 官方确认 `lts` 标签选择 Active LTS，但本次没有解析实际 registry manifest，也没有运行容器，不能由标签文字推断某个已发布镜像的版本。[Node.js Docker：LTS](https://github.com/nodejs/docker-node#long-term-support-lts)
+初始基线使用滚动 `lts` 标签时，应记录构建和 smoke 实际使用的 Node.js/pnpm 版本及镜像信息。Node.js 官方确认 `lts` 标签选择 Active LTS，但本次没有解析当时的 registry manifest，不能由标签文字推断某个已发布镜像的版本。当前策略由 [Node toolchain](../../README.md#node-toolchain) 固定 major，允许该 major 内的 patch release 正常更新。[Node.js Docker：LTS](https://github.com/nodejs/docker-node#long-term-support-lts)
 
 ## 调研基线验证
 

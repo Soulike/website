@@ -1,6 +1,6 @@
 import {type Article, type ServerResponse} from '@module/classes';
 
-import {axiosInstance} from '../CONFIG.js';
+import {databaseRequest} from '../CONFIG.js';
 import {
   ADD,
   ADD_PAGE_VIEW,
@@ -16,15 +16,13 @@ import {
 export async function add(
   article: Pick<Article, 'title' | 'content' | 'category' | 'isVisible'>,
 ): Promise<ServerResponse<void>> {
-  const {data} = await axiosInstance.post<ServerResponse<void>>(ADD, article);
-  return data;
+  return databaseRequest.post<ServerResponse<void>>(ADD, article);
 }
 
 export async function deleteById(id: number): Promise<ServerResponse<void>> {
-  const {data} = await axiosInstance.post<ServerResponse<void>>(DELETE_BY_ID, {
+  return databaseRequest.post<ServerResponse<void>>(DELETE_BY_ID, {
     id,
   });
-  return data;
 }
 
 export async function modify(
@@ -33,27 +31,19 @@ export async function modify(
       Omit<Article, 'publicationTime' | 'modificationTime' | 'pageViews'>
     >,
 ): Promise<ServerResponse<void>> {
-  const {data} = await axiosInstance.post<ServerResponse<void>>(
-    MODIFY,
-    article,
-  );
-  return data;
+  return databaseRequest.post<ServerResponse<void>>(MODIFY, article);
 }
 
 export async function get(
   article: Partial<Article>,
 ): Promise<ServerResponse<Article[]>> {
-  const {data} = await axiosInstance.get<ServerResponse<Article[]>>(GET, {
-    params: {
-      json: JSON.stringify(article),
-    },
+  return databaseRequest.get<ServerResponse<Article[]>>(GET, {
+    json: JSON.stringify(article),
   });
-  return data;
 }
 
 export async function getAll(): Promise<ServerResponse<Article[]>> {
-  const {data} = await axiosInstance.get<ServerResponse<Article[]>>(GET_ALL);
-  return data;
+  return databaseRequest.get<ServerResponse<Article[]>>(GET_ALL);
 }
 
 export async function getByDate(
@@ -61,36 +51,25 @@ export async function getByDate(
   month?: number,
   day?: number,
 ): Promise<ServerResponse<Article[]>> {
-  const {data} = await axiosInstance.get<ServerResponse<Article[]>>(
-    GET_BY_DATE,
-    {
-      params: {
-        json: JSON.stringify({year, month, day}),
-      },
-    },
-  );
-  return data;
+  return databaseRequest.get<ServerResponse<Article[]>>(GET_BY_DATE, {
+    json: JSON.stringify({year, month, day}),
+  });
 }
 
 export async function count(
   article: Partial<Article>,
 ): Promise<ServerResponse<number>> {
-  const {data} = await axiosInstance.get<ServerResponse<number>>(COUNT, {
-    params: {
-      json: JSON.stringify(article),
-    },
+  return databaseRequest.get<ServerResponse<number>>(COUNT, {
+    json: JSON.stringify(article),
   });
-  return data;
 }
 
 export async function countAll(): Promise<ServerResponse<number>> {
-  const {data} = await axiosInstance.get<ServerResponse<number>>(COUNT_ALL);
-  return data;
+  return databaseRequest.get<ServerResponse<number>>(COUNT_ALL);
 }
 
 export async function addPageView(id: number): Promise<ServerResponse<void>> {
-  const {data} = await axiosInstance.post<ServerResponse<void>>(ADD_PAGE_VIEW, {
+  return databaseRequest.post<ServerResponse<void>>(ADD_PAGE_VIEW, {
     id,
   });
-  return data;
 }

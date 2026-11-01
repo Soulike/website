@@ -1,4 +1,8 @@
 import {requiredImageArgument, withSmokeHarness} from './shared/harness.ts';
+import {
+  databaseFixtureDockerArgs,
+  smokeLegacyDatabaseClient,
+} from './shared/legacy-database-client.ts';
 import {assertNodeImageRuntime} from './shared/node-runtime.ts';
 
 const image = requiredImageArgument();
@@ -14,6 +18,7 @@ await withSmokeHarness(image, async (smoke) => {
     description: 'Admin server',
     port: 4003,
     dockerArgs: [
+      ...databaseFixtureDockerArgs,
       '--env',
       `REDIS_PASSWORD_FILE=${redisSecret.containerPath}`,
       '--volume',
@@ -27,6 +32,9 @@ await withSmokeHarness(image, async (smoke) => {
     path: '/smoke-not-found',
     expectedStatus: 404,
     headers: {cookie: 'sess=smoke-session'},
+  });
+  await smokeLegacyDatabaseClient(smoke, '/blog/article/getById', {
+    cookie: 'sess=smoke-session',
   });
 });
 
