@@ -1,3 +1,5 @@
+import {inspect} from 'node:util';
+
 import signale from 'signale';
 
 export class Logger {
@@ -25,6 +27,6 @@ export class Logger {
     const errorWrapper = new Error(`Error when ${httpMethod} ${path}`, {
       cause: error,
     });
-    signale.error(errorWrapper.stack);
+    signale.error(inspect(errorWrapper, {depth: null}));
   }
 }

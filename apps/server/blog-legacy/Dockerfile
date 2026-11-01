@@ -17,4 +17,4 @@ RUN addgroup -S bloggroup \
 WORKDIR /blog
 EXPOSE 4004
 USER bloguser
-CMD ["node", "dist/index.mjs"]
+CMD ["node", "--enable-source-maps", "dist/index.mjs"]

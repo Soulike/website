@@ -17,4 +17,4 @@ RUN addgroup -S authgroup \
 WORKDIR /auth
 EXPOSE 3000
 USER authuser
-CMD ["node", "dist/index.mjs"]
+CMD ["node", "--enable-source-maps", "dist/index.mjs"]

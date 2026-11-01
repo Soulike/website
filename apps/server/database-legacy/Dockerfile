@@ -17,4 +17,4 @@ RUN addgroup -S databasegroup \
 WORKDIR /database
 EXPOSE 4000
 USER databaseuser
-CMD ["node", "dist/index.mjs"]
+CMD ["node", "--enable-source-maps", "dist/index.mjs"]

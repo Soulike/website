@@ -17,4 +17,4 @@ RUN addgroup -S admingroup \
 WORKDIR /admin
 EXPOSE 4003
 USER adminuser
-CMD ["node", "dist/index.mjs"]
+CMD ["node", "--enable-source-maps", "dist/index.mjs"]

@@ -6,6 +6,7 @@ const serverBuildOptions = {
   format: 'esm',
   target: 'node24',
   minify: true,
+  keepNames: true,
   sourcemap: 'linked',
   outdir: './dist',
   outExtension: {'.js': '.mjs'},
