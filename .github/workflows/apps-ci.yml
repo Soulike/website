@@ -54,35 +54,36 @@ jobs:
         id: filter
         with:
           filters: |
+            # Rules are ORed; exclude instruction basenames within each directory glob.
             shared:
-              - 'libraries/**'
-              - 'configs/**'
+              - 'libraries/**/!(AGENTS.md|CLAUDE.md)'
+              - 'configs/**/!(AGENTS.md|CLAUDE.md)'
               - 'package.json'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
-              - '.github/scripts/smoke/**'
+              - '.github/scripts/smoke/**/!(AGENTS.md|CLAUDE.md)'
               - '.github/workflows/apps-ci.yml'
               - '.github/workflows/*docker-image-build-and-push.yml'
             blog:
-              - 'apps/web/blog-vite/**'
-              - 'modules/**'
+              - 'apps/web/blog-vite/**/!(AGENTS.md|CLAUDE.md)'
+              - 'modules/**/!(AGENTS.md|CLAUDE.md)'
             admin:
-              - 'apps/web/admin-vite/**'
-              - 'modules/**'
+              - 'apps/web/admin-vite/**/!(AGENTS.md|CLAUDE.md)'
+              - 'modules/**/!(AGENTS.md|CLAUDE.md)'
             game-2048:
-              - 'apps/web/game-2048/**'
+              - 'apps/web/game-2048/**/!(AGENTS.md|CLAUDE.md)'
             auth-server:
-              - 'apps/server/auth/**'
-              - 'modules/**'
+              - 'apps/server/auth/**/!(AGENTS.md|CLAUDE.md)'
+              - 'modules/**/!(AGENTS.md|CLAUDE.md)'
             admin-server-legacy:
-              - 'apps/server/admin-legacy/**'
-              - 'modules/**'
+              - 'apps/server/admin-legacy/**/!(AGENTS.md|CLAUDE.md)'
+              - 'modules/**/!(AGENTS.md|CLAUDE.md)'
             blog-server-legacy:
-              - 'apps/server/blog-legacy/**'
-              - 'modules/**'
+              - 'apps/server/blog-legacy/**/!(AGENTS.md|CLAUDE.md)'
+              - 'modules/**/!(AGENTS.md|CLAUDE.md)'
             database-server-legacy:
-              - 'apps/server/database-legacy/**'
-              - 'modules/**'
+              - 'apps/server/database-legacy/**/!(AGENTS.md|CLAUDE.md)'
+              - 'modules/**/!(AGENTS.md|CLAUDE.md)'
       - name: Setup Node.js for matrix
         uses: actions/setup-node@v7
         with:
