@@ -54,7 +54,8 @@ logic changes, new unit tests, or compiler deprecation suppressions were needed.
 - `CI=1 pnpm test` passed, including the database legacy server's five Jest tests using the actual `ts-jest` transformer.
 - All four server builds passed through their existing `node build.ts` scripts.
 - The shared ESLint configurations load with TypeScript 6.0.3; the new stylesheet declaration passes its package's ESLint check.
-- Full Web ESLint checks report three errors in admin, two in blog, and none in game-2048. The same five Ant Design deprecation errors were reproduced using the cached TypeScript 5.9.3 and React ESLint 2.13.0 packages with equivalent temporary configurations. No migration-introduced lint errors were found. Warning counts changed with the React preset upgrade.
+- At the migration checkpoint, full Web ESLint checks reported three errors in admin, two in blog, and none in game-2048. The same five Ant Design deprecation errors were reproduced using the cached TypeScript 5.9.3 and React ESLint 2.13.0 packages with equivalent temporary configurations. No migration-introduced lint errors were found. Warning counts changed with the React preset upgrade.
+- A subsequent cleanup replaced `Select.Option` with `options` and four notification `message` arguments with `title`. Full Web lint then passed with zero errors; the existing 17 warnings remain. Admin and blog type checks and production builds passed again.
 - Formatting, local documentation links, and `git diff --check` passed.
 
 Docker builds were not run because the local Docker daemon was unavailable.

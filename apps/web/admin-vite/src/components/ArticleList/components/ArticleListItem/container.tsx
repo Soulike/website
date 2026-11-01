@@ -46,7 +46,7 @@ export function ArticleListItem(props: ArticleListItemProps) {
         id,
         () => {
           notification.success({
-            message: 'Article deleted',
+            title: 'Article deleted',
           });
           onDeleteArticleSuccess(id);
         },

@@ -16,7 +16,6 @@ import {useMemo} from 'react';
 import styles from './styles.module.css';
 
 const {TextArea} = Input;
-const {Option} = Select;
 
 export interface ArticleEditorViewProps {
   title: Article['title'];
@@ -97,16 +96,8 @@ export function ArticleEditorView(props: ArticleEditorViewProps) {
           className={styles.categorySelect}
           disabled={shouldDisable || !categories}
           placeholder={'Category'}
-        >
-          {categories?.map((category) => {
-            const {id, name} = category;
-            return (
-              <Option value={id} key={id}>
-                {name}
-              </Option>
-            );
-          })}
-        </Select>
+          options={categories?.map(({id, name}) => ({value: id, label: name}))}
+        />
         <Checkbox
           disabled={shouldDisable}
           checked={isVisible}
