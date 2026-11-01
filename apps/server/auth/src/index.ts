@@ -1,3 +1,5 @@
+import {inspect} from 'node:util';
+
 import {bodyParser} from '@koa/bodyparser';
 import cors from '@koa/cors';
 import {Logger} from '@library/logger';
@@ -14,11 +16,7 @@ const app = new Koa();
 app.proxy = true;
 
 app.on('error', (e: unknown) => {
-  if (e instanceof Error) {
-    Logger.error(`Uncaught error：\n${e.name}\n${e.message}\n${e.stack ?? ''}`);
-  } else {
-    Logger.error(`Uncaught error：\n${JSON.stringify(e)}`);
-  }
+  Logger.error(`Uncaught error：\n${inspect(e, {depth: null})}`);
 });
 
 app.use(cors(KOA_CORS_OPTIONS));

@@ -1,5 +1,5 @@
 {
-  "name": "@config/esbuild",
+  "name": "@config/rolldown",
   "type": "module",
   "private": true,
   "exports": {
@@ -9,9 +9,10 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@script/node-version": "workspace:^",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
-    "esbuild": "catalog:",
+    "rolldown": "catalog:",
     "typescript": "catalog:"
   }
 }

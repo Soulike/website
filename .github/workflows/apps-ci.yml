@@ -27,7 +27,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: 'lts/*'
+          node-version: '26'
           check-latest: true
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
@@ -58,6 +58,8 @@ jobs:
             shared:
               - 'libraries/**/!(AGENTS.md|CLAUDE.md)'
               - 'configs/**/!(AGENTS.md|CLAUDE.md)'
+              - 'scripts/node-version/**/!(AGENTS.md|CLAUDE.md)'
+              - '.node-version'
               - 'package.json'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
@@ -87,13 +89,14 @@ jobs:
       - name: Setup Node.js for matrix
         uses: actions/setup-node@v7
         with:
-          node-version: 'lts/*'
+          node-version: '26'
           check-latest: true
       - name: Build matrix
         id: build-matrix
         env:
           FILTER_RESULTS: ${{ toJSON(steps.filter.outputs) }}
         run: |
+          node scripts/node-version/src/check-runtime.ts
           echo "matrix=$(node .github/scripts/smoke/build-matrix.ts)" >> "$GITHUB_OUTPUT"
   build:
     needs: [test, changes]

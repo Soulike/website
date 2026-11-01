@@ -53,13 +53,15 @@ jobs:
         if: inputs.smoke-script != ''
         uses: actions/setup-node@v7
         with:
-          node-version: 'lts/*'
+          node-version: '26'
           check-latest: true
       - name: Smoke image
         if: inputs.smoke-script != ''
         env:
           SMOKE_SCRIPT: ${{ inputs.smoke-script }}
-        run: node "$SMOKE_SCRIPT" "$LOCAL_IMAGE"
+        run: |
+          node scripts/node-version/src/check-runtime.ts
+          node "$SMOKE_SCRIPT" "$LOCAL_IMAGE"
       - name: Push image
         if: inputs.push-to-registry
         env:

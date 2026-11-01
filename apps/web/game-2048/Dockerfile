@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:lts-alpine AS base
+FROM node:26-alpine AS base
 WORKDIR /website
 COPY . .
 RUN npm install --global --ignore-scripts pnpm@latest \

@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:lts-alpine AS base
+FROM node:26-alpine AS base
 WORKDIR /website
 COPY . .
 RUN npm install --global --ignore-scripts pnpm@latest \
@@ -9,7 +9,7 @@ RUN npm install --global --ignore-scripts pnpm@latest \
 FROM base AS builder
 RUN pnpm --filter "./apps/server/blog-legacy" build
 
-FROM node:lts-alpine AS blog-server-legacy
+FROM node:26-alpine AS blog-server-legacy
 COPY --from=builder /website/apps/server/blog-legacy/dist /blog/dist
 RUN addgroup -S bloggroup \
     && adduser -S -G bloggroup bloguser \
@@ -17,4 +17,4 @@ RUN addgroup -S bloggroup \
 WORKDIR /blog
 EXPOSE 4004
 USER bloguser
-CMD ["node", "dist/index.mjs"]
+CMD ["node", "--enable-source-maps", "dist/index.mjs"]

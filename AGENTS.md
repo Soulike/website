@@ -4,6 +4,8 @@ This monorepo uses pnpm for dependency management and workspace commands, Node.j
 
 ## Toolchain documentation
 
+For Node version changes and generated configuration, see [Node toolchain](README.md#node-toolchain).
+
 Use the [pnpm documentation](https://pnpm.io/) for dependency and workspace tasks. Check the [Node.js release status](https://nodejs.org/en/about/previous-releases) for the LTS selected by CI and Docker, then use that release's API documentation for runtime behavior.
 
 ## Task preparation
@@ -37,6 +39,7 @@ This repository uses a single-context domain documentation layout. See `docs/age
 - `modules/` - Business-specific packages containing domain logic.
 - `libraries/` - Reusable, business-agnostic packages.
 - `nginx/` - NGINX configs for server deployment.
+- `scripts/` - Repository development and CI commands.
 
 ---
 
