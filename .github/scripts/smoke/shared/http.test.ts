@@ -1,13 +1,20 @@
 import assert from 'node:assert/strict';
 import {createServer, type Server} from 'node:http';
-import test from 'node:test';
+
+import {afterEach, test, vi} from 'vitest';
 
 import {waitForHttp} from './http.ts';
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 async function listen(server: Server): Promise<string> {
   await new Promise<void>((resolve, reject) => {
     server.once('error', reject);
-    server.listen(0, '127.0.0.1', () => resolve());
+    server.listen(0, '127.0.0.1', () => {
+      resolve();
+    });
   });
   const address = server.address();
   assert(address && typeof address === 'object');
@@ -17,7 +24,13 @@ async function listen(server: Server): Promise<string> {
 async function close(server: Server): Promise<void> {
   server.closeAllConnections();
   await new Promise<void>((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
+    server.close((error) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve();
+    });
   });
 }
 
@@ -47,11 +60,11 @@ test('returns the expected HTTP response', async () => {
 
 test('bounds a response that never completes', {timeout: 5_000}, async () => {
   const {promise: partialResponseSent, resolve: markPartialResponseSent} =
-    Promise.withResolvers<void>();
+    Promise.withResolvers<undefined>();
   const server = createServer((_request, response) => {
     response.writeHead(200, {'content-type': 'text/plain'});
     response.write('partial response');
-    markPartialResponseSent();
+    markPartialResponseSent(undefined);
     // Keep the body open to reproduce a stalled application.
   });
 
@@ -100,11 +113,11 @@ test('bounds a response that never completes', {timeout: 5_000}, async () => {
   }
 });
 
-test('does not request after the running-state check exhausts the deadline', async (context) => {
+test('does not request after the running-state check exhausts the deadline', async () => {
   let fetchCalls = 0;
-  context.mock.method(globalThis, 'fetch', async () => {
+  vi.spyOn(globalThis, 'fetch').mockImplementation(() => {
     fetchCalls += 1;
-    throw new Error('fetch should not be called');
+    return Promise.reject(new Error('fetch should not be called'));
   });
 
   const waitArray = new Int32Array(

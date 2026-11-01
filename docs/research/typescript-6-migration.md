@@ -1,9 +1,13 @@
 # TypeScript 6 migration
 
-Completed locally on 2026-11-01, using Node.js 26.13.0 and pnpm 12.16.1.
+Initial migration completed locally on 2026-11-01, using Node.js 26.13.0 and pnpm 12.16.1.
 This records the migration from TypeScript 5.9.3 after the
 [TypeScript 7 assessment](typescript-7-upgrade.md) established incompatible lint
 and Jest integrations. It is a local validation record, not deployment evidence.
+
+The compiler, configuration, and validation sections below record that initial
+checkpoint. [Integration with the Vitest baseline](#integration-with-the-vitest-baseline)
+records the later state after incorporating the updated `main` branch.
 
 ## Compiler and integrations
 
@@ -62,3 +66,22 @@ Docker builds were not run because the local Docker daemon was unavailable.
 Local server bundles and Web builds do not establish container smoke-test,
 hosted CI, editor, or deployment success. Recheck this record's version-specific
 constraints and validation when changing the toolchain again.
+
+## Integration with the Vitest baseline
+
+The later [test-runner migration](https://github.com/Soulike/website/pull/145)
+removed Jest, `ts-jest`, and Jest types. Integrating that baseline into this
+migration required pnpm to repair and regenerate the conflicted lockfile from
+the merged manifests. TypeScript remains 6.0.3, React ESLint remains 3.0.0, and
+the seven-day policy retains its strict and missing-timestamp settings.
+
+The database legacy application no longer overrides ambient types with `jest`;
+it inherits `node` from the shared configuration. Its renamed
+[`Util.test.ts`](../../apps/server/database-legacy/src/Function/__tests__/Util.test.ts)
+imports Vitest's test functions explicitly.
+
+The integrated workspace passed the frozen-lockfile installation with strict
+peer checks, `pnpm validate:pr`, and all 309 existing tests using Vitest. All
+three Web lint scripts passed with zero errors and the existing 17 warnings.
+These are local integration results; the earlier container and deployment
+validation limits still apply.

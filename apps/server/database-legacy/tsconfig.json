@@ -1,7 +1,6 @@
 {
   "extends": "@config/typescript/node",
   "compilerOptions": {
-    "types": ["node", "jest"],
     "rootDir": "./src",
     "outDir": "./dist",
     "paths": {

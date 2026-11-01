@@ -10,9 +10,14 @@ The migration target was subsequently changed to TypeScript 6. The
 [TypeScript 6 migration record](typescript-6-migration.md) describes the delivered
 change and validation; the findings below retain the pre-migration baseline.
 
+The later [Vitest migration](https://github.com/Soulike/website/pull/145) removed
+Jest and `ts-jest` from the repository. The Jest blocker below describes the
+recorded baseline; reassess the remaining lint integration before a future TS7
+upgrade.
+
 ## Conclusion
 
-**Replacing every `typescript` dependency with TypeScript 7 is currently blocked by the lint and Jest integrations.** The installed `typescript-eslint` and `ts-jest` actively reject TypeScript 7's missing legacy JavaScript compiler API. These are observed runtime failures, beyond unsupported peer ranges.
+**At the recorded baseline, replacing every `typescript` dependency with TypeScript 7 was blocked by the lint and Jest integrations.** The installed `typescript-eslint` and `ts-jest` actively rejected TypeScript 7's missing legacy JavaScript compiler API. These were observed runtime failures, beyond unsupported peer ranges.
 
 **Using TypeScript 7 for project type checking while retaining a compatible JavaScript compiler API for those integrations is feasible in principle.** The compiler probes found configuration-default changes that can be addressed without changing business logic. A complete dependency installation, lint run, Jest transformation, and container build using that arrangement remain necessary before claiming a delivered migration.
 
@@ -33,7 +38,7 @@ The [published 7.0.2 manifest](https://registry.npmjs.org/typescript/7.0.2) expo
 | Vite and server bundling | Three web scripts run `tsc -b && vite build`; [`server.ts`](../../configs/esbuild/src/server.ts) bundles using esbuild. No project-owned direct import of the TypeScript compiler API was found.                                                                     | **No identified compiler-API blocker.** [Vite 7](https://v7.vite.dev/guide/features#typescript) and [esbuild](https://esbuild.github.io/content-types/#typescript) transpile separately from type checking. This separation allows a different type checker; it is not evidence of a completed upgraded build.                                                                                    |
 | Vitest                   | Existing Vitest configs run runtime tests and coverage without enabling `typecheck`.                                                                                                                                                                                 | **No identified blocker in the configured path.** The installed [Vitest 4.1.12 manifest](https://registry.npmjs.org/vitest/4.1.12) has no TypeScript peer requirement. Its optional type-test path is a separate integration; the [Vitest type-testing guide](https://v4.vitest.dev/guide/testing-types) describes invoking a compiler and parsing its output.                                    |
 
-Jest discovery was checked with `pnpm --filter <package> exec jest --listTests --runInBand`: admin and blog currently discover no tests, while database discovers [`src/Function/__tests__/Util.ts`](../../apps/server/database-legacy/src/Function/__tests__/Util.ts). Its `describe`, `it`, and `expect` globals need Jest declarations. A successful `--passWithNoTests` run for the other applications would not validate their TypeScript transformer.
+Jest discovery was checked with `pnpm --filter <package> exec jest --listTests --runInBand`: admin and blog discovered no tests at the recorded baseline, while database discovered [`src/Function/__tests__/Util.ts`](https://github.com/Soulike/website/blob/9014815fab5c7e83ef334086ae5620fc390356e2/apps/server/database-legacy/src/Function/__tests__/Util.ts). Its `describe`, `it`, and `expect` globals needed Jest declarations. A successful `--passWithNoTests` run for the other applications would not validate their TypeScript transformer.
 
 ## Local compiler and integration evidence
 
