@@ -1,14 +1,14 @@
 # TypeScript 后端 Docker 部署方式调研
 
 - 调研日期：2026-11-01
-- 仓库基线：[`3cce0b86635cde06130950b5470968c602dcfd02`](https://github.com/Soulike/website/commit/3cce0b86635cde06130950b5470968c602dcfd02)
+- 初始调研基线：[`3cce0b86635cde06130950b5470968c602dcfd02`](https://github.com/Soulike/website/commit/3cce0b86635cde06130950b5470968c602dcfd02)
 - 本地验证环境：Node.js `v26.13.0`、pnpm `12.16.1`、esbuild `0.28.2`。
 
-**本次选择继续使用压缩的 esbuild bundle，保留函数和类名，启用 source maps，并修复 auth 的错误因果链输出。** 四个 Dockerfile 已在启动命令中加入 `--enable-source-maps`；auth 的请求错误和未捕获错误日志改为用 `util.inspect(..., {depth: null})` 输出错误及嵌套 `cause`。构建使用 `minify: true` 和 `keepNames: true`，以保留可读的报错名称。
+**本次先修复 source maps、函数和类名保留及 auth 的错误因果链，随后选择迁移到 Rolldown。** 四个 Dockerfile 已在启动命令中加入 `--enable-source-maps`；auth 的请求错误和未捕获错误日志改为用 `util.inspect(..., {depth: null})` 输出错误及嵌套 `cause`。构建使用 `minify: true` 和 `keepNames: true`，以保留可读的报错名称。
 
-逐文件 JS + `pnpm deploy --prod` 是可行的另一种部署方式，但本次没有选择迁移。维护者反馈此前携带 `node_modules` 的镜像过大，优先保留 bundle 的体积和交付复杂度优势；本次没有测量两种方案的 OCI 镜像大小。本文保留调研基线和备选方案，并记录已落实到源码的修复；容器和生产部署仍需另外验证。
+逐文件 JS + `pnpm deploy --prod` 是可行的另一种部署方式，但本次没有选择迁移。维护者反馈此前携带 `node_modules` 的镜像过大，优先保留 bundle 的体积和交付复杂度优势；本次没有测量两种方案的 OCI 镜像大小。本文保留初始调研基线和备选方案；当前构建工具、采用的特性和迁移验证见 [bundler 比较记录](typescript-backend-bundler-comparison.md)。
 
-## 当前四个后端 app
+## 交付结构与初始 esbuild 基线
 
 | App               | Docker 最终阶段          | 监听端口 | 当前运行命令                               |
 | ----------------- | ------------------------ | -------- | ------------------------------------------ |
@@ -17,7 +17,7 @@
 | `blog-legacy`     | `blog-server-legacy`     | 4004     | `node --enable-source-maps dist/index.mjs` |
 | `database-legacy` | `database-server-legacy` | 4000     | `node --enable-source-maps dist/index.mjs` |
 
-四个 [Dockerfile](../../apps/server/auth/Dockerfile) 使用相同结构：在 `node:lts-alpine` 中复制仓库、安装完整 pnpm workspace、构建目标 app；最终阶段复制整个 `dist`，以非 root 用户执行 Node.js。最终镜像没有复制 `node_modules`。各 app 的 `build.ts` 都调用统一的 [esbuild 配置](../../configs/esbuild/src/server.ts)，其关键设置是：
+四个 [Dockerfile](../../apps/server/auth/Dockerfile) 使用相同结构：在 `node:lts-alpine` 中复制仓库、安装完整 pnpm workspace、构建目标 app；最终阶段复制整个 `dist`，以非 root 用户执行 Node.js。最终镜像没有复制 `node_modules`。目前各 app 的 `build.ts` 调用统一的 [Rolldown 配置](../../configs/rolldown/src/server.ts)，语法目标为 Node.js 26。以下是迁移前的 [esbuild 配置](https://github.com/Soulike/website/blob/bd977bf9707b6ceba8bc10710f3a577744ce20d3/configs/esbuild/src/server.ts)，保留为初始调研证据：
 
 ```ts
 bundle: true,
@@ -30,7 +30,7 @@ sourcemap: 'linked',
 outExtension: {'.js': '.mjs'},
 ```
 
-配置还用 `createRequire(import.meta.url)` 为打包的 CommonJS 依赖提供动态 `require`。`linked` 会生成旁边的 `.map` 和 `sourceMappingURL` 注释；Docker 复制整个 `dist` 时也复制 `.map`。[esbuild：Sourcemap](https://esbuild.github.io/api/#sourcemap)
+初始 esbuild 配置还用 `createRequire(import.meta.url)` 为打包的 CommonJS 依赖提供动态 `require`。`linked` 会生成旁边的 `.map` 和 `sourceMappingURL` 注释；Docker 复制整个 `dist` 时也复制 `.map`。[esbuild：Sourcemap](https://esbuild.github.io/api/#sourcemap)
 
 [CI](../../.github/workflows/apps-ci.yml) 使用 `lts/*` 和最新 pnpm；[镜像工作流](../../.github/workflows/docker-image-build-and-push.yml) 构建 `linux/amd64`，先运行 smoke，再按需发布 `latest`。Node.js 官方页面在调研时列出 Node.js 26 为最新 LTS，Node.js 24、22 也处于 LTS；本次运行时行为采用 [Node.js 26 文档](https://nodejs.org/docs/latest-v26.x/api/)。esbuild 的 `target: 'node24'` 是输出语法兼容目标，不能证明实际容器运行的是 Node.js 24。[Node.js release status](https://nodejs.org/en/about/previous-releases)
 
@@ -48,7 +48,7 @@ outExtension: {'.js': '.mjs'},
 
 | 方案                               | 错误定位                                | 依赖处理                              | 本仓库改造成本                     | 适用判断                                 |
 | ---------------------------------- | --------------------------------------- | ------------------------------------- | ---------------------------------- | ---------------------------------------- |
-| 全量 esbuild bundle + source maps  | 可以还原原始文件行列；名称单独处理      | 最终阶段继续只复制 `dist`             | 低                                 | 当前优先采用                             |
+| 全量 esbuild bundle + source maps  | 可以还原原始文件行列；名称单独处理      | 最终阶段继续只复制 `dist`             | 低                                 | 初始选择，后续替换为 Rolldown            |
 | 逐文件 JS + `pnpm deploy --prod`   | 保留文件结构；source maps 可指回 TS     | pnpm 生成独立生产依赖目录             | 中到高：需建设 workspace JS 产物   | 本次未选，保留依赖目录带来的体积成本     |
 | 内部代码 bundle，npm 依赖 external | 内部靠 maps，依赖保留原有文件           | 仍需部署生产 `node_modules`           | 中：需明确 external 边界和部署清单 | 内部 TS 暂时不拆包、外部依赖不适合打包时 |
 | 原生 Node.js 执行 TS / `tsx`       | 原生擦除类型保留行号；loader 路径需验证 | 仍需生产依赖，`tsx` 还需运行时 loader | 当前原生 Node.js 路径存在阻断      | 暂不建议作为本次部署迁移方向             |
@@ -130,14 +130,14 @@ Node.js 官方展示了 `node --import=tsx your-file.ts` 作为第三方 loader 
 | 部署目录中的依赖解析                                                  | `node_modules` 的全部软链接都留在部署根目录内；导入 `koa` 成功                                     | 部署目录不依赖原 workspace 的链接，普通 JS 依赖可以加载     |
 | 从上述部署目录用原生 Node.js 导入 `@library/logger`                   | 失败：`ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING`，指向部署目录中的 `src/index.ts`               | deploy 成功不代表当前 TS workspace packages 可直接运行      |
 
-四个当前压缩 bundle 约为 1.66–1.90 MB，旁边的 maps 约为 4.58–5.48 MB，都是未压缩文件大小。它们不能推导 OCI 镜像大小、启动时间或生产错误日志的性能。
+初始 esbuild 压缩 bundle 约为 1.66–1.90 MB，旁边的 maps 约为 4.58–5.48 MB，记录的是尚未经过 gzip 等文件压缩的大小。它们不能推导 OCI 镜像大小、启动时间或生产错误日志的性能。
 
-本机 Docker daemon 不可用，因此本次没有构建或运行容器，也没有验证生产请求、目标平台原生依赖或 `tsx`。后续部署验证应包括目标镜像构建、现有 image smoke，以及一次真正请求失败时输出原始 TS 位置和原始 cause 的日志；仅在宿主机编译成功不能替代这些验证。
+初始诊断修复阶段 Docker daemon 不可用，未构建或运行容器，也未验证生产请求、目标平台原生依赖或 `tsx`。下列记录保留该阶段的验证范围；后续 Rolldown 与 Node 26 的 Linux 编译、容器 smoke 和真实错误请求验证见 [bundler 比较记录](typescript-backend-bundler-comparison.md#迁移实现后的验证)。
 
-## 修复后的验证
+## esbuild 诊断修复阶段验证
 
 - 从四个 Dockerfile 读取实际启动命令，在宿主 Node.js 中执行同一个压缩的临时 fixture；运行目录只复制 `dist` 和 maps。四条命令都输出了原始 `request-handler.ts:2:9` 位置，运行目录没有源文件。
 - fixture 调用修复后的实际 `Logger.dispatcherError`，验证请求方法和路径、三层错误消息、原始 TypeError 堆栈，以及字符串和循环引用错误值均进入日志。未通过模拟 HTTP 请求验证 auth 的完整请求链路。
 - auth 应用重新打包成功，保留压缩和 linked maps；auth 与 logger 的 typecheck、ESLint 检查通过，auth 现有测试 3 项通过。没有新增单元测试。
 - 开启 `keepNames` 后，使用实际构建配置与未压缩 bundle 对比：实验中的普通函数名、类名、`Logger.dispatcherError` / `BackendDependency.query` 堆栈名称和原始 `request-handler.ts:3:11` 位置均保留，嵌套 cause 仍可见。四个 app 使用更新后的统一配置重新打包成功，配置包的 typecheck 与 ESLint 通过。
-- Docker daemon 仍不可用，容器 smoke 和生产日志尚未验证。
+- 该阶段 Docker daemon 不可用，尚未验证容器 smoke 和生产日志；后续验证单独记录在上述 bundler 比较文档中。

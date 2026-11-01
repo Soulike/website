@@ -19,7 +19,7 @@
     "signale": "^1.4.0"
   },
   "devDependencies": {
-    "@config/esbuild": "workspace:^",
+    "@config/rolldown": "workspace:^",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
     "@types/koa": "catalog:",

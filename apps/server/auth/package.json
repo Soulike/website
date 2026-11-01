@@ -7,7 +7,7 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@config/esbuild": "workspace:^",
+    "@config/rolldown": "workspace:^",
     "@types/koa": "^3.0.1",
     "@types/koa__cors": "^5.0.1",
     "@types/koa-compose": "^3.2.9",
