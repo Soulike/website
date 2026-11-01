@@ -40,6 +40,8 @@ Rolldown 将 TypeScript 转换、模块解析、CJS 互操作和 Oxc 压缩器�
 
 当前 helper 使用 `rolldown()`、`bundle.write()` 和 `finally` 中的 `bundle.close()`，在生成产物失败时也关闭构建资源。官方的一次性 `build()` API 在 1.2.16 仍标为 experimental，本次采用现有稳定 API。当前语法目标更新为 `node26`，根 `engines.node` 为 `>=26`，与选择最新 LTS 的要求对齐；体积表仍是 `node24` 目标下的历史对照，本次没有重做 Node.js 26 目标下的双工具体积比较。配置的完整可执行来源是统一 helper，不在本文维护第二份构建脚本。[Rolldown build API](https://rolldown.rs/reference/Function.build)、[Plugin lifecycle](https://rolldown.rs/reference/Interface.Plugin#closebundle)
 
+PR review 发现 `lts/*` 在实际 CI 中仍解析为 Node 24，因此后续将 [.node-version](../../.node-version) 作为唯一人工维护的主版本来源。`pnpm node:sync` 预先生成 CI、Docker、编译目标和版本声明；`pnpm node:check` 拒绝漂移，运行检查验证 CI、本地构建及后端镜像里的真实 Node。维护步骤与生成范围见 [Node toolchain](../../README.md#node-toolchain)。
+
 这里没有 externalize npm 依赖，Node.js 内置模块继续由运行时提供。`tsconfig: true` 为各模块发现配置并处理 `paths`；扩展名映射支持源码中 `.js` import 对应 `.ts` 文件。当前单入口配置使用 `codeSplitting: false` 输出一个 JS chunk；旧的 `inlineDynamicImports` 选项已弃用。`minify` 默认只是 `dce-only`，不能以默认输出与开启全面压缩的 esbuild 比体积。[TSConfig](https://rolldown.rs/reference/InputOptions.tsconfig)、[Resolve](https://rolldown.rs/reference/InputOptions.resolve)、[Code splitting](https://rolldown.rs/reference/OutputOptions.codeSplitting)、[Minify](https://rolldown.rs/reference/OutputOptions.minify)
 
 `keepNames` 与 source maps 分别保护运行时函数/类名和原始源码位置，Docker 的 `--enable-source-maps` 仍需保留。换 bundler 不改变 logger 必须记录原始错误和 cause 的责任。[Keep names](https://rolldown.rs/reference/OutputOptions.keepNames)、[Sourcemap](https://rolldown.rs/reference/OutputOptions.sourcemap)
@@ -102,6 +104,7 @@ maps 的路径变换和源码内容选择服务于诊断与产物管理；`sourc
 - 独立 auth 容器中，对未建表的测试 PostgreSQL 发出真实 `POST /session` 请求，得到 HTTP 500；日志保留了原始 `relation "users" does not exist`、`42P01`、嵌套 cause、`Logger.dispatcherError` 和 TS 文件行列。
 - 选择 `1.2.15` 后重新完成上述四个运行阶段 smoke、真实 auth 错误日志检查，以及缺包失败和独立 names/maps/cause fixture 检查。
 - 完整 Dockerfile 的在线多阶段构建在镜像解析/拉取阶段长时间等待后中止。本次未验证完整 builder 的重新安装流程，也未部署生产；上述检查支持 Linux 编译及最终运行阶段。
+- 统一版本来源后，八项生成与运行策略测试、真实 Node 24 拒绝检查、CI 配置漂移检查、全仓验证和测试均通过；正式 `node:26-alpine` 镜像确认运行 Node `26.13.0`，四个后端 Linux 编译及包含镜像版本验证的 smoke 通过。
 
 ## 其他工具为什么没有优先于 Rolldown
 

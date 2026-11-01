@@ -1,6 +1,8 @@
 import {requiredImageArgument, withSmokeHarness} from './shared/harness.ts';
+import {assertNodeImageRuntime} from './shared/node-runtime.ts';
 
 const image = requiredImageArgument();
+assertNodeImageRuntime(image);
 
 await withSmokeHarness(image, async (smoke) => {
   const redisSecret = smoke.createRedisSecret();

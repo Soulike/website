@@ -1,0 +1,24 @@
+{
+  "name": "@script/node-version",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./runtime": "./src/runtime.ts"
+  },
+  "scripts": {
+    "sync": "node src/cli.ts --write",
+    "check": "node src/cli.ts --check",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "typescript": "catalog:",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@config/eslint": "workspace:^",
+    "@config/typescript": "workspace:^",
+    "@types/node": "catalog:",
+    "vitest": "catalog:"
+  }
+}

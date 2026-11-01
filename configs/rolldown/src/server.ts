@@ -1,3 +1,8 @@
+import {
+  assertNodeRuntime,
+  assertNodeTarget,
+  readNodeMajor,
+} from '@script/node-version/runtime';
 import {type InputOptions, type OutputOptions, rolldown} from 'rolldown';
 
 const serverBuildOptions = {
@@ -23,6 +28,9 @@ const serverOutputOptions = {
 } satisfies OutputOptions;
 
 export async function buildServer(entryPoints: string[]): Promise<void> {
+  const major = readNodeMajor();
+  assertNodeRuntime(major);
+  assertNodeTarget(serverBuildOptions.transform.target, major);
   const bundle = await rolldown({...serverBuildOptions, input: entryPoints});
   try {
     await bundle.write(serverOutputOptions);

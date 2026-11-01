@@ -8,6 +8,8 @@ on:
       - 'apps/web/game-2048/**'
       - 'libraries/**'
       - 'configs/**'
+      - '.node-version'
+      - 'scripts/node-version/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'

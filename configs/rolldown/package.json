@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@script/node-version": "workspace:^",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
     "rolldown": "catalog:",

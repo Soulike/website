@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:lts-alpine AS base
+FROM node:26-alpine AS base
 WORKDIR /website
 COPY . .
 RUN npm install --global --ignore-scripts pnpm@latest \
@@ -9,7 +9,7 @@ RUN npm install --global --ignore-scripts pnpm@latest \
 FROM base AS builder
 RUN pnpm --filter "./apps/server/database-legacy" build
 
-FROM node:lts-alpine AS database-server-legacy
+FROM node:26-alpine AS database-server-legacy
 COPY --from=builder /website/apps/server/database-legacy/dist /database/dist
 RUN addgroup -S databasegroup \
     && adduser -S -G databasegroup databaseuser \
