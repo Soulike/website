@@ -16,7 +16,11 @@ async function requestDatabase<ResT>(
       `Database request failed with HTTP status ${response.status}`,
     );
   }
-  return response.json();
+  try {
+    return await response.json();
+  } catch (cause: unknown) {
+    throw new Error('Failed to read JSON response from database', {cause});
+  }
 }
 
 export const databaseRequest = {
