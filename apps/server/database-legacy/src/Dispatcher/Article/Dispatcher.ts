@@ -1,6 +1,5 @@
 import {jsonQsParser} from '@library/koa-middlewares';
 import {FailServerResponse} from '@module/classes';
-import moment from 'moment';
 
 import {AppRouter} from '@/types.js';
 
@@ -81,26 +80,50 @@ export default (router: AppRouter) => {
     GET_BY_DATE,
     jsonQsParser({onError: onJSONQsParseError}),
     async (ctx) => {
-      const {year, month, day} = ctx.request.body;
-      if (typeof year !== 'number') {
+      const query: unknown = ctx.request.body;
+      if (query === null || typeof query !== 'object' || !('year' in query)) {
         ctx.response.body = new FailServerResponse('请求参数错误');
         return;
       }
 
-      if (typeof month === 'number') {
-        if (typeof day === 'number') {
-          // 年月日都有
-          const date = moment(`${year}-${month}-${day}`, 'YYYY-MM-DD');
-          if (!date.isValid()) {
-            ctx.response.body = new FailServerResponse('日期无效');
-            return;
-          }
-        } // 仅有年月
-        else {
-          if (month < 1 || month > 12) {
-            ctx.response.body = new FailServerResponse('日期无效');
-            return;
-          }
+      const {year} = query;
+      const month = 'month' in query ? query.month : undefined;
+      const day = 'day' in query ? query.day : undefined;
+      if (
+        typeof year !== 'number' ||
+        (month !== undefined && typeof month !== 'number') ||
+        (day !== undefined && typeof day !== 'number') ||
+        (day !== undefined && month === undefined)
+      ) {
+        ctx.response.body = new FailServerResponse('请求参数错误');
+        return;
+      }
+
+      if (
+        !Number.isInteger(year) ||
+        (typeof month === 'number' && !Number.isInteger(month)) ||
+        (typeof day === 'number' && !Number.isInteger(day))
+      ) {
+        ctx.response.body = new FailServerResponse('日期无效');
+        return;
+      }
+
+      if (
+        month !== undefined &&
+        day === undefined &&
+        (month < 1 || month > 12)
+      ) {
+        ctx.response.body = new FailServerResponse('日期无效');
+        return;
+      }
+
+      if (month !== undefined && day !== undefined) {
+        try {
+          Temporal.PlainDate.from({year, month, day}, {overflow: 'reject'});
+        } catch (error) {
+          if (!(error instanceof RangeError)) throw error;
+          ctx.response.body = new FailServerResponse('日期无效');
+          return;
         }
       }
 
