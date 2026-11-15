@@ -945,10 +945,6 @@ importers:
         version: 4.1.12(@types/node@26.6.5)(@vitest/coverage-v8@4.1.12)(jsdom@27.4.0(@noble/hashes@1.8.0)(supports-color@7.2.0))(vite@7.3.7(@types/node@26.6.5)(jiti@2.6.1)(yaml@2.9.1))
 
   libraries/universal/request:
-    dependencies:
-      '@module/classes':
-        specifier: workspace:^
-        version: link:../../../modules/universal/classes
     devDependencies:
       '@config/eslint':
         specifier: workspace:^
@@ -1262,22 +1258,6 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 4.1.12(@types/node@26.6.5)(@vitest/coverage-v8@4.1.12)(jsdom@27.4.0(@noble/hashes@1.8.0)(supports-color@7.2.0))(vite@7.3.7(@types/node@26.6.5)(jiti@2.6.1)(yaml@2.9.1))
-
-  modules/universal/classes:
-    dependencies:
-      zod:
-        specifier: ^4.1.13
-        version: 4.6.7
-    devDependencies:
-      '@config/eslint':
-        specifier: workspace:^
-        version: link:../../../configs/eslint
-      '@config/typescript':
-        specifier: workspace:^
-        version: link:../../../configs/typescript
-      typescript:
-        specifier: 'catalog:'
-        version: 6.0.3
 
   modules/universal/session-sdk:
     dependencies:

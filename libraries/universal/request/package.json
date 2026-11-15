@@ -2,9 +2,6 @@
   "name": "@library/request",
   "main": "src/index.ts",
   "type": "module",
-  "dependencies": {
-    "@module/classes": "workspace:^"
-  },
   "scripts": {
     "typecheck": "tsc --noEmit",
     "lint": "eslint ./src"
