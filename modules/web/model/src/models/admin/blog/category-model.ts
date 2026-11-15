@@ -41,14 +41,12 @@ export class CategoryModel {
   }
 
   public async getAll(): Promise<Category[]> {
-    const response = await Request.JSONToJSON.get<unknown>(
-      CategoryModel.PATH.GET_ALL,
-    );
+    const response = await Request.JSONToJSON.get(CategoryModel.PATH.GET_ALL);
     return parseServerResponse(CategoryListSchema, response);
   }
 
   public async getById(id: Category['id']): Promise<Category> {
-    const response = await Request.JSONToJSON.get<unknown>(
+    const response = await Request.JSONToJSON.get(
       CategoryModel.PATH.GET_BY_ID,
       {
         searchParams: new URLSearchParams({
@@ -60,14 +58,14 @@ export class CategoryModel {
   }
 
   public async getArticleAmountGroupedById(): Promise<CategoryIdToArticleAmount> {
-    const response = await Request.JSONToJSON.get<unknown>(
+    const response = await Request.JSONToJSON.get(
       CategoryModel.PATH.GET_ALL_ARTICLE_AMOUNT_BY_ID,
     );
     return parseServerResponse(CategoryIdToArticleAmountSchema, response);
   }
 
   public async getArticleAmountById(id: Category['id']): Promise<number> {
-    const response = await Request.JSONToJSON.get<unknown>(
+    const response = await Request.JSONToJSON.get(
       CategoryModel.PATH.GET_ARTICLE_AMOUNT_BY_ID,
       {
         searchParams: new URLSearchParams({
@@ -79,17 +77,14 @@ export class CategoryModel {
   }
 
   public async add(category: CategoryDraft): Promise<void> {
-    const response = await Request.JSONToJSON.post<unknown>(
-      CategoryModel.PATH.ADD,
-      {
-        body: category,
-      },
-    );
+    const response = await Request.JSONToJSON.post(CategoryModel.PATH.ADD, {
+      body: category,
+    });
     parseVoidServerResponse(response);
   }
 
   public async deleteById(id: Category['id']): Promise<void> {
-    const response = await Request.JSONToJSON.post<unknown>(
+    const response = await Request.JSONToJSON.post(
       CategoryModel.PATH.DELETE_BY_ID,
       {
         body: {id},
@@ -102,12 +97,9 @@ export class CategoryModel {
     id: UpdateCategory['id'],
     modifiedParts: Omit<UpdateCategory, 'id'>,
   ): Promise<void> {
-    const response = await Request.JSONToJSON.post<unknown>(
-      CategoryModel.PATH.MODIFY,
-      {
-        body: {id, ...modifiedParts},
-      },
-    );
+    const response = await Request.JSONToJSON.post(CategoryModel.PATH.MODIFY, {
+      body: {id, ...modifiedParts},
+    });
     parseVoidServerResponse(response);
   }
 }

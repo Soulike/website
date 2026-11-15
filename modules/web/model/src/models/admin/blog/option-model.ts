@@ -21,19 +21,14 @@ export class OptionModel {
   }
 
   public async getAbout(): Promise<SiteOption['about']> {
-    const response = await Request.JSONToJSON.get<unknown>(
-      OptionModel.PATH.GET_ABOUT,
-    );
+    const response = await Request.JSONToJSON.get(OptionModel.PATH.GET_ABOUT);
     return parseServerResponse(SiteOptionSchema, response).about;
   }
 
   public async setAbout(about: SiteOption['about']): Promise<void> {
-    const response = await Request.JSONToJSON.post<unknown>(
-      OptionModel.PATH.SET_ABOUT,
-      {
-        body: {about},
-      },
-    );
+    const response = await Request.JSONToJSON.post(OptionModel.PATH.SET_ABOUT, {
+      body: {about},
+    });
     parseVoidServerResponse(response);
   }
 }

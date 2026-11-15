@@ -13,6 +13,11 @@ assert(
   typeof filters === 'object' && filters !== null && !Array.isArray(filters),
 );
 
-process.stdout.write(
-  JSON.stringify(buildImageMatrix(filters as Record<string, string>)),
-);
+const normalizedFilters: Record<string, string | undefined> = {};
+for (const [key, value] of Object.entries(filters)) {
+  if (typeof value === 'string') {
+    normalizedFilters[key] = value;
+  }
+}
+
+process.stdout.write(JSON.stringify(buildImageMatrix(normalizedFilters)));

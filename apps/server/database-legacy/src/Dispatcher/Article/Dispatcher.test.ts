@@ -317,10 +317,14 @@ describe('Article RPC endpoints', () => {
         status: 200,
         body: {isSuccessful: false, error: {code: 'INVALID_REQUEST_PARAMS'}},
       });
-      expect(
-        'details' in
-          (getResponse.body as {error: Record<string, unknown>}).error,
-      ).toBe(false);
+      assert(
+        typeof getResponse.body === 'object' &&
+          getResponse.body !== null &&
+          'error' in getResponse.body &&
+          typeof getResponse.body.error === 'object' &&
+          getResponse.body.error !== null,
+      );
+      expect('details' in getResponse.body.error).toBe(false);
 
       const countResponse = await getRequest(
         '/article/count',
