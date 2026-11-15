@@ -3,7 +3,7 @@ packages:
   - '.github/scripts/smoke'
   - 'apps/*/*'
   - 'modules/*/*'
-  - 'schemas/*/*'
+  - 'schemas/*'
   - 'libraries/*/*'
   - 'configs/*'
 

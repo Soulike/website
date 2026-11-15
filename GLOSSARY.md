@@ -38,6 +38,9 @@ _Avoid_: Public, Is Public
 **Category**:
 A named classification to which each Article belongs; a Category cannot be removed while any Article references it.
 
+**Category Draft**:
+Author-supplied category name prepared for creating or renaming a Category.
+
 **Site Option**:
 Site-wide editorial configuration content, currently the public About page content.
 _Avoid_: About Option

@@ -1,6 +1,6 @@
 # Top-level schemas workspace and schema-first domain types
 
-Status: accepted
+Status: superseded by ADR-0003
 
 Shared persistence row contracts (DAO) and cross-boundary transport contracts (DTO) are separated into dedicated packages under a top-level `schemas/` directory (`@schema/*`), using Zod schemas as the single source of truth (`z.infer`) without entity `class` or separate `interface` wrappers.
 

@@ -1,14 +1,11 @@
+import {CategoryRowSchema} from '@schema/database';
 import {z} from 'zod';
 
-// Column bounds follow modules/server/database/src/tables/tables.sql ("categories").
-export const CategorySchema = z.object({
-  id: z.number().int().positive(),
-  name: z.string().min(1).max(255),
-});
+export const CategorySchema = CategoryRowSchema;
 export type Category = z.infer<typeof CategorySchema>;
 
 export const CategoryDraftSchema = z.object({
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().pipe(CategoryRowSchema.shape.name),
 });
 export type CategoryDraft = z.infer<typeof CategoryDraftSchema>;
 

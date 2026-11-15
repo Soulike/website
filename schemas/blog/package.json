@@ -10,6 +10,7 @@
     "lint": "eslint ./src"
   },
   "dependencies": {
+    "@schema/database": "workspace:^",
     "zod": "catalog:"
   },
   "devDependencies": {

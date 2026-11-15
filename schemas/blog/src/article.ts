@@ -1,15 +1,9 @@
+import {ArticleRowSchema} from '@schema/database';
 import {z} from 'zod';
 
-// Column bounds follow modules/server/database/src/tables/tables.sql ("articles").
-export const ArticleSchema = z.object({
-  id: z.number().int().positive(),
-  title: z.string().min(1).max(255),
-  content: z.string(),
-  category: z.number().int().positive(),
+export const ArticleSchema = ArticleRowSchema.extend({
   publicationTime: z.iso.datetime(),
   modificationTime: z.iso.datetime(),
-  pageViews: z.number().int().nonnegative(),
-  isVisible: z.boolean(),
 });
 export type Article = z.infer<typeof ArticleSchema>;
 
@@ -18,10 +12,12 @@ export const ArticleAbstractSchema = ArticleSchema;
 export type ArticleAbstract = z.infer<typeof ArticleAbstractSchema>;
 
 export const ArticleDraftSchema = z.object({
-  title: z.string().trim().min(1).max(255),
-  content: z.string().refine((value) => value.trim().length > 0),
-  category: z.number().int().positive(),
-  isVisible: z.boolean(),
+  title: z.string().trim().pipe(ArticleRowSchema.shape.title),
+  content: ArticleRowSchema.shape.content.refine(
+    (value) => value.trim().length > 0,
+  ),
+  category: ArticleRowSchema.shape.category,
+  isVisible: ArticleRowSchema.shape.isVisible,
 });
 export type ArticleDraft = z.infer<typeof ArticleDraftSchema>;
 

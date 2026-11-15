@@ -1,11 +1,13 @@
 import {z} from 'zod';
 
+import {CategoryRowSchema} from './category.js';
+
 // Column bounds follow modules/server/database/src/tables/tables.sql ("articles").
 export const ArticleRowSchema = z.object({
   id: z.number().int().positive(),
   title: z.string().min(1).max(255),
   content: z.string(),
-  category: z.number().int().positive(),
+  category: CategoryRowSchema.shape.id,
   publicationTime: z.date(),
   modificationTime: z.date(),
   pageViews: z.number().int().nonnegative(),
