@@ -25,6 +25,7 @@ catalog:
   antd: '^6.1.0'
   eslint: '^10.0.2'
   koa: '^3.1.1'
+  koa-body: '^8.0.1'
   koa-compose: '^4.1.0'
   koa-session: '^7.0.2'
   react: '^19.2.3'
