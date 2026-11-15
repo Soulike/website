@@ -33,7 +33,7 @@
   },
   "peerDependencies": {
     "path-browserify": ">=1.0.0",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react": ">=19.2.0",
+    "react-dom": ">=19.2.0"
   }
 }
