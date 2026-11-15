@@ -2,8 +2,9 @@ import {ClockCircleOutlined, TagOutlined} from '@ant-design/icons';
 import {Markdown} from '@library/react-components/csr';
 import {type Article, type Category} from '@schema/blog';
 import {Alert, Skeleton, Tag} from 'antd';
+import {useMemo} from 'react';
 
-import {getDateString} from '@/helpers/date-helpers.js';
+import {getDateString, parseToDate} from '@/helpers/date-helpers.js';
 
 import style from './style.module.css';
 
@@ -23,7 +24,10 @@ export function ArticleView(props: Props) {
     category,
     loading,
   } = props;
-  const publicationTime = new Date(article.publicationTime);
+  const publicationTime = useMemo(
+    () => parseToDate(article.publicationTime),
+    [article.publicationTime],
+  );
   return (
     <div className={style.Article}>
       <Skeleton active={true} loading={loading}>

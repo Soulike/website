@@ -1,6 +1,7 @@
 import {type Article} from '@schema/blog';
-import {useEffect} from 'react';
+import {useEffect, useMemo} from 'react';
 
+import {parseToDate} from '@/helpers/date-helpers.js';
 import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 import {getMarkdownAbstract} from '@/helpers/markdown-helpers.js';
 
@@ -24,7 +25,7 @@ export function ArticleListItem(props: ArticleListItemProps) {
   const abstract = getMarkdownAbstract(content);
   const {category, categoryLoading, categoryLoadError} =
     useViewModel(categoryId);
-  const time = new Date(publicationTime);
+  const time = useMemo(() => parseToDate(publicationTime), [publicationTime]);
 
   useEffect(() => {
     if (categoryLoadError) {
