@@ -1,3 +1,19 @@
 .ArticleList {
   width: 100%;
+
+  .listyRoot {
+    overflow: hidden;
+
+    :global(.ant-listy-item:last-child) {
+      border-bottom: none;
+    }
+  }
+
+  .emptyContainer {
+    padding: 32px 16px;
+  }
+
+  .pagination {
+    margin-top: 16px;
+  }
 }

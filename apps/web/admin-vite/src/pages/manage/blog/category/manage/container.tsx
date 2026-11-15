@@ -5,6 +5,7 @@ import {
   message,
   type ModalProps,
   notification,
+  type PaginationProps,
   type PopconfirmProps,
   type TagProps,
 } from 'antd';
@@ -23,8 +24,13 @@ import {
 import {ManageView} from './view.js';
 import {useViewModel} from './view-model.js';
 
+const DEFAULT_PAGE_SIZE = 10;
+
 // TODO: Revamp this component.
 export function Manage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+
   const [isArticleListModalVisible, setIsArticleListModalVisible] =
     useState(false);
   const [categoryIdOfArticleListModal, setCategoryIdOfArticleListModal] =
@@ -164,6 +170,16 @@ export function Manage() {
     refreshCategoryArticleAmount(categoryIdOfArticleListModal);
   }, [categoryIdOfArticleListModal, refreshCategoryArticleAmount]);
 
+  const onPaginationChange: NonNullable<PaginationProps['onChange']> =
+    useCallback((page, nextPageSize) => {
+      setCurrentPage(page);
+      setPageSize(nextPageSize);
+    }, []);
+
+  const totalCategories = idToCategory?.size ?? 0;
+  const totalPages = Math.max(1, Math.ceil(totalCategories / pageSize));
+  const effectiveCurrentPage = Math.min(currentPage, totalPages);
+
   return (
     <ManageView
       loading={
@@ -174,6 +190,9 @@ export function Manage() {
       }
       idToCategory={idToCategory}
       categoryToArticleNumberMap={idToArticleAmount}
+      currentPage={effectiveCurrentPage}
+      pageSize={pageSize}
+      onPaginationChange={onPaginationChange}
       isArticleListModalVisible={isArticleListModalVisible}
       categoryIdOfArticleListModal={categoryIdOfArticleListModal}
       onArticleAmountTagClick={onArticleAmountTagClick}

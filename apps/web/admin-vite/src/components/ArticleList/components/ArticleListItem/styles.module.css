@@ -1,18 +1,33 @@
 .ArticleListItem {
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .titleWrapper {
+    flex: 1 1 200px;
+    min-width: 0;
+  }
+
   .title {
     cursor: pointer;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
   }
 
   .tagContainer {
     display: flex;
+    flex-wrap: wrap;
     gap: 4px;
-  }
-
-  .switch {
-    margin-left: 20px;
-  }
-
-  .buttonWrapper {
-    margin-left: 20px;
   }
 }

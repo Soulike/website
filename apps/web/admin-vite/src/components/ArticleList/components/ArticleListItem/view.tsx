@@ -4,7 +4,6 @@ import {type Article, type Category} from '@schema/blog';
 import {
   Button,
   ButtonProps,
-  List,
   Popconfirm,
   PopconfirmProps,
   Space,
@@ -17,9 +16,6 @@ import {
 import type {DOMAttributes} from 'react';
 
 import styles from './styles.module.css';
-
-const {Item} = List;
-const {Meta} = Item;
 
 export interface ArticleListItemViewProps {
   /**
@@ -42,7 +38,6 @@ export interface ArticleListItemViewProps {
 
 export function ArticleListItemView(props: ArticleListItemViewProps) {
   const {
-    id,
     title,
     publicationTime,
     modificationTime,
@@ -59,59 +54,58 @@ export function ArticleListItemView(props: ArticleListItemViewProps) {
   return (
     <div className={styles.ArticleListItem}>
       <Spin spinning={loading} size={'small'}>
-        <Item key={id}>
-          <Meta
-            title={
-              <span className={styles.title} onClick={onTitleClick}>
-                {title}
-              </span>
-            }
-          />
-          <div className={styles.tagContainer}>
-            <Tag color={'blue'}>{categoryName}</Tag>
-            <Tag color={'geekblue'}>
-              Published at：
-              <DateString date={publicationTime} />
-            </Tag>
-            <Tag color={'geekblue'}>
-              Last Modified At：
-              <DateString date={modificationTime} />
-            </Tag>
+        <div className={styles.row}>
+          <div className={styles.titleWrapper}>
+            <span className={styles.title} onClick={onTitleClick}>
+              {title}
+            </span>
           </div>
-          <Tooltip title={'Change Visibility'}>
-            <Switch
-              className={styles.switch}
-              onChange={onIsVisibleSwitchChange}
-              checked={isVisibleSwitchChecked}
-              disabled={locked}
-              loading={loading}
-              checkedChildren={'Public'}
-              unCheckedChildren={'Private'}
-            />
-          </Tooltip>
-          <Space.Compact size={'small'} className={styles.buttonWrapper}>
-            <Tooltip title={'Modify'}>
-              <Button
-                type={'primary'}
-                ghost={true}
+          <div className={styles.actions}>
+            <div className={styles.tagContainer}>
+              <Tag color={'blue'}>{categoryName}</Tag>
+              <Tag color={'geekblue'}>
+                Published at：
+                <DateString date={publicationTime} />
+              </Tag>
+              <Tag color={'geekblue'}>
+                Last Modified At：
+                <DateString date={modificationTime} />
+              </Tag>
+            </div>
+            <Tooltip title={'Change Visibility'}>
+              <Switch
+                onChange={onIsVisibleSwitchChange}
+                checked={isVisibleSwitchChecked}
                 disabled={locked}
-                onClick={onModifyButtonClick}
-              >
-                <EditOutlined />
-              </Button>
+                loading={loading}
+                checkedChildren={'Public'}
+                unCheckedChildren={'Private'}
+              />
             </Tooltip>
-            <Tooltip title={'Delete'}>
-              <Popconfirm
-                title={`Confirm deleting《${title}》？`}
-                onConfirm={onDeleteArticleConfirm}
-              >
-                <Button danger={true} ghost={true} disabled={locked}>
-                  <DeleteOutlined />
+            <Space.Compact size={'small'}>
+              <Tooltip title={'Modify'}>
+                <Button
+                  type={'primary'}
+                  ghost={true}
+                  disabled={locked}
+                  onClick={onModifyButtonClick}
+                >
+                  <EditOutlined />
                 </Button>
-              </Popconfirm>
-            </Tooltip>
-          </Space.Compact>
-        </Item>
+              </Tooltip>
+              <Tooltip title={'Delete'}>
+                <Popconfirm
+                  title={`Confirm deleting《${title}》？`}
+                  onConfirm={onDeleteArticleConfirm}
+                >
+                  <Button danger={true} ghost={true} disabled={locked}>
+                    <DeleteOutlined />
+                  </Button>
+                </Popconfirm>
+              </Tooltip>
+            </Space.Compact>
+          </div>
+        </div>
       </Spin>
     </div>
   );
