@@ -10,10 +10,11 @@ interface Props {
   categoryInModal?: Category;
   onOk: ModalProps['onOk'];
   onCancel: ModalProps['onCancel'];
+  onArticleDeleted?: () => void;
 }
 
 export function ArticleListModal(props: Props) {
-  const {open, categoryInModal, onOk, onCancel} = props;
+  const {open, categoryInModal, onOk, onCancel, onArticleDeleted} = props;
   return (
     <Modal
       title={`Articles in ${categoryInModal ? categoryInModal.name : ''}`}
@@ -26,6 +27,7 @@ export function ArticleListModal(props: Props) {
       <div className={styles.ArticleListModal}>
         <ArticleList
           category={categoryInModal ? categoryInModal.id : undefined}
+          onArticleDeleted={onArticleDeleted}
         />
       </div>
     </Modal>

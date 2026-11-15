@@ -17,10 +17,13 @@ export function useViewModel() {
   } = useIdToCategoryCache();
 
   const {
-    idToArticleAmount,
+    idToArticleAmountCache,
+    setCategoryArticleAmount,
+    refreshCategoryArticleAmount,
+    deleteCategoryArticleAmount,
     loading: idToArticleAmountLoading,
     error: idToArticleAmountLoadError,
-  } = BlogModelHooks.CategoryModelHooks.useIdToArticleAmount();
+  } = useIdToArticleAmountCache();
 
   const {
     submitting: categoryModificationSubmitting,
@@ -39,7 +42,8 @@ export function useViewModel() {
       assert(idToCategoryCache);
       idToCategoryCache.delete(id);
       setIdToCategoryCache(new Map(idToCategoryCache));
-    });
+      deleteCategoryArticleAmount(id);
+    }, setCategoryArticleAmount);
 
   return {
     idToCategory: idToCategoryCache,
@@ -47,7 +51,8 @@ export function useViewModel() {
     idToCategoryLoadError,
     idToArticleAmountLoading,
     idToArticleAmountLoadError,
-    idToArticleAmount,
+    idToArticleAmount: idToArticleAmountCache,
+    refreshCategoryArticleAmount,
     handleCategoryModificationSubmit,
     categoryModificationSubmitting,
     handleCategoryDeletion,
@@ -71,6 +76,69 @@ function useIdToCategoryCache() {
   return {
     idToCategoryCache,
     setIdToCategoryCache,
+    loading,
+    error,
+  };
+}
+
+function useIdToArticleAmountCache() {
+  const categoryModel = useMemo(() => new BlogModels.CategoryModel(), []);
+  const {idToArticleAmount, loading, error} =
+    BlogModelHooks.CategoryModelHooks.useIdToArticleAmount();
+  const [idToArticleAmountCache, setIdToArticleAmountCache] = useState<
+    typeof idToArticleAmount | null
+  >(null);
+
+  useEffect(() => {
+    if (!loading && !error) {
+      setIdToArticleAmountCache(idToArticleAmount);
+    }
+  }, [error, idToArticleAmount, loading]);
+
+  const setCategoryArticleAmount = useCallback(
+    (id: Category['id'], articleAmount: number) => {
+      setIdToArticleAmountCache((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        const next = new Map(prev);
+        next.set(id, articleAmount);
+        return next;
+      });
+    },
+    [],
+  );
+
+  const deleteCategoryArticleAmount = useCallback((id: Category['id']) => {
+    setIdToArticleAmountCache((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      const next = new Map(prev);
+      next.delete(id);
+      return next;
+    });
+  }, []);
+
+  const refreshCategoryArticleAmount = useCallback(
+    (id: Category['id']) => {
+      categoryModel
+        .getArticleAmountById(id)
+        .then((articleAmount) => {
+          setCategoryArticleAmount(id, articleAmount);
+        })
+        .catch((refreshError: unknown) => {
+          console.error(refreshError);
+        });
+    },
+    [categoryModel, setCategoryArticleAmount],
+  );
+
+  return {
+    idToArticleAmountCache,
+    setCategoryArticleAmount,
+    refreshCategoryArticleAmount,
+    deleteCategoryArticleAmount,
     loading,
     error,
   };
@@ -114,23 +182,35 @@ function useSubmitCategoryModification(
 
 function useSubmitCategoryDeletion(
   afterSubmitSuccess: (id: Category['id']) => void,
+  onInUseDetected: (id: Category['id'], articleAmount: number) => void,
 ) {
   const categoryModel = useMemo(() => new BlogModels.CategoryModel(), []);
   const [submitting, setSubmitting] = useState(false);
   const handleCategoryDeletion = useCallback(
-    (id: Category['id'], onError: (e: unknown) => void) => {
+    (
+      id: Category['id'],
+      onInUse: (articleAmount: number) => void,
+      onError: (e: unknown) => void,
+    ) => {
       setSubmitting(true);
       categoryModel
-        .deleteById(id)
-        .then(() => {
-          afterSubmitSuccess(id);
+        .getArticleAmountById(id)
+        .then((articleAmount) => {
+          if (articleAmount !== 0) {
+            onInUseDetected(id, articleAmount);
+            onInUse(articleAmount);
+            return;
+          }
+          return categoryModel.deleteById(id).then(() => {
+            afterSubmitSuccess(id);
+          });
         })
         .catch(onError)
         .finally(() => {
           setSubmitting(false);
         });
     },
-    [afterSubmitSuccess, categoryModel],
+    [afterSubmitSuccess, categoryModel, onInUseDetected],
   );
 
   return {

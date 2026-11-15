@@ -48,6 +48,7 @@ export function Manage() {
     idToArticleAmountLoading,
     idToArticleAmountLoadError,
     idToArticleAmount,
+    refreshCategoryArticleAmount,
     handleCategoryModificationSubmit,
     categoryModificationSubmitting,
     handleCategoryDeletion,
@@ -139,26 +140,29 @@ export function Manage() {
   };
 
   const onDeleteCategoryConfirm: PopconfirmProps['onConfirm'] = () => {
-    assert(idToArticleAmount);
-    const articleAmount = idToArticleAmount.get(idOfCategoryToDelete) ?? 0;
-    if (articleAmount !== 0) {
-      getServerErrorMessage({
-        code: 'CATEGORY_IN_USE',
-        details: {articleAmount},
-      })
-        .then((warningMessage) => {
-          void message.warning(warningMessage);
+    handleCategoryDeletion(
+      idOfCategoryToDelete,
+      (articleAmount) => {
+        getServerErrorMessage({
+          code: 'CATEGORY_IN_USE',
+          details: {articleAmount},
         })
-        .catch((error: unknown) => {
-          console.error(error);
-        });
-      return;
-    }
-
-    handleCategoryDeletion(idOfCategoryToDelete, (e) => {
-      showErrorNotification(e);
-    });
+          .then((warningMessage) => {
+            void message.warning(warningMessage);
+          })
+          .catch((error: unknown) => {
+            console.error(error);
+          });
+      },
+      (e) => {
+        showErrorNotification(e);
+      },
+    );
   };
+
+  const onArticleDeletedInModal = useCallback(() => {
+    refreshCategoryArticleAmount(categoryIdOfArticleListModal);
+  }, [categoryIdOfArticleListModal, refreshCategoryArticleAmount]);
 
   return (
     <ManageView
@@ -177,6 +181,7 @@ export function Manage() {
       onArticleListModalCancel={onArticleListModalCancel}
       onDeleteCategoryButtonClick={onDeleteCategoryButtonClick}
       onDeleteCategoryConfirm={onDeleteCategoryConfirm}
+      onArticleDeletedInModal={onArticleDeletedInModal}
       isModifyModalVisible={isModifyModalVisible}
       onModifyModalOk={onModifyModalOk}
       onModifyModalCancel={onModifyModalCancel}
