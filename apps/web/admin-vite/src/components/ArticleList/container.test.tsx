@@ -132,7 +132,7 @@ describe('Admin ArticleList pagination', () => {
     vi.restoreAllMocks();
   });
 
-  it('slices pages, changes page size via Pagination, and clamps when deleting the sole item on the last page', async () => {
+  it('slices pages and updates page size via Pagination', async () => {
     const user = userEvent.setup();
     render(
       <ConfigProvider locale={enUS}>
@@ -147,7 +147,6 @@ describe('Admin ArticleList pagination', () => {
       screen.getByRole('button', {name: 'Page 1'}).getAttribute('aria-current'),
     ).toBe('page');
 
-    // Navigate to page 2 via Pagination.
     await user.click(screen.getByRole('button', {name: 'Page 2'}));
 
     expect(screen.getByText('Article 11')).toBeTruthy();
@@ -156,7 +155,6 @@ describe('Admin ArticleList pagination', () => {
       screen.getByRole('button', {name: 'Page 2'}).getAttribute('aria-current'),
     ).toBe('page');
 
-    // Change page size from 10 to 5 via Pagination's size selector.
     await user.click(screen.getByRole('combobox', {name: 'Page Size'}));
     await user.click(screen.getByText('5 / page'));
 
@@ -167,20 +165,30 @@ describe('Admin ArticleList pagination', () => {
     expect(
       screen.getByRole('button', {name: 'Page 2'}).getAttribute('aria-current'),
     ).toBe('page');
+  });
 
-    // Navigate to page 3 (sole item 11), delete it, and verify both slice and active page clamp to page 2.
+  it('clamps the active page and slice when deleting the sole item on the last page', async () => {
+    hookMocks.idToArticle = createArticlesMap(21);
+    const user = userEvent.setup();
+    render(
+      <ConfigProvider locale={enUS}>
+        <ArticleList />
+      </ConfigProvider>,
+    );
+
+    expect(await screen.findByText('Article 1')).toBeTruthy();
     await user.click(screen.getByRole('button', {name: 'Page 3'}));
 
-    expect(screen.getByText('Article 11')).toBeTruthy();
+    expect(screen.getByText('Article 21')).toBeTruthy();
     expect(
       screen.getByRole('button', {name: 'Page 3'}).getAttribute('aria-current'),
     ).toBe('page');
 
-    await user.click(screen.getByRole('button', {name: 'Delete Article 11'}));
+    await user.click(screen.getByRole('button', {name: 'Delete Article 21'}));
 
-    expect(screen.getByText('Article 6')).toBeTruthy();
-    expect(screen.getByText('Article 10')).toBeTruthy();
-    expect(screen.queryByText('Article 11')).toBeNull();
+    expect(screen.getByText('Article 11')).toBeTruthy();
+    expect(screen.getByText('Article 20')).toBeTruthy();
+    expect(screen.queryByText('Article 21')).toBeNull();
     expect(
       screen.getByRole('button', {name: 'Page 2'}).getAttribute('aria-current'),
     ).toBe('page');

@@ -144,7 +144,7 @@ describe('Category Manage Listy pagination', () => {
     vi.restoreAllMocks();
   });
 
-  it('slices pages, changes page size via Pagination, and clamps when deleting the sole category on the last page', async () => {
+  it('slices pages and updates page size via Pagination', async () => {
     const user = userEvent.setup();
     render(
       <ConfigProvider locale={enUS}>
@@ -159,7 +159,6 @@ describe('Category Manage Listy pagination', () => {
       screen.getByRole('button', {name: 'Page 1'}).getAttribute('aria-current'),
     ).toBe('page');
 
-    // Switch to page 2 via Pagination.
     await user.click(screen.getByRole('button', {name: 'Page 2'}));
 
     expect(screen.getByText('Category 11')).toBeTruthy();
@@ -168,7 +167,6 @@ describe('Category Manage Listy pagination', () => {
       screen.getByRole('button', {name: 'Page 2'}).getAttribute('aria-current'),
     ).toBe('page');
 
-    // Change page size from 10 to 5 via Pagination's size selector.
     await user.click(screen.getByRole('combobox', {name: 'Page Size'}));
     await user.click(screen.getByText('5 / page'));
 
@@ -179,11 +177,24 @@ describe('Category Manage Listy pagination', () => {
     expect(
       screen.getByRole('button', {name: 'Page 2'}).getAttribute('aria-current'),
     ).toBe('page');
+  });
 
-    // Navigate to page 3 (sole Category 11), delete it, and verify slice and page clamp to page 2.
+  it('clamps the active page and slice when deleting the sole category on the last page', async () => {
+    const {categories, amounts} = createCategories(21);
+    hookMocks.categories = categories;
+    hookMocks.articleAmounts = amounts;
+
+    const user = userEvent.setup();
+    render(
+      <ConfigProvider locale={enUS}>
+        <Manage />
+      </ConfigProvider>,
+    );
+
+    expect(await screen.findByText('Category 1')).toBeTruthy();
     await user.click(screen.getByRole('button', {name: 'Page 3'}));
 
-    expect(screen.getByText('Category 11')).toBeTruthy();
+    expect(screen.getByText('Category 21')).toBeTruthy();
     expect(
       screen.getByRole('button', {name: 'Page 3'}).getAttribute('aria-current'),
     ).toBe('page');
@@ -192,11 +203,11 @@ describe('Category Manage Listy pagination', () => {
     await user.click(screen.getByRole('button', {name: 'OK'}));
 
     await waitFor(() => {
-      expect(categoryModelMocks.deleteById).toHaveBeenCalledWith(11);
+      expect(categoryModelMocks.deleteById).toHaveBeenCalledWith(21);
     });
-    expect(await screen.findByText('Category 6')).toBeTruthy();
-    expect(screen.getByText('Category 10')).toBeTruthy();
-    expect(screen.queryByText('Category 11')).toBeNull();
+    expect(await screen.findByText('Category 11')).toBeTruthy();
+    expect(screen.getByText('Category 20')).toBeTruthy();
+    expect(screen.queryByText('Category 21')).toBeNull();
     expect(
       screen.getByRole('button', {name: 'Page 2'}).getAttribute('aria-current'),
     ).toBe('page');
