@@ -1,10 +1,16 @@
 import assert from 'node:assert';
 
 import {useTextInput} from '@library/hooks';
-import {User} from '@module/classes';
 import {useSession} from '@module/session-context';
 import {CreateSessionResult} from '@module/session-sdk';
+import {type LoginCredentials, LoginCredentialsSchema} from '@schema/auth';
 import {useCallback, useState} from 'react';
+
+import {
+  getValidationErrorMessage,
+  LOGIN_CREDENTIALS_FIELD_LABELS,
+} from '@/helpers/validation-i18n-helper.js';
+import {getI18nString, STRING_KEY} from '@/i18n/index.js';
 
 export function useViewModel() {
   const {session, sessionError, isLoadingSession, createSession} = useSession();
@@ -26,7 +32,11 @@ export function useViewModel() {
   };
 }
 
-function useLogin(createSession: (user: User) => Promise<CreateSessionResult>) {
+function useLogin(
+  createSession: (
+    credentials: LoginCredentials,
+  ) => Promise<CreateSessionResult>,
+) {
   const [loginLoading, setLoginLoading] = useState(false);
 
   const login = useCallback(
@@ -35,24 +45,39 @@ function useLogin(createSession: (user: User) => Promise<CreateSessionResult>) {
       password: string,
       onValidationFailed: (message: string) => void,
       onSuccess?: () => void,
+      onUnauthorized?: (message: string) => void,
       onError?: (error: Error) => void,
     ) => {
-      if (!username) {
-        onValidationFailed('Please input username');
+      const parsedCredentials = LoginCredentialsSchema.safeParse({
+        username,
+        password,
+      });
+      if (!parsedCredentials.success) {
+        const firstIssue = parsedCredentials.error.issues[0];
+        getValidationErrorMessage(firstIssue, LOGIN_CREDENTIALS_FIELD_LABELS)
+          .then((message) => {
+            onValidationFailed(message);
+          })
+          .catch((e: unknown) => {
+            console.error(e);
+          });
         return;
       }
-      if (!password) {
-        onValidationFailed('Please input password');
-        return;
-      }
+
       setLoginLoading(true);
-      createSession(new User(username, password))
+      createSession(parsedCredentials.data)
         .then((result) => {
           if (result === CreateSessionResult.SUCCESS) {
             onSuccess?.();
-          } else {
-            onError?.(new Error('Wrong username or password'));
+            return;
           }
+          getI18nString(STRING_KEY.UI_MESSAGE_LOGIN_WRONG_CREDENTIALS)
+            .then((message) => {
+              onUnauthorized?.(message);
+            })
+            .catch((e: unknown) => {
+              console.error(e);
+            });
         })
         .catch((e: unknown) => {
           if (onError) {

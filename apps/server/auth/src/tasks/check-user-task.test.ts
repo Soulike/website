@@ -1,4 +1,3 @@
-import {User} from '@module/classes';
 import {FakeUserTable} from '@module/database/fake';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
@@ -19,16 +18,16 @@ describe('CheckUserTask', () => {
     vi.restoreAllMocks();
   });
 
-  it('should return true when user credentials match', async () => {
+  it('should return true when credentials match Account', async () => {
     const username = 'testuser';
     const password = 'password123';
     const saltedPassword = CheckUserTask.getSaltedPasswordForTesting(
       username,
       password,
     );
-    await FakeUserTable.insert(new User(username, saltedPassword));
+    await FakeUserTable.insert({username, password: saltedPassword});
 
-    const task = new CheckUserTask(new User(username, password));
+    const task = new CheckUserTask({username, password});
     const result = await task.run();
     expect(result).toBe(true);
   });
@@ -39,9 +38,9 @@ describe('CheckUserTask', () => {
       username,
       'password123',
     );
-    await FakeUserTable.insert(new User(username, saltedPassword));
+    await FakeUserTable.insert({username, password: saltedPassword});
 
-    const task = new CheckUserTask(new User(username, 'wrongpassword'));
+    const task = new CheckUserTask({username, password: 'wrongpassword'});
     const result = await task.run();
     expect(result).toBe(false);
   });
@@ -51,9 +50,15 @@ describe('CheckUserTask', () => {
       'existinguser',
       'password123',
     );
-    await FakeUserTable.insert(new User('existinguser', saltedPassword));
+    await FakeUserTable.insert({
+      username: 'existinguser',
+      password: saltedPassword,
+    });
 
-    const task = new CheckUserTask(new User('nonexistentuser', 'password123'));
+    const task = new CheckUserTask({
+      username: 'nonexistentuser',
+      password: 'password123',
+    });
     const result = await task.run();
     expect(result).toBe(false);
   });

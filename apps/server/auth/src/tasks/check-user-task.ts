@@ -3,27 +3,27 @@ import crypto from 'node:crypto';
 
 import {PromiseTask} from '@library/task-runner';
 import {assertIsTest} from '@library/test-helpers';
-import {User} from '@module/classes';
 import {UserTable} from '@module/database';
+import type {LoginCredentials} from '@schema/auth';
 
 /**
- * Check if `user` matches the record in database.
+ * Check if `credentials` matches the Account record in database.
  */
 export class CheckUserTask extends PromiseTask<boolean> {
-  private readonly user: User;
+  private readonly credentials: LoginCredentials;
 
-  constructor(user: User) {
+  constructor(credentials: LoginCredentials) {
     super();
-    this.user = user;
+    this.credentials = credentials;
   }
 
   public override async run(): Promise<boolean> {
-    const {username, password} = this.user;
-    const expectedUser = await UserTable.selectByUsername(username);
-    if (!expectedUser) {
+    const {username, password} = this.credentials;
+    const expectedAccount = await UserTable.selectByUsername(username);
+    if (!expectedAccount) {
       return false;
     }
-    const {password: expectedPassword} = expectedUser;
+    const {password: expectedPassword} = expectedAccount;
     const saltedPassword = CheckUserTask.getSaltedPassword(username, password);
     return CheckUserTask.timingSafeEqualHex(saltedPassword, expectedPassword);
   }

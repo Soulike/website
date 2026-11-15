@@ -1,5 +1,12 @@
 import {isObjectEmpty} from '@library/object-helpers';
-import {User} from '@module/classes';
+import {
+  type AccountInsertRow,
+  AccountInsertRowSchema,
+  type AccountRow,
+  AccountRowSchema,
+  type AccountUpdateRow,
+  type OrderConfig,
+} from '@schema/database';
 
 import {query} from '../helpers/query-helpers.js';
 import {
@@ -8,31 +15,29 @@ import {
   generateSetClause,
   generateWhereClause,
 } from '../helpers/sql-helpers.js';
-import {OrderConfig} from '../types.js';
 
 export class UserTable {
-  static async insert(user: User): Promise<void> {
-    const filteredUser = Object.assign<Record<string, unknown>, User>(
-      {},
-      User.from(user),
-    );
+  static async insert(account: AccountInsertRow): Promise<void> {
+    const filteredAccount = AccountInsertRowSchema.parse(account);
     const {insertStatement, values} = generateInsertStatement(
       'users',
-      filteredUser,
+      filteredAccount,
     );
     await query<unknown[]>(insertStatement, values);
   }
 
-  static async deleteByUsername(username: User['username']): Promise<void> {
+  static async deleteByUsername(
+    username: AccountRow['username'],
+  ): Promise<void> {
     const deleteStatement = 'DELETE FROM "users" WHERE "username"=$1';
     await query(deleteStatement, [username]);
   }
 
   static async updateByUsername(
-    username: User['username'],
-    user: Partial<Omit<User, 'username'>>,
+    username: AccountRow['username'],
+    account: AccountUpdateRow,
   ): Promise<void> {
-    const {setClause, values} = generateSetClause(user);
+    const {setClause, values} = generateSetClause(account);
     if (values.length == 0) {
       return;
     }
@@ -45,46 +50,49 @@ export class UserTable {
   }
 
   static async selectByUsername(
-    username: User['username'],
-  ): Promise<User | null> {
+    username: AccountRow['username'],
+  ): Promise<AccountRow | null> {
     const selectStatement = 'SELECT * FROM "users" WHERE "username"=$1';
-    const {rows, rowCount} = await query<User>(selectStatement, [username]);
+    const {rows, rowCount} = await query<AccountRow>(selectStatement, [
+      username,
+    ]);
     if (rowCount === 0) {
       return null;
-    } else {
-      return User.from(rows[0]);
     }
+    return AccountRowSchema.parse(rows[0]);
   }
 
-  static async selectAll(orderConfig: OrderConfig<User> = {}): Promise<User[]> {
+  static async selectAll(
+    orderConfig: OrderConfig<AccountRow> = {},
+  ): Promise<AccountRow[]> {
     return this.select({}, orderConfig);
   }
 
   static async select(
-    user: Partial<User>,
-    orderConfig: OrderConfig<User> = {},
-  ): Promise<User[]> {
-    if (isObjectEmpty(user)) {
+    account: Partial<AccountRow>,
+    orderConfig: OrderConfig<AccountRow> = {},
+  ): Promise<AccountRow[]> {
+    if (isObjectEmpty(account)) {
       return this.selectAll(orderConfig);
     }
-    const {whereClause, values} = generateWhereClause(user);
-    const {rows} = await query<User>(
+    const {whereClause, values} = generateWhereClause(account);
+    const {rows} = await query<AccountRow>(
       `SELECT *
        FROM "users" ${whereClause} ${generateOrderByClause(orderConfig)}`,
       values,
     );
-    return rows.map((row) => User.from(row));
+    return rows.map((row) => AccountRowSchema.parse(row));
   }
 
   static async countAll(): Promise<number> {
     return this.count({});
   }
 
-  static async count(user: Partial<User>): Promise<number> {
-    if (isObjectEmpty(user)) {
+  static async count(account: Partial<AccountRow>): Promise<number> {
+    if (isObjectEmpty(account)) {
       return this.countAll();
     }
-    const {whereClause, values} = generateWhereClause(user);
+    const {whereClause, values} = generateWhereClause(account);
     const {rows} = await query<{c: string}>(
       `SELECT count("username") AS "c"
        FROM "users" ${whereClause}`,

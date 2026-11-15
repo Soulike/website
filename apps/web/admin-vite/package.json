@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "pnpm --workspace-root node:runtime && tsc -b && vite build",
+    "test": "vitest",
     "lint": "eslint ./src",
     "preview": "vite preview",
     "analyze": "vite-bundle-visualizer",
@@ -13,24 +14,27 @@
   },
   "dependencies": {
     "@ant-design/icons": "catalog:",
-    "@module/classes": "workspace:^",
     "@library/hooks": "workspace:^",
     "@library/i18n": "workspace:^",
+    "@library/react-components": "workspace:^",
+    "@library/request": "workspace:^",
+    "@module/classes": "workspace:^",
     "@module/model": "workspace:^",
     "@module/session-context": "workspace:^",
     "@module/session-sdk": "workspace:^",
-    "@library/react-components": "workspace:^",
-    "@library/request": "workspace:^",
+    "@schema/auth": "workspace:^",
     "antd": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "react-router": "catalog:"
+    "react-router": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
+    "@config/eslint": "workspace:^",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react-swc": "^4.2.2",
-    "@config/eslint": "workspace:^",
+    "@vitest/coverage-v8": "catalog:",
     "browserslist-to-esbuild": "^2.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "sharp": "^0.35.5",
@@ -40,7 +44,8 @@
     "vite": "catalog:",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-image-optimizer": "^2.0.3",
-    "vite-plugin-node-polyfills": "^0.24.0"
+    "vite-plugin-node-polyfills": "^0.24.0",
+    "vitest": "catalog:"
   },
   "browserslist": [
     "last 2 Chrome versions",

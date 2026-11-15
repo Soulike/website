@@ -63,7 +63,7 @@ export class PromiseTaskRunner {
 
     try {
       const result = await task.run();
-      if (result) {
+      if (result !== null) {
         return {
           error: null,
           result,

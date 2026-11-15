@@ -1,5 +1,12 @@
 import {isObjectEmpty} from '@library/object-helpers';
-import {Article} from '@module/classes';
+import {
+  type ArticleInsertRow,
+  ArticleInsertRowSchema,
+  type ArticleRow,
+  ArticleRowSchema,
+  type ArticleUpdateRow,
+  type OrderConfig,
+} from '@schema/database';
 
 import {query} from '../helpers/query-helpers.js';
 import {
@@ -8,12 +15,10 @@ import {
   generateSetClause,
   generateWhereClause,
 } from '../helpers/sql-helpers.js';
-import {OrderConfig} from '../types.js';
 
 export class ArticleTable {
-  static async insert(article: Omit<Article, 'id'>): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {id, ...filteredArticle} = Article.from({id: 0, ...article});
+  static async insert(article: ArticleInsertRow): Promise<void> {
+    const filteredArticle = ArticleInsertRowSchema.parse(article);
     const {insertStatement, values} = generateInsertStatement(
       'articles',
       filteredArticle,
@@ -21,14 +26,14 @@ export class ArticleTable {
     await query<unknown[]>(insertStatement, values);
   }
 
-  static async deleteById(id: Article['id']): Promise<void> {
+  static async deleteById(id: ArticleRow['id']): Promise<void> {
     const deleteStatement = 'DELETE FROM "articles" WHERE "id"=$1';
     await query(deleteStatement, [id]);
   }
 
   static async updateById(
-    id: Article['id'],
-    article: Partial<Omit<Article, 'id'>>,
+    id: ArticleRow['id'],
+    article: ArticleUpdateRow,
   ): Promise<void> {
     const {setClause, values} = generateSetClause(article);
     if (values.length == 0) {
@@ -42,36 +47,35 @@ export class ArticleTable {
     );
   }
 
-  static async selectById(id: Article['id']): Promise<Article | null> {
+  static async selectById(id: ArticleRow['id']): Promise<ArticleRow | null> {
     const selectStatement = 'SELECT * FROM "articles" WHERE "id"=$1';
-    const {rows, rowCount} = await query<Article>(selectStatement, [id]);
+    const {rows, rowCount} = await query<ArticleRow>(selectStatement, [id]);
     if (rowCount === 0) {
       return null;
-    } else {
-      return Article.from(rows[0]);
     }
+    return ArticleRowSchema.parse(rows[0]);
   }
 
   static async selectAll(
-    orderConfig: OrderConfig<Article> = {},
-  ): Promise<Article[]> {
+    orderConfig: OrderConfig<ArticleRow> = {},
+  ): Promise<ArticleRow[]> {
     return this.select({}, orderConfig);
   }
 
   static async select(
-    article: Partial<Article>,
-    orderConfig: OrderConfig<Article> = {},
-  ): Promise<Article[]> {
+    article: Partial<ArticleRow>,
+    orderConfig: OrderConfig<ArticleRow> = {},
+  ): Promise<ArticleRow[]> {
     if (isObjectEmpty(article)) {
       return this.selectAll(orderConfig);
     }
     const {whereClause, values} = generateWhereClause(article);
-    const {rows} = await query<Article>(
+    const {rows} = await query<ArticleRow>(
       `SELECT *
        FROM "articles" ${whereClause} ${generateOrderByClause(orderConfig)}`,
       values,
     );
-    return rows.map((row) => Article.from(row));
+    return rows.map((row) => ArticleRowSchema.parse(row));
   }
 
   static async countAll(): Promise<number> {
@@ -80,7 +84,7 @@ export class ArticleTable {
     return Number.parseInt(rows[0].c);
   }
 
-  static async count(article: Partial<Article>): Promise<number> {
+  static async count(article: Partial<ArticleRow>): Promise<number> {
     if (isObjectEmpty(article)) {
       return this.countAll();
     }

@@ -1,4 +1,9 @@
-import {Session, User} from '@module/classes';
+import {
+  type LoginCredentials,
+  LoginCredentialsSchema,
+  type Session,
+  SessionSchema,
+} from '@schema/auth';
 import {StatusCodes} from 'http-status-codes';
 
 import {CreateSessionResult} from './types.js';
@@ -18,18 +23,22 @@ export async function getSession(): Promise<Session | null> {
     throw new Error(`Get session failed with HTTP status ${response.status}`);
   }
   const session: unknown = await response.json();
-  if (!Session.validate(session)) {
+  const parsedSession = SessionSchema.safeParse(session);
+  if (!parsedSession.success) {
     throw new Error(`Invalid Session`);
   }
-  return Session.from(session);
+  return parsedSession.data;
 }
 
-export async function createSession(user: User): Promise<CreateSessionResult> {
+export async function createSession(
+  credentials: LoginCredentials,
+): Promise<CreateSessionResult> {
+  const parsedCredentials = LoginCredentialsSchema.parse(credentials);
   const response = await fetch(AUTH_URL, {
     method: 'POST',
     credentials: 'include',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(user),
+    body: JSON.stringify(parsedCredentials),
   });
   if (response.ok) {
     return CreateSessionResult.SUCCESS;
