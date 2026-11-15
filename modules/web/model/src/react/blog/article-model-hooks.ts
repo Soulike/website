@@ -1,5 +1,5 @@
 import {RejectCallback, ResolveCallback, usePromise} from '@library/hooks';
-import {Article, Category} from '@module/classes';
+import {type Article, type Category} from '@schema/blog';
 import {useMemo} from 'react';
 
 import {articleModel} from '../../models/blog/index.js';

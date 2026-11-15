@@ -1,10 +1,10 @@
 import path from 'node:path';
 
 import {Request} from '@library/request';
-import {ServerResponse} from '@module/classes';
+import {type SiteOption, SiteOptionSchema} from '@schema/blog';
 
-import {ModelAccessDeniedError} from '../model-access-error.js';
 import {prependServerPrefix} from '../path-helper.js';
+import {parseServerResponse} from '../response-helper.js';
 
 class OptionModel {
   private static readonly PATH = Object.freeze({
@@ -15,15 +15,11 @@ class OptionModel {
     return prependServerPrefix(path.join('option', subPath));
   }
 
-  public async getAbout(): Promise<string> {
-    const response = await Request.JSONToJSON.get<
-      ServerResponse<{about: string}>
-    >(OptionModel.PATH.GET_ABOUT);
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data.about;
-    }
+  public async getAbout(): Promise<SiteOption['about']> {
+    const response = await Request.JSONToJSON.get<unknown>(
+      OptionModel.PATH.GET_ABOUT,
+    );
+    return parseServerResponse(SiteOptionSchema, response).about;
   }
 }
 

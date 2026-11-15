@@ -1,5 +1,5 @@
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
-import {type Category} from '@module/classes';
+import {type Category} from '@schema/blog';
 import {
   Button,
   type ButtonProps,
@@ -43,6 +43,7 @@ interface Props {
 
   onDeleteCategoryButtonClick: (id: number) => ButtonProps['onClick'];
   onDeleteCategoryConfirm: PopconfirmProps['onConfirm'];
+  onArticleDeletedInModal?: () => void;
 }
 
 export function ManageView(props: Props) {
@@ -57,6 +58,7 @@ export function ManageView(props: Props) {
     onArticleListModalCancel,
     onDeleteCategoryButtonClick,
     onDeleteCategoryConfirm,
+    onArticleDeletedInModal,
     isModifyModalVisible,
     onModifyModalOk,
     onModifyModalCancel,
@@ -125,6 +127,7 @@ export function ManageView(props: Props) {
         categoryInModal={categoryInModal}
         onOk={onArticleListModalOk}
         onCancel={onArticleListModalCancel}
+        onArticleDeleted={onArticleDeletedInModal}
       />
       <ModifyModal
         open={isModifyModalVisible}

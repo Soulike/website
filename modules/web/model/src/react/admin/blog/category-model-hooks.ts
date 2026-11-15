@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 
 import {RejectCallback, ResolveCallback, usePromise} from '@library/hooks';
-import {Category, CategoryIdToArticleAmount} from '@module/classes';
+import {type Category, type CategoryIdToArticleAmount} from '@schema/blog';
 import {useEffect, useMemo, useState} from 'react';
 
 import {CategoryModel} from '../../../models/admin/blog/category-model.js';

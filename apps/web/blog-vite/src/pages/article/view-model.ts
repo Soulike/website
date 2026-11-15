@@ -1,6 +1,6 @@
 import {useLazyPromise} from '@library/hooks';
-import {Article, Category} from '@module/classes';
 import {articleModel, categoryModel} from '@module/model/blog';
+import {type Article, type Category} from '@schema/blog';
 import {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router';
 

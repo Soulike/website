@@ -1,9 +1,9 @@
 import assert from 'node:assert';
 
 import {useAntdCheckbox, useAntdSelect, useTextInput} from '@library/hooks';
-import {Article} from '@module/classes';
 import {BlogModels} from '@module/model/admin';
 import {BlogModelHooks} from '@module/model/react/admin';
+import {type Article} from '@schema/blog';
 import {useEffect, useMemo, useState} from 'react';
 
 import {useArticlePreviewModal} from '@/components/ArticlePreviewModal/index.js';

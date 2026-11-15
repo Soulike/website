@@ -27,33 +27,34 @@ class Category {
 
 ```ts
 {
-    json: Partial<Category>, // Category 对象 JSON 串
+    json: Partial<Category>, // 至少包含一个白名单筛选字段
 }
 ```
 
-- 成功响应对象：`Category[]`
-- 失败响应消息：
-  - 分类不存在：分类不存在
+- 成功响应：`data` 为 `Category[]`
+- 失败响应错误码：
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
 - 其他说明：
-  - 如果没有筛选条件，返回空数组
+  - 空筛选对象或未知字段将被拒绝
 
 ### `/getAll`
 
 - 功能说明：获取所有分类
 - 请求方法：GET
 - 请求对象：无
-- 成功响应对象：`Array<Category>`
-- 失败响应消息：无
+- 成功响应：`data` 为 `Category[]`
+- 失败响应错误码：无
 - 其他说明：无
 
 ### `/add`
 
 - 功能说明：添加分类
 - 请求方法：POST
-- 请求对象：`Omit<Category, 'id'>` 实例
-- 成功响应对象：无
-- 失败响应消息：
-  - 分类名重复：分类已存在
+- 请求对象：`CategoryDraft`（`name`）
+- 成功响应：`data` 为 `null`
+- 失败响应错误码：
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 分类名重复：`CATEGORY_ALREADY_EXISTS`
 - 其他说明：无
 
 ### `/deleteById`
@@ -68,21 +69,23 @@ class Category {
 }
 ```
 
-- 成功响应对象：无
-- 失败响应消息：
-  - 分类不存在：分类不存在
-  - 文章分类下仍有文章存在：文章分类 ${文章分类名} 仍被 ${使用该分类文章数量} 个文章使用，删除失败
+- 成功响应：`data` 为 `null`
+- 失败响应错误码：
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 分类不存在：`CATEGORY_NOT_FOUND`
+  - 文章分类下仍有文章存在：`CATEGORY_IN_USE`（`details: { articleAmount }`）
 - 其他说明：无
 
 ### `/modify`
 
 - 功能说明：编辑分类
 - 请求方法：POST
-- 请求对象：`Partial<Category> & Pick<Category, 'id'>` 实例
-- 成功响应对象：无
-- 失败响应消息：无
-  - 分类 ID 不存在：分类不存在
-  - 分类名重复：分类已存在
+- 请求对象：`UpdateCategory`（`id` 与 `name`）
+- 成功响应：`data` 为 `null`
+- 失败响应错误码：
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 分类 ID 不存在：`CATEGORY_NOT_FOUND`
+  - 分类名重复：`CATEGORY_ALREADY_EXISTS`
 - 其他说明：无
 
 ### `/countArticleById`
@@ -99,7 +102,8 @@ class Category {
 }
 ```
 
-- 成功响应对象：`number`
-- 失败响应消息：
-  - 分类 ID 不存在：分类不存在
+- 成功响应：`data` 为 `number`
+- 失败响应错误码：
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 分类 ID 不存在：`CATEGORY_NOT_FOUND`
 - 其他说明：无

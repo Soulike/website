@@ -1,10 +1,20 @@
 import {LoginCredentialsSchema} from '@schema/auth';
+import {
+  ArticleDraftSchema,
+  CategoryDraftSchema,
+  SiteOptionSchema,
+} from '@schema/blog';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import type {z} from 'zod';
 
 import {
+  ARTICLE_DRAFT_FIELD_LABELS,
+  CATEGORY_DRAFT_FIELD_LABELS,
   getValidationErrorMessage,
   LOGIN_CREDENTIALS_FIELD_LABELS,
+  SITE_OPTION_FIELD_LABELS,
+  validateFormSchema,
+  type ValidationFieldLabels,
 } from './validation-i18n-helper.js';
 
 describe('validation-i18n-helper', () => {
@@ -201,5 +211,164 @@ describe('validation-i18n-helper', () => {
     await expect(
       getValidationErrorMessage(issue, LOGIN_CREDENTIALS_FIELD_LABELS),
     ).resolves.toBe('输入格式无效');
+  });
+
+  async function validateSchemaAndFormat(
+    schema: z.ZodType,
+    input: unknown,
+    fieldLabels: ValidationFieldLabels,
+  ): Promise<string> {
+    const parsed = schema.safeParse(input);
+    expect(parsed.success).toBe(false);
+    if (parsed.success) {
+      throw new Error('Expected validation to fail');
+    }
+    return getValidationErrorMessage(parsed.error.issues[0], fieldLabels);
+  }
+
+  it.each([
+    [
+      'en',
+      {title: '   ', content: 'Body', category: 1, isVisible: true},
+      'Please enter Title',
+    ],
+    [
+      'zh-cn',
+      {title: '   ', content: 'Body', category: 1, isVisible: true},
+      '请输入标题',
+    ],
+    [
+      'en',
+      {title: 'a'.repeat(256), content: 'Body', category: 1, isVisible: true},
+      'Title must be at most 255 characters',
+    ],
+    [
+      'en',
+      {title: 'Hello', content: '', category: 1, isVisible: true},
+      'Please enter Content',
+    ],
+    [
+      'en',
+      {title: 'Hello', content: '   \n\t ', category: 1, isVisible: true},
+      'Please enter Content',
+    ],
+    [
+      'zh-cn',
+      {title: 'Hello', content: '   ', category: 1, isVisible: true},
+      '请输入正文',
+    ],
+    [
+      'en',
+      {title: 'Hello', content: 'Body', category: null, isVisible: true},
+      'Please select Category',
+    ],
+    [
+      'zh-cn',
+      {title: 'Hello', content: 'Body', category: null, isVisible: true},
+      '请选择分类',
+    ],
+  ])(
+    'formats ArticleDraft failure in %s for %j',
+    async (language, payload, expectedMessage) => {
+      mockNavigatorLanguage = language;
+      await expect(
+        validateSchemaAndFormat(
+          ArticleDraftSchema,
+          payload,
+          ARTICLE_DRAFT_FIELD_LABELS,
+        ),
+      ).resolves.toBe(expectedMessage);
+    },
+  );
+
+  it('preserves Markdown outer whitespace in ArticleDraft content and SiteOption about while rejecting whitespace-only', async () => {
+    const validArticle = ArticleDraftSchema.safeParse({
+      title: '  My Title  ',
+      content: '  # Markdown with outer spaces  \n',
+      category: 1,
+      isVisible: true,
+    });
+    expect(validArticle.success).toBe(true);
+    if (validArticle.success) {
+      expect(validArticle.data.title).toBe('My Title');
+      expect(validArticle.data.content).toBe(
+        '  # Markdown with outer spaces  \n',
+      );
+    }
+
+    const validAbout = SiteOptionSchema.safeParse({
+      about: '  # About  ',
+    });
+    expect(validAbout.success).toBe(true);
+    if (validAbout.success) {
+      expect(validAbout.data.about).toBe('  # About  ');
+    }
+
+    mockNavigatorLanguage = 'en';
+    await expect(
+      validateSchemaAndFormat(
+        SiteOptionSchema,
+        {about: '   '},
+        SITE_OPTION_FIELD_LABELS,
+      ),
+    ).resolves.toBe('Please enter About');
+
+    mockNavigatorLanguage = 'zh-cn';
+    await expect(
+      validateSchemaAndFormat(
+        SiteOptionSchema,
+        {about: ''},
+        SITE_OPTION_FIELD_LABELS,
+      ),
+    ).resolves.toBe('请输入关于页面内容');
+  });
+
+  it.each([
+    ['en', {name: '   '}, 'Please enter Category name'],
+    ['zh-cn', {name: ''}, '请输入分类名称'],
+    [
+      'en',
+      {name: 'a'.repeat(256)},
+      'Category name must be at most 255 characters',
+    ],
+  ])(
+    'formats CategoryDraft failure in %s for %j',
+    async (language, payload, expectedMessage) => {
+      mockNavigatorLanguage = language;
+      await expect(
+        validateSchemaAndFormat(
+          CategoryDraftSchema,
+          payload,
+          CATEGORY_DRAFT_FIELD_LABELS,
+        ),
+      ).resolves.toBe(expectedMessage);
+    },
+  );
+
+  it('validateFormSchema returns parsed data on success and invokes localized callback on failure', async () => {
+    const onValidationFailed = vi.fn();
+    mockNavigatorLanguage = 'en';
+
+    const validResult = validateFormSchema(
+      CategoryDraftSchema,
+      {name: '  Notes  '},
+      CATEGORY_DRAFT_FIELD_LABELS,
+      onValidationFailed,
+    );
+    expect(validResult).toEqual({name: 'Notes'});
+    expect(onValidationFailed).not.toHaveBeenCalled();
+
+    const invalidResult = validateFormSchema(
+      CategoryDraftSchema,
+      {name: '   '},
+      CATEGORY_DRAFT_FIELD_LABELS,
+      onValidationFailed,
+    );
+    expect(invalidResult).toBeNull();
+    await vi.waitFor(() => {
+      expect(onValidationFailed).toHaveBeenCalledWith(
+        'Please enter Category name',
+      );
+    });
   });
 });

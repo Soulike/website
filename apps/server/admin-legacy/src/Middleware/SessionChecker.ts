@@ -1,12 +1,14 @@
-import {FailServerResponse} from '@module/classes';
+import {SessionSchema} from '@schema/auth';
+import {failResponse} from '@schema/rpc';
 import {type Middleware} from 'koa';
 
 export default (): Middleware => {
   return async (ctx, next) => {
-    if (ctx.session === null || typeof ctx.session.username !== 'string') {
-      ctx.response.body = new FailServerResponse('请先登录');
-    } else {
-      await next();
+    const parsed = SessionSchema.safeParse(ctx.session);
+    if (!parsed.success) {
+      ctx.response.body = failResponse({code: 'UNAUTHORIZED'});
+      return;
     }
+    await next();
   };
 };

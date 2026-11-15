@@ -1,4 +1,5 @@
 import {useTextInput} from '@library/hooks';
+import {CategoryDraftSchema} from '@schema/blog';
 import {
   type ButtonProps,
   message,
@@ -10,7 +11,14 @@ import {
 import assert from 'assert';
 import {useCallback, useEffect, useState} from 'react';
 
-import {showErrorNotification} from '@/helpers/error-notification-helper.js';
+import {
+  getServerErrorMessage,
+  showErrorNotification,
+} from '@/helpers/error-notification-helper.js';
+import {
+  CATEGORY_DRAFT_FIELD_LABELS,
+  validateFormSchema,
+} from '@/helpers/validation-i18n-helper.js';
 
 import {ManageView} from './view.js';
 import {useViewModel} from './view-model.js';
@@ -40,6 +48,7 @@ export function Manage() {
     idToArticleAmountLoading,
     idToArticleAmountLoadError,
     idToArticleAmount,
+    refreshCategoryArticleAmount,
     handleCategoryModificationSubmit,
     categoryModificationSubmitting,
     handleCategoryDeletion,
@@ -78,14 +87,21 @@ export function Manage() {
 
   const onModifyModalOk: ModalProps['onOk'] = (e) => {
     e.preventDefault();
-    if (nameOfCategoryToModify.length === 0) {
-      void message.warning('Please input category name.');
+    const draft = validateFormSchema(
+      CategoryDraftSchema,
+      {name: nameOfCategoryToModify},
+      CATEGORY_DRAFT_FIELD_LABELS,
+      (warningMessage) => {
+        void message.warning(warningMessage);
+      },
+    );
+    if (draft === null) {
       return;
     }
 
     handleCategoryModificationSubmit(
       idOfCategoryToModify,
-      {name: nameOfCategoryToModify},
+      draft,
       () => {
         notification.success({title: 'Category modified'});
       },
@@ -124,16 +140,29 @@ export function Manage() {
   };
 
   const onDeleteCategoryConfirm: PopconfirmProps['onConfirm'] = () => {
-    assert(idToArticleAmount);
-    if (idToArticleAmount.get(idOfCategoryToDelete) === 0) {
-      void message.warning('Can not delete category with articles');
-      return;
-    }
-
-    handleCategoryDeletion(idOfCategoryToDelete, (e) => {
-      showErrorNotification(e);
-    });
+    handleCategoryDeletion(
+      idOfCategoryToDelete,
+      (articleAmount) => {
+        getServerErrorMessage({
+          code: 'CATEGORY_IN_USE',
+          details: {articleAmount},
+        })
+          .then((warningMessage) => {
+            void message.warning(warningMessage);
+          })
+          .catch((error: unknown) => {
+            console.error(error);
+          });
+      },
+      (e) => {
+        showErrorNotification(e);
+      },
+    );
   };
+
+  const onArticleDeletedInModal = useCallback(() => {
+    refreshCategoryArticleAmount(categoryIdOfArticleListModal);
+  }, [categoryIdOfArticleListModal, refreshCategoryArticleAmount]);
 
   return (
     <ManageView
@@ -152,6 +181,7 @@ export function Manage() {
       onArticleListModalCancel={onArticleListModalCancel}
       onDeleteCategoryButtonClick={onDeleteCategoryButtonClick}
       onDeleteCategoryConfirm={onDeleteCategoryConfirm}
+      onArticleDeletedInModal={onArticleDeletedInModal}
       isModifyModalVisible={isModifyModalVisible}
       onModifyModalOk={onModifyModalOk}
       onModifyModalCancel={onModifyModalCancel}

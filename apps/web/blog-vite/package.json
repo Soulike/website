@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "pnpm --workspace-root node:runtime && tsc -b && vite build",
+    "test": "vitest",
     "lint": "eslint ./src",
     "preview": "vite preview",
     "analyze": "vite-bundle-visualizer",
@@ -13,13 +14,14 @@
   },
   "dependencies": {
     "@ant-design/icons": "catalog:",
-    "@module/classes": "workspace:^",
     "@library/hitokoto-hooks": "workspace:^",
     "@library/hooks": "workspace:^",
     "@library/i18n": "workspace:^",
     "@module/model": "workspace:^",
     "@library/react-components": "workspace:^",
     "@library/request": "workspace:^",
+    "@schema/blog": "workspace:^",
+    "@schema/rpc": "workspace:^",
     "antd": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
@@ -30,6 +32,7 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react-swc": "^4.2.2",
+    "@vitest/coverage-v8": "catalog:",
     "@config/eslint": "workspace:^",
     "browserslist-to-esbuild": "^2.1.1",
     "eslint": "catalog:",
@@ -41,7 +44,8 @@
     "vite": "catalog:",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-image-optimizer": "^2.0.3",
-    "vite-plugin-node-polyfills": "^0.24.0"
+    "vite-plugin-node-polyfills": "^0.24.0",
+    "vitest": "catalog:"
   },
   "browserslist": [
     "defaults",

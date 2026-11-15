@@ -14,22 +14,29 @@
 
 ## 响应对象
 
+响应契约由 `@schema/rpc` 定义：
+
 ```ts
-class Response {
-  public isSuccessful: boolean; // 本次请求是否成功
-  public message?: string; // 请求失败时，显示给用户的消息
-  public data?: any; // 请求成功时，前端需要的数据
-}
+type ServerResponse<TData = null> =
+  | {isSuccessful: true; data: TData}
+  | {
+      isSuccessful: false;
+      error:
+        | {code: Exclude<ErrorCode, 'CATEGORY_IN_USE'>}
+        | {code: 'CATEGORY_IN_USE'; details: {articleAmount: number}};
+    };
 ```
 
-- 当因服务器发生错误无法产生响应时，消息填写“服务器错误”
-- 当请求参数错误时，消息填写“请求参数错误”
+- 无返回值的成功响应统一返回 `{ isSuccessful: true, data: null }`
+- 当请求参数不符合接口契约或 JSON 解析失败时，返回 `{ isSuccessful: false, error: { code: 'INVALID_REQUEST_PARAMS' } }`（服务端记录 Zod 校验详情，不向客户端暴露内部 details）
+- 当发生未捕获的服务器内部错误时，返回 HTTP 500 `Internal Server Error`
 
 ---
 
 ## 接口详细信息
 
-- 对请求参数的类型不做严格检查，直接交给 Sequelize 处理。会发生必要的类型转换
-  - 注意，在接口中，字段不存在等价于传入 `undefined`，会带入数据库中做查询
+- 所有接口入口均使用 Zod（`@schema/database`、`@schema/blog` 及端点局部 Schema）进行严格参数校验：
+  - `/get`、`/count` 等筛选接口仅接受白名单字段且至少需提供一个筛选字段，空筛选对象或未知字段将被拒绝（`INVALID_REQUEST_PARAMS`）
+  - `/modify` 接口必须包含主标识符及至少一个可修改字段，空更新将被拒绝（`INVALID_REQUEST_PARAMS`）
 
 所有接口文档见 [document](./document) 文件夹。

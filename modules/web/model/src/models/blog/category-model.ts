@@ -1,10 +1,13 @@
 import path from 'node:path';
 
 import {Request} from '@library/request';
-import {Category, ServerResponse} from '@module/classes';
+import {type Category, CategorySchema} from '@schema/blog';
+import {z} from 'zod';
 
-import {ModelAccessDeniedError} from '../model-access-error.js';
 import {prependServerPrefix} from '../path-helper.js';
+import {parseServerResponse} from '../response-helper.js';
+
+const CategoryListSchema = z.array(CategorySchema);
 
 class CategoryModel {
   private static readonly PATH = Object.freeze({
@@ -22,14 +25,10 @@ class CategoryModel {
   }
 
   public async getAll(): Promise<Category[]> {
-    const response = await Request.JSONToJSON.get<ServerResponse<Category[]>>(
+    const response = await Request.JSONToJSON.get<unknown>(
       CategoryModel.PATH.GET_ALL,
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data;
-    }
+    return parseServerResponse(CategoryListSchema, response);
   }
 
   /**
@@ -45,7 +44,7 @@ class CategoryModel {
   }
 
   public async getById(id: Category['id']): Promise<Category> {
-    const response = await Request.JSONToJSON.get<ServerResponse<Category>>(
+    const response = await Request.JSONToJSON.get<unknown>(
       CategoryModel.PATH.GET_BY_ID,
       {
         searchParams: new URLSearchParams({
@@ -53,11 +52,7 @@ class CategoryModel {
         }),
       },
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data;
-    }
+    return parseServerResponse(CategorySchema, response);
   }
 
   public async getByIdCache(

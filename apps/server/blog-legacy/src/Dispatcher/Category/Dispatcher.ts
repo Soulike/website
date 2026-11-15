@@ -1,10 +1,15 @@
 import {jsonQsParser} from '@library/koa-middlewares';
-import {FailServerResponse} from '@module/classes';
+import {CategorySchema} from '@schema/blog';
+import {z} from 'zod';
 
 import {Category as CategoryService} from '../../Service/index.js';
 import {AppRouter} from '../../types.js';
-import {onJSONQsParseError} from '../Function.js';
+import {onJSONQsParseError, parseRequestPayload} from '../Function.js';
 import {GET_ALL, GET_BY_ID} from './ROUTE.js';
+
+const CategoryIdPayloadSchema = z.object({
+  id: CategorySchema.shape.id,
+});
 
 export default (router: AppRouter) => {
   router.get(GET_ALL, async (ctx) => {
@@ -15,12 +20,16 @@ export default (router: AppRouter) => {
     GET_BY_ID,
     jsonQsParser({onError: onJSONQsParseError}),
     async (ctx) => {
-      const {id} = ctx.request.body;
-      if (typeof id !== 'number') {
-        ctx.response.body = new FailServerResponse('请求参数错误');
-      } else {
-        ctx.response.body = await CategoryService.getById(id);
+      const parsed = parseRequestPayload(
+        CategoryIdPayloadSchema,
+        ctx.request.body,
+        GET_BY_ID,
+      );
+      if (!parsed.success) {
+        ctx.response.body = parsed.response;
+        return;
       }
+      ctx.response.body = await CategoryService.getById(parsed.data.id);
     },
   );
 };

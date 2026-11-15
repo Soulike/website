@@ -1,77 +1,95 @@
 import {
   type Article,
-  FailServerResponse,
-  type ServerResponse,
-  SuccessfulServerResponse,
-} from '@module/classes';
+  type ArticleDraft,
+  type UpdateArticle,
+} from '@schema/blog';
+import {type ArticleRow, type ArticleUpdateRow} from '@schema/database';
+import {failResponse, type ServerResponse, successResponse} from '@schema/rpc';
 
 import {
   Article as ArticleTable,
   Category as CategoryTable,
 } from '../Database/index.js';
 
-export async function add(
-  article: Pick<Article, 'title' | 'content' | 'category' | 'isVisible'>,
-): Promise<ServerResponse<void>> {
+function serializeArticleRow(row: ArticleRow): Article {
+  return {
+    ...row,
+    publicationTime: row.publicationTime.toISOString(),
+    modificationTime: row.modificationTime.toISOString(),
+  };
+}
+
+function toArticleRowFilter(filter: Partial<Article>): Partial<ArticleRow> {
+  const {publicationTime, modificationTime, ...rest} = filter;
+  return {
+    ...rest,
+    ...(publicationTime === undefined
+      ? {}
+      : {publicationTime: new Date(publicationTime)}),
+    ...(modificationTime === undefined
+      ? {}
+      : {modificationTime: new Date(modificationTime)}),
+  };
+}
+
+export async function add(article: ArticleDraft): Promise<ServerResponse> {
   const {title, content, category, isVisible} = article;
   if ((await CategoryTable.count({id: category})) === 0) {
-    return new FailServerResponse('文章分类不存在，请重新选择分类');
+    return failResponse({code: 'ARTICLE_CATEGORY_NOT_FOUND'});
   }
   if ((await ArticleTable.countByTitle(title)) !== 0) {
-    return new FailServerResponse('文章标题已存在，请修改文章标题');
+    return failResponse({code: 'ARTICLE_TITLE_ALREADY_EXISTS'});
   }
   const nowDate = new Date();
   await ArticleTable.insert({
     title,
     content,
     category,
-    publicationTime: nowDate.toISOString(),
-    modificationTime: nowDate.toISOString(),
+    publicationTime: nowDate,
+    modificationTime: nowDate,
     pageViews: 0,
     isVisible,
   });
-  return new SuccessfulServerResponse(undefined);
+  return successResponse();
 }
 
-export async function deleteById(id: number): Promise<ServerResponse<void>> {
+export async function deleteById(id: Article['id']): Promise<ServerResponse> {
   if ((await ArticleTable.count({id})) === 0) {
-    return new FailServerResponse('文章不存在');
+    return failResponse({code: 'ARTICLE_NOT_FOUND'});
   }
   await ArticleTable.deleteById(id);
-  return new SuccessfulServerResponse(undefined);
+  return successResponse();
 }
 
-export async function modify(
-  article: Pick<Article, 'id'> &
-    Partial<
-      Omit<Article, 'publicationTime' | 'modificationTime' | 'pageViews'>
-    >,
-): Promise<ServerResponse<void>> {
+export async function modify(article: UpdateArticle): Promise<ServerResponse> {
   const {id} = article;
   const articleInDatabase = await ArticleTable.selectById(id);
   if (articleInDatabase === null) {
-    return new FailServerResponse('文章不存在');
+    return failResponse({code: 'ARTICLE_NOT_FOUND'});
   }
-  const newArticle: Pick<Article, 'id'> &
-    Partial<Omit<Article, 'publicationTime' | 'pageViews'>> = {...article};
-  if (articleInDatabase.content !== article.content) {
-    newArticle.modificationTime = new Date().toISOString();
+  const newArticle: ArticleUpdateRow & Pick<ArticleRow, 'id'> = {...article};
+  if (
+    article.content !== undefined &&
+    articleInDatabase.content !== article.content
+  ) {
+    newArticle.modificationTime = new Date();
   }
   await ArticleTable.update(newArticle);
-  return new SuccessfulServerResponse(undefined);
+  return successResponse();
 }
 
 export async function get(
   article: Partial<Article>,
 ): Promise<ServerResponse<Article[]>> {
-  const articles = await ArticleTable.selectInPublicationTimeDescOrder(article);
-  return new SuccessfulServerResponse(articles);
+  const articles = await ArticleTable.selectInPublicationTimeDescOrder(
+    toArticleRowFilter(article),
+  );
+  return successResponse(articles.map(serializeArticleRow));
 }
 
 export async function getAll(): Promise<ServerResponse<Article[]>> {
-  const articles: Article[] =
-    await ArticleTable.selectAllByPublicationTimeDescOrder();
-  return new SuccessfulServerResponse(articles);
+  const articles = await ArticleTable.selectAllByPublicationTimeDescOrder();
+  return successResponse(articles.map(serializeArticleRow));
 }
 
 export async function getByDate(
@@ -84,28 +102,27 @@ export async function getByDate(
     month,
     day,
   );
-  return new SuccessfulServerResponse(articles);
+  return successResponse(articles.map(serializeArticleRow));
 }
 
 export async function count(
   article: Partial<Article>,
 ): Promise<ServerResponse<number>> {
-  const articleAmount = await ArticleTable.count(article);
-  return new SuccessfulServerResponse(articleAmount);
+  const articleAmount = await ArticleTable.count(toArticleRowFilter(article));
+  return successResponse(articleAmount);
 }
 
 export async function countAll(): Promise<ServerResponse<number>> {
   const articleAmount = await ArticleTable.countAll();
-  return new SuccessfulServerResponse(articleAmount);
+  return successResponse(articleAmount);
 }
 
-export async function addPageView(id: number): Promise<ServerResponse<void>> {
+export async function addPageView(id: Article['id']): Promise<ServerResponse> {
   const articleInDatabase = await ArticleTable.selectById(id);
   if (articleInDatabase === null) {
-    return new FailServerResponse('文章不存在');
+    return failResponse({code: 'ARTICLE_NOT_FOUND'});
   }
   const {pageViews} = articleInDatabase;
-  const newArticle = {id, pageViews: pageViews + 1};
-  await ArticleTable.update(newArticle);
-  return new SuccessfulServerResponse(undefined);
+  await ArticleTable.update({id, pageViews: pageViews + 1});
+  return successResponse();
 }

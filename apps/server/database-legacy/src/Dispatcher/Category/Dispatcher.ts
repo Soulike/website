@@ -1,10 +1,15 @@
 import {jsonQsParser} from '@library/koa-middlewares';
-import {FailServerResponse} from '@module/classes';
+import {
+  CategoryDraftSchema,
+  CategorySchema,
+  UpdateCategorySchema,
+} from '@schema/blog';
+import {z} from 'zod';
 
 import {AppRouter} from '@/types.js';
 
 import {Category as CategoryService} from '../../Service/index.js';
-import {onJSONQsParseError} from '../Function.js';
+import {onJSONQsParseError, parseRequestPayload} from '../Function.js';
 import {
   ADD,
   COUNT_ARTICLE_BY_ID,
@@ -14,10 +19,31 @@ import {
   MODIFY,
 } from './ROUTE.js';
 
+const CategoryIdPayloadSchema = z.object({
+  id: CategorySchema.shape.id,
+});
+
+const CategoryFilterSchema = CategorySchema.partial()
+  .strict()
+  .refine(
+    (value) => Object.values(value).some((field) => field !== undefined),
+    {message: 'At least one filter field is required'},
+  );
+
+const StrictCategoryDraftSchema = CategoryDraftSchema.strict();
+
 export default (router: AppRouter) => {
   router.get(GET, jsonQsParser({onError: onJSONQsParseError}), async (ctx) => {
-    const category = ctx.request.body;
-    ctx.response.body = await CategoryService.get(category);
+    const parsed = parseRequestPayload(
+      CategoryFilterSchema,
+      ctx.request.body,
+      GET,
+    );
+    if (!parsed.success) {
+      ctx.response.body = parsed.response;
+      return;
+    }
+    ctx.response.body = await CategoryService.get(parsed.data);
   });
 
   router.get(GET_ALL, async (ctx) => {
@@ -25,51 +51,60 @@ export default (router: AppRouter) => {
   });
 
   router.post(ADD, async (ctx) => {
-    const category = ctx.request.body;
-    if (
-      typeof category.name !== 'string' ||
-      typeof category.id !== 'undefined'
-    ) {
-      ctx.response.body = new FailServerResponse('请求参数错误');
-    } else {
-      ctx.response.body = await CategoryService.add(category);
+    const parsed = parseRequestPayload(
+      StrictCategoryDraftSchema,
+      ctx.request.body,
+      ADD,
+    );
+    if (!parsed.success) {
+      ctx.response.body = parsed.response;
+      return;
     }
+    ctx.response.body = await CategoryService.add(parsed.data);
   });
 
   router.post(DELETE_BY_ID, async (ctx) => {
-    const {id} = ctx.request.body;
-    if (typeof id !== 'number') {
-      ctx.response.body = new FailServerResponse('请求参数错误');
-    } else {
-      ctx.response.body = await CategoryService.deleteById(id);
+    const parsed = parseRequestPayload(
+      CategoryIdPayloadSchema,
+      ctx.request.body,
+      DELETE_BY_ID,
+    );
+    if (!parsed.success) {
+      ctx.response.body = parsed.response;
+      return;
     }
+    ctx.response.body = await CategoryService.deleteById(parsed.data.id);
   });
 
   router.post(MODIFY, async (ctx) => {
-    const {id, name} = ctx.request.body;
-    if (
-      typeof id !== 'number' ||
-      (typeof name !== 'string' && typeof name !== 'undefined')
-    ) {
-      ctx.response.body = new FailServerResponse('请求参数错误');
-    } else {
-      ctx.response.body = await CategoryService.modify({
-        id,
-        name,
-      });
+    const parsed = parseRequestPayload(
+      UpdateCategorySchema,
+      ctx.request.body,
+      MODIFY,
+    );
+    if (!parsed.success) {
+      ctx.response.body = parsed.response;
+      return;
     }
+    ctx.response.body = await CategoryService.modify(parsed.data);
   });
 
   router.get(
     COUNT_ARTICLE_BY_ID,
     jsonQsParser({onError: onJSONQsParseError}),
     async (ctx) => {
-      const {id} = ctx.request.body;
-      if (typeof id !== 'number') {
-        ctx.response.body = new FailServerResponse('请求参数错误');
-      } else {
-        ctx.response.body = await CategoryService.countArticleById(id);
+      const parsed = parseRequestPayload(
+        CategoryIdPayloadSchema,
+        ctx.request.body,
+        COUNT_ARTICLE_BY_ID,
+      );
+      if (!parsed.success) {
+        ctx.response.body = parsed.response;
+        return;
       }
+      ctx.response.body = await CategoryService.countArticleById(
+        parsed.data.id,
+      );
     },
   );
 };

@@ -1,4 +1,4 @@
-import {Article} from '@module/classes';
+import {type Article} from '@schema/blog';
 import {notification, PopconfirmProps} from 'antd';
 import {useCallback, useMemo} from 'react';
 

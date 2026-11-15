@@ -1,4 +1,15 @@
-import {type Article, type ServerResponse} from '@module/classes';
+import {
+  type Article,
+  type ArticleDraft,
+  ArticleSchema,
+  type UpdateArticle,
+} from '@schema/blog';
+import {
+  createServerResponseSchema,
+  type ServerResponse,
+  VoidServerResponseSchema,
+} from '@schema/rpc';
+import {z} from 'zod';
 
 import {databaseRequest} from '../CONFIG.js';
 import {
@@ -13,37 +24,45 @@ import {
   MODIFY,
 } from './ROUTE.js';
 
-export async function add(
-  article: Pick<Article, 'title' | 'content' | 'category' | 'isVisible'>,
-): Promise<ServerResponse<void>> {
-  return databaseRequest.post<ServerResponse<void>>(ADD, article);
+const ArticleArrayResponseSchema = createServerResponseSchema(
+  z.array(ArticleSchema),
+);
+const CountResponseSchema = createServerResponseSchema(
+  z.number().int().nonnegative(),
+);
+
+export async function add(article: ArticleDraft): Promise<ServerResponse> {
+  return VoidServerResponseSchema.parse(
+    await databaseRequest.post<unknown>(ADD, article),
+  );
 }
 
-export async function deleteById(id: number): Promise<ServerResponse<void>> {
-  return databaseRequest.post<ServerResponse<void>>(DELETE_BY_ID, {
-    id,
-  });
+export async function deleteById(id: Article['id']): Promise<ServerResponse> {
+  return VoidServerResponseSchema.parse(
+    await databaseRequest.post<unknown>(DELETE_BY_ID, {id}),
+  );
 }
 
-export async function modify(
-  article: Pick<Article, 'id'> &
-    Partial<
-      Omit<Article, 'publicationTime' | 'modificationTime' | 'pageViews'>
-    >,
-): Promise<ServerResponse<void>> {
-  return databaseRequest.post<ServerResponse<void>>(MODIFY, article);
+export async function modify(article: UpdateArticle): Promise<ServerResponse> {
+  return VoidServerResponseSchema.parse(
+    await databaseRequest.post<unknown>(MODIFY, article),
+  );
 }
 
 export async function get(
   article: Partial<Article>,
 ): Promise<ServerResponse<Article[]>> {
-  return databaseRequest.get<ServerResponse<Article[]>>(GET, {
-    json: JSON.stringify(article),
-  });
+  return ArticleArrayResponseSchema.parse(
+    await databaseRequest.get<unknown>(GET, {
+      json: JSON.stringify(article),
+    }),
+  );
 }
 
 export async function getAll(): Promise<ServerResponse<Article[]>> {
-  return databaseRequest.get<ServerResponse<Article[]>>(GET_ALL);
+  return ArticleArrayResponseSchema.parse(
+    await databaseRequest.get<unknown>(GET_ALL),
+  );
 }
 
 export async function getByDate(
@@ -51,25 +70,31 @@ export async function getByDate(
   month?: number,
   day?: number,
 ): Promise<ServerResponse<Article[]>> {
-  return databaseRequest.get<ServerResponse<Article[]>>(GET_BY_DATE, {
-    json: JSON.stringify({year, month, day}),
-  });
+  return ArticleArrayResponseSchema.parse(
+    await databaseRequest.get<unknown>(GET_BY_DATE, {
+      json: JSON.stringify({year, month, day}),
+    }),
+  );
 }
 
 export async function count(
   article: Partial<Article>,
 ): Promise<ServerResponse<number>> {
-  return databaseRequest.get<ServerResponse<number>>(COUNT, {
-    json: JSON.stringify(article),
-  });
+  return CountResponseSchema.parse(
+    await databaseRequest.get<unknown>(COUNT, {
+      json: JSON.stringify(article),
+    }),
+  );
 }
 
 export async function countAll(): Promise<ServerResponse<number>> {
-  return databaseRequest.get<ServerResponse<number>>(COUNT_ALL);
+  return CountResponseSchema.parse(
+    await databaseRequest.get<unknown>(COUNT_ALL),
+  );
 }
 
-export async function addPageView(id: number): Promise<ServerResponse<void>> {
-  return databaseRequest.post<ServerResponse<void>>(ADD_PAGE_VIEW, {
-    id,
-  });
+export async function addPageView(id: Article['id']): Promise<ServerResponse> {
+  return VoidServerResponseSchema.parse(
+    await databaseRequest.post<unknown>(ADD_PAGE_VIEW, {id}),
+  );
 }

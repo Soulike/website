@@ -1,10 +1,14 @@
 import assert from 'node:assert';
 
-import {Article, NewArticle} from '@module/classes';
 import {BlogModels} from '@module/model/admin';
+import {type Article, ArticleDraftSchema} from '@schema/blog';
 import {useCallback, useMemo, useState} from 'react';
 import {useNavigate} from 'react-router';
 
+import {
+  ARTICLE_DRAFT_FIELD_LABELS,
+  validateFormSchema,
+} from '@/helpers/validation-i18n-helper.js';
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config/index.js';
 
 export function useViewModel() {
@@ -36,23 +40,19 @@ export function useSubmitArticle(afterSubmitSuccess: () => void) {
       onSubmitSuccess: () => void,
       onSubmitFailed: (error: Error) => void,
     ) => {
-      const validationPassed = NewArticle.validateFormInput(
-        {
-          title,
-          content,
-          category: selectedCategory,
-          isVisible,
-        },
+      const draft = validateFormSchema(
+        ArticleDraftSchema,
+        {title, content, category: selectedCategory, isVisible},
+        ARTICLE_DRAFT_FIELD_LABELS,
         onValidationFailed,
       );
-      if (!validationPassed) {
+      if (draft === null) {
         return;
       }
-      assert(selectedCategory !== null);
 
       setIsSubmittingArticle(true);
       articleModel
-        .add(new NewArticle(selectedCategory, content, isVisible, title))
+        .add(draft)
         .then(() => {
           onSubmitSuccess();
           afterSubmitSuccess();

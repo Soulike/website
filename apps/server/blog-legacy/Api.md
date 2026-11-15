@@ -59,10 +59,10 @@ class Category {
 }
 ```
 
-- 成功响应对象：[`Article`](#article) 实例
-- 失败响应消息
-  - 文章不存在：文章不存在
-  - 文章不可见：文章不存在
+- 成功响应：`data` 为 `Article` 对象
+- 失败响应错误码：
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 文章不存在或不可见：`ARTICLE_NOT_FOUND`
 - 其他说明
   - 添加文章浏览量
   - 对用户设置 Cookie，有效期一小时，会话存储用户浏览过的文章 ID。每次访问均查询是否已经浏览过，已浏览过不增加文章浏览量
@@ -81,9 +81,9 @@ class Category {
 }
 ```
 
-- 成功响应对象：[`Article`](#article) 实例数组
-- 失败响应消息
-  - 分类不存在：文章分类不存在
+- 成功响应：`data` 为 `ArticleAbstract[]`
+- 失败响应错误码：
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
 - 其他说明
   - `content` 域截断为前 300 个字符
   - 只返回可见的文章
@@ -113,10 +113,11 @@ class Category {
 }
 ```
 
-- 成功响应对象：[`Category`](#category) 实例数组
-- 失败响应消息：无
-- 其他说明：
-  - 分类不存在：文章分类不存在
+- 成功响应：`data` 为 `Category` 对象
+- 失败响应错误码：
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 分类不存在：`CATEGORY_NOT_FOUND`
+- 其他说明：无
 
 ### 设置相关（前缀为 `/option`）
 

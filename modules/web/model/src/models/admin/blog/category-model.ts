@@ -2,14 +2,23 @@ import path from 'node:path';
 
 import {Request} from '@library/request';
 import {
-  Category,
-  CategoryIdToArticleAmount,
-  NewCategory,
-  ServerResponse,
-} from '@module/classes';
+  type Category,
+  type CategoryDraft,
+  type CategoryIdToArticleAmount,
+  CategoryIdToArticleAmountSchema,
+  CategorySchema,
+  type UpdateCategory,
+} from '@schema/blog';
+import {z} from 'zod';
 
-import {ModelAccessDeniedError} from '../../model-access-error.js';
+import {
+  parseServerResponse,
+  parseVoidServerResponse,
+} from '../../response-helper.js';
 import {prependBlogPrefix} from './path-helper.js';
+
+const CategoryListSchema = z.array(CategorySchema);
+const ArticleAmountSchema = z.number().int().nonnegative();
 
 export class CategoryModel {
   private static readonly PATH = Object.freeze({
@@ -32,18 +41,14 @@ export class CategoryModel {
   }
 
   public async getAll(): Promise<Category[]> {
-    const response = await Request.JSONToJSON.get<ServerResponse<Category[]>>(
+    const response = await Request.JSONToJSON.get<unknown>(
       CategoryModel.PATH.GET_ALL,
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data;
-    }
+    return parseServerResponse(CategoryListSchema, response);
   }
 
   public async getById(id: Category['id']): Promise<Category> {
-    const response = await Request.JSONToJSON.get<ServerResponse<Category>>(
+    const response = await Request.JSONToJSON.get<unknown>(
       CategoryModel.PATH.GET_BY_ID,
       {
         searchParams: new URLSearchParams({
@@ -51,26 +56,18 @@ export class CategoryModel {
         }),
       },
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data;
-    }
+    return parseServerResponse(CategorySchema, response);
   }
 
   public async getArticleAmountGroupedById(): Promise<CategoryIdToArticleAmount> {
-    const response = await Request.JSONToJSON.get<
-      ServerResponse<CategoryIdToArticleAmount>
-    >(CategoryModel.PATH.GET_ALL_ARTICLE_AMOUNT_BY_ID);
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data;
-    }
+    const response = await Request.JSONToJSON.get<unknown>(
+      CategoryModel.PATH.GET_ALL_ARTICLE_AMOUNT_BY_ID,
+    );
+    return parseServerResponse(CategoryIdToArticleAmountSchema, response);
   }
 
   public async getArticleAmountById(id: Category['id']): Promise<number> {
-    const response = await Request.JSONToJSON.get<ServerResponse<number>>(
+    const response = await Request.JSONToJSON.get<unknown>(
       CategoryModel.PATH.GET_ARTICLE_AMOUNT_BY_ID,
       {
         searchParams: new URLSearchParams({
@@ -78,49 +75,39 @@ export class CategoryModel {
         }),
       },
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data;
-    }
+    return parseServerResponse(ArticleAmountSchema, response);
   }
 
-  public async add(category: NewCategory): Promise<void> {
-    const response = await Request.JSONToJSON.post<ServerResponse<void>>(
+  public async add(category: CategoryDraft): Promise<void> {
+    const response = await Request.JSONToJSON.post<unknown>(
       CategoryModel.PATH.ADD,
       {
         body: category,
       },
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    }
+    parseVoidServerResponse(response);
   }
 
   public async deleteById(id: Category['id']): Promise<void> {
-    const response = await Request.JSONToJSON.post<ServerResponse<void>>(
+    const response = await Request.JSONToJSON.post<unknown>(
       CategoryModel.PATH.DELETE_BY_ID,
       {
         body: {id},
       },
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    }
+    parseVoidServerResponse(response);
   }
 
   public async modify(
-    id: Category['id'],
-    modifiedParts: Partial<NewCategory>,
+    id: UpdateCategory['id'],
+    modifiedParts: Omit<UpdateCategory, 'id'>,
   ): Promise<void> {
-    const response = await Request.JSONToJSON.post<ServerResponse<void>>(
+    const response = await Request.JSONToJSON.post<unknown>(
       CategoryModel.PATH.MODIFY,
       {
         body: {id, ...modifiedParts},
       },
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    }
+    parseVoidServerResponse(response);
   }
 }

@@ -1,4 +1,9 @@
-import {Category} from '@module/classes';
+import {
+  type CategoryInsertRow,
+  type CategoryRow,
+  CategoryRowSchema,
+  type CategoryUpdateRow,
+} from '@schema/database';
 
 import {
   generateParameterizedStatementAndParametersArray,
@@ -6,7 +11,7 @@ import {
 } from '../Function.js';
 import pool from '../Pool.js';
 
-export async function insert(category: Omit<Category, 'id'>): Promise<void> {
+export async function insert(category: CategoryInsertRow): Promise<void> {
   const insertStatement = 'INSERT INTO "categories"("name") VALUES ($1)';
   const client = await pool.connect();
   try {
@@ -19,7 +24,7 @@ export async function insert(category: Omit<Category, 'id'>): Promise<void> {
   }
 }
 
-export async function deleteById(id: Category['id']): Promise<void> {
+export async function deleteById(id: CategoryRow['id']): Promise<void> {
   const deleteStatement = 'DELETE FROM "categories" WHERE "id"=$1';
   const client = await pool.connect();
   try {
@@ -32,18 +37,19 @@ export async function deleteById(id: Category['id']): Promise<void> {
 }
 
 export async function update(
-  category: Partial<Category> & Pick<Category, 'id'>,
+  category: CategoryUpdateRow & Pick<CategoryRow, 'id'>,
 ): Promise<void> {
   const client = await pool.connect();
   try {
+    const {id, ...updates} = category;
     const {parameterizedStatement, parameters} =
-      generateParameterizedStatementAndParametersArray(category, ',');
+      generateParameterizedStatementAndParametersArray(updates, ',');
     await transaction(client, async (client) => {
       await client.query(
         `UPDATE "categories" SET ${parameterizedStatement} WHERE "id"=$${
           parameters.length + 1
         }`,
-        [...parameters, category.id],
+        [...parameters, id],
       );
     });
   } finally {
@@ -51,17 +57,18 @@ export async function update(
   }
 }
 
-export async function selectById(id: Category['id']): Promise<Category | null> {
+export async function selectById(
+  id: CategoryRow['id'],
+): Promise<CategoryRow | null> {
   const selectStatement = 'SELECT * FROM "categories" WHERE "id"=$1';
   const {rows, rowCount} = await pool.query(selectStatement, [id]);
   if (rowCount === 0) {
     return null;
-  } else {
-    return Category.from(rows[0]);
   }
+  return CategoryRowSchema.parse(rows[0]);
 }
 
-export async function count(category: Partial<Category>): Promise<number> {
+export async function count(category: Partial<CategoryRow>): Promise<number> {
   const {parameterizedStatement, parameters} =
     generateParameterizedStatementAndParametersArray(category, 'AND');
   const {rows} = await pool.query(
@@ -71,23 +78,27 @@ export async function count(category: Partial<Category>): Promise<number> {
   return Number.parseInt(rows[0].c);
 }
 
-export async function selectAll(): Promise<Category[]> {
+export async function selectAll(): Promise<CategoryRow[]> {
   const {rows} = await pool.query(`SELECT *
                                      FROM "categories"`);
-  return rows.map((row) => Category.from(row));
+  return rows.map((row) => CategoryRowSchema.parse(row));
 }
 
-export async function select(category: Partial<Category>): Promise<Category[]> {
+export async function select(
+  category: Partial<CategoryRow>,
+): Promise<CategoryRow[]> {
   const {parameterizedStatement, parameters} =
     generateParameterizedStatementAndParametersArray(category, 'AND');
   const {rows} = await pool.query(
     `SELECT * FROM "categories" WHERE ${parameterizedStatement}`,
     parameters,
   );
-  return rows.map((row) => Category.from(row));
+  return rows.map((row) => CategoryRowSchema.parse(row));
 }
 
-export async function countArticlesById(id: Category['id']): Promise<number> {
+export async function countArticlesById(
+  id: CategoryRow['id'],
+): Promise<number> {
   const {rows} = await pool.query(
     `SELECT count("a"."id") AS "count"
              FROM "categories"        "c"

@@ -1,4 +1,4 @@
-import {type Article} from '@module/classes';
+import {type Article} from '@schema/blog';
 import {List, Skeleton} from 'antd';
 
 import {ArticleListItem} from './components/ArticleListItem';

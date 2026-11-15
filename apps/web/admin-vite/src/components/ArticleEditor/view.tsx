@@ -1,4 +1,4 @@
-import {Article, type Category, NewArticle} from '@module/classes';
+import {type Article, type ArticleDraft, type Category} from '@schema/blog';
 import {
   Button,
   type ButtonProps,
@@ -28,10 +28,10 @@ export interface ArticleEditorViewProps {
   onCategorySelectorChange: SelectProps<number>['onChange'];
   onIsVisibleCheckboxChange: CheckboxProps['onChange'];
   onSubmitButtonClick: (article: {
-    title: NewArticle['title'];
-    content: NewArticle['content'];
-    category: NewArticle['category'] | null;
-    isVisible: NewArticle['isVisible'];
+    title: ArticleDraft['title'];
+    content: ArticleDraft['content'];
+    category: ArticleDraft['category'] | null;
+    isVisible: ArticleDraft['isVisible'];
   }) => void;
   onPreviewButtonClick: ButtonProps['onClick'];
   isLoadingCategory: boolean;

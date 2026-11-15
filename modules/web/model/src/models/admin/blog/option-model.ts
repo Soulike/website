@@ -1,9 +1,12 @@
 import path from 'node:path';
 
 import {Request} from '@library/request';
-import {ServerResponse} from '@module/classes';
+import {type SiteOption, SiteOptionSchema} from '@schema/blog';
 
-import {ModelAccessDeniedError} from '../../model-access-error.js';
+import {
+  parseServerResponse,
+  parseVoidServerResponse,
+} from '../../response-helper.js';
 import {prependBlogPrefix} from './path-helper.js';
 
 export class OptionModel {
@@ -17,26 +20,20 @@ export class OptionModel {
     return prependBlogPrefix(path.join('option', subPath));
   }
 
-  public async getAbout(): Promise<string> {
-    const response = await Request.JSONToJSON.get<
-      ServerResponse<{about: string}>
-    >(OptionModel.PATH.GET_ABOUT);
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data.about;
-    }
+  public async getAbout(): Promise<SiteOption['about']> {
+    const response = await Request.JSONToJSON.get<unknown>(
+      OptionModel.PATH.GET_ABOUT,
+    );
+    return parseServerResponse(SiteOptionSchema, response).about;
   }
 
-  public async setAbout(about: string): Promise<void> {
-    const response = await Request.JSONToJSON.post<ServerResponse<void>>(
+  public async setAbout(about: SiteOption['about']): Promise<void> {
+    const response = await Request.JSONToJSON.post<unknown>(
       OptionModel.PATH.SET_ABOUT,
       {
         body: {about},
       },
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    }
+    parseVoidServerResponse(response);
   }
 }

@@ -1,9 +1,14 @@
 import {jsonQsParser} from '@library/koa-middlewares';
-import {Category, FailServerResponse} from '@module/classes';
+import {
+  CategoryDraftSchema,
+  CategorySchema,
+  UpdateCategorySchema,
+} from '@schema/blog';
+import {z} from 'zod';
 
 import {Category as CategoryService} from '../../../Service/index.js';
 import {AppRouter} from '../../../types.js';
-import {onJSONQsParseError} from '../../Function.js';
+import {onJSONQsParseError, parseRequestPayload} from '../../Function.js';
 import {
   ADD,
   DELETE_BY_ID,
@@ -14,18 +19,26 @@ import {
   MODIFY,
 } from './ROUTE.js';
 
+const CategoryIdPayloadSchema = z.object({
+  id: CategorySchema.shape.id,
+});
+
 export default (router: AppRouter) => {
   router.get(
     GET_BY_ID,
     jsonQsParser({onError: onJSONQsParseError}),
     async (ctx, next) => {
       try {
-        const {id} = ctx.request.body;
-        if (typeof id !== 'number') {
-          ctx.response.body = new FailServerResponse('请求参数错误');
-        } else {
-          ctx.response.body = await CategoryService.getById(id);
+        const parsed = parseRequestPayload(
+          CategoryIdPayloadSchema,
+          ctx.request.body,
+          GET_BY_ID,
+        );
+        if (!parsed.success) {
+          ctx.response.body = parsed.response;
+          return;
         }
+        ctx.response.body = await CategoryService.getById(parsed.data.id);
       } finally {
         await next();
       }
@@ -53,12 +66,18 @@ export default (router: AppRouter) => {
     jsonQsParser({onError: onJSONQsParseError}),
     async (ctx, next) => {
       try {
-        const {id} = ctx.request.body;
-        if (typeof id !== 'number') {
-          ctx.response.body = new FailServerResponse('请求参数错误');
-        } else {
-          ctx.response.body = await CategoryService.getArticleAmountById(id);
+        const parsed = parseRequestPayload(
+          CategoryIdPayloadSchema,
+          ctx.request.body,
+          GET_ARTICLE_AMOUNT_BY_ID,
+        );
+        if (!parsed.success) {
+          ctx.response.body = parsed.response;
+          return;
         }
+        ctx.response.body = await CategoryService.getArticleAmountById(
+          parsed.data.id,
+        );
       } finally {
         await next();
       }
@@ -67,10 +86,16 @@ export default (router: AppRouter) => {
 
   router.post(ADD, async (ctx, next) => {
     try {
-      // 参数检查在数据库层
-      ctx.response.body = await CategoryService.add(
-        Category.from(ctx.request.body),
+      const parsed = parseRequestPayload(
+        CategoryDraftSchema,
+        ctx.request.body,
+        ADD,
       );
+      if (!parsed.success) {
+        ctx.response.body = parsed.response;
+        return;
+      }
+      ctx.response.body = await CategoryService.add(parsed.data);
     } finally {
       await next();
     }
@@ -78,12 +103,16 @@ export default (router: AppRouter) => {
 
   router.post(DELETE_BY_ID, async (ctx, next) => {
     try {
-      const {id} = ctx.request.body;
-      if (typeof id !== 'number') {
-        ctx.response.body = new FailServerResponse('请求参数错误');
-      } else {
-        ctx.response.body = await CategoryService.deleteById(id);
+      const parsed = parseRequestPayload(
+        CategoryIdPayloadSchema,
+        ctx.request.body,
+        DELETE_BY_ID,
+      );
+      if (!parsed.success) {
+        ctx.response.body = parsed.response;
+        return;
       }
+      ctx.response.body = await CategoryService.deleteById(parsed.data.id);
     } finally {
       await next();
     }
@@ -91,10 +120,16 @@ export default (router: AppRouter) => {
 
   router.post(MODIFY, async (ctx, next) => {
     try {
-      // 参数检查在数据库层
-      ctx.response.body = await CategoryService.modify(
-        Category.from(ctx.request.body),
+      const parsed = parseRequestPayload(
+        UpdateCategorySchema,
+        ctx.request.body,
+        MODIFY,
       );
+      if (!parsed.success) {
+        ctx.response.body = parsed.response;
+        return;
+      }
+      ctx.response.body = await CategoryService.modify(parsed.data);
     } finally {
       await next();
     }
