@@ -2,7 +2,7 @@ import assert from 'node:assert';
 
 import {RejectCallback, ResolveCallback, usePromise} from '@library/hooks';
 import {type Article} from '@schema/blog';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 
 import {ArticleModel} from '../../../models/admin/blog/article-model.js';
 
@@ -67,6 +67,10 @@ function useIdToArticle(
     Article['id'],
     Article
   > | null>(null);
+  const onSuccessRef = useRef(onSuccess);
+  onSuccessRef.current = onSuccess;
+  const onRejectRef = useRef(onReject);
+  onRejectRef.current = onReject;
 
   useEffect(() => {
     if (loading) {
@@ -74,22 +78,22 @@ function useIdToArticle(
     }
 
     if (error) {
-      if (onReject) {
-        void onReject(error);
+      if (onRejectRef.current) {
+        void onRejectRef.current(error);
       }
       return;
     }
 
     assert(articles);
-    const idToCategory = new Map<Article['id'], Article>();
+    const idToArticleMap = new Map<Article['id'], Article>();
     for (const article of articles) {
-      idToCategory.set(article.id, article);
+      idToArticleMap.set(article.id, article);
     }
-    setIdToArticle(idToCategory);
-    if (onSuccess) {
-      void onSuccess(idToCategory);
+    setIdToArticle(idToArticleMap);
+    if (onSuccessRef.current) {
+      void onSuccessRef.current(idToArticleMap);
     }
-  }, [loading, error, onReject, articles, onSuccess]);
+  }, [loading, error, articles]);
 
   return {
     loading,

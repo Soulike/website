@@ -24,6 +24,8 @@
   },
   "devDependencies": {
     "@config/typescript": "workspace:^",
+    "@testing-library/dom": "catalog:",
+    "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "typescript": "catalog:",

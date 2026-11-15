@@ -2,7 +2,7 @@ import assert from 'node:assert';
 
 import {RejectCallback, ResolveCallback, usePromise} from '@library/hooks';
 import {type Category, type CategoryIdToArticleAmount} from '@schema/blog';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 
 import {CategoryModel} from '../../../models/admin/blog/category-model.js';
 
@@ -62,6 +62,10 @@ function useIdToCategory(
     Category['id'],
     Category
   > | null>(null);
+  const onSuccessRef = useRef(onSuccess);
+  onSuccessRef.current = onSuccess;
+  const onRejectRef = useRef(onReject);
+  onRejectRef.current = onReject;
 
   useEffect(() => {
     if (loading) {
@@ -69,8 +73,8 @@ function useIdToCategory(
     }
 
     if (error) {
-      if (onReject) {
-        void onReject(error);
+      if (onRejectRef.current) {
+        void onRejectRef.current(error);
       }
       return;
     }
@@ -81,8 +85,8 @@ function useIdToCategory(
       idToCategory.set(category.id, category);
     }
     setIdToCategory(idToCategory);
-    void onSuccess?.(idToCategory);
-  }, [loading, error, onReject, categories]);
+    void onSuccessRef.current?.(idToCategory);
+  }, [loading, error, categories]);
 
   return {
     loading,
