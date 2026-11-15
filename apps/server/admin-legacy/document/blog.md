@@ -70,10 +70,11 @@ class Category {
 }
 ```
 
-- 成功响应对象：[Article](#article) 实例
-- 失败响应消息
-  - 未登录：请先登录
-  - 文章不存在：文章不存在
+- 成功响应：`data` 为 `Article` 对象
+- 失败响应错误码：
+  - 未登录或 Session 无效：`UNAUTHORIZED`
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 文章不存在：`ARTICLE_NOT_FOUND`
 - 其他说明：无
 
 #### `/getAll`
@@ -110,11 +111,14 @@ class Category {
 - 功能说明：添加文章
 - 请求方法：POST
 - 请求对象：`Pick<Article, 'title' | 'content' | 'category' | 'isVisible'>` 实例
-- 成功响应对象：无
-- 失败响应消息
-  - 未登录：请先登录
-- 其他说明
-  - 数据库层已做参数检查
+- 成功响应：`data` 为 `null`
+- 失败响应错误码：
+  - 未登录或 Session 无效：`UNAUTHORIZED`
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 文章分类不存在：`ARTICLE_CATEGORY_NOT_FOUND`
+  - 文章标题已存在：`ARTICLE_TITLE_ALREADY_EXISTS`
+- 其他说明：
+  - 入口使用 `ArticleDraftSchema` 校验，并转发至数据库层
 
 #### `/deleteById`
 
@@ -128,20 +132,25 @@ class Category {
 }
 ```
 
-- 成功响应对象：无
-- 失败响应消息
-  - 未登录：请先登录
+- 成功响应：`data` 为 `null`
+- 失败响应错误码：
+  - 未登录或 Session 无效：`UNAUTHORIZED`
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 文章不存在：`ARTICLE_NOT_FOUND`
 - 其他说明：无
 
 #### `/modify`
 
 - 功能说明：修改文章
 - 请求方法：POST
-- 请求对象：`Pick<Article, 'id'> & Partial<Omit<Article, 'publicationTime' | 'modificationTime' | 'pageViews'>>` 实例
-- 成功响应对象：无
-- 失败响应消息
-  - 未登录：请先登录
-- 其他说明：无
+- 请求对象：`UpdateArticle`（`id` 与至少一个可修改字段）
+- 成功响应：`data` 为 `null`
+- 失败响应错误码：
+  - 未登录或 Session 无效：`UNAUTHORIZED`
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 文章不存在：`ARTICLE_NOT_FOUND`
+- 其他说明：
+  - 入口使用 `UpdateArticleSchema` 校验，空更新将被拒绝
 
 ### 分类（`/category`）
 
@@ -214,12 +223,14 @@ class Category {
 
 - 功能说明：添加文章分类
 - 请求方法：POST
-- 请求对象：`Omit<Category, 'id'>` 实例
-- 成功响应对象：无
-- 失败响应消息
-  - 未登录：请先登录
-- 其他说明
-  - 参数检查在数据库层
+- 请求对象：`CategoryDraft`
+- 成功响应：`data` 为 `null`
+- 失败响应错误码：
+  - 未登录或 Session 无效：`UNAUTHORIZED`
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 分类已存在：`CATEGORY_ALREADY_EXISTS`
+- 其他说明：
+  - 入口使用 `CategoryDraftSchema` 校验
 
 #### `/deleteById`
 
@@ -233,19 +244,27 @@ class Category {
 }
 ```
 
-- 成功响应对象：无
-- 失败响应消息：无
+- 成功响应：`data` 为 `null`
+- 失败响应错误码：
+  - 未登录或 Session 无效：`UNAUTHORIZED`
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 分类不存在：`CATEGORY_NOT_FOUND`
+  - 分类仍被文章使用：`CATEGORY_IN_USE`（`details: { articleAmount }`）
 - 其他说明：无
 
 #### `/modify`
 
 - 功能说明：修改文章分类
 - 请求方法：POST
-- 请求对象：`Partial<Category> & Pick<Category, 'id'>` 实例
-- 成功响应对象：无
-- 失败响应消息：无
-- 其他说明
-  - 参数检查在数据库层
+- 请求对象：`UpdateCategory`（`id` 与 `name`）
+- 成功响应：`data` 为 `null`
+- 失败响应错误码：
+  - 未登录或 Session 无效：`UNAUTHORIZED`
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+  - 分类不存在：`CATEGORY_NOT_FOUND`
+  - 分类已存在：`CATEGORY_ALREADY_EXISTS`
+- 其他说明：
+  - 入口使用 `UpdateCategorySchema` 校验
 
 ### 设置相关（前缀为 `/option`）
 
@@ -279,9 +298,12 @@ class Category {
 }
 ```
 
-- 成功响应对象：无
-- 失败响应消息：无
-- 其他说明
+- 成功响应：`data` 为 `null`
+- 失败响应错误码：
+  - 未登录或 Session 无效：`UNAUTHORIZED`
+  - 请求参数错误：`INVALID_REQUEST_PARAMS`
+- 其他说明：
+  - 使用 `SiteOptionSchema` 校验 `about`（保留合法 Markdown 空白，拒绝纯空白）
   - 如果存储文件不存在，创建新的并存储
   - 如果存储文件已存在，覆盖存储
   - 存储在用户文件夹下 `.blog-data` 目录中，文件名为 `about.md`

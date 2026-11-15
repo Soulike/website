@@ -6,16 +6,22 @@
 
 ## 响应对象
 
+响应契约由 `@schema/rpc` 定义：
+
 ```ts
-class Response {
-  public isSuccessful: boolean; // 本次请求是否成功
-  public message?: string; // 请求失败时，显示给用户的消息
-  public data?: any; // 请求成功时，前端需要的数据
-}
+type ServerResponse<TData = null> =
+  | {isSuccessful: true; data: TData}
+  | {
+      isSuccessful: false;
+      error:
+        | {code: Exclude<ErrorCode, 'CATEGORY_IN_USE'>}
+        | {code: 'CATEGORY_IN_USE'; details: {articleAmount: number}};
+    };
 ```
 
-- 当因服务器发生错误无法产生响应时，消息填写“服务器错误”
-- 当请求参数错误时，消息填写“请求参数错误”
+- 无返回值的成功响应统一返回 `{ isSuccessful: true, data: null }`
+- 当请求参数或 JSON 解析失败时，返回 `{ isSuccessful: false, error: { code: 'INVALID_REQUEST_PARAMS' } }`
+- 当发生未捕获的服务器内部错误时，返回 HTTP 500 `Internal Server Error`
 
 ## 模块文档
 
