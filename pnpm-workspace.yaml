@@ -1,5 +1,5 @@
 packages:
-  - 'scripts/node-version'
+  - 'scripts/*'
   - '.github/scripts/smoke'
   - 'apps/*/*'
   - 'modules/*/*'
