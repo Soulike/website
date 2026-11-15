@@ -11,7 +11,8 @@
     "katex": "^0.18.2"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ./src"
   },
   "devDependencies": {
     "@types/jsdom": "^27.0.0",

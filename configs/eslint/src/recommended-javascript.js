@@ -6,6 +6,9 @@ export default [
   eslint.configs.recommended,
   eslintConfigPrettier,
   {
+    linterOptions: {
+      reportUnusedDisableDirectives: 'error',
+    },
     plugins: {
       'simple-import-sort': simpleImportSort,
     },

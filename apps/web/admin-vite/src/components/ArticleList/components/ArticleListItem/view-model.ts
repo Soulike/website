@@ -98,7 +98,7 @@ function useCategoryById(categoryId: Category['id'] | null) {
   const categoryModel = useMemo(() => new BlogModels.CategoryModel(), []);
 
   useEffect(() => {
-    if (!categoryId) {
+    if (categoryId === null) {
       setCategory(null);
       return;
     }

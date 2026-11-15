@@ -36,11 +36,11 @@ export class NewArticle implements ArticleBase {
   ) {
     const {title, content, category, isVisible} = newArticle;
     let validationPassed = true;
-    if (!title) {
+    if (title === undefined || title === null || title.length === 0) {
       onValidationFailed?.('Please input title');
       validationPassed = false;
     }
-    if (!content) {
+    if (content === undefined || content === null || content.length === 0) {
       onValidationFailed?.('Please input content');
       validationPassed = false;
     }

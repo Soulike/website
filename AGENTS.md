@@ -41,6 +41,15 @@ This repository uses a single-context domain documentation layout. See `docs/age
 - `nginx/` - NGINX configs for server deployment.
 - `scripts/` - Repository development and CI commands.
 
+### New workspace packages
+
+Every workspace package matched by `pnpm-workspace.yaml` must satisfy these checks so `pnpm validate:pr` discovers it without root-script edits:
+
+- Register any new top-level directory in `pnpm-workspace.yaml` and update path filters in `.github/workflows/apps-ci.yml` and relevant Docker workflows.
+- Set `"type": "module"` in `package.json` and define `"typecheck"` (`tsc --noEmit` for Node/library packages, `tsc -b` for Vite web apps) and `"lint"` (`eslint ./src`, or `eslint .` when TS files live outside `src/`), plus `"test"` if tested. Pure config packages without TypeScript/JavaScript sources still provide explicit no-op scripts matching `configs/typescript`.
+- Extend the matching `@config/typescript/*` preset in `tsconfig.json` and `@config/eslint` in `eslint.config.mjs`.
+- Formatting is enforced repository-wide by `pnpm format:check` (`prettier --check .`); do not add per-package format scripts or ignore source directories in `.prettierignore`.
+
 ---
 
 ## Code Style

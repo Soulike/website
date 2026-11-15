@@ -32,11 +32,11 @@ class MockSyncTaskWithTeardown<T> extends SyncTask<T> {
     this.mockTeardown = vi.fn();
   }
 
-  public run(): T | null {
+  public override run(): T | null {
     return this.mockRun();
   }
 
-  public async teardown(): Promise<void> {
+  public override async teardown(): Promise<void> {
     await this.mockTeardown();
     await super.teardown();
   }

@@ -3,7 +3,7 @@ import {env} from 'node:process';
 
 import {type PoolConfig} from 'pg';
 
-if (!env.DB_PASSWORD_FILE) {
+if (env.DB_PASSWORD_FILE === undefined || env.DB_PASSWORD_FILE === '') {
   throw new Error('Env DB_PASSWORD_FILE is not provided.');
 }
 

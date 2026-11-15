@@ -52,43 +52,53 @@ export function createI18n<
     return i18nCore.getString(key);
   }
 
-  function useI18nString(key: StringKey, ...args: string[]): string {
-    const [string, setString] = useState('');
-
-    const languageChangeCallback = useCallback(
-      (strings: KeyToString) => {
-        setString(strings[key]);
-      },
-      [key],
-    );
-
-    useEffect(() => {
-      i18nCore
-        .ensureStringsLoaded()
-        .then(() => {
-          setString(i18nCore.getString(key, ...args));
-        })
-        .catch((e: unknown) => {
-          console.error(e);
-        });
-
-      i18nCore.addEventListener(
-        I18nEventType.LANGUAGE_CHANGE,
-        languageChangeCallback,
-      );
-      return () => {
-        i18nCore.removeEventListener(
-          I18nEventType.LANGUAGE_CHANGE,
-          languageChangeCallback,
-        );
-      };
-    }, [args, key, languageChangeCallback]);
-
-    return string;
-  }
+  const boundUseI18nString = useI18nStringWithCore<StringKey, KeyToString>;
+  const useI18nString = boundUseI18nString.bind(null, i18nCore);
 
   return {
     getI18nString,
     useI18nString,
   };
+}
+
+function useI18nStringWithCore<
+  StringKey extends PropertyKey,
+  KeyToString extends Record<StringKey, string>,
+>(
+  i18nCore: I18nCore<StringKey, KeyToString>,
+  key: StringKey,
+  ...args: string[]
+): string {
+  const [string, setString] = useState('');
+
+  const languageChangeCallback = useCallback(
+    (strings: KeyToString) => {
+      setString(strings[key]);
+    },
+    [key],
+  );
+
+  useEffect(() => {
+    i18nCore
+      .ensureStringsLoaded()
+      .then(() => {
+        setString(i18nCore.getString(key, ...args));
+      })
+      .catch((e: unknown) => {
+        console.error(e);
+      });
+
+    i18nCore.addEventListener(
+      I18nEventType.LANGUAGE_CHANGE,
+      languageChangeCallback,
+    );
+    return () => {
+      i18nCore.removeEventListener(
+        I18nEventType.LANGUAGE_CHANGE,
+        languageChangeCallback,
+      );
+    };
+  }, [args, i18nCore, key, languageChangeCallback]);
+
+  return string;
 }

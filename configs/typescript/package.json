@@ -10,6 +10,8 @@
     "./script": "./src/tsconfig.script.json"
   },
   "scripts": {
-    "build": "echo \"ts-config is not required to build.\""
+    "build": "echo \"ts-config is not required to build.\"",
+    "typecheck": "echo \"ts-config is not required to typecheck.\"",
+    "lint": "echo \"ts-config is not required to lint.\""
   }
 }

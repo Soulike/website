@@ -47,7 +47,7 @@ export async function startPostgres(
     '--env',
     `POSTGRES_PASSWORD=${smokeDatabasePassword}`,
   ];
-  if (schema) {
+  if (schema !== undefined && schema.length > 0) {
     args.push(
       '--volume',
       `${schema}:/docker-entrypoint-initdb.d/database.sql:ro`,
@@ -79,7 +79,7 @@ export async function startPostgres(
       ).status === 0,
   );
 
-  if (schema) {
+  if (schema !== undefined && schema.length > 0) {
     await runtime.waitFor(
       'database schema readiness',
       () =>

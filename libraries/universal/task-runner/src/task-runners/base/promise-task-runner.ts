@@ -46,7 +46,7 @@ export class PromiseTaskRunner {
   public async push<ResultT>(
     taskOrFunc: PromiseTask<ResultT> | (() => Promise<ResultT>),
   ): Promise<TaskResult<ResultT>> {
-    let task: PromiseTask<ResultT> | null = null;
+    let task: PromiseTask<ResultT>;
     if (typeof taskOrFunc === 'function') {
       task = new TempPromiseTask<ResultT>();
       task.run = taskOrFunc;

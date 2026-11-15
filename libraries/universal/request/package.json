@@ -6,7 +6,8 @@
     "@module/classes": "workspace:^"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ./src"
   },
   "devDependencies": {
     "@types/assert": "^1.5.11",

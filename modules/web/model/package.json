@@ -10,7 +10,8 @@
     "./react/blog": "./src/react/blog/index.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ./src"
   },
   "dependencies": {
     "@module/classes": "workspace:^",

@@ -14,6 +14,4 @@ interface TaskCancelResult {
 }
 
 export type TaskResult<T> =
-  | TaskSuccessResult<T>
-  | TaskFailureResult
-  | TaskCancelResult;
+  TaskSuccessResult<T> | TaskFailureResult | TaskCancelResult;

@@ -9,7 +9,8 @@
     "sync": "node src/cli.ts --write",
     "check": "node src/cli.ts --check",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "lint": "eslint ./src"
   },
   "dependencies": {
     "typescript": "catalog:",

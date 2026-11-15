@@ -58,7 +58,7 @@ jobs:
             shared:
               - 'libraries/**/!(AGENTS.md|CLAUDE.md)'
               - 'configs/**/!(AGENTS.md|CLAUDE.md)'
-              - 'scripts/node-version/**/!(AGENTS.md|CLAUDE.md)'
+              - 'scripts/**/!(AGENTS.md|CLAUDE.md)'
               - '.node-version'
               - 'package.json'
               - 'pnpm-lock.yaml'

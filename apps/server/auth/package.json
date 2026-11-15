@@ -4,7 +4,8 @@
   "scripts": {
     "build": "node build.ts",
     "typecheck": "tsc --noEmit",
-    "test": "vitest"
+    "test": "vitest",
+    "lint": "eslint ./src"
   },
   "devDependencies": {
     "@config/rolldown": "workspace:^",

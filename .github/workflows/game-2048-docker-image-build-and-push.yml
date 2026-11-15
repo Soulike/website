@@ -9,7 +9,7 @@ on:
       - 'libraries/**'
       - 'configs/**'
       - '.node-version'
-      - 'scripts/node-version/**'
+      - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'

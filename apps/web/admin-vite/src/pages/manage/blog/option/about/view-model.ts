@@ -19,7 +19,12 @@ export function useViewModel() {
     error: aboutLoadError,
   } = BlogModelHooks.OptionModelHooks.useAbout();
   useEffect(() => {
-    if (!aboutLoading && !aboutLoadError && about) {
+    if (
+      !aboutLoading &&
+      !aboutLoadError &&
+      about !== null &&
+      about.length > 0
+    ) {
       setAboutMarkdown(about);
     }
   }, [about, aboutLoadError, aboutLoading, setAboutMarkdown]);
