@@ -8,8 +8,8 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {useArticlePreviewModal} from '@/components/ArticlePreviewModal';
 import {
-  getValidationErrorMessage,
   SITE_OPTION_FIELD_LABELS,
+  validateFormSchema,
 } from '@/helpers/validation-i18n-helper.js';
 
 export function useViewModel() {
@@ -81,26 +81,21 @@ function useSubmitAboutModification() {
       onSuccess: (about: string) => void,
       onError: (e: Error) => void,
     ) => {
-      const parsedOption = SiteOptionSchema.safeParse({about});
-      if (!parsedOption.success) {
-        getValidationErrorMessage(
-          parsedOption.error.issues[0],
-          SITE_OPTION_FIELD_LABELS,
-        )
-          .then((message) => {
-            onValidationFailed(message);
-          })
-          .catch((e: unknown) => {
-            console.error(e);
-          });
+      const option = validateFormSchema(
+        SiteOptionSchema,
+        {about},
+        SITE_OPTION_FIELD_LABELS,
+        onValidationFailed,
+      );
+      if (option === null) {
         return;
       }
 
       setSubmitting(true);
       optionModel
-        .setAbout(parsedOption.data.about)
+        .setAbout(option.about)
         .then(() => {
-          onSuccess(parsedOption.data.about);
+          onSuccess(option.about);
         })
         .catch((error: unknown) => {
           assert(error instanceof Error);

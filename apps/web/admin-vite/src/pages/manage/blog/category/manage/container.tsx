@@ -17,7 +17,7 @@ import {
 } from '@/helpers/error-notification-helper.js';
 import {
   CATEGORY_DRAFT_FIELD_LABELS,
-  getValidationErrorMessage,
+  validateFormSchema,
 } from '@/helpers/validation-i18n-helper.js';
 
 import {ManageView} from './view.js';
@@ -86,26 +86,21 @@ export function Manage() {
 
   const onModifyModalOk: ModalProps['onOk'] = (e) => {
     e.preventDefault();
-    const parsedDraft = CategoryDraftSchema.safeParse({
-      name: nameOfCategoryToModify,
-    });
-    if (!parsedDraft.success) {
-      getValidationErrorMessage(
-        parsedDraft.error.issues[0],
-        CATEGORY_DRAFT_FIELD_LABELS,
-      )
-        .then((warningMessage) => {
-          void message.warning(warningMessage);
-        })
-        .catch((error: unknown) => {
-          console.error(error);
-        });
+    const draft = validateFormSchema(
+      CategoryDraftSchema,
+      {name: nameOfCategoryToModify},
+      CATEGORY_DRAFT_FIELD_LABELS,
+      (warningMessage) => {
+        void message.warning(warningMessage);
+      },
+    );
+    if (draft === null) {
       return;
     }
 
     handleCategoryModificationSubmit(
       idOfCategoryToModify,
-      parsedDraft.data,
+      draft,
       () => {
         notification.success({title: 'Category modified'});
       },

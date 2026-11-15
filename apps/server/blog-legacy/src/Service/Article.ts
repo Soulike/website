@@ -3,6 +3,13 @@ import {failResponse, type ServerResponse, successResponse} from '@schema/rpc';
 
 import {Article as ArticleTable} from '../Database/index.js';
 
+function toArticleAbstract(article: Article): ArticleAbstract {
+  return {
+    ...article,
+    content: article.content.slice(0, 301), // 仅保留 300 个字符
+  };
+}
+
 export async function getAllWithAbstract(): Promise<
   ServerResponse<ArticleAbstract[]>
 > {
@@ -10,13 +17,7 @@ export async function getAllWithAbstract(): Promise<
   if (!serverResponse.isSuccessful) {
     return failResponse(serverResponse.error);
   }
-  const {data: articles} = serverResponse;
-  return successResponse(
-    articles.map((article) => ({
-      ...article,
-      content: article.content.slice(0, 301), // 仅保留 300 个字符
-    })),
-  );
+  return successResponse(serverResponse.data.map(toArticleAbstract));
 }
 
 export async function getById(
@@ -47,11 +48,5 @@ export async function getByCategoryWithAbstract(
   if (!serverResponse.isSuccessful) {
     return failResponse(serverResponse.error);
   }
-  const {data: articles} = serverResponse;
-  return successResponse(
-    articles.map((article) => ({
-      ...article,
-      content: article.content.slice(0, 301), // 仅保留 300 个字符
-    })),
-  );
+  return successResponse(serverResponse.data.map(toArticleAbstract));
 }

@@ -13,6 +13,7 @@ import {
   getValidationErrorMessage,
   LOGIN_CREDENTIALS_FIELD_LABELS,
   SITE_OPTION_FIELD_LABELS,
+  validateFormSchema,
   type ValidationFieldLabels,
 } from './validation-i18n-helper.js';
 
@@ -343,4 +344,31 @@ describe('validation-i18n-helper', () => {
       ).resolves.toBe(expectedMessage);
     },
   );
+
+  it('validateFormSchema returns parsed data on success and invokes localized callback on failure', async () => {
+    const onValidationFailed = vi.fn();
+    mockNavigatorLanguage = 'en';
+
+    const validResult = validateFormSchema(
+      CategoryDraftSchema,
+      {name: '  Notes  '},
+      CATEGORY_DRAFT_FIELD_LABELS,
+      onValidationFailed,
+    );
+    expect(validResult).toEqual({name: 'Notes'});
+    expect(onValidationFailed).not.toHaveBeenCalled();
+
+    const invalidResult = validateFormSchema(
+      CategoryDraftSchema,
+      {name: '   '},
+      CATEGORY_DRAFT_FIELD_LABELS,
+      onValidationFailed,
+    );
+    expect(invalidResult).toBeNull();
+    await vi.waitFor(() => {
+      expect(onValidationFailed).toHaveBeenCalledWith(
+        'Please enter Category name',
+      );
+    });
+  });
 });

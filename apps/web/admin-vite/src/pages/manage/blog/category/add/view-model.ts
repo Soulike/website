@@ -7,7 +7,7 @@ import {useCallback, useMemo, useState} from 'react';
 
 import {
   CATEGORY_DRAFT_FIELD_LABELS,
-  getValidationErrorMessage,
+  validateFormSchema,
 } from '@/helpers/validation-i18n-helper.js';
 
 export function useViewModel() {
@@ -40,24 +40,19 @@ function useNewCategorySubmit(afterSubmitSuccess?: () => void) {
       onSubmitSuccess: () => void,
       onSubmitFailed: (error: Error) => void,
     ) => {
-      const parsedDraft = CategoryDraftSchema.safeParse({name});
-      if (!parsedDraft.success) {
-        getValidationErrorMessage(
-          parsedDraft.error.issues[0],
-          CATEGORY_DRAFT_FIELD_LABELS,
-        )
-          .then((message) => {
-            onValidationFailed(message);
-          })
-          .catch((e: unknown) => {
-            console.error(e);
-          });
+      const draft = validateFormSchema(
+        CategoryDraftSchema,
+        {name},
+        CATEGORY_DRAFT_FIELD_LABELS,
+        onValidationFailed,
+      );
+      if (draft === null) {
         return;
       }
 
       setSubmitting(true);
       categoryModel
-        .add(parsedDraft.data)
+        .add(draft)
         .then(() => {
           onSubmitSuccess();
           afterSubmitSuccess?.();

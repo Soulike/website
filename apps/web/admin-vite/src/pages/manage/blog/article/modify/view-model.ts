@@ -7,7 +7,7 @@ import {useNavigate, useSearchParams} from 'react-router';
 
 import {
   ARTICLE_DRAFT_FIELD_LABELS,
-  getValidationErrorMessage,
+  validateFormSchema,
 } from '@/helpers/validation-i18n-helper.js';
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config/index.js';
 
@@ -62,29 +62,19 @@ export function useSubmitArticleModification(afterSubmitSuccess?: () => void) {
       onSubmitSuccess: () => void,
       onSubmitFailed: (error: Error) => void,
     ) => {
-      const parsedDraft = ArticleDraftSchema.safeParse({
-        title,
-        content,
-        category: selectedCategory,
-        isVisible,
-      });
-      if (!parsedDraft.success) {
-        getValidationErrorMessage(
-          parsedDraft.error.issues[0],
-          ARTICLE_DRAFT_FIELD_LABELS,
-        )
-          .then((message) => {
-            onValidationFailed(message);
-          })
-          .catch((e: unknown) => {
-            console.error(e);
-          });
+      const draft = validateFormSchema(
+        ArticleDraftSchema,
+        {title, content, category: selectedCategory, isVisible},
+        ARTICLE_DRAFT_FIELD_LABELS,
+        onValidationFailed,
+      );
+      if (draft === null) {
         return;
       }
 
       setIsSubmitting(true);
       articleModel
-        .modify(id, parsedDraft.data)
+        .modify(id, draft)
         .then(() => {
           onSubmitSuccess();
           afterSubmitSuccess?.();

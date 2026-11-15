@@ -7,8 +7,8 @@ import {type LoginCredentials, LoginCredentialsSchema} from '@schema/auth';
 import {useCallback, useState} from 'react';
 
 import {
-  getValidationErrorMessage,
   LOGIN_CREDENTIALS_FIELD_LABELS,
+  validateFormSchema,
 } from '@/helpers/validation-i18n-helper.js';
 import {getI18nString, STRING_KEY} from '@/i18n/index.js';
 
@@ -48,24 +48,18 @@ function useLogin(
       onUnauthorized?: (message: string) => void,
       onError?: (error: Error) => void,
     ) => {
-      const parsedCredentials = LoginCredentialsSchema.safeParse({
-        username,
-        password,
-      });
-      if (!parsedCredentials.success) {
-        const firstIssue = parsedCredentials.error.issues[0];
-        getValidationErrorMessage(firstIssue, LOGIN_CREDENTIALS_FIELD_LABELS)
-          .then((message) => {
-            onValidationFailed(message);
-          })
-          .catch((e: unknown) => {
-            console.error(e);
-          });
+      const credentials = validateFormSchema(
+        LoginCredentialsSchema,
+        {username, password},
+        LOGIN_CREDENTIALS_FIELD_LABELS,
+        onValidationFailed,
+      );
+      if (credentials === null) {
         return;
       }
 
       setLoginLoading(true);
-      createSession(parsedCredentials.data)
+      createSession(credentials)
         .then((result) => {
           if (result === CreateSessionResult.SUCCESS) {
             onSuccess?.();

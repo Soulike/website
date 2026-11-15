@@ -95,3 +95,23 @@ export async function getValidationErrorMessage(
     }
   }
 }
+
+export function validateFormSchema<TSchema extends z.ZodType>(
+  schema: TSchema,
+  input: unknown,
+  fieldLabels: ValidationFieldLabels,
+  onValidationFailed: (message: string) => void,
+): z.infer<TSchema> | null {
+  const parsed = schema.safeParse(input);
+  if (!parsed.success) {
+    getValidationErrorMessage(parsed.error.issues[0], fieldLabels)
+      .then((message) => {
+        onValidationFailed(message);
+      })
+      .catch((error: unknown) => {
+        console.error(error);
+      });
+    return null;
+  }
+  return parsed.data;
+}
