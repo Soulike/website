@@ -94,7 +94,8 @@ export function createI18n<
     return i18nCore.getString(key);
   }
 
-  const useI18nString = useI18nStringWithCore.bind(null, i18nCore);
+  const boundUseI18nString = useI18nStringWithCore<StringKey, KeyToString>;
+  const useI18nString = boundUseI18nString.bind(null, i18nCore);
 
   return {
     getI18nString,
