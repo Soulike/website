@@ -1,37 +1,51 @@
-# Domain docs
+# Domain Docs
 
-This repository uses a single-context domain documentation layout.
+How the engineering skills should consume this repo's domain documentation when exploring the codebase.
 
-## Before exploring
+## Before exploring, read these
 
-Read these sources when they exist and are relevant to the task:
+- **`GLOSSARY.md`** at the repo root, or
+- **`GLOSSARY-MAP.md`** at the repo root if it exists: it points at one `GLOSSARY.md` per context. Read each one relevant to the topic.
+- **`docs/adr/`**: read ADRs that touch the area you're about to work in. In multi-context repos, also check `src/<context>/docs/adr/` for context-scoped decisions.
 
-- `GLOSSARY.md` at the repository root for established domain vocabulary.
-- ADRs under `docs/adr/` for decisions affecting the area under change.
+If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill (reached via `/grill-with-docs` and `/improve-codebase-architecture`) creates them lazily when terms or decisions actually get resolved.
 
-If these files do not exist, continue without reporting their absence. Create them lazily when terminology or a consequential decision needs a maintained owner.
+## File structure
 
-## Layout
+Single-context repo (most repos):
 
-```text
+```
 /
 ├── GLOSSARY.md
-└── docs/
-    └── adr/
-        ├── 0001-example-decision.md
-        └── 0002-another-decision.md
+├── docs/adr/
+│   ├── 0001-event-sourced-orders.md
+│   └── 0002-postgres-for-write-model.md
+└── src/
 ```
 
-`GLOSSARY.md` owns the repository's established domain terms. `docs/adr/` records consequential architectural decisions and their original rationale.
+Multi-context repo (presence of `GLOSSARY-MAP.md` at the root):
 
-## Vocabulary
+```
+/
+├── GLOSSARY-MAP.md
+├── docs/adr/                          ← system-wide decisions
+└── src/
+    ├── ordering/
+    │   ├── GLOSSARY.md
+    │   └── docs/adr/                  ← context-specific decisions
+    └── billing/
+        ├── GLOSSARY.md
+        └── docs/adr/
+```
 
-Use terms as defined in `GLOSSARY.md` in issues, specifications, code, tests, and documentation. Avoid introducing a synonym for an established term.
+## Use the glossary's vocabulary
 
-When a required concept has no established term, determine whether the codebase already expresses it under another name. Record a new term only when the distinction is meaningful and recurring.
+When your output names a domain concept (in an issue title, a refactor proposal, a hypothesis, a test name), use the term as defined in `GLOSSARY.md`. Don't drift to synonyms the glossary explicitly avoids.
 
-## Architectural decisions
+If the concept you need isn't in the glossary yet, that's a signal: either you're inventing language the project doesn't use (reconsider) or there's a real gap (note it for `/domain-modeling`).
 
-Read ADRs that affect the area before proposing or implementing a change. If proposed work conflicts with an ADR, identify the conflict explicitly instead of silently replacing the recorded decision.
+## Flag ADR conflicts
 
-Preserve ADRs as historical records. Mark a decision as superseded rather than rewriting its original context.
+If your output contradicts an existing ADR, surface it explicitly rather than silently overriding:
+
+> _Contradicts ADR-0007 (event-sourced orders), but worth reopening because…_
