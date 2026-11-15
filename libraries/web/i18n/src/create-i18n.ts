@@ -41,6 +41,26 @@ import {I18nEventType} from './types.js';
  * const message = await getI18nString(STRING_KEY.WELCOME);
  * ```
  */
+export function createI18n<
+  StringKey extends PropertyKey,
+  KeyToString extends Record<StringKey, string>,
+>(config: I18nConfig<StringKey, KeyToString>) {
+  const i18nCore = new I18nCore<StringKey, KeyToString>(config);
+
+  async function getI18nString(key: StringKey): Promise<string> {
+    await i18nCore.ensureStringsLoaded();
+    return i18nCore.getString(key);
+  }
+
+  const boundUseI18nString = useI18nStringWithCore<StringKey, KeyToString>;
+  const useI18nString = boundUseI18nString.bind(null, i18nCore);
+
+  return {
+    getI18nString,
+    useI18nString,
+  };
+}
+
 function useI18nStringWithCore<
   StringKey extends PropertyKey,
   KeyToString extends Record<StringKey, string>,
@@ -81,24 +101,4 @@ function useI18nStringWithCore<
   }, [args, i18nCore, key, languageChangeCallback]);
 
   return string;
-}
-
-export function createI18n<
-  StringKey extends PropertyKey,
-  KeyToString extends Record<StringKey, string>,
->(config: I18nConfig<StringKey, KeyToString>) {
-  const i18nCore = new I18nCore<StringKey, KeyToString>(config);
-
-  async function getI18nString(key: StringKey): Promise<string> {
-    await i18nCore.ensureStringsLoaded();
-    return i18nCore.getString(key);
-  }
-
-  const boundUseI18nString = useI18nStringWithCore<StringKey, KeyToString>;
-  const useI18nString = boundUseI18nString.bind(null, i18nCore);
-
-  return {
-    getI18nString,
-    useI18nString,
-  };
 }
