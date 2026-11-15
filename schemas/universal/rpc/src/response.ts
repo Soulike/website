@@ -6,13 +6,21 @@ import {
   type ServerError,
 } from './error.js';
 
-export const VoidServerResponseSchema = z.discriminatedUnion('isSuccessful', [
-  z.object({
-    isSuccessful: z.literal(true),
-    data: z.undefined().optional(),
-  }),
-  FailServerResponseSchema,
-]);
+function createServerResponseUnion<TSuccessShape extends z.ZodRawShape>(
+  successShape: TSuccessShape,
+) {
+  return z.discriminatedUnion('isSuccessful', [
+    z.object({
+      isSuccessful: z.literal(true),
+      ...successShape,
+    }),
+    FailServerResponseSchema,
+  ]);
+}
+
+export const VoidServerResponseSchema = createServerResponseUnion({
+  data: z.undefined().optional(),
+});
 export type VoidServerResponse = z.infer<typeof VoidServerResponseSchema>;
 
 export type ServerResponse<TData> =
@@ -28,13 +36,9 @@ export function createServerResponseSchema<TDataSchema extends z.ZodType>(
   if (dataSchema === undefined) {
     return VoidServerResponseSchema;
   }
-  return z.discriminatedUnion('isSuccessful', [
-    z.object({
-      isSuccessful: z.literal(true),
-      data: dataSchema,
-    }),
-    FailServerResponseSchema,
-  ]);
+  return createServerResponseUnion({
+    data: dataSchema,
+  });
 }
 
 export function successResponse(): {isSuccessful: true};
@@ -42,14 +46,14 @@ export function successResponse<TData>(data: TData): {
   isSuccessful: true;
   data: TData;
 };
-export function successResponse<TData>(data?: TData): {
+export function successResponse<TData>(...args: [] | [TData]): {
   isSuccessful: true;
   data?: TData;
 } {
-  if (arguments.length === 0) {
+  if (args.length === 0) {
     return {isSuccessful: true};
   }
-  return {isSuccessful: true, data};
+  return {isSuccessful: true, data: args[0]};
 }
 
 export function failResponse(error: ServerError): FailServerResponse {

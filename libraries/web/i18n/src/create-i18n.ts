@@ -38,7 +38,7 @@ import {I18nEventType} from './types.js';
  * const hello = useI18nString(STRING_KEY.HELLO_USER, 'Alice');
  *
  * // Outside React:
- * const message = await getI18nString(STRING_KEY.WELCOME);
+ * const message = await getI18nString(STRING_KEY.HELLO_USER, 'Alice');
  * ```
  */
 export function createI18n<
