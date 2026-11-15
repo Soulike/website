@@ -13,6 +13,19 @@ import {
 
 import {sortEntities} from './fake-table-helpers.js';
 
+function matchesArticleFilter(
+  row: ArticleRow,
+  filter: Partial<ArticleRow>,
+): boolean {
+  return Object.entries(filter).every(([key, value]) => {
+    const rowValue = row[key as keyof ArticleRow];
+    if (rowValue instanceof Date && value instanceof Date) {
+      return rowValue.getTime() === value.getTime();
+    }
+    return rowValue === value;
+  });
+}
+
 export class FakeArticleTable {
   private static articles: ArticleRow[] = [];
   private static idCounter = 1;
@@ -67,15 +80,14 @@ export class FakeArticleTable {
     article: Partial<ArticleRow>,
     orderConfig: OrderConfig<ArticleRow> = {},
   ): Promise<ArticleRow[]> {
-    if (isObjectEmpty(article)) {
+    const filteredConfig = removeUndefinedFieldsShallow(article);
+    if (isObjectEmpty(filteredConfig)) {
       return this.sortArticles([...this.articles], orderConfig);
     }
 
-    const filteredArticles = this.articles.filter((a) => {
-      return Object.entries(article).every(([key, value]) => {
-        return a[key as keyof ArticleRow] === value;
-      });
-    });
+    const filteredArticles = this.articles.filter((a) =>
+      matchesArticleFilter(a, filteredConfig),
+    );
 
     await Promise.resolve();
     return this.sortArticles(filteredArticles, orderConfig);
@@ -87,15 +99,14 @@ export class FakeArticleTable {
   }
 
   static async count(article: Partial<ArticleRow>): Promise<number> {
-    if (isObjectEmpty(article)) {
+    const filteredConfig = removeUndefinedFieldsShallow(article);
+    if (isObjectEmpty(filteredConfig)) {
       return this.countAll();
     }
 
-    const filteredArticles = this.articles.filter((a) => {
-      return Object.entries(article).every(([key, value]) => {
-        return a[key as keyof ArticleRow] === value;
-      });
-    });
+    const filteredArticles = this.articles.filter((a) =>
+      matchesArticleFilter(a, filteredConfig),
+    );
 
     return filteredArticles.length;
   }
