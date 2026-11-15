@@ -62,7 +62,9 @@ export function ArticleListItemView(props: ArticleListItemViewProps) {
           </div>
           <div className={styles.actions}>
             <div className={styles.tagContainer}>
-              <Tag color={'blue'}>{categoryName}</Tag>
+              <Tag color={'blue'} className={styles.categoryTag}>
+                {categoryName}
+              </Tag>
               <Tag color={'geekblue'}>
                 Published at：
                 <DateString date={publicationTime} />

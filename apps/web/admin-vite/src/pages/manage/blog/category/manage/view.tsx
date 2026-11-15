@@ -109,7 +109,9 @@ export function ManageView(props: Props) {
                 return (
                   <div className={Style.categoryItem}>
                     <div className={Style.categoryMeta}>
-                      <Tag color={'blue'}>{name}</Tag>
+                      <Tag color={'blue'} className={Style.categoryTag}>
+                        {name}
+                      </Tag>
                     </div>
                     <div className={Style.categoryActions}>
                       <Spin size={'small'} spinning={loading}>

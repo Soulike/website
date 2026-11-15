@@ -24,6 +24,12 @@
     min-width: 0;
   }
 
+  .categoryTag {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
   .categoryActions {
     display: flex;
     align-items: center;

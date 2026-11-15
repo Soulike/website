@@ -23,11 +23,21 @@
     align-items: center;
     gap: 16px;
     flex-wrap: wrap;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .tagContainer {
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .categoryTag {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }
