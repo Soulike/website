@@ -60,4 +60,50 @@ describe('FakeArticleTable', () => {
 
     await expect(FakeArticleTable.count({category: 2})).resolves.toBe(0);
   });
+
+  it('isolates stored timestamps from mutations to insert, update, and selected Dates', async () => {
+    const inputPub = new Date(Date.UTC(2026, 1, 1, 0, 0, 0));
+    const inputMod = new Date(Date.UTC(2026, 1, 2, 0, 0, 0));
+    await FakeArticleTable.insert({
+      title: 'Isolated Article',
+      content: 'Body',
+      category: 1,
+      publicationTime: inputPub,
+      modificationTime: inputMod,
+      pageViews: 0,
+      isVisible: true,
+    });
+
+    inputPub.setUTCFullYear(2000);
+    inputMod.setUTCFullYear(2001);
+
+    const inserted = await FakeArticleTable.selectById(2);
+    expect(inserted?.publicationTime.getTime()).toBe(
+      Date.UTC(2026, 1, 1, 0, 0, 0),
+    );
+    expect(inserted?.modificationTime.getTime()).toBe(
+      Date.UTC(2026, 1, 2, 0, 0, 0),
+    );
+
+    inserted?.publicationTime.setUTCFullYear(1999);
+    const afterSelectByIdMutation = await FakeArticleTable.selectById(2);
+    expect(afterSelectByIdMutation?.publicationTime.getTime()).toBe(
+      Date.UTC(2026, 1, 1, 0, 0, 0),
+    );
+
+    const listed = await FakeArticleTable.select({title: 'Isolated Article'});
+    listed[0]?.modificationTime.setUTCFullYear(1998);
+    const afterSelectMutation = await FakeArticleTable.selectById(2);
+    expect(afterSelectMutation?.modificationTime.getTime()).toBe(
+      Date.UTC(2026, 1, 2, 0, 0, 0),
+    );
+
+    const updateMod = new Date(Date.UTC(2026, 2, 10, 0, 0, 0));
+    await FakeArticleTable.updateById(2, {modificationTime: updateMod});
+    updateMod.setUTCFullYear(2010);
+    const afterUpdateMutation = await FakeArticleTable.selectById(2);
+    expect(afterUpdateMutation?.modificationTime.getTime()).toBe(
+      Date.UTC(2026, 2, 10, 0, 0, 0),
+    );
+  });
 });

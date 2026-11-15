@@ -26,6 +26,26 @@ function matchesArticleFilter(
   });
 }
 
+function cloneArticleRow(row: ArticleRow): ArticleRow {
+  return {
+    ...row,
+    publicationTime: new Date(row.publicationTime.getTime()),
+    modificationTime: new Date(row.modificationTime.getTime()),
+  };
+}
+
+function cloneArticleUpdate(article: ArticleUpdateRow): ArticleUpdateRow {
+  return {
+    ...article,
+    ...(article.publicationTime !== undefined
+      ? {publicationTime: new Date(article.publicationTime.getTime())}
+      : {}),
+    ...(article.modificationTime !== undefined
+      ? {modificationTime: new Date(article.modificationTime.getTime())}
+      : {}),
+  };
+}
+
 export class FakeArticleTable {
   private static articles: ArticleRow[] = [];
   private static idCounter = 1;
@@ -38,7 +58,9 @@ export class FakeArticleTable {
   static async insert(article: ArticleInsertRow): Promise<void> {
     const id = this.idCounter++;
     const parsedArticle = ArticleInsertRowSchema.parse(article);
-    const newArticle = ArticleRowSchema.parse({id, ...parsedArticle});
+    const newArticle = cloneArticleRow(
+      ArticleRowSchema.parse({id, ...parsedArticle}),
+    );
     await Promise.resolve();
     this.articles.push(newArticle);
   }
@@ -52,7 +74,9 @@ export class FakeArticleTable {
     id: ArticleRow['id'],
     article: ArticleUpdateRow,
   ): Promise<void> {
-    const filteredArticle = removeUndefinedFieldsShallow(article);
+    const filteredArticle = cloneArticleUpdate(
+      removeUndefinedFieldsShallow(article),
+    );
     if (isObjectEmpty(filteredArticle)) {
       return;
     }
@@ -67,7 +91,7 @@ export class FakeArticleTable {
   static async selectById(id: ArticleRow['id']): Promise<ArticleRow | null> {
     const article = this.articles.find((a) => a.id === id);
     await Promise.resolve();
-    return article ? ArticleRowSchema.parse(article) : null;
+    return article ? cloneArticleRow(ArticleRowSchema.parse(article)) : null;
   }
 
   static async selectAll(
@@ -116,6 +140,8 @@ export class FakeArticleTable {
     orderConfig: OrderConfig<ArticleRow>,
   ): ArticleRow[] {
     const sortedArticles = sortEntities(articles, orderConfig);
-    return sortedArticles.map((article) => ArticleRowSchema.parse(article));
+    return sortedArticles.map((article) =>
+      cloneArticleRow(ArticleRowSchema.parse(article)),
+    );
   }
 }
