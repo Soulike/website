@@ -47,9 +47,12 @@ export function createI18n<
 >(config: I18nConfig<StringKey, KeyToString>) {
   const i18nCore = new I18nCore<StringKey, KeyToString>(config);
 
-  async function getI18nString(key: StringKey): Promise<string> {
+  async function getI18nString(
+    key: StringKey,
+    ...args: string[]
+  ): Promise<string> {
     await i18nCore.ensureStringsLoaded();
-    return i18nCore.getString(key);
+    return i18nCore.getString(key, ...args);
   }
 
   const boundUseI18nString = useI18nStringWithCore<StringKey, KeyToString>;
@@ -71,12 +74,9 @@ function useI18nStringWithCore<
 ): string {
   const [string, setString] = useState('');
 
-  const languageChangeCallback = useCallback(
-    (strings: KeyToString) => {
-      setString(strings[key]);
-    },
-    [key],
-  );
+  const languageChangeCallback = useCallback(() => {
+    setString(i18nCore.getString(key, ...args));
+  }, [args, i18nCore, key]);
 
   useEffect(() => {
     i18nCore

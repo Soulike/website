@@ -7,6 +7,7 @@ on:
     paths:
       - 'apps/server/admin-legacy/**'
       - 'modules/**'
+      - 'schemas/**'
       - 'libraries/**'
       - 'configs/**'
       - '.node-version'
