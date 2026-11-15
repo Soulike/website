@@ -125,7 +125,7 @@ export class I18nCore<
       console.warn('I18n is not ready yet');
     }
     const template = this.keyToString?.[key];
-    if (!template) {
+    if (template === undefined || template.length === 0) {
       return '';
     }
     return format(template, this.placeholderMark, ...values);

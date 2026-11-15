@@ -47,7 +47,7 @@ export function runCommand(
     stderr: result.stderr,
   };
 
-  if (!options.allowFailure && commandResult.status !== 0) {
+  if (options.allowFailure !== true && commandResult.status !== 0) {
     throw new CommandError(renderedCommand, commandResult);
   }
 

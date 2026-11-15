@@ -17,7 +17,7 @@ async function listen(server: Server): Promise<string> {
     });
   });
   const address = server.address();
-  assert(address && typeof address === 'object');
+  assert(typeof address === 'object' && address !== null);
   return `http://127.0.0.1:${address.port}`;
 }
 

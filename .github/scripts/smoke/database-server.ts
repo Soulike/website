@@ -31,7 +31,7 @@ await withSmokeHarness(image, async (smoke) => {
     basicAuth: ['Soulike', 'Soulike@Database'],
   });
   const body: unknown = JSON.parse(response.body);
-  assert(body && typeof body === 'object');
+  assert(typeof body === 'object' && body !== null);
   assert.equal(Reflect.get(body, 'isSuccessful'), true);
   assert.deepEqual(Reflect.get(body, 'data'), []);
 });

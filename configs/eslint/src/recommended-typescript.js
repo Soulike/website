@@ -18,6 +18,7 @@ export default [
     rules: {
       '@typescript-eslint/no-extraneous-class': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
+      '@typescript-eslint/strict-boolean-expressions': 'error',
       '@typescript-eslint/switch-exhaustiveness-check': [
         'error',
         {
@@ -26,6 +27,14 @@ export default [
         },
       ],
       '@typescript-eslint/unified-signatures': 'off',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            ':matches(TSAsExpression, TSTypeAssertion) > :matches(TSAsExpression, TSTypeAssertion).expression',
+          message: 'Do not use chained type assertions.',
+        },
+      ],
     },
   },
 ];

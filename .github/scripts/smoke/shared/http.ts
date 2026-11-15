@@ -90,9 +90,13 @@ export async function waitForHttp({
       lastStatus = response.status.toString();
       const bodyResult = await readBody(response);
       lastBody = bodyResult.body;
-      lastError = bodyResult.error ? errorMessage(bodyResult.error) : '';
+      lastError =
+        bodyResult.error !== undefined ? errorMessage(bodyResult.error) : '';
 
-      if (!bodyResult.error && response.status === expectedStatus) {
+      if (
+        bodyResult.error === undefined &&
+        response.status === expectedStatus
+      ) {
         return {status: response.status, body: lastBody};
       }
     } catch (error) {

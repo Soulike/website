@@ -55,7 +55,7 @@ beforeAll(async () => {
   server = app.listen(0, '127.0.0.1');
   await once(server, 'listening');
   const address = server.address();
-  assert(address && typeof address === 'object');
+  assert(typeof address === 'object' && address !== null);
   baseUrl = `http://127.0.0.1:${address.port}`;
 });
 
@@ -73,7 +73,7 @@ afterAll(async () => {
     }
   } finally {
     vi.unstubAllEnvs();
-    if (secretDirectory) {
+    if (secretDirectory !== undefined) {
       await rm(secretDirectory, {recursive: true, force: true});
     }
   }
@@ -87,11 +87,10 @@ async function getByDate(json?: string) {
   const url = new URL('/article/getByDate', baseUrl);
   if (json !== undefined) url.searchParams.set('json', json);
   const response = await fetch(url, {signal: AbortSignal.timeout(1_000)});
-  const body: unknown = response.headers
-    .get('content-type')
-    ?.includes('application/json')
-    ? await response.json()
-    : await response.text();
+  const body: unknown =
+    response.headers.get('content-type')?.includes('application/json') === true
+      ? await response.json()
+      : await response.text();
   return {status: response.status, body};
 }
 

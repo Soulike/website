@@ -20,7 +20,7 @@ export class NewCategory implements CategoryBase {
     onValidationFailed?: (message: string) => void,
   ): boolean {
     const {name} = newCategory;
-    if (!name) {
+    if (name === undefined || name === null || name.length === 0) {
       onValidationFailed?.('Please input category');
       return false;
     }

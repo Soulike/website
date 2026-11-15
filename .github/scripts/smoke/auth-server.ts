@@ -36,7 +36,7 @@ await withSmokeHarness(image, async (smoke) => {
     headers: {cookie: 'sess=smoke-session'},
   });
   const body: unknown = JSON.parse(response.body);
-  assert(body && typeof body === 'object');
+  assert(typeof body === 'object' && body !== null);
   assert.equal(Reflect.get(body, 'username'), 'smoke');
 });
 

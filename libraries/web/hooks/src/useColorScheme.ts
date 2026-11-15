@@ -12,7 +12,7 @@ export function useColorScheme(override?: ColorScheme) {
   const isDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   useEffect(() => {
-    if (override) {
+    if (override !== undefined) {
       setColorScheme(override);
       return;
     }
