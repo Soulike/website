@@ -8,7 +8,8 @@
     "build": "pnpm --workspace-root node:runtime && tsc -b && vite build",
     "lint": "eslint ./src",
     "preview": "vite preview",
-    "analyze": "vite-bundle-visualizer"
+    "analyze": "vite-bundle-visualizer",
+    "typecheck": "tsc -b"
   },
   "dependencies": {
     "@ant-design/icons": "catalog:",

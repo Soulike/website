@@ -3,7 +3,8 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ./src"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "catalog:",

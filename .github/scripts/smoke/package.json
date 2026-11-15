@@ -3,10 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
   "devDependencies": {
+    "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
     "@types/node": "catalog:",
     "typescript": "catalog:",

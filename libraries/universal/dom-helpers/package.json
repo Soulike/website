@@ -7,7 +7,8 @@
     "./ssr": "./src/ssr/index.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ./src"
   },
   "dependencies": {
     "jsdom": "^27.3.0"

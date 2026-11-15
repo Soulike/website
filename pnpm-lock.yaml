@@ -101,6 +101,9 @@ importers:
 
   .github/scripts/smoke:
     devDependencies:
+      '@config/eslint':
+        specifier: workspace:^
+        version: link:../../../configs/eslint
       '@config/typescript':
         specifier: workspace:^
         version: link:../../../configs/typescript

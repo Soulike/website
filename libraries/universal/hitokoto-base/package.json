@@ -5,7 +5,8 @@
   "main": "./src/index.ts",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest"
+    "test": "vitest",
+    "lint": "eslint ./src"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "catalog:",

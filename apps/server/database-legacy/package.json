@@ -4,7 +4,8 @@
   "scripts": {
     "build": "node build.ts",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "lint": "eslint ./src"
   },
   "dependencies": {
     "@koa/router": "catalog:",
