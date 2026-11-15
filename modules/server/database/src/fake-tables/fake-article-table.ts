@@ -1,11 +1,20 @@
-import {isObjectEmpty} from '@library/object-helpers';
-import {Article} from '@module/classes';
+import {
+  isObjectEmpty,
+  removeUndefinedFieldsShallow,
+} from '@library/object-helpers';
+import {
+  type ArticleInsertRow,
+  ArticleInsertRowSchema,
+  type ArticleRow,
+  ArticleRowSchema,
+  type ArticleUpdateRow,
+  type OrderConfig,
+} from '@schema/database';
 
-import {OrderConfig} from '../types.js';
 import {sortEntities} from './fake-table-helpers.js';
 
 export class FakeArticleTable {
-  private static articles: Article[] = [];
+  private static articles: ArticleRow[] = [];
   private static idCounter = 1;
 
   static reset(): void {
@@ -13,56 +22,58 @@ export class FakeArticleTable {
     this.idCounter = 1;
   }
 
-  static async insert(article: Omit<Article, 'id'>): Promise<void> {
+  static async insert(article: ArticleInsertRow): Promise<void> {
     const id = this.idCounter++;
-    const newArticle = Article.from({id, ...article});
+    const parsedArticle = ArticleInsertRowSchema.parse(article);
+    const newArticle = ArticleRowSchema.parse({id, ...parsedArticle});
     await Promise.resolve();
     this.articles.push(newArticle);
   }
 
-  static async deleteById(id: Article['id']): Promise<void> {
+  static async deleteById(id: ArticleRow['id']): Promise<void> {
     await Promise.resolve();
     this.articles = this.articles.filter((article) => article.id !== id);
   }
 
   static async updateById(
-    id: Article['id'],
-    article: Partial<Omit<Article, 'id'>>,
+    id: ArticleRow['id'],
+    article: ArticleUpdateRow,
   ): Promise<void> {
-    if (isObjectEmpty(article)) {
+    const filteredArticle = removeUndefinedFieldsShallow(article);
+    if (isObjectEmpty(filteredArticle)) {
       return;
     }
 
     const index = this.articles.findIndex((a) => a.id === id);
     if (index !== -1) {
       await Promise.resolve();
-      Object.assign(this.articles[index], article);
+      Object.assign(this.articles[index], filteredArticle);
     }
   }
 
-  static async selectById(id: Article['id']): Promise<Article | null> {
-    const article = this.articles.find((article) => article.id === id);
+  static async selectById(id: ArticleRow['id']): Promise<ArticleRow | null> {
+    const article = this.articles.find((a) => a.id === id);
     await Promise.resolve();
-    return article ? Article.from(article) : null;
+    return article ? ArticleRowSchema.parse(article) : null;
   }
 
   static async selectAll(
-    orderConfig: OrderConfig<Article> = {},
-  ): Promise<Article[]> {
+    orderConfig: OrderConfig<ArticleRow> = {},
+  ): Promise<ArticleRow[]> {
     return this.select({}, orderConfig);
   }
 
   static async select(
-    article: Partial<Article>,
-    orderConfig: OrderConfig<Article> = {},
-  ): Promise<Article[]> {
+    article: Partial<ArticleRow>,
+    orderConfig: OrderConfig<ArticleRow> = {},
+  ): Promise<ArticleRow[]> {
     if (isObjectEmpty(article)) {
       return this.sortArticles([...this.articles], orderConfig);
     }
 
     const filteredArticles = this.articles.filter((a) => {
       return Object.entries(article).every(([key, value]) => {
-        return a[key as keyof Article] === value;
+        return a[key as keyof ArticleRow] === value;
       });
     });
 
@@ -75,14 +86,14 @@ export class FakeArticleTable {
     return this.articles.length;
   }
 
-  static async count(article: Partial<Article>): Promise<number> {
+  static async count(article: Partial<ArticleRow>): Promise<number> {
     if (isObjectEmpty(article)) {
       return this.countAll();
     }
 
     const filteredArticles = this.articles.filter((a) => {
       return Object.entries(article).every(([key, value]) => {
-        return a[key as keyof Article] === value;
+        return a[key as keyof ArticleRow] === value;
       });
     });
 
@@ -90,10 +101,10 @@ export class FakeArticleTable {
   }
 
   private static sortArticles(
-    articles: Article[],
-    orderConfig: OrderConfig<Article>,
-  ): Article[] {
+    articles: ArticleRow[],
+    orderConfig: OrderConfig<ArticleRow>,
+  ): ArticleRow[] {
     const sortedArticles = sortEntities(articles, orderConfig);
-    return sortedArticles.map((article) => Article.from(article));
+    return sortedArticles.map((article) => ArticleRowSchema.parse(article));
   }
 }

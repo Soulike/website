@@ -19,9 +19,9 @@
     "vitest": "catalog:"
   },
   "dependencies": {
-    "@types/pg": "^8.16.0",
-    "@module/classes": "workspace:^",
     "@library/object-helpers": "workspace:^",
+    "@schema/database": "workspace:^",
+    "@types/pg": "^8.16.0",
     "pg": "^8.16.3"
   }
 }

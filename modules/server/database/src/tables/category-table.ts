@@ -1,5 +1,12 @@
 import {isObjectEmpty} from '@library/object-helpers';
-import {Category} from '@module/classes';
+import {
+  type CategoryInsertRow,
+  CategoryInsertRowSchema,
+  type CategoryRow,
+  CategoryRowSchema,
+  type CategoryUpdateRow,
+  type OrderConfig,
+} from '@schema/database';
 
 import {query} from '../helpers/query-helpers.js';
 import {
@@ -8,12 +15,10 @@ import {
   generateSetClause,
   generateWhereClause,
 } from '../helpers/sql-helpers.js';
-import {OrderConfig} from '../types.js';
 
 export class CategoryTable {
-  static async insert(category: Omit<Category, 'id'>): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {id, ...filteredCategory} = Category.from({id: 0, ...category});
+  static async insert(category: CategoryInsertRow): Promise<void> {
+    const filteredCategory = CategoryInsertRowSchema.parse(category);
     const {insertStatement, values} = generateInsertStatement(
       'categories',
       filteredCategory,
@@ -21,14 +26,14 @@ export class CategoryTable {
     await query<unknown[]>(insertStatement, values);
   }
 
-  static async deleteById(id: Category['id']): Promise<void> {
+  static async deleteById(id: CategoryRow['id']): Promise<void> {
     const deleteStatement = 'DELETE FROM "categories" WHERE "id"=$1';
     await query(deleteStatement, [id]);
   }
 
   static async updateById(
-    id: Category['id'],
-    category: Partial<Omit<Category, 'id'>>,
+    id: CategoryRow['id'],
+    category: CategoryUpdateRow,
   ): Promise<void> {
     const {setClause, values} = generateSetClause(category);
     if (values.length == 0) {
@@ -42,21 +47,20 @@ export class CategoryTable {
     );
   }
 
-  static async selectById(id: Category['id']): Promise<Category | null> {
+  static async selectById(id: CategoryRow['id']): Promise<CategoryRow | null> {
     const selectStatement = 'SELECT * FROM "categories" WHERE "id"=$1';
-    const {rows, rowCount} = await query<Category>(selectStatement, [id]);
+    const {rows, rowCount} = await query<CategoryRow>(selectStatement, [id]);
     if (rowCount === 0) {
       return null;
-    } else {
-      return Category.from(rows[0]);
     }
+    return CategoryRowSchema.parse(rows[0]);
   }
 
   static async countAll(): Promise<number> {
     return this.count({});
   }
 
-  static async count(category: Partial<Category>): Promise<number> {
+  static async count(category: Partial<CategoryRow>): Promise<number> {
     const {whereClause, values} = generateWhereClause(category);
     const {rows} = await query<{c: string}>(
       `SELECT count("id") AS "c"
@@ -68,29 +72,29 @@ export class CategoryTable {
   }
 
   static async selectAll(
-    orderConfig: OrderConfig<Category> = {},
-  ): Promise<Category[]> {
+    orderConfig: OrderConfig<CategoryRow> = {},
+  ): Promise<CategoryRow[]> {
     return this.select({}, orderConfig);
   }
 
   static async select(
-    category: Partial<Category>,
-    orderConfig: OrderConfig<Category> = {},
-  ): Promise<Category[]> {
+    category: Partial<CategoryRow>,
+    orderConfig: OrderConfig<CategoryRow> = {},
+  ): Promise<CategoryRow[]> {
     if (isObjectEmpty(category)) {
       return this.selectAll(orderConfig);
     }
     const {whereClause, values} = generateWhereClause(category);
-    const {rows} = await query<Category>(
+    const {rows} = await query<CategoryRow>(
       `SELECT *
        FROM "categories"
        ${whereClause} ${generateOrderByClause(orderConfig)}`,
       values,
     );
-    return rows.map((row) => Category.from(row));
+    return rows.map((row) => CategoryRowSchema.parse(row));
   }
 
-  static async countArticlesById(id: Category['id']): Promise<number> {
+  static async countArticlesById(id: CategoryRow['id']): Promise<number> {
     const {rows} = await query<{count: string}>(
       `SELECT count("a"."id") AS "count"
        FROM "categories" "c"

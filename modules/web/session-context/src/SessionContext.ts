@@ -1,5 +1,5 @@
-import {Session} from '@module/classes';
 import {createSession, deleteSession} from '@module/session-sdk';
+import type {Session} from '@schema/auth';
 import {createContext} from 'react';
 
 export interface SessionContextValue {

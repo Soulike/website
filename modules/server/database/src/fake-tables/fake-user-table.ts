@@ -1,96 +1,112 @@
-import {isObjectEmpty} from '@library/object-helpers';
-import {User} from '@module/classes';
+import {
+  isObjectEmpty,
+  removeUndefinedFieldsShallow,
+} from '@library/object-helpers';
+import {
+  type AccountInsertRow,
+  AccountInsertRowSchema,
+  type AccountRow,
+  AccountRowSchema,
+  type AccountUpdateRow,
+  type OrderConfig,
+} from '@schema/database';
 
-import {OrderConfig} from '../types.js';
 import {sortEntities} from './fake-table-helpers.js';
 
 export class FakeUserTable {
-  private static users: User[] = [];
+  private static accounts: AccountRow[] = [];
 
   static reset(): void {
-    this.users = [];
+    this.accounts = [];
   }
 
-  static async insert(user: User): Promise<void> {
-    const newUser = User.from(user);
+  static async insert(account: AccountInsertRow): Promise<void> {
+    const newAccount = AccountInsertRowSchema.parse(account);
     await Promise.resolve();
-    this.users.push(newUser);
+    this.accounts.push(newAccount);
   }
 
-  static async deleteByUsername(username: User['username']): Promise<void> {
+  static async deleteByUsername(
+    username: AccountRow['username'],
+  ): Promise<void> {
     await Promise.resolve();
-    this.users = this.users.filter((user) => user.username !== username);
+    this.accounts = this.accounts.filter(
+      (account) => account.username !== username,
+    );
   }
 
   static async updateByUsername(
-    username: User['username'],
-    user: Partial<Omit<User, 'username'>>,
+    username: AccountRow['username'],
+    account: AccountUpdateRow,
   ): Promise<void> {
-    if (isObjectEmpty(user)) {
+    const filteredAccount = removeUndefinedFieldsShallow(account);
+    if (isObjectEmpty(filteredAccount)) {
       return;
     }
 
-    const index = this.users.findIndex((u) => u.username === username);
+    const index = this.accounts.findIndex((a) => a.username === username);
     if (index !== -1) {
       await Promise.resolve();
-      Object.assign(this.users[index], user);
+      Object.assign(this.accounts[index], filteredAccount);
     }
   }
 
   static async selectByUsername(
-    username: User['username'],
-  ): Promise<User | null> {
-    const user = this.users.find((user) => user.username === username);
+    username: AccountRow['username'],
+  ): Promise<AccountRow | null> {
+    const account = this.accounts.find((a) => a.username === username);
     await Promise.resolve();
-    return user ? User.from(user) : null;
+    return account ? AccountRowSchema.parse(account) : null;
   }
 
-  static async selectAll(orderConfig: OrderConfig<User> = {}): Promise<User[]> {
+  static async selectAll(
+    orderConfig: OrderConfig<AccountRow> = {},
+  ): Promise<AccountRow[]> {
     return this.select({}, orderConfig);
   }
 
   static async select(
-    user: Partial<User>,
-    orderConfig: OrderConfig<User> = {},
-  ): Promise<User[]> {
-    if (isObjectEmpty(user)) {
-      return this.sortUsers([...this.users], orderConfig);
+    account: Partial<AccountRow>,
+    orderConfig: OrderConfig<AccountRow> = {},
+  ): Promise<AccountRow[]> {
+    if (isObjectEmpty(account)) {
+      return this.sortAccounts([...this.accounts], orderConfig);
     }
 
-    const filteredUsers = this.users.filter((u) => {
-      return Object.entries(user).every(([key, value]) => {
-        return u[key as keyof User] === value;
+    const filteredAccounts = this.accounts.filter((a) => {
+      return Object.entries(account).every(([key, value]) => {
+        return a[key as keyof AccountRow] === value;
       });
     });
 
     await Promise.resolve();
-    return this.sortUsers(filteredUsers, orderConfig);
+    return this.sortAccounts(filteredAccounts, orderConfig);
   }
 
   static async countAll(): Promise<number> {
     await Promise.resolve();
-    return this.users.length;
+    return this.accounts.length;
   }
 
-  static async count(user: Partial<User>): Promise<number> {
-    if (isObjectEmpty(user)) {
+  static async count(account: Partial<AccountRow>): Promise<number> {
+    if (isObjectEmpty(account)) {
       return this.countAll();
     }
 
-    const filteredUsers = this.users.filter((u) => {
-      return Object.entries(user).every(([key, value]) => {
-        return u[key as keyof User] === value;
+    const filteredAccounts = this.accounts.filter((a) => {
+      return Object.entries(account).every(([key, value]) => {
+        return a[key as keyof AccountRow] === value;
       });
     });
 
-    return filteredUsers.length;
+    return filteredAccounts.length;
   }
 
-  private static sortUsers(
-    users: User[],
-    orderConfig: OrderConfig<User>,
-  ): User[] {
-    const sortedUsers = sortEntities(users, orderConfig);
-    return sortedUsers.map((user) => User.from(user));
+  private static sortAccounts(
+    accounts: AccountRow[],
+    orderConfig: OrderConfig<AccountRow>,
+  ): AccountRow[] {
+    const sortedAccounts = sortEntities(accounts, orderConfig);
+    return sortedAccounts.map((account) => AccountRowSchema.parse(account));
   }
 }

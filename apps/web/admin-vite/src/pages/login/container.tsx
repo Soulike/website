@@ -8,6 +8,7 @@ import {
 import {useNavigate} from 'react-router';
 
 import {showErrorNotification} from '@/helpers/error-notification-helper.js';
+import {getI18nString, STRING_KEY} from '@/i18n/index.js';
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config';
 
 import {LoginView} from './view.js';
@@ -39,6 +40,10 @@ export function Login() {
     }
   }, [sessionError]);
 
+  const showErrorMessage = useCallback((message: string) => {
+    notification.error({title: message});
+  }, []);
+
   const onLoginFormSubmit: DOMAttributes<HTMLFormElement>['onSubmit'] =
     useCallback<Exclude<DOMAttributes<HTMLFormElement>['onSubmit'], undefined>>(
       (e) => {
@@ -46,18 +51,23 @@ export function Login() {
         login(
           username,
           password,
-          (message) => {
-            notification.error({title: message});
-          },
+          showErrorMessage,
           () => {
-            notification.success({title: 'Successfully logged in'});
+            getI18nString(STRING_KEY.UI_MESSAGE_LOGIN_SUCCESS)
+              .then((message) => {
+                notification.success({title: message});
+              })
+              .catch((e: unknown) => {
+                console.error(e);
+              });
           },
+          showErrorMessage,
           (error) => {
             showErrorNotification(error);
           },
         );
       },
-      [login, password, username],
+      [login, password, showErrorMessage, username],
     );
 
   return (

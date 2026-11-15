@@ -204,12 +204,12 @@ importers:
       '@library/task-runner':
         specifier: workspace:^
         version: link:../../../libraries/universal/task-runner
-      '@module/classes':
-        specifier: workspace:^
-        version: link:../../../modules/universal/classes
       '@module/database':
         specifier: workspace:^
         version: link:../../../modules/server/database
+      '@schema/auth':
+        specifier: workspace:^
+        version: link:../../../schemas/auth
       http-status-codes:
         specifier: ^2.3.0
         version: 2.3.0
@@ -417,6 +417,9 @@ importers:
       '@module/session-sdk':
         specifier: workspace:^
         version: link:../../../modules/universal/session-sdk
+      '@schema/auth':
+        specifier: workspace:^
+        version: link:../../../schemas/auth
       antd:
         specifier: 'catalog:'
         version: 6.6.7(moment@2.31.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -429,6 +432,9 @@ importers:
       react-router:
         specifier: 'catalog:'
         version: 7.18.4(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
     devDependencies:
       '@config/eslint':
         specifier: workspace:^
@@ -442,6 +448,9 @@ importers:
       '@vitejs/plugin-react-swc':
         specifier: ^4.2.2
         version: 4.3.3(vite@7.3.7(@types/node@26.6.5)(jiti@2.6.1)(yaml@2.9.1))
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 4.1.12(vitest@4.1.12)
       browserslist-to-esbuild:
         specifier: ^2.1.1
         version: 2.1.1(browserslist@4.29.4)
@@ -472,6 +481,9 @@ importers:
       vite-plugin-node-polyfills:
         specifier: ^0.24.0
         version: 0.24.0(rollup@4.65.0)(vite@7.3.7(@types/node@26.6.5)(jiti@2.6.1)(yaml@2.9.1))
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.12(@types/node@26.6.5)(@vitest/coverage-v8@4.1.12)(jsdom@27.4.0(@noble/hashes@1.8.0)(supports-color@7.2.0))(vite@7.3.7(@types/node@26.6.5)(jiti@2.6.1)(yaml@2.9.1))
 
   apps/web/blog-vite:
     dependencies:
@@ -1186,9 +1198,9 @@ importers:
       '@library/object-helpers':
         specifier: workspace:^
         version: link:../../../libraries/universal/object-helpers
-      '@module/classes':
+      '@schema/database':
         specifier: workspace:^
-        version: link:../../universal/classes
+        version: link:../../../schemas/database
       '@types/pg':
         specifier: ^8.16.0
         version: 8.23.1
@@ -1233,9 +1245,9 @@ importers:
 
   modules/universal/session-sdk:
     dependencies:
-      '@module/classes':
+      '@schema/auth':
         specifier: workspace:^
-        version: link:../classes
+        version: link:../../../schemas/auth
       http-status-codes:
         specifier: ^2.3.0
         version: 2.3.0
@@ -1302,12 +1314,12 @@ importers:
       '@config/typescript':
         specifier: workspace:^
         version: link:../../../configs/typescript
-      '@module/classes':
-        specifier: workspace:^
-        version: link:../../universal/classes
       '@module/session-sdk':
         specifier: workspace:^
         version: link:../../universal/session-sdk
+      '@schema/auth':
+        specifier: workspace:^
+        version: link:../../../schemas/auth
       '@testing-library/dom':
         specifier: ^10.4.1
         version: 10.4.2

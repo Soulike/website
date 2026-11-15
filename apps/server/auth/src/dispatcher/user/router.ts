@@ -1,6 +1,6 @@
 import Router from '@koa/router';
 import {Logger} from '@library/logger';
-import {Session, User} from '@module/classes';
+import {LoginCredentialsSchema, SessionSchema} from '@schema/auth';
 import {StatusCodes} from 'http-status-codes';
 import {DefaultState} from 'koa';
 
@@ -12,31 +12,29 @@ import {SESSION} from './path.js';
 const router = new Router<DefaultState, Context>();
 
 router.get(SESSION, (ctx) => {
-  if (!Session.validate(ctx.session)) {
+  const parsedSession = SessionSchema.safeParse(ctx.session);
+  if (!parsedSession.success) {
     ctx.session = null;
-  }
-
-  if (!ctx.session) {
     ctx.response.status = StatusCodes.NOT_FOUND;
-  } else {
-    ctx.response.body = ctx.session;
+    return;
   }
+  ctx.response.body = parsedSession.data;
 });
 
 router.post(SESSION, async (ctx) => {
-  const body: unknown = ctx.request.body;
-  if (!User.validate(body)) {
+  const parsedCredentials = LoginCredentialsSchema.safeParse(ctx.request.body);
+  if (!parsedCredentials.success) {
     ctx.response.status = StatusCodes.BAD_REQUEST;
     return;
   }
   try {
-    const session = await createSession(User.from(body));
-    if (session) {
-      ctx.session = session;
-      ctx.response.status = StatusCodes.NO_CONTENT;
-    } else {
+    const session = await createSession(parsedCredentials.data);
+    if (!session) {
       ctx.response.status = StatusCodes.UNAUTHORIZED;
+      return;
     }
+    ctx.session = session;
+    ctx.response.status = StatusCodes.NO_CONTENT;
   } catch (e: unknown) {
     ctx.response.status = StatusCodes.INTERNAL_SERVER_ERROR;
     Logger.dispatcherError(SESSION, 'POST', e);

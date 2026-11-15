@@ -10,8 +10,8 @@
     "@vitest/coverage-v8": "catalog:",
     "@config/eslint": "workspace:^",
     "@config/typescript": "workspace:^",
-    "@module/classes": "workspace:^",
     "@module/session-sdk": "workspace:^",
+    "@schema/auth": "workspace:^",
     "eslint-plugin-react-hooks": "^7.1.1",
     "typescript": "catalog:",
     "vitest": "catalog:"

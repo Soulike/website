@@ -1,12 +1,21 @@
-import {isObjectEmpty} from '@library/object-helpers';
-import {Category} from '@module/classes';
+import {
+  isObjectEmpty,
+  removeUndefinedFieldsShallow,
+} from '@library/object-helpers';
+import {
+  type CategoryInsertRow,
+  CategoryInsertRowSchema,
+  type CategoryRow,
+  CategoryRowSchema,
+  type CategoryUpdateRow,
+  type OrderConfig,
+} from '@schema/database';
 
-import {OrderConfig} from '../types.js';
 import {FakeArticleTable} from './fake-article-table.js';
 import {sortEntities} from './fake-table-helpers.js';
 
 export class FakeCategoryTable {
-  private static categories: Category[] = [];
+  private static categories: CategoryRow[] = [];
   private static idCounter = 1;
 
   static reset(): void {
@@ -14,56 +23,58 @@ export class FakeCategoryTable {
     this.idCounter = 1;
   }
 
-  static async insert(category: Omit<Category, 'id'>): Promise<void> {
+  static async insert(category: CategoryInsertRow): Promise<void> {
     const id = this.idCounter++;
-    const newCategory = Category.from({id, ...category});
+    const parsedCategory = CategoryInsertRowSchema.parse(category);
+    const newCategory = CategoryRowSchema.parse({id, ...parsedCategory});
     await Promise.resolve();
     this.categories.push(newCategory);
   }
 
-  static async deleteById(id: Category['id']): Promise<void> {
+  static async deleteById(id: CategoryRow['id']): Promise<void> {
     await Promise.resolve();
     this.categories = this.categories.filter((category) => category.id !== id);
   }
 
   static async updateById(
-    id: Category['id'],
-    category: Partial<Omit<Category, 'id'>>,
+    id: CategoryRow['id'],
+    category: CategoryUpdateRow,
   ): Promise<void> {
-    if (isObjectEmpty(category)) {
+    const filteredCategory = removeUndefinedFieldsShallow(category);
+    if (isObjectEmpty(filteredCategory)) {
       return;
     }
 
     const index = this.categories.findIndex((c) => c.id === id);
     if (index !== -1) {
       await Promise.resolve();
-      Object.assign(this.categories[index], category);
+      Object.assign(this.categories[index], filteredCategory);
     }
   }
 
-  static async selectById(id: Category['id']): Promise<Category | null> {
-    const category = this.categories.find((category) => category.id === id);
+  static async selectById(id: CategoryRow['id']): Promise<CategoryRow | null> {
+    const category = this.categories.find((c) => c.id === id);
     await Promise.resolve();
-    return category ? Category.from(category) : null;
+    return category ? CategoryRowSchema.parse(category) : null;
   }
 
   static async selectAll(
-    orderConfig: OrderConfig<Category> = {},
-  ): Promise<Category[]> {
+    orderConfig: OrderConfig<CategoryRow> = {},
+  ): Promise<CategoryRow[]> {
     return this.select({}, orderConfig);
   }
 
   static async select(
-    category: Partial<Category>,
-    orderConfig: OrderConfig<Category> = {},
-  ): Promise<Category[]> {
+    category: Partial<CategoryRow>,
+    orderConfig: OrderConfig<CategoryRow> = {},
+  ): Promise<CategoryRow[]> {
     if (isObjectEmpty(category)) {
       return this.sortCategories([...this.categories], orderConfig);
     }
 
     const filteredCategories = this.categories.filter((c) => {
       return Object.entries(category).every(([key, value]) => {
-        return c[key as keyof Category] === value;
+        return c[key as keyof CategoryRow] === value;
       });
     });
 
@@ -76,21 +87,21 @@ export class FakeCategoryTable {
     return this.categories.length;
   }
 
-  static async count(category: Partial<Category>): Promise<number> {
+  static async count(category: Partial<CategoryRow>): Promise<number> {
     if (isObjectEmpty(category)) {
       return this.countAll();
     }
 
     const filteredCategories = this.categories.filter((c) => {
       return Object.entries(category).every(([key, value]) => {
-        return c[key as keyof Category] === value;
+        return c[key as keyof CategoryRow] === value;
       });
     });
 
     return filteredCategories.length;
   }
 
-  static async countArticlesById(id: Category['id']): Promise<number> {
+  static async countArticlesById(id: CategoryRow['id']): Promise<number> {
     await Promise.resolve();
 
     // Get all articles from FakeArticleTable with matching category ID
@@ -99,10 +110,12 @@ export class FakeCategoryTable {
   }
 
   private static sortCategories(
-    categories: Category[],
-    orderConfig: OrderConfig<Category>,
-  ): Category[] {
+    categories: CategoryRow[],
+    orderConfig: OrderConfig<CategoryRow>,
+  ): CategoryRow[] {
     const sortedCategories = sortEntities(categories, orderConfig);
-    return sortedCategories.map((category) => Category.from(category));
+    return sortedCategories.map((category) =>
+      CategoryRowSchema.parse(category),
+    );
   }
 }

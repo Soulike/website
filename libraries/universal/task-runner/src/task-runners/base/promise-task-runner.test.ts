@@ -100,6 +100,18 @@ describe('PromiseTaskRunner', () => {
       expect(result.result).toBe(null);
     });
 
+    it('should preserve falsy non-null results such as false', async () => {
+      const runner = new PromiseTaskRunner();
+      const task = new MockPromiseTask(() => Promise.resolve(false));
+
+      const result = await runner.push(task);
+
+      expect(result).toEqual({
+        error: null,
+        result: false,
+      });
+    });
+
     it('should handle task returning null (cancelled)', async () => {
       const runner = new PromiseTaskRunner();
       const mockRun = vi.fn(() => Promise.resolve(null));
