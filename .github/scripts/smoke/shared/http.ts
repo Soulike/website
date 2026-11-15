@@ -33,7 +33,7 @@ async function readBody(response: Response): Promise<BodyResult> {
   let body = '';
 
   try {
-    while (true) {
+    for (;;) {
       const {done, value} = await reader.read();
       if (done) break;
       body += decoder.decode(value, {stream: true});

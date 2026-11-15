@@ -101,7 +101,7 @@ export async function selectByPublicationTimeDescOrder(
   month?: number,
   day?: number,
 ): Promise<Article[]> {
-  let queryResult = null;
+  let queryResult;
   if (typeof month === 'number') {
     if (typeof day === 'number') {
       // 年月日都有

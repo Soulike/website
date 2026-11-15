@@ -40,5 +40,5 @@ function sanitizeRequestParameters(
     select,
     min_length,
     max_length,
-  } as RequestParameters;
+  };
 }

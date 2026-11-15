@@ -57,5 +57,9 @@ export function buildImageMatrix(
       ? targets
       : targets.filter(({filter}) => filters[filter] === 'true');
 
-  return selectedTargets.map(({filter: _filter, ...target}) => target);
+  return selectedTargets.map((target) => ({
+    'docker-build-target': target['docker-build-target'],
+    'docker-file-path': target['docker-file-path'],
+    'smoke-script': target['smoke-script'],
+  }));
 }

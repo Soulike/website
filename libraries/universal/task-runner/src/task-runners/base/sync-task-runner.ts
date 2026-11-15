@@ -41,7 +41,7 @@ export abstract class SyncTaskRunner {
   public async push<ResultT>(
     taskOrFunc: SyncTask<ResultT> | (() => ResultT),
   ): Promise<TaskResult<ResultT>> {
-    let task: SyncTask<ResultT> | null = null;
+    let task: SyncTask<ResultT>;
     if (typeof taskOrFunc === 'function') {
       task = new TempSyncTask<ResultT>();
       task.run = taskOrFunc;

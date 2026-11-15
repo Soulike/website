@@ -11,7 +11,7 @@ export async function getSession(): Promise<Session | null> {
     method: 'GET',
     credentials: 'include',
   });
-  if (response.status === (StatusCodes.NOT_FOUND as number)) {
+  if (Object.is(response.status, StatusCodes.NOT_FOUND)) {
     return null;
   }
   if (!response.ok) {
@@ -34,7 +34,7 @@ export async function createSession(user: User): Promise<CreateSessionResult> {
   if (response.ok) {
     return CreateSessionResult.SUCCESS;
   }
-  if (response.status === (StatusCodes.UNAUTHORIZED as number)) {
+  if (Object.is(response.status, StatusCodes.UNAUTHORIZED)) {
     return CreateSessionResult.UNAUTHORIZED;
   }
   throw new Error(`Create session failed with HTTP status ${response.status}`);

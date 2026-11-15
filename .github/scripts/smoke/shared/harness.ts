@@ -4,17 +4,17 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {setTimeout as delay} from 'node:timers/promises';
 
-import {runCommand, type CommandResult} from './command.ts';
+import {type CommandResult, runCommand} from './command.ts';
 import {
+  type DependencyRuntime,
+  type PostgresOptions,
+  type RedisOptions,
   smokeDatabasePassword,
   smokeRedisPassword,
   startPostgres,
   startRedis,
-  type DependencyRuntime,
-  type PostgresOptions,
-  type RedisOptions,
 } from './dependencies.ts';
-import {waitForHttp, type HttpResponse} from './http.ts';
+import {type HttpResponse, waitForHttp} from './http.ts';
 
 export interface SecretMount {
   hostPath: string;
@@ -251,8 +251,9 @@ class SmokeHarness implements SmokeContext {
       redis: this.redis,
       runDocker: (args, allowFailure, timeoutMs) =>
         this.docker(args, allowFailure, timeoutMs),
-      waitFor: async (description, predicate) =>
-        await this.waitFor(description, predicate),
+      waitFor: async (description, predicate) => {
+        await this.waitFor(description, predicate);
+      },
     };
   }
 

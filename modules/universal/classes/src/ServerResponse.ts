@@ -19,5 +19,4 @@ export class FailServerResponse {
 }
 
 export type ServerResponse<TBody> =
-  | SuccessfulServerResponse<TBody>
-  | FailServerResponse;
+  SuccessfulServerResponse<TBody> | FailServerResponse;

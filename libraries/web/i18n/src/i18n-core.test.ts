@@ -269,17 +269,17 @@ describe('I18nCore', () => {
 
     it('should return empty string for non-existent key', async () => {
       mockNavigatorLanguage = 'en';
-      const loaders = createMockLoaders();
-
-      const core = new I18nCore<TestStringKey, TestStrings>({
-        languageLoaders: loaders,
+      const core = new I18nCore<string, Record<string, string>>({
+        languageLoaders: {
+          en: vi.fn(async () => Promise.resolve({WELCOME: 'Welcome!'})),
+        },
         defaultLanguageCode: 'en',
         placeholderMark: '{}',
       });
 
       await core.ensureStringsLoaded();
 
-      expect(core.getString('NON_EXISTENT' as TestStringKey)).toBe('');
+      expect(core.getString('NON_EXISTENT')).toBe('');
     });
 
     it('should return empty string when strings not loaded', () => {

@@ -43,8 +43,8 @@ export function runCommand(
 
   const commandResult: CommandResult = {
     status: result.status ?? 1,
-    stdout: result.stdout ?? '',
-    stderr: result.stderr ?? '',
+    stdout: result.stdout,
+    stderr: result.stderr,
   };
 
   if (!options.allowFailure && commandResult.status !== 0) {

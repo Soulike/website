@@ -87,26 +87,16 @@ export class GameManagerImpl
   private moveWithoutCreatingNewTile(direction: MoveDirection) {
     assert(!this.gameChecker.isGameOver(), 'Try to move after game is over.');
 
-    let operationMovements: OperationMovements;
-
     switch (direction) {
       case MoveDirection.UP:
-        operationMovements = this.moveUp();
-        break;
+        return this.moveUp();
       case MoveDirection.DOWN:
-        operationMovements = this.moveDown();
-        break;
+        return this.moveDown();
       case MoveDirection.LEFT:
-        operationMovements = this.moveLeft();
-        break;
+        return this.moveLeft();
       case MoveDirection.RIGHT:
-        operationMovements = this.moveRight();
-        break;
-      default:
-        assert.fail(`Unexpected direction ${String(direction)}`);
+        return this.moveRight();
     }
-
-    return operationMovements;
   }
 
   private moveUp(): OperationMovements {

@@ -41,6 +41,48 @@ import {I18nEventType} from './types.js';
  * const message = await getI18nString(STRING_KEY.WELCOME);
  * ```
  */
+function useI18nStringWithCore<
+  StringKey extends PropertyKey,
+  KeyToString extends Record<StringKey, string>,
+>(
+  i18nCore: I18nCore<StringKey, KeyToString>,
+  key: StringKey,
+  ...args: string[]
+): string {
+  const [string, setString] = useState('');
+
+  const languageChangeCallback = useCallback(
+    (strings: KeyToString) => {
+      setString(strings[key]);
+    },
+    [key],
+  );
+
+  useEffect(() => {
+    i18nCore
+      .ensureStringsLoaded()
+      .then(() => {
+        setString(i18nCore.getString(key, ...args));
+      })
+      .catch((e: unknown) => {
+        console.error(e);
+      });
+
+    i18nCore.addEventListener(
+      I18nEventType.LANGUAGE_CHANGE,
+      languageChangeCallback,
+    );
+    return () => {
+      i18nCore.removeEventListener(
+        I18nEventType.LANGUAGE_CHANGE,
+        languageChangeCallback,
+      );
+    };
+  }, [args, i18nCore, key, languageChangeCallback]);
+
+  return string;
+}
+
 export function createI18n<
   StringKey extends PropertyKey,
   KeyToString extends Record<StringKey, string>,
@@ -52,40 +94,7 @@ export function createI18n<
     return i18nCore.getString(key);
   }
 
-  function useI18nString(key: StringKey, ...args: string[]): string {
-    const [string, setString] = useState('');
-
-    const languageChangeCallback = useCallback(
-      (strings: KeyToString) => {
-        setString(strings[key]);
-      },
-      [key],
-    );
-
-    useEffect(() => {
-      i18nCore
-        .ensureStringsLoaded()
-        .then(() => {
-          setString(i18nCore.getString(key, ...args));
-        })
-        .catch((e: unknown) => {
-          console.error(e);
-        });
-
-      i18nCore.addEventListener(
-        I18nEventType.LANGUAGE_CHANGE,
-        languageChangeCallback,
-      );
-      return () => {
-        i18nCore.removeEventListener(
-          I18nEventType.LANGUAGE_CHANGE,
-          languageChangeCallback,
-        );
-      };
-    }, [args, key, languageChangeCallback]);
-
-    return string;
-  }
+  const useI18nString = useI18nStringWithCore.bind(null, i18nCore);
 
   return {
     getI18nString,
