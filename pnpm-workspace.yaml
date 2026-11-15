@@ -3,6 +3,7 @@ packages:
   - '.github/scripts/smoke'
   - 'apps/*/*'
   - 'modules/*/*'
+  - 'schemas/*'
   - 'libraries/*/*'
   - 'configs/*'
 
@@ -33,6 +34,7 @@ catalog:
   typescript: '^6.0.3'
   vite: '^7.2.7'
   vitest: '^4.0.15'
+  zod: '^4.1.13'
 
 allowBuilds:
   '@swc/core': true

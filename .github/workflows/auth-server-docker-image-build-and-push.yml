@@ -7,6 +7,7 @@ on:
     paths:
       - 'apps/server/auth/**'
       - 'modules/**'
+      - 'schemas/**'
       - 'libraries/**'
       - 'configs/**'
       - '.node-version'

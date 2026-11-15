@@ -37,6 +37,7 @@ This repository uses a single-context domain documentation layout. See `docs/age
 - `apps/` - Web and server applications. Each app has its own `Dockerfile`.
 - `configs/` - Shared configuration packages (ESLint, TypeScript, etc.).
 - `modules/` - Business-specific packages containing domain logic.
+- `schemas/` - Shared schema-first Zod contracts (DAO, DTO, and RPC schemas). See `schemas/AGENTS.md`.
 - `libraries/` - Reusable, business-agnostic packages.
 - `nginx/` - NGINX configs for server deployment.
 - `scripts/` - Repository development and CI commands.
