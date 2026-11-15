@@ -14,5 +14,5 @@ export abstract class PromiseTask<ResultT> extends Task<
    *
    * @returns Promise that resolves to the task result, or null if the operation fails/is cancelled
    */
-  public abstract run(): Promise<ResultT | null>;
+  public abstract override run(): Promise<ResultT | null>;
 }

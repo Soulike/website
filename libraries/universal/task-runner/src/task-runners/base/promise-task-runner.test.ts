@@ -26,11 +26,11 @@ class MockPromiseTaskWithTeardown<T> extends PromiseTask<T> {
     this.mockTeardown = vi.fn();
   }
 
-  public run(): Promise<T | null> {
+  public override run(): Promise<T | null> {
     return this.mockRun();
   }
 
-  public async teardown(): Promise<void> {
+  public override async teardown(): Promise<void> {
     await this.mockTeardown();
     await super.teardown();
   }

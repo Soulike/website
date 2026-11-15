@@ -32,5 +32,5 @@ export abstract class SyncTask<ResultT> extends Task<ResultT | null> {
    *
    * @returns The task result, or null if the operation fails/is cancelled
    */
-  public abstract run(): ResultT | null;
+  public abstract override run(): ResultT | null;
 }
