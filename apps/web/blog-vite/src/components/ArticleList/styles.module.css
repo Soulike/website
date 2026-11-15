@@ -1,4 +1,17 @@
 .ArticleList {
   height: 100%;
   width: 100%;
+
+  .listyItem {
+    border-bottom: none;
+    padding-inline: 0;
+  }
+
+  .emptyPlaceholder {
+    min-height: 200px;
+  }
+
+  .pagination {
+    margin-top: 24px;
+  }
 }

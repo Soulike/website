@@ -1,5 +1,4 @@
 import {type Article} from '@schema/blog';
-import {List} from 'antd';
 import {useEffect} from 'react';
 
 import {showErrorNotification} from '@/helpers/error-notification-helper.js';
@@ -11,8 +10,6 @@ import {useViewModel} from './view-model.js';
 export interface ArticleListItemProps {
   article: Article;
 }
-
-const {Item} = List;
 
 export function ArticleListItem(props: ArticleListItemProps) {
   const {article} = props;
@@ -36,16 +33,14 @@ export function ArticleListItem(props: ArticleListItemProps) {
   }, [categoryLoadError]);
 
   return (
-    <Item key={id}>
-      <ArticlePreviewCard
-        loading={categoryLoading}
-        articleId={id}
-        articleTitle={title}
-        articleTime={time}
-        articleCategory={category ?? undefined}
-        articleViewAmount={pageViews}
-        articleBriefTextMarkdown={abstract}
-      />
-    </Item>
+    <ArticlePreviewCard
+      loading={categoryLoading}
+      articleId={id}
+      articleTitle={title}
+      articleTime={time}
+      articleCategory={category ?? undefined}
+      articleViewAmount={pageViews}
+      articleBriefTextMarkdown={abstract}
+    />
   );
 }

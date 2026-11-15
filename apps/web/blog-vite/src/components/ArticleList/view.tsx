@@ -1,6 +1,5 @@
 import {type Article} from '@schema/blog';
-import {Empty, List} from 'antd';
-import type {PaginationConfig} from 'antd/lib/pagination';
+import {Empty, Listy, Pagination, type PaginationProps, Spin} from 'antd';
 import {RefObject} from 'react';
 
 import {ArticleListItem} from './components/ArticleListItem';
@@ -8,31 +7,55 @@ import styles from './styles.module.css';
 
 interface Props {
   viewRef: RefObject<HTMLDivElement | null>;
-  onPageNumberChange: PaginationConfig['onChange'];
+  currentPage: number;
+  pageSize: number;
+  totalArticles: number;
+  onPageNumberChange: NonNullable<PaginationProps['onChange']>;
   articleList: Article[];
   loading: boolean;
 }
 
 export function ArticleListView(props: Props) {
-  const {onPageNumberChange, articleList, loading, viewRef} = props;
+  const {
+    currentPage,
+    pageSize,
+    totalArticles,
+    onPageNumberChange,
+    articleList,
+    loading,
+    viewRef,
+  } = props;
   return (
     <div className={styles.ArticleList} ref={viewRef}>
-      <List
-        loading={loading}
-        dataSource={articleList}
-        split={false}
-        locale={{
-          emptyText: <Empty description={'暂无文章'} />,
-        }}
-        pagination={{
-          pageSize: 10,
-          showSizeChanger: false,
-          position: 'bottom',
-          hideOnSinglePage: true,
-          onChange: onPageNumberChange,
-        }}
-        renderItem={(article) => <ArticleListItem article={article} />}
-      ></List>
+      <Spin spinning={loading}>
+        {totalArticles === 0 ? (
+          loading ? (
+            <div className={styles.emptyPlaceholder} />
+          ) : (
+            <Empty description={'暂无文章'} />
+          )
+        ) : (
+          <>
+            <Listy<Article>
+              items={articleList}
+              rowKey={'id'}
+              rowHoverable={false}
+              classNames={{item: styles.listyItem}}
+              itemRender={(article) => <ArticleListItem article={article} />}
+            />
+            <Pagination
+              className={styles.pagination}
+              align={'end'}
+              current={currentPage}
+              pageSize={pageSize}
+              total={totalArticles}
+              showSizeChanger={false}
+              hideOnSinglePage={true}
+              onChange={onPageNumberChange}
+            />
+          </>
+        )}
+      </Spin>
     </div>
   );
 }

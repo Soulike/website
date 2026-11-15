@@ -3,6 +3,47 @@
   min-height: 100%;
   overflow: auto;
 
+  .listyRoot {
+    overflow: hidden;
+
+    :global(.ant-listy-item:last-child) {
+      border-bottom: none;
+    }
+  }
+
+  .categoryItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .categoryMeta {
+    flex: 1 1 160px;
+    min-width: 0;
+  }
+
+  .categoryTag {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .categoryActions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .emptyContainer {
+    padding: 32px 16px;
+  }
+
+  .pagination {
+    margin-top: 16px;
+  }
+
   .articleAmountTag {
     cursor: pointer;
   }
