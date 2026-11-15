@@ -1,10 +1,18 @@
 import path from 'node:path';
 
 import {Request} from '@library/request';
-import {Article, ServerResponse} from '@module/classes';
+import {
+  type Article,
+  type ArticleAbstract,
+  ArticleAbstractSchema,
+  ArticleSchema,
+} from '@schema/blog';
+import {z} from 'zod';
 
-import {ModelAccessDeniedError} from '../model-access-error.js';
 import {prependServerPrefix} from '../path-helper.js';
+import {parseServerResponse} from '../response-helper.js';
+
+const ArticleAbstractListSchema = z.array(ArticleAbstractSchema);
 
 class ArticleModel {
   private static readonly PATH = Object.freeze({
@@ -21,35 +29,27 @@ class ArticleModel {
     return prependServerPrefix(path.join('article', subPath));
   }
 
-  public async getAllWithAbstract(): Promise<Article[]> {
-    const response = await Request.JSONToJSON.get<ServerResponse<Article[]>>(
+  public async getAllWithAbstract(): Promise<ArticleAbstract[]> {
+    const response = await Request.JSONToJSON.get<unknown>(
       ArticleModel.PATH.GET_ALL_WITH_ABSTRACT,
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data;
-    }
+    return parseServerResponse(ArticleAbstractListSchema, response);
   }
 
   public async getById(id: Article['id']): Promise<Article> {
-    const response = await Request.JSONToJSON.get<ServerResponse<Article>>(
+    const response = await Request.JSONToJSON.get<unknown>(
       ArticleModel.PATH.GET_BY_ID,
       {
         searchParams: new URLSearchParams({json: JSON.stringify({id})}),
       },
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data;
-    }
+    return parseServerResponse(ArticleSchema, response);
   }
 
   public async getByCategoryWithAbstract(
     category: Article['category'],
-  ): Promise<Article[]> {
-    const response = await Request.JSONToJSON.get<ServerResponse<Article[]>>(
+  ): Promise<ArticleAbstract[]> {
+    const response = await Request.JSONToJSON.get<unknown>(
       ArticleModel.PATH.GET_BY_CATEGORY_WITH_ABSTRACT,
       {
         searchParams: new URLSearchParams({
@@ -57,11 +57,7 @@ class ArticleModel {
         }),
       },
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data;
-    }
+    return parseServerResponse(ArticleAbstractListSchema, response);
   }
 }
 

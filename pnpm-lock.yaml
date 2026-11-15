@@ -128,9 +128,15 @@ importers:
       '@library/koa-middlewares':
         specifier: workspace:^
         version: link:../../../libraries/server/koa-middlewares
-      '@module/classes':
+      '@schema/auth':
         specifier: workspace:^
-        version: link:../../../modules/universal/classes
+        version: link:../../../schemas/auth
+      '@schema/blog':
+        specifier: workspace:^
+        version: link:../../../schemas/blog
+      '@schema/rpc':
+        specifier: workspace:^
+        version: link:../../../schemas/rpc
       ioredis:
         specifier: ^5.6.1
         version: 5.11.1(supports-color@7.2.0)
@@ -149,6 +155,9 @@ importers:
       signale:
         specifier: ^1.4.0
         version: 1.4.0
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
     devDependencies:
       '@config/eslint':
         specifier: workspace:^
@@ -268,9 +277,12 @@ importers:
       '@library/koa-middlewares':
         specifier: workspace:^
         version: link:../../../libraries/server/koa-middlewares
-      '@module/classes':
+      '@schema/blog':
         specifier: workspace:^
-        version: link:../../../modules/universal/classes
+        version: link:../../../schemas/blog
+      '@schema/rpc':
+        specifier: workspace:^
+        version: link:../../../schemas/rpc
       koa:
         specifier: 'catalog:'
         version: 3.2.1
@@ -286,6 +298,9 @@ importers:
       signale:
         specifier: ^1.4.0
         version: 1.4.0
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
     devDependencies:
       '@config/eslint':
         specifier: workspace:^
@@ -326,9 +341,15 @@ importers:
       '@library/koa-middlewares':
         specifier: workspace:^
         version: link:../../../libraries/server/koa-middlewares
-      '@module/classes':
+      '@schema/blog':
         specifier: workspace:^
-        version: link:../../../modules/universal/classes
+        version: link:../../../schemas/blog
+      '@schema/database':
+        specifier: workspace:^
+        version: link:../../../schemas/database
+      '@schema/rpc':
+        specifier: workspace:^
+        version: link:../../../schemas/rpc
       clone-deep:
         specifier: ^4.0.1
         version: 4.0.1
@@ -350,6 +371,9 @@ importers:
       signale:
         specifier: ^1.4.0
         version: 1.4.0
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
     devDependencies:
       '@config/eslint':
         specifier: workspace:^
@@ -405,9 +429,6 @@ importers:
       '@library/request':
         specifier: workspace:^
         version: link:../../../libraries/universal/request
-      '@module/classes':
-        specifier: workspace:^
-        version: link:../../../modules/universal/classes
       '@module/model':
         specifier: workspace:^
         version: link:../../../modules/web/model
@@ -420,6 +441,12 @@ importers:
       '@schema/auth':
         specifier: workspace:^
         version: link:../../../schemas/auth
+      '@schema/blog':
+        specifier: workspace:^
+        version: link:../../../schemas/blog
+      '@schema/rpc':
+        specifier: workspace:^
+        version: link:../../../schemas/rpc
       antd:
         specifier: 'catalog:'
         version: 6.6.7(moment@2.31.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -505,12 +532,15 @@ importers:
       '@library/request':
         specifier: workspace:^
         version: link:../../../libraries/universal/request
-      '@module/classes':
-        specifier: workspace:^
-        version: link:../../../modules/universal/classes
       '@module/model':
         specifier: workspace:^
         version: link:../../../modules/web/model
+      '@schema/blog':
+        specifier: workspace:^
+        version: link:../../../schemas/blog
+      '@schema/rpc':
+        specifier: workspace:^
+        version: link:../../../schemas/rpc
       antd:
         specifier: 'catalog:'
         version: 6.6.7(moment@2.31.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -539,6 +569,9 @@ importers:
       '@vitejs/plugin-react-swc':
         specifier: ^4.2.2
         version: 4.3.3(vite@7.3.7(@types/node@26.6.5)(jiti@2.6.1)(yaml@2.9.1))
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 4.1.12(vitest@4.1.12)
       browserslist-to-esbuild:
         specifier: ^2.1.1
         version: 2.1.1(browserslist@4.29.4)
@@ -572,6 +605,9 @@ importers:
       vite-plugin-node-polyfills:
         specifier: ^0.24.0
         version: 0.24.0(rollup@4.65.0)(vite@7.3.7(@types/node@26.6.5)(jiti@2.6.1)(yaml@2.9.1))
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.12(@types/node@26.6.5)(@vitest/coverage-v8@4.1.12)(jsdom@27.4.0(@noble/hashes@1.8.0)(supports-color@7.2.0))(vite@7.3.7(@types/node@26.6.5)(jiti@2.6.1)(yaml@2.9.1))
 
   apps/web/game-2048:
     dependencies:
@@ -1279,9 +1315,12 @@ importers:
       '@library/request':
         specifier: workspace:^
         version: link:../../../libraries/universal/request
-      '@module/classes':
+      '@schema/blog':
         specifier: workspace:^
-        version: link:../../universal/classes
+        version: link:../../../schemas/blog
+      '@schema/rpc':
+        specifier: workspace:^
+        version: link:../../../schemas/rpc
       path-browserify:
         specifier: '>=1.0.0'
         version: 1.0.1
@@ -1291,6 +1330,9 @@ importers:
       react-dom:
         specifier: '>=16.8.0'
         version: 19.3.1(react@19.3.1)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
     devDependencies:
       '@config/typescript':
         specifier: workspace:^
@@ -1298,9 +1340,15 @@ importers:
       '@types/react':
         specifier: 'catalog:'
         version: 19.3.0
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 4.1.12(vitest@4.1.12)
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.12(@types/node@26.6.5)(@vitest/coverage-v8@4.1.12)(jsdom@27.4.0(@noble/hashes@1.8.0)(supports-color@7.2.0))(vite@7.3.7(@types/node@26.6.5)(jiti@2.6.1)(yaml@2.9.1))
 
   modules/web/session-context:
     dependencies:

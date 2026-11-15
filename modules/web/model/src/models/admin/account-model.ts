@@ -1,10 +1,17 @@
 import path from 'node:path';
 
 import {Request} from '@library/request';
-import {ServerResponse} from '@module/classes';
+import {z} from 'zod';
 
-import {ModelAccessDeniedError} from '../model-access-error.js';
 import {prependServerPrefix} from '../path-helper.js';
+import {
+  parseServerResponse,
+  parseVoidServerResponse,
+} from '../response-helper.js';
+
+const SessionCheckDataSchema = z.strictObject({
+  isInSession: z.boolean(),
+});
 
 export class AccountModel {
   private static readonly PATH = Object.freeze({
@@ -18,37 +25,26 @@ export class AccountModel {
   }
 
   public async login(username: string, password: string): Promise<void> {
-    const response = await Request.JSONToJSON.post<ServerResponse<void>>(
+    const response = await Request.JSONToJSON.post<unknown>(
       AccountModel.PATH.LOGIN,
       {
         body: {username, password},
       },
     );
-
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    }
+    parseVoidServerResponse(response);
   }
 
   public async logout(): Promise<void> {
-    const response = await Request.JSONToJSON.post<ServerResponse<void>>(
+    const response = await Request.JSONToJSON.post<unknown>(
       AccountModel.PATH.LOGOUT,
     );
-
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    }
+    parseVoidServerResponse(response);
   }
 
   public async isLoggedIn(): Promise<boolean> {
-    const response = await Request.JSONToJSON.get<
-      ServerResponse<{isInSession: boolean}>
-    >(AccountModel.PATH.CHECK_SESSION);
-
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data.isInSession;
-    }
+    const response = await Request.JSONToJSON.get<unknown>(
+      AccountModel.PATH.CHECK_SESSION,
+    );
+    return parseServerResponse(SessionCheckDataSchema, response).isInSession;
   }
 }

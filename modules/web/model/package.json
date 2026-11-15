@@ -11,18 +11,23 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "test": "vitest",
     "lint": "eslint ./src"
   },
   "dependencies": {
-    "@module/classes": "workspace:^",
     "@config/eslint": "workspace:^",
     "@library/hooks": "workspace:^",
-    "@library/request": "workspace:^"
+    "@library/request": "workspace:^",
+    "@schema/blog": "workspace:^",
+    "@schema/rpc": "workspace:^",
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "@types/react": "catalog:",
     "@config/typescript": "workspace:^",
-    "typescript": "catalog:"
+    "@types/react": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "peerDependencies": {
     "path-browserify": ">=1.0.0",

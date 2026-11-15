@@ -1,10 +1,14 @@
 import assert from 'node:assert';
 
-import {Article, NewArticle} from '@module/classes';
 import {BlogModels} from '@module/model/admin';
+import {type Article, ArticleDraftSchema, ArticleSchema} from '@schema/blog';
 import {useCallback, useLayoutEffect, useMemo, useState} from 'react';
 import {useNavigate, useSearchParams} from 'react-router';
 
+import {
+  ARTICLE_DRAFT_FIELD_LABELS,
+  getValidationErrorMessage,
+} from '@/helpers/validation-i18n-helper.js';
 import {PAGE_ID, PAGE_ID_TO_PATH} from '@/router/page-config/index.js';
 
 export function useViewModel() {
@@ -36,10 +40,11 @@ export function useViewModel() {
 function useSearchParameterId(): Article['id'] | null {
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
-  if (id === null) {
+  if (id === null || !/^[1-9]\d*$/.test(id)) {
     return null;
   }
-  return Number.parseInt(id);
+  const parsed = ArticleSchema.shape.id.safeParse(Number(id));
+  return parsed.success ? parsed.data : null;
 }
 
 export function useSubmitArticleModification(afterSubmitSuccess?: () => void) {
@@ -57,23 +62,29 @@ export function useSubmitArticleModification(afterSubmitSuccess?: () => void) {
       onSubmitSuccess: () => void,
       onSubmitFailed: (error: Error) => void,
     ) => {
-      const validationPassed = NewArticle.validateFormInput(
-        {
-          title,
-          content,
-          category: selectedCategory,
-          isVisible,
-        },
-        onValidationFailed,
-      );
-      if (!validationPassed) {
+      const parsedDraft = ArticleDraftSchema.safeParse({
+        title,
+        content,
+        category: selectedCategory,
+        isVisible,
+      });
+      if (!parsedDraft.success) {
+        getValidationErrorMessage(
+          parsedDraft.error.issues[0],
+          ARTICLE_DRAFT_FIELD_LABELS,
+        )
+          .then((message) => {
+            onValidationFailed(message);
+          })
+          .catch((e: unknown) => {
+            console.error(e);
+          });
         return;
       }
-      assert(selectedCategory !== null);
 
       setIsSubmitting(true);
       articleModel
-        .modify(id, {title, content, category: selectedCategory, isVisible})
+        .modify(id, parsedDraft.data)
         .then(() => {
           onSubmitSuccess();
           afterSubmitSuccess?.();

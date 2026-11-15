@@ -1,4 +1,4 @@
-import {Article as ArticleClass, Category} from '@module/classes';
+import {type Article as ArticleType, type Category} from '@schema/blog';
 import {useEffect, useMemo} from 'react';
 
 import {showErrorNotification} from '@/helpers/error-notification-helper.js';
@@ -19,13 +19,27 @@ export function Article() {
     outdatedWarningMessage,
   } = useViewModel();
 
-  const placeholderArticle = useMemo(() => {
-    return new ArticleClass(0, '', '', 0, '0', '0', 0, true);
-  }, []);
+  const placeholderArticle = useMemo<ArticleType>(
+    () => ({
+      id: 0,
+      title: '',
+      content: '',
+      category: 0,
+      publicationTime: '0',
+      modificationTime: '0',
+      pageViews: 0,
+      isVisible: true,
+    }),
+    [],
+  );
 
-  const placeholderCategory = useMemo(() => {
-    return new Category(0, '');
-  }, []);
+  const placeholderCategory = useMemo<Category>(
+    () => ({
+      id: 0,
+      name: '',
+    }),
+    [],
+  );
 
   useEffect(() => {
     if (articleLoadError) {

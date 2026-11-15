@@ -1,10 +1,21 @@
 import path from 'node:path';
 
 import {Request} from '@library/request';
-import {Article, NewArticle, ServerResponse} from '@module/classes';
+import {
+  type Article,
+  type ArticleDraft,
+  ArticleSchema,
+  type UpdateArticle,
+} from '@schema/blog';
+import {z} from 'zod';
 
-import {ModelAccessDeniedError} from '../../model-access-error.js';
+import {
+  parseServerResponse,
+  parseVoidServerResponse,
+} from '../../response-helper.js';
 import {prependBlogPrefix} from './path-helper.js';
+
+const ArticleListSchema = z.array(ArticleSchema);
 
 export class ArticleModel {
   private static readonly PATH = Object.freeze({
@@ -21,34 +32,26 @@ export class ArticleModel {
   }
 
   public async getById(id: Article['id']): Promise<Article> {
-    const response = await Request.JSONToJSON.get<ServerResponse<Article>>(
+    const response = await Request.JSONToJSON.get<unknown>(
       ArticleModel.PATH.GET_BY_ID,
       {
         searchParams: new URLSearchParams({json: JSON.stringify({id})}),
       },
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data;
-    }
+    return parseServerResponse(ArticleSchema, response);
   }
 
   public async getAll(): Promise<Article[]> {
-    const response = await Request.JSONToJSON.get<ServerResponse<Article[]>>(
+    const response = await Request.JSONToJSON.get<unknown>(
       ArticleModel.PATH.GET_ALL,
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data;
-    }
+    return parseServerResponse(ArticleListSchema, response);
   }
 
   public async getByCategory(
     category: Article['category'],
   ): Promise<Article[]> {
-    const response = await Request.JSONToJSON.get<ServerResponse<Article[]>>(
+    const response = await Request.JSONToJSON.get<unknown>(
       ArticleModel.PATH.GET_BY_CATEGORY,
       {
         searchParams: new URLSearchParams({
@@ -56,51 +59,39 @@ export class ArticleModel {
         }),
       },
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    } else {
-      return response.data;
-    }
+    return parseServerResponse(ArticleListSchema, response);
   }
 
-  public async add(article: NewArticle): Promise<void> {
-    const response = await Request.JSONToJSON.post<ServerResponse<void>>(
+  public async add(article: ArticleDraft): Promise<void> {
+    const response = await Request.JSONToJSON.post<unknown>(
       ArticleModel.PATH.ADD,
       {
         body: article,
       },
     );
-
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    }
+    parseVoidServerResponse(response);
   }
 
   public async deleteById(id: Article['id']): Promise<void> {
-    const response = await Request.JSONToJSON.post<ServerResponse<void>>(
+    const response = await Request.JSONToJSON.post<unknown>(
       ArticleModel.PATH.DELETE_BY_ID,
       {
         body: {id},
       },
     );
-
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    }
+    parseVoidServerResponse(response);
   }
 
   public async modify(
-    id: Article['id'],
-    modifiedParts: Partial<NewArticle>,
+    id: UpdateArticle['id'],
+    modifiedParts: Omit<UpdateArticle, 'id'>,
   ): Promise<void> {
-    const response = await Request.JSONToJSON.post<ServerResponse<void>>(
+    const response = await Request.JSONToJSON.post<unknown>(
       ArticleModel.PATH.MODIFY,
       {
         body: {id, ...modifiedParts},
       },
     );
-    if (!response.isSuccessful) {
-      throw new ModelAccessDeniedError(response.message);
-    }
+    parseVoidServerResponse(response);
   }
 }

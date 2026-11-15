@@ -3,9 +3,14 @@ import assert from 'node:assert';
 import {useTextInput} from '@library/hooks';
 import {BlogModels} from '@module/model/admin';
 import {BlogModelHooks} from '@module/model/react/admin';
+import {SiteOptionSchema} from '@schema/blog';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {useArticlePreviewModal} from '@/components/ArticlePreviewModal';
+import {
+  getValidationErrorMessage,
+  SITE_OPTION_FIELD_LABELS,
+} from '@/helpers/validation-i18n-helper.js';
 
 export function useViewModel() {
   const {
@@ -76,17 +81,26 @@ function useSubmitAboutModification() {
       onSuccess: (about: string) => void,
       onError: (e: Error) => void,
     ) => {
-      const validationPassed = about.length > 0;
-      if (!validationPassed) {
-        onValidationFailed('Please input about content');
+      const parsedOption = SiteOptionSchema.safeParse({about});
+      if (!parsedOption.success) {
+        getValidationErrorMessage(
+          parsedOption.error.issues[0],
+          SITE_OPTION_FIELD_LABELS,
+        )
+          .then((message) => {
+            onValidationFailed(message);
+          })
+          .catch((e: unknown) => {
+            console.error(e);
+          });
         return;
       }
 
       setSubmitting(true);
       optionModel
-        .setAbout(about)
+        .setAbout(parsedOption.data.about)
         .then(() => {
-          onSuccess(about);
+          onSuccess(parsedOption.data.about);
         })
         .catch((error: unknown) => {
           assert(error instanceof Error);

@@ -1,9 +1,14 @@
 import assert from 'node:assert';
 
 import {useTextInput} from '@library/hooks';
-import {Category, NewCategory} from '@module/classes';
 import {BlogModels} from '@module/model/admin';
+import {type Category, CategoryDraftSchema} from '@schema/blog';
 import {useCallback, useMemo, useState} from 'react';
+
+import {
+  CATEGORY_DRAFT_FIELD_LABELS,
+  getValidationErrorMessage,
+} from '@/helpers/validation-i18n-helper.js';
 
 export function useViewModel() {
   const {
@@ -35,18 +40,24 @@ function useNewCategorySubmit(afterSubmitSuccess?: () => void) {
       onSubmitSuccess: () => void,
       onSubmitFailed: (error: Error) => void,
     ) => {
-      const validationPass = NewCategory.validateFormInput(
-        {name},
-        onValidationFailed,
-      );
-      if (!validationPass) {
+      const parsedDraft = CategoryDraftSchema.safeParse({name});
+      if (!parsedDraft.success) {
+        getValidationErrorMessage(
+          parsedDraft.error.issues[0],
+          CATEGORY_DRAFT_FIELD_LABELS,
+        )
+          .then((message) => {
+            onValidationFailed(message);
+          })
+          .catch((e: unknown) => {
+            console.error(e);
+          });
         return;
       }
 
-      assert(name !== null);
       setSubmitting(true);
       categoryModel
-        .add({name})
+        .add(parsedDraft.data)
         .then(() => {
           onSubmitSuccess();
           afterSubmitSuccess?.();

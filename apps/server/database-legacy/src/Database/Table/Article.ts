@@ -1,4 +1,9 @@
-import {Article} from '@module/classes';
+import {
+  type ArticleInsertRow,
+  type ArticleRow,
+  ArticleRowSchema,
+  type ArticleUpdateRow,
+} from '@schema/database';
 
 import {
   generateParameterizedStatementAndParametersArray,
@@ -6,7 +11,7 @@ import {
 } from '../Function.js';
 import pool from '../Pool.js';
 
-export async function insert(article: Omit<Article, 'id'>): Promise<void> {
+export async function insert(article: ArticleInsertRow): Promise<void> {
   const insertStatement = `INSERT INTO "articles"
                              (title, content, category, "publicationTime", "modificationTime", "pageViews", "isVisible")
                              VALUES
@@ -38,7 +43,7 @@ export async function insert(article: Omit<Article, 'id'>): Promise<void> {
   }
 }
 
-export async function deleteById(id: Article['id']): Promise<void> {
+export async function deleteById(id: ArticleRow['id']): Promise<void> {
   const deleteStatement = 'DELETE FROM "articles" WHERE "id"=$1';
   const client = await pool.connect();
   try {
@@ -51,18 +56,19 @@ export async function deleteById(id: Article['id']): Promise<void> {
 }
 
 export async function update(
-  article: Partial<Article> & Pick<Article, 'id'>,
+  article: ArticleUpdateRow & Pick<ArticleRow, 'id'>,
 ): Promise<void> {
   const client = await pool.connect();
   try {
+    const {id, ...updates} = article;
     const {parameterizedStatement, parameters} =
-      generateParameterizedStatementAndParametersArray(article, ',');
+      generateParameterizedStatementAndParametersArray(updates, ',');
     await transaction(client, async (client) => {
       await client.query(
         `UPDATE "articles" SET ${parameterizedStatement} WHERE "id"=$${
           parameters.length + 1
         }`,
-        [...parameters, article.id],
+        [...parameters, id],
       );
     });
   } finally {
@@ -70,17 +76,20 @@ export async function update(
   }
 }
 
-export async function selectById(id: Article['id']): Promise<Article | null> {
+export async function selectById(
+  id: ArticleRow['id'],
+): Promise<ArticleRow | null> {
   const selectStatement = 'SELECT * FROM "articles" WHERE "id"=$1';
   const {rows, rowCount} = await pool.query(selectStatement, [id]);
   if (rowCount === 0) {
     return null;
-  } else {
-    return Article.from(rows[0]);
   }
+  return ArticleRowSchema.parse(rows[0]);
 }
 
-export async function countByTitle(title: Article['title']): Promise<number> {
+export async function countByTitle(
+  title: ArticleRow['title'],
+): Promise<number> {
   const selectStatement =
     'SELECT count("id") AS "c" FROM "articles" WHERE "title"=$1';
   const {rows} = await pool.query(selectStatement, [title]);
@@ -88,19 +97,19 @@ export async function countByTitle(title: Article['title']): Promise<number> {
 }
 
 export async function selectAllByPublicationTimeDescOrder(): Promise<
-  Article[]
+  ArticleRow[]
 > {
   const {rows} = await pool.query(`SELECT *
                                      FROM "articles"
                                      ORDER BY "publicationTime" DESC, "id" DESC `);
-  return rows.map((row) => Article.from(row));
+  return rows.map((row) => ArticleRowSchema.parse(row));
 }
 
 export async function selectByPublicationTimeDescOrder(
   year: number,
   month?: number,
   day?: number,
-): Promise<Article[]> {
+): Promise<ArticleRow[]> {
   let queryResult;
   if (typeof month === 'number') {
     if (typeof day === 'number') {
@@ -136,7 +145,7 @@ export async function selectByPublicationTimeDescOrder(
     );
   }
   const {rows} = queryResult;
-  return rows.map((row) => Article.from(row));
+  return rows.map((row) => ArticleRowSchema.parse(row));
 }
 
 export async function countAll(): Promise<number> {
@@ -146,18 +155,18 @@ export async function countAll(): Promise<number> {
 }
 
 export async function selectInPublicationTimeDescOrder(
-  article: Partial<Article>,
-): Promise<Article[]> {
+  article: Partial<ArticleRow>,
+): Promise<ArticleRow[]> {
   const {parameterizedStatement, parameters} =
     generateParameterizedStatementAndParametersArray(article, 'AND');
   const {rows} = await pool.query(
     `SELECT * FROM "articles" WHERE ${parameterizedStatement} ORDER BY "publicationTime" DESC, "id" DESC `,
     parameters,
   );
-  return rows.map((row) => Article.from(row));
+  return rows.map((row) => ArticleRowSchema.parse(row));
 }
 
-export async function count(article: Partial<Article>): Promise<number> {
+export async function count(article: Partial<ArticleRow>): Promise<number> {
   const {parameterizedStatement, parameters} =
     generateParameterizedStatementAndParametersArray(article, 'AND');
   const {rows} = await pool.query(

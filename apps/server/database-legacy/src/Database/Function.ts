@@ -1,7 +1,5 @@
 import {type Client, type PoolClient} from 'pg';
 
-import {Util} from '../Function/index.js';
-
 export async function transaction<T extends Client | PoolClient>(
   client: T,
   transaction: (client: T) => Promise<any>,
@@ -23,12 +21,14 @@ export function generateParameterizedStatementAndParametersArray(
   parameters: unknown[];
   parameterizedStatement: string;
 } {
-  obj = Util.removeUndefinedValuesFromObject(obj);
+  const entries = Object.entries(obj).filter(
+    ([, value]) => value !== undefined,
+  );
   const parameters: unknown[] = [];
   let parameterizedStatement = ''; // "a"=$1,"b"=$2
-  Object.keys(obj).forEach((key, index) => {
+  entries.forEach(([key, value], index) => {
     parameterizedStatement += `"${key}"=$${index + 1} ${connection} `;
-    parameters.push(obj[key]);
+    parameters.push(value);
   });
   return {
     parameters,

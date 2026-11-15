@@ -1,8 +1,8 @@
 import assert from 'node:assert';
 
-import {Category} from '@module/classes';
 import {BlogModels} from '@module/model/admin';
 import {BlogModelHooks} from '@module/model/react/admin';
+import {type Category} from '@schema/blog';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 
 type CategoryModelType = InstanceType<typeof BlogModels.CategoryModel>;

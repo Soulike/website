@@ -24,7 +24,9 @@ const server = createServer((request, response) => {
   }
   response.end(JSON.stringify({
     isSuccessful: false,
-    message: "fixture database failure",
+    error: {
+      code: "ARTICLE_NOT_FOUND",
+    },
   }));
 });
 await new Promise((resolve) => server.listen(4000, "127.0.0.1", resolve));
@@ -62,7 +64,9 @@ export async function smokeLegacyDatabaseClient(
   });
   assert.deepEqual(JSON.parse(businessFailure.body), {
     isSuccessful: false,
-    message: 'fixture database failure',
+    error: {
+      code: 'ARTICLE_NOT_FOUND',
+    },
   });
 
   const invalidQuery = await smoke.waitForHttp({
@@ -74,6 +78,8 @@ export async function smokeLegacyDatabaseClient(
   });
   assert.deepEqual(JSON.parse(invalidQuery.body), {
     isSuccessful: false,
-    message: '请求参数错误',
+    error: {
+      code: 'INVALID_REQUEST_PARAMS',
+    },
   });
 }

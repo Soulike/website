@@ -4,7 +4,7 @@ import {
   TagsOutlined,
 } from '@ant-design/icons';
 import {Markdown} from '@library/react-components/csr';
-import {type Category} from '@module/classes';
+import {type Category} from '@schema/blog';
 import {Card, Tag} from 'antd';
 
 import {getDateString} from '@/helpers/date-helpers.js';

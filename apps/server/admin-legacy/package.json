@@ -4,19 +4,22 @@
   "scripts": {
     "build": "node build.ts",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests",
+    "test": "vitest run",
     "lint": "eslint ./src"
   },
   "dependencies": {
     "@koa/router": "catalog:",
     "@library/koa-middlewares": "workspace:^",
-    "@module/classes": "workspace:^",
+    "@schema/auth": "workspace:^",
+    "@schema/blog": "workspace:^",
+    "@schema/rpc": "workspace:^",
     "ioredis": "^5.6.1",
     "koa": "catalog:",
     "koa-body": "^6.0.1",
     "koa-compose": "catalog:",
     "koa-session": "^7.0.2",
-    "signale": "^1.4.0"
+    "signale": "^1.4.0",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@config/rolldown": "workspace:^",

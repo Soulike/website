@@ -1,5 +1,5 @@
-import {Article} from '@module/classes';
 import {BlogModelHooks} from '@module/model/react/admin';
+import {type Article} from '@schema/blog';
 import {useCallback, useEffect, useState} from 'react';
 
 export function useViewModel(category?: Article['category']) {

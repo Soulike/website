@@ -10,14 +10,17 @@
   "dependencies": {
     "@koa/router": "catalog:",
     "@library/koa-middlewares": "workspace:^",
-    "@module/classes": "workspace:^",
+    "@schema/blog": "workspace:^",
+    "@schema/database": "workspace:^",
+    "@schema/rpc": "workspace:^",
     "clone-deep": "^4.0.1",
     "koa": "catalog:",
     "koa-basic-auth": "^4.0.0",
     "koa-body": "^6.0.1",
     "koa-compose": "catalog:",
     "pg": "^8.14.1",
-    "signale": "^1.4.0"
+    "signale": "^1.4.0",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@config/eslint": "workspace:^",

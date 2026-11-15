@@ -1,4 +1,4 @@
-import {type Article} from '@module/classes';
+import {type Article} from '@schema/blog';
 import {Empty, List} from 'antd';
 import type {PaginationConfig} from 'antd/lib/pagination';
 import {RefObject} from 'react';

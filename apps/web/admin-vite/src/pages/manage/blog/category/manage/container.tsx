@@ -1,4 +1,5 @@
 import {useTextInput} from '@library/hooks';
+import {CategoryDraftSchema} from '@schema/blog';
 import {
   type ButtonProps,
   message,
@@ -10,7 +11,14 @@ import {
 import assert from 'assert';
 import {useCallback, useEffect, useState} from 'react';
 
-import {showErrorNotification} from '@/helpers/error-notification-helper.js';
+import {
+  getServerErrorMessage,
+  showErrorNotification,
+} from '@/helpers/error-notification-helper.js';
+import {
+  CATEGORY_DRAFT_FIELD_LABELS,
+  getValidationErrorMessage,
+} from '@/helpers/validation-i18n-helper.js';
 
 import {ManageView} from './view.js';
 import {useViewModel} from './view-model.js';
@@ -78,14 +86,26 @@ export function Manage() {
 
   const onModifyModalOk: ModalProps['onOk'] = (e) => {
     e.preventDefault();
-    if (nameOfCategoryToModify.length === 0) {
-      void message.warning('Please input category name.');
+    const parsedDraft = CategoryDraftSchema.safeParse({
+      name: nameOfCategoryToModify,
+    });
+    if (!parsedDraft.success) {
+      getValidationErrorMessage(
+        parsedDraft.error.issues[0],
+        CATEGORY_DRAFT_FIELD_LABELS,
+      )
+        .then((warningMessage) => {
+          void message.warning(warningMessage);
+        })
+        .catch((error: unknown) => {
+          console.error(error);
+        });
       return;
     }
 
     handleCategoryModificationSubmit(
       idOfCategoryToModify,
-      {name: nameOfCategoryToModify},
+      parsedDraft.data,
       () => {
         notification.success({title: 'Category modified'});
       },
@@ -125,8 +145,18 @@ export function Manage() {
 
   const onDeleteCategoryConfirm: PopconfirmProps['onConfirm'] = () => {
     assert(idToArticleAmount);
-    if (idToArticleAmount.get(idOfCategoryToDelete) === 0) {
-      void message.warning('Can not delete category with articles');
+    const articleAmount = idToArticleAmount.get(idOfCategoryToDelete) ?? 0;
+    if (articleAmount !== 0) {
+      getServerErrorMessage({
+        code: 'CATEGORY_IN_USE',
+        details: {articleAmount},
+      })
+        .then((warningMessage) => {
+          void message.warning(warningMessage);
+        })
+        .catch((error: unknown) => {
+          console.error(error);
+        });
       return;
     }
 

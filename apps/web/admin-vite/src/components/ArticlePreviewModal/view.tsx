@@ -1,5 +1,5 @@
 import {Markdown} from '@library/react-components/csr';
-import {Article} from '@module/classes';
+import {type Article} from '@schema/blog';
 import {Modal, type ModalProps, Skeleton} from 'antd';
 
 import styles from './styles.module.css';

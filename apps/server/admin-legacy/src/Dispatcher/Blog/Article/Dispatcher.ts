@@ -1,9 +1,15 @@
 import {jsonQsParser} from '@library/koa-middlewares';
-import {Article, FailServerResponse} from '@module/classes';
+import {
+  ArticleDraftSchema,
+  ArticleSchema,
+  CategorySchema,
+  UpdateArticleSchema,
+} from '@schema/blog';
+import {z} from 'zod';
 
 import {Article as ArticleService} from '../../../Service/index.js';
 import {AppRouter} from '../../../types.js';
-import {onJSONQsParseError} from '../../Function.js';
+import {onJSONQsParseError, parseRequestPayload} from '../../Function.js';
 import {
   ADD,
   DELETE_BY_ID,
@@ -13,18 +19,30 @@ import {
   MODIFY,
 } from './ROUTE.js';
 
+const ArticleIdPayloadSchema = z.object({
+  id: ArticleSchema.shape.id,
+});
+
+const ArticleCategoryPayloadSchema = z.object({
+  category: CategorySchema.shape.id,
+});
+
 export default (router: AppRouter) => {
   router.get(
     GET_BY_ID,
     jsonQsParser({onError: onJSONQsParseError}),
     async (ctx, next) => {
       try {
-        const {id} = ctx.request.body;
-        if (typeof id !== 'number') {
-          ctx.response.body = new FailServerResponse('请求参数错误');
-        } else {
-          ctx.response.body = await ArticleService.getById(id);
+        const parsed = parseRequestPayload(
+          ArticleIdPayloadSchema,
+          ctx.request.body,
+          GET_BY_ID,
+        );
+        if (!parsed.success) {
+          ctx.response.body = parsed.response;
+          return;
         }
+        ctx.response.body = await ArticleService.getById(parsed.data.id);
       } finally {
         await next();
       }
@@ -44,12 +62,18 @@ export default (router: AppRouter) => {
     jsonQsParser({onError: onJSONQsParseError}),
     async (ctx, next) => {
       try {
-        const {category} = ctx.request.body;
-        if (typeof category !== 'number') {
-          ctx.response.body = new FailServerResponse('请求参数错误');
-        } else {
-          ctx.response.body = await ArticleService.getByCategory(category);
+        const parsed = parseRequestPayload(
+          ArticleCategoryPayloadSchema,
+          ctx.request.body,
+          GET_BY_CATEGORY,
+        );
+        if (!parsed.success) {
+          ctx.response.body = parsed.response;
+          return;
         }
+        ctx.response.body = await ArticleService.getByCategory(
+          parsed.data.category,
+        );
       } finally {
         await next();
       }
@@ -58,10 +82,16 @@ export default (router: AppRouter) => {
 
   router.post(ADD, async (ctx, next) => {
     try {
-      // 参数检查在数据库层
-      ctx.response.body = await ArticleService.add(
-        Article.from(ctx.request.body),
+      const parsed = parseRequestPayload(
+        ArticleDraftSchema,
+        ctx.request.body,
+        ADD,
       );
+      if (!parsed.success) {
+        ctx.response.body = parsed.response;
+        return;
+      }
+      ctx.response.body = await ArticleService.add(parsed.data);
     } finally {
       await next();
     }
@@ -69,12 +99,16 @@ export default (router: AppRouter) => {
 
   router.post(DELETE_BY_ID, async (ctx, next) => {
     try {
-      const {id} = ctx.request.body;
-      if (typeof id !== 'number') {
-        ctx.response.body = new FailServerResponse('请求参数错误');
-      } else {
-        ctx.response.body = await ArticleService.deleteById(id);
+      const parsed = parseRequestPayload(
+        ArticleIdPayloadSchema,
+        ctx.request.body,
+        DELETE_BY_ID,
+      );
+      if (!parsed.success) {
+        ctx.response.body = parsed.response;
+        return;
       }
+      ctx.response.body = await ArticleService.deleteById(parsed.data.id);
     } finally {
       await next();
     }
@@ -82,10 +116,16 @@ export default (router: AppRouter) => {
 
   router.post(MODIFY, async (ctx, next) => {
     try {
-      // 参数检查在数据库层
-      ctx.response.body = await ArticleService.modify(
-        Article.from(ctx.request.body),
+      const parsed = parseRequestPayload(
+        UpdateArticleSchema,
+        ctx.request.body,
+        MODIFY,
       );
+      if (!parsed.success) {
+        ctx.response.body = parsed.response;
+        return;
+      }
+      ctx.response.body = await ArticleService.modify(parsed.data);
     } finally {
       await next();
     }
