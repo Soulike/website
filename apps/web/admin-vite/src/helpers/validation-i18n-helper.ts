@@ -29,7 +29,7 @@ function resolveFieldKey(
   fieldLabels: ValidationFieldLabels,
 ): {field: string; labelKey: STRING_KEY} | undefined {
   const field = issue.path[0];
-  if (typeof field !== 'string') {
+  if (typeof field !== 'string' || !Object.hasOwn(fieldLabels, field)) {
     return undefined;
   }
   const labelKey = fieldLabels[field];

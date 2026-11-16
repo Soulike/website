@@ -214,6 +214,20 @@ describe('validation-i18n-helper', () => {
     await expect(
       getValidationErrorMessage(issue, LOGIN_CREDENTIALS_FIELD_LABELS),
     ).resolves.toBe('输入格式无效');
+
+    const prototypeKeyIssue: z.core.$ZodIssue = {
+      code: 'custom',
+      path: ['toString'],
+      message: 'Invalid',
+    };
+
+    mockNavigatorLanguage = 'en';
+    await expect(
+      getValidationErrorMessage(
+        prototypeKeyIssue,
+        LOGIN_CREDENTIALS_FIELD_LABELS,
+      ),
+    ).resolves.toBe('Invalid input');
   });
 
   async function validateSchemaAndFormat(
