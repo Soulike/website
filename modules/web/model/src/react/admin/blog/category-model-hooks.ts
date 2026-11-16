@@ -1,8 +1,6 @@
-import assert from 'node:assert';
-
 import {RejectCallback, ResolveCallback, usePromise} from '@library/hooks';
 import {type Category, type CategoryIdToArticleAmount} from '@schema/blog';
-import {useEffect, useEffectEvent, useMemo, useState} from 'react';
+import {useMemo} from 'react';
 
 import {CategoryModel} from '../../../models/admin/blog/category-model.js';
 
@@ -53,42 +51,31 @@ function useCategoryById(
   };
 }
 
+function buildIdToCategoryMap(
+  categories: readonly Category[],
+): Map<Category['id'], Category> {
+  const idToCategory = new Map<Category['id'], Category>();
+  for (const category of categories) {
+    idToCategory.set(category.id, category);
+  }
+  return idToCategory;
+}
+
 function useIdToCategory(
   onSuccess?: ResolveCallback<Map<Category['id'], Category>>,
   onReject?: RejectCallback,
 ) {
-  const {loading, error, categories} = useAllCategories();
-  const [idToCategory, setIdToCategory] = useState<Map<
-    Category['id'],
-    Category
-  > | null>(null);
-  const handleSuccess = useEffectEvent(
-    (categoryMap: Map<Category['id'], Category>) => {
-      void onSuccess?.(categoryMap);
-    },
+  const {loading, error, categories} = useAllCategories(
+    onSuccess
+      ? (loadedCategories) => onSuccess(buildIdToCategoryMap(loadedCategories))
+      : undefined,
+    onReject,
   );
-  const handleReject = useEffectEvent((rejectedError: Error) => {
-    void onReject?.(rejectedError);
-  });
 
-  useEffect(() => {
-    if (loading) {
-      return;
-    }
-
-    if (error) {
-      handleReject(error);
-      return;
-    }
-
-    assert(categories);
-    const idToCategory = new Map<Category['id'], Category>();
-    for (const category of categories) {
-      idToCategory.set(category.id, category);
-    }
-    setIdToCategory(idToCategory);
-    handleSuccess(idToCategory);
-  }, [loading, error, categories]);
+  const idToCategory = useMemo(
+    () => (categories ? buildIdToCategoryMap(categories) : null),
+    [categories],
+  );
 
   return {
     loading,

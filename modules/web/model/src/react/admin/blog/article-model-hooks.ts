@@ -1,8 +1,6 @@
-import assert from 'node:assert';
-
 import {RejectCallback, ResolveCallback, usePromise} from '@library/hooks';
 import {type Article} from '@schema/blog';
-import {useEffect, useEffectEvent, useMemo, useState} from 'react';
+import {useMemo} from 'react';
 
 import {ArticleModel} from '../../../models/admin/blog/article-model.js';
 
@@ -57,43 +55,33 @@ function useArticleById(
   };
 }
 
+function buildIdToArticleMap(
+  articles: readonly Article[],
+): Map<Article['id'], Article> {
+  const idToArticle = new Map<Article['id'], Article>();
+  for (const article of articles) {
+    idToArticle.set(article.id, article);
+  }
+  return idToArticle;
+}
+
 function useIdToArticle(
   category?: Article['category'],
   onSuccess?: ResolveCallback<Map<Article['id'], Article>>,
   onReject?: RejectCallback,
 ) {
-  const {loading, error, articles} = useArticles(category);
-  const [idToArticle, setIdToArticle] = useState<Map<
-    Article['id'],
-    Article
-  > | null>(null);
-  const handleSuccess = useEffectEvent(
-    (articleMap: Map<Article['id'], Article>) => {
-      void onSuccess?.(articleMap);
-    },
+  const {loading, error, articles} = useArticles(
+    category,
+    onSuccess
+      ? (loadedArticles) => onSuccess(buildIdToArticleMap(loadedArticles))
+      : undefined,
+    onReject,
   );
-  const handleReject = useEffectEvent((rejectedError: Error) => {
-    void onReject?.(rejectedError);
-  });
 
-  useEffect(() => {
-    if (loading) {
-      return;
-    }
-
-    if (error) {
-      handleReject(error);
-      return;
-    }
-
-    assert(articles);
-    const idToArticleMap = new Map<Article['id'], Article>();
-    for (const article of articles) {
-      idToArticleMap.set(article.id, article);
-    }
-    setIdToArticle(idToArticleMap);
-    handleSuccess(idToArticleMap);
-  }, [loading, error, articles]);
+  const idToArticle = useMemo(
+    () => (articles ? buildIdToArticleMap(articles) : null),
+    [articles],
+  );
 
   return {
     loading,

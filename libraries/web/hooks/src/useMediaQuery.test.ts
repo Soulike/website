@@ -77,6 +77,7 @@ describe('useMediaQuery', () => {
     }
 
     // Simulate media query change
+    matchMediaMock.mockReturnValue(createMediaQueryList(true));
     act(() => {
       handler(Object.assign(new Event('change'), {matches: true}));
     });
