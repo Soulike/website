@@ -20,5 +20,7 @@ export function pickRandomElement<T>(elements: readonly T[]): T {
   const begin = 0;
   const end = elements.length;
   const randomIndex = getRandomInteger(begin, end);
-  return elements[randomIndex];
+  const element = elements[randomIndex];
+  assert(element !== undefined);
+  return element;
 }

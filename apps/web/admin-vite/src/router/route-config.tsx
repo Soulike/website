@@ -19,66 +19,54 @@ import {Add as ManageBlogCategoryAdd} from '@/pages/manage/blog/category/add';
 import {Manage as ManageBlogCategoryManage} from '@/pages/manage/blog/category/manage';
 import {About as ManageBlogOptionAbout} from '@/pages/manage/blog/option/about';
 
-import {PAGE_ID, PAGE_ID_TO_PATH, type PageIdType} from './page-config';
+import {PAGE_ID, PAGE_ID_TO_PATH} from './page-config';
 
-const routeConfig: Record<PageIdType, Readonly<RouteObject>> = {};
-
-routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.ADD] = {
-  path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.ADD]),
-  element: <ManageBlogArticleAdd />,
-};
-
-routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE] = {
-  path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE]),
-  element: <ManageBlogArticleManage />,
-};
-
-routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY] = {
-  path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY]),
-  element: <ManageBlogArticleModify />,
-};
-
-routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.INDEX] = {
+const manageBlogArticleRoute: Readonly<RouteObject> = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.INDEX]),
   element: null,
   children: [
-    routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.ADD],
-    routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE],
-    routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY],
+    {
+      path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.ADD]),
+      element: <ManageBlogArticleAdd />,
+    },
+    {
+      path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE]),
+      element: <ManageBlogArticleManage />,
+    },
+    {
+      path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY]),
+      element: <ManageBlogArticleModify />,
+    },
   ],
 };
 
-routeConfig[PAGE_ID.MANAGE.BLOG.CATEGORY.ADD] = {
-  path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.CATEGORY.ADD]),
-  element: <ManageBlogCategoryAdd />,
-};
-
-routeConfig[PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE] = {
-  path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE]),
-  element: <ManageBlogCategoryManage />,
-};
-
-routeConfig[PAGE_ID.MANAGE.BLOG.CATEGORY.INDEX] = {
+const manageBlogCategoryRoute: Readonly<RouteObject> = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.CATEGORY.INDEX]),
   element: null,
   children: [
-    routeConfig[PAGE_ID.MANAGE.BLOG.CATEGORY.ADD],
-    routeConfig[PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE],
+    {
+      path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.CATEGORY.ADD]),
+      element: <ManageBlogCategoryAdd />,
+    },
+    {
+      path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE]),
+      element: <ManageBlogCategoryManage />,
+    },
   ],
 };
 
-routeConfig[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT] = {
-  path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT]),
-  element: <ManageBlogOptionAbout />,
-};
-
-routeConfig[PAGE_ID.MANAGE.BLOG.OPTION.INDEX] = {
+const manageBlogOptionRoute: Readonly<RouteObject> = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.OPTION.INDEX]),
   element: null,
-  children: [routeConfig[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT]],
+  children: [
+    {
+      path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT]),
+      element: <ManageBlogOptionAbout />,
+    },
+  ],
 };
 
-routeConfig[PAGE_ID.MANAGE.BLOG.INDEX] = {
+const manageBlogRoute: Readonly<RouteObject> = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.BLOG.INDEX]),
   element: (
     <ErrorBoundary fallback={<NotFound />}>
@@ -92,13 +80,13 @@ routeConfig[PAGE_ID.MANAGE.BLOG.INDEX] = {
       index: true,
       element: <ManageBlogIndex />,
     },
-    routeConfig[PAGE_ID.MANAGE.BLOG.ARTICLE.INDEX],
-    routeConfig[PAGE_ID.MANAGE.BLOG.CATEGORY.INDEX],
-    routeConfig[PAGE_ID.MANAGE.BLOG.OPTION.INDEX],
+    manageBlogArticleRoute,
+    manageBlogCategoryRoute,
+    manageBlogOptionRoute,
   ],
 };
 
-routeConfig[PAGE_ID.MANAGE.INDEX] = {
+const manageRoute: Readonly<RouteObject> = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.MANAGE.INDEX]),
   element: (
     <ErrorBoundary fallback={<NotFound />}>
@@ -112,16 +100,16 @@ routeConfig[PAGE_ID.MANAGE.INDEX] = {
       index: true,
       element: <ManageIndex />,
     },
-    routeConfig[PAGE_ID.MANAGE.BLOG.INDEX],
+    manageBlogRoute,
   ],
 };
 
-routeConfig[PAGE_ID.LOGIN] = {
+const loginRoute: Readonly<RouteObject> = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.LOGIN]),
   element: <Login />,
 };
 
-routeConfig[PAGE_ID.INDEX] = {
+const indexRoute: Readonly<RouteObject> = {
   path: PAGE_ID_TO_PATH[PAGE_ID.INDEX],
   element: (
     <ErrorBoundary fallback={<NotFound />}>
@@ -135,9 +123,9 @@ routeConfig[PAGE_ID.INDEX] = {
       index: true,
       element: <Index />,
     },
-    routeConfig[PAGE_ID.LOGIN],
-    routeConfig[PAGE_ID.MANAGE.INDEX],
+    loginRoute,
+    manageRoute,
   ],
 };
 
-export const CONFIG: Readonly<RouteObject>[] = [routeConfig[PAGE_ID.INDEX]];
+export const CONFIG: Readonly<RouteObject>[] = [indexRoute];

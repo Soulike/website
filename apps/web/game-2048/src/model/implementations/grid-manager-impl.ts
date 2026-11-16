@@ -27,19 +27,32 @@ export class GridManagerImpl implements GridManager {
     return this.emptyTileCount;
   }
 
+  public getTileValue(coordinate: Coordinate): number {
+    const {row, col} = coordinate;
+    const gridRow = this.grid[row];
+    assert(gridRow !== undefined, `Invalid row index: ${String(row)}`);
+    const value = gridRow[col];
+    assert(value !== undefined, `Invalid column index: ${String(col)}`);
+    return value;
+  }
+
   public resetGrid(): void {
     this.grid = new Array<number[]>(GRID_SIDE_LENGTH);
     for (let i = 0; i < this.grid.length; i++) {
-      this.grid[i] = new Array<number>(GRID_SIDE_LENGTH);
-      this.grid[i].fill(EMPTY_TILE_VALUE);
+      const row = new Array<number>(GRID_SIDE_LENGTH);
+      row.fill(EMPTY_TILE_VALUE);
+      this.grid[i] = row;
     }
     this.emptyTileCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
   }
 
   public setTileValue(coordinate: Coordinate, value: number): void {
     const {row, col} = coordinate;
-    const oldValue = this.grid[row][col];
-    this.grid[row][col] = value;
+    const gridRow = this.grid[row];
+    assert(gridRow !== undefined, `Invalid row index: ${String(row)}`);
+    const oldValue = gridRow[col];
+    assert(oldValue !== undefined, `Invalid column index: ${String(col)}`);
+    gridRow[col] = value;
 
     if (oldValue === EMPTY_TILE_VALUE && value !== EMPTY_TILE_VALUE) {
       this.emptyTileCount--;
@@ -53,8 +66,10 @@ export class GridManagerImpl implements GridManager {
     assertIsTest('clearGridForTesting');
 
     for (let i = 0; i < GRID_SIDE_LENGTH; i++) {
+      const gridRow = this.grid[i];
+      assert(gridRow !== undefined);
       for (let j = 0; j < GRID_SIDE_LENGTH; j++) {
-        this.grid[i][j] = EMPTY_TILE_VALUE;
+        gridRow[j] = EMPTY_TILE_VALUE;
       }
     }
 
@@ -75,9 +90,18 @@ export class GridManagerImpl implements GridManager {
     this.emptyTileCount = GRID_SIDE_LENGTH * GRID_SIDE_LENGTH;
 
     for (let i = 0; i < GRID_SIDE_LENGTH; i++) {
+      const gridRow = this.grid[i];
+      const stateRow = gridState[i];
+      assert(gridRow !== undefined && stateRow !== undefined);
       for (let j = 0; j < GRID_SIDE_LENGTH; j++) {
-        this.grid[i][j] = gridState[i][j];
-        if (this.grid[i][j] !== EMPTY_TILE_VALUE) {
+        const value = stateRow[j];
+        if (value === undefined) {
+          assert.fail(
+            `Invalid grid state coordinate: (${String(i)}, ${String(j)})`,
+          );
+        }
+        gridRow[j] = value;
+        if (value !== EMPTY_TILE_VALUE) {
           this.emptyTileCount--;
         }
       }

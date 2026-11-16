@@ -22,22 +22,24 @@ export class GameCheckerImpl implements GameChecker {
     }
 
     // Check if any adjacent tiles can be merged
-    for (let row = 0; row < this.grid.length; row++) {
-      for (let col = 0; col < this.grid[0].length; col++) {
-        const tileValue = this.grid[row][col];
+    const rowCount = this.grid.length;
+    const colCount = this.grid[0]?.length ?? 0;
+    for (let row = 0; row < rowCount; row++) {
+      for (let col = 0; col < colCount; col++) {
+        const tileValue = this.gridManager.getTileValue({row, col});
 
         // Check right neighbor
         if (
-          col < this.grid[0].length - 1 &&
-          this.grid[row][col + 1] === tileValue
+          col < colCount - 1 &&
+          this.gridManager.getTileValue({row, col: col + 1}) === tileValue
         ) {
           return false;
         }
 
         // Check bottom neighbor
         if (
-          row < this.grid.length - 1 &&
-          this.grid[row + 1][col] === tileValue
+          row < rowCount - 1 &&
+          this.gridManager.getTileValue({row: row + 1, col}) === tileValue
         ) {
           return false;
         }

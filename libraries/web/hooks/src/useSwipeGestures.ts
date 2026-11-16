@@ -37,6 +37,9 @@ export function useSwipeGestures(
     touchEvent.preventDefault();
 
     const touch = touchEvent.touches[0];
+    if (touch === undefined) {
+      return;
+    }
     touchStartRef.current = {
       x: touch.clientX,
       y: touch.clientY,
@@ -56,7 +59,7 @@ export function useSwipeGestures(
       const touchEnd = touchEvent.changedTouches[0];
       const touchStart = touchStartRef.current;
 
-      if (!touchStart) {
+      if (touchEnd === undefined || !touchStart) {
         return;
       }
 

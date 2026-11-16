@@ -81,10 +81,10 @@ export class FakeArticleTable {
       return;
     }
 
-    const index = this.articles.findIndex((a) => a.id === id);
-    if (index !== -1) {
+    const existingArticle = this.articles.find((a) => a.id === id);
+    if (existingArticle !== undefined) {
       await Promise.resolve();
-      Object.assign(this.articles[index], filteredArticle);
+      Object.assign(existingArticle, filteredArticle);
     }
   }
 

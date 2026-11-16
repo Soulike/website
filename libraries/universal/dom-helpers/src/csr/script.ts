@@ -2,9 +2,9 @@ export function loadScript(script: string, tagAttr?: Record<string, string>) {
   const tag = document.createElement('script');
 
   if (tagAttr !== undefined) {
-    Object.keys(tagAttr).forEach((attr) => {
-      tag.setAttribute(attr, tagAttr[attr]);
-    });
+    for (const [attr, value] of Object.entries(tagAttr)) {
+      tag.setAttribute(attr, value);
+    }
   }
 
   tag.innerHTML = script;
@@ -19,9 +19,9 @@ export async function loadExternalScript(
     const tag = document.createElement('script');
 
     if (tagAttr !== undefined) {
-      Object.keys(tagAttr).forEach((attr) => {
-        tag.setAttribute(attr, tagAttr[attr]);
-      });
+      for (const [attr, value] of Object.entries(tagAttr)) {
+        tag.setAttribute(attr, value);
+      }
     }
 
     tag.src = src;

@@ -44,10 +44,10 @@ export class FakeUserTable {
       return;
     }
 
-    const index = this.accounts.findIndex((a) => a.username === username);
-    if (index !== -1) {
+    const existingAccount = this.accounts.find((a) => a.username === username);
+    if (existingAccount !== undefined) {
       await Promise.resolve();
-      Object.assign(this.accounts[index], filteredAccount);
+      Object.assign(existingAccount, filteredAccount);
     }
   }
 

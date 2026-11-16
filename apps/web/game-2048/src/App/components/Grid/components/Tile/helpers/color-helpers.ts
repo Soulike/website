@@ -26,8 +26,9 @@ export function getTileBackgroundColor(value: number): string {
   };
 
   // For known values, return the specific color
-  if (value in colorMap) {
-    return colorMap[value];
+  const color = colorMap[value];
+  if (color !== undefined) {
+    return color;
   }
 
   // For higher values (4096, 8192, etc.), use a dark color

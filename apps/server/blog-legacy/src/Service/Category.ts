@@ -14,9 +14,9 @@ export async function getById(
   if (!serverResponse.isSuccessful) {
     return failResponse(serverResponse.error);
   }
-  const {data} = serverResponse;
-  if (data.length === 0) {
+  const [category] = serverResponse.data;
+  if (category === undefined) {
     return failResponse({code: 'CATEGORY_NOT_FOUND'});
   }
-  return successResponse(data[0]);
+  return successResponse(category);
 }

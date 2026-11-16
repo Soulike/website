@@ -29,10 +29,14 @@ function resolveFieldKey(
   fieldLabels: ValidationFieldLabels,
 ): {field: string; labelKey: STRING_KEY} | undefined {
   const field = issue.path[0];
-  if (typeof field !== 'string' || !Object.hasOwn(fieldLabels, field)) {
+  if (typeof field !== 'string') {
     return undefined;
   }
-  return {field, labelKey: fieldLabels[field]};
+  const labelKey = fieldLabels[field];
+  if (labelKey === undefined) {
+    return undefined;
+  }
+  return {field, labelKey};
 }
 
 export async function getValidationErrorMessage(
@@ -104,7 +108,11 @@ export function validateFormSchema<TSchema extends z.ZodType>(
 ): z.infer<TSchema> | null {
   const parsed = schema.safeParse(input);
   if (!parsed.success) {
-    getValidationErrorMessage(parsed.error.issues[0], fieldLabels)
+    const [firstIssue] = parsed.error.issues;
+    if (firstIssue === undefined) {
+      return null;
+    }
+    getValidationErrorMessage(firstIssue, fieldLabels)
       .then((message) => {
         onValidationFailed(message);
       })

@@ -32,7 +32,7 @@ describe('GridManagerImpl', () => {
     it('should return current grid state', () => {
       gridManager.setTileValue({row: 0, col: 0}, 2);
       const grid = gridManager.getGrid();
-      expect(grid[0][0]).toBe(2);
+      expect(grid[0]?.[0]).toBe(2);
     });
   });
 
@@ -89,7 +89,7 @@ describe('GridManagerImpl', () => {
     it('should set tile value correctly', () => {
       gridManager.setTileValue({row: 1, col: 2}, 8);
       const grid = gridManager.getGrid();
-      expect(grid[1][2]).toBe(8);
+      expect(grid[1]?.[2]).toBe(8);
     });
 
     it('should decrease empty tile count when setting non-empty value', () => {
@@ -120,9 +120,9 @@ describe('GridManagerImpl', () => {
       gridManager.setTileValue({row: 1, col: 2}, 8);
 
       const grid = gridManager.getGrid();
-      expect(grid[0][0]).toBe(2);
-      expect(grid[3][3]).toBe(4);
-      expect(grid[1][2]).toBe(8);
+      expect(grid[0]?.[0]).toBe(2);
+      expect(grid[3]?.[3]).toBe(4);
+      expect(grid[1]?.[2]).toBe(8);
       expect(gridManager.getEmptyTileCount()).toBe(
         GRID_SIDE_LENGTH * GRID_SIDE_LENGTH - 3,
       );
@@ -140,10 +140,10 @@ describe('GridManagerImpl', () => {
       );
 
       const grid = gridManager.getGrid();
-      expect(grid[0][0]).toBe(2);
-      expect(grid[0][GRID_SIDE_LENGTH - 1]).toBe(4);
-      expect(grid[GRID_SIDE_LENGTH - 1][0]).toBe(8);
-      expect(grid[GRID_SIDE_LENGTH - 1][GRID_SIDE_LENGTH - 1]).toBe(16);
+      expect(grid[0]?.[0]).toBe(2);
+      expect(grid[0]?.[GRID_SIDE_LENGTH - 1]).toBe(4);
+      expect(grid[GRID_SIDE_LENGTH - 1]?.[0]).toBe(8);
+      expect(grid[GRID_SIDE_LENGTH - 1]?.[GRID_SIDE_LENGTH - 1]).toBe(16);
       expect(gridManager.getEmptyTileCount()).toBe(
         GRID_SIDE_LENGTH * GRID_SIDE_LENGTH - 4,
       );
@@ -155,7 +155,7 @@ describe('GridManagerImpl', () => {
       gridManager.setTileValue({row: 1, col: 1}, 8);
 
       const grid = gridManager.getGrid();
-      expect(grid[1][1]).toBe(8);
+      expect(grid[1]?.[1]).toBe(8);
       expect(gridManager.getEmptyTileCount()).toBe(
         GRID_SIDE_LENGTH * GRID_SIDE_LENGTH - 1,
       );

@@ -23,13 +23,14 @@ interface Props {
 
 export function LayoutView(props: Props) {
   const {pathname, children} = props;
+  const currentPageId = PATH_TO_PAGE_ID[pathname];
   return (
     <Layout className={styles.layout}>
       <Sider width={250} theme={'light'}>
         <Menu
           theme={'light'}
           mode={'inline'}
-          selectedKeys={[PATH_TO_PAGE_ID[pathname]]}
+          selectedKeys={currentPageId !== undefined ? [currentPageId] : []}
           items={[
             {
               label: (

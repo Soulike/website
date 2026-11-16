@@ -46,6 +46,9 @@ describe('validation-i18n-helper', () => {
     }
     const firstIssue = parsed.error.issues[0];
     expect(firstIssue).toBeDefined();
+    if (firstIssue === undefined) {
+      throw new Error('Expected at least one validation issue');
+    }
     return getValidationErrorMessage(
       firstIssue,
       LOGIN_CREDENTIALS_FIELD_LABELS,
@@ -223,7 +226,11 @@ describe('validation-i18n-helper', () => {
     if (parsed.success) {
       throw new Error('Expected validation to fail');
     }
-    return getValidationErrorMessage(parsed.error.issues[0], fieldLabels);
+    const [firstIssue] = parsed.error.issues;
+    if (firstIssue === undefined) {
+      throw new Error('Expected at least one validation issue');
+    }
+    return getValidationErrorMessage(firstIssue, fieldLabels);
   }
 
   it.each([

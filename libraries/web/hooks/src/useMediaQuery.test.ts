@@ -52,7 +52,11 @@ describe('useMediaQuery', () => {
     expect(result.current).toBe(false);
 
     // Get the registered event handler
-    const handler = addEventListener.mock.calls[0][1] as EventListener;
+    const firstCall = addEventListener.mock.calls[0];
+    if (firstCall === undefined) {
+      throw new Error('Expected addEventListener to be called');
+    }
+    const handler = firstCall[1] as EventListener;
 
     // Simulate media query change
     act(() => {
@@ -78,10 +82,11 @@ describe('useMediaQuery', () => {
     unmount();
 
     // Verify cleanup
+    const firstCall = addEventListener.mock.calls[0];
+    if (firstCall === undefined) {
+      throw new Error('Expected addEventListener to be called');
+    }
     expect(removeEventListener).toHaveBeenCalledOnce();
-    expect(removeEventListener).toHaveBeenCalledWith(
-      'change',
-      addEventListener.mock.calls[0][1],
-    );
+    expect(removeEventListener).toHaveBeenCalledWith('change', firstCall[1]);
   });
 });

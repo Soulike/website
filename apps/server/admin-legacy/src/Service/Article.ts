@@ -14,11 +14,11 @@ export async function getById(
   if (!serverResponse.isSuccessful) {
     return failResponse(serverResponse.error);
   }
-  const {data} = serverResponse;
-  if (data.length === 0) {
+  const [article] = serverResponse.data;
+  if (article === undefined) {
     return failResponse({code: 'ARTICLE_NOT_FOUND'});
   }
-  return successResponse(data[0]);
+  return successResponse(article);
 }
 
 export async function getAll(): Promise<ServerResponse<Article[]>> {

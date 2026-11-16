@@ -181,9 +181,14 @@ describe('deepFreeze', () => {
     // Check freezing at various levels
     expect(Object.isFrozen(frozenObj)).toBe(true);
     expect(Object.isFrozen(frozenObj.data)).toBe(true);
-    expect(Object.isFrozen(frozenObj.data[0])).toBe(true);
-    expect(Object.isFrozen(frozenObj.data[0].items)).toBe(true);
-    expect(Object.isFrozen(frozenObj.data[0].items[0])).toBe(true);
+    const firstDatum = frozenObj.data[0];
+    expect(firstDatum).toBeDefined();
+    if (firstDatum === undefined) {
+      throw new Error('Expected frozenObj.data[0] to be defined');
+    }
+    expect(Object.isFrozen(firstDatum)).toBe(true);
+    expect(Object.isFrozen(firstDatum.items)).toBe(true);
+    expect(Object.isFrozen(firstDatum.items[0])).toBe(true);
     expect(Object.isFrozen(frozenObj.metadata)).toBe(true);
     expect(Object.isFrozen(frozenObj.metadata.author)).toBe(true);
     expect(Object.isFrozen(frozenObj.metadata.author.contact)).toBe(true);
