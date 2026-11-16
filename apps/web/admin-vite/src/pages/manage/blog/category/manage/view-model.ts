@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import {BlogModels} from '@module/model/admin';
 import {BlogModelHooks} from '@module/model/react/admin';
 import {type Category} from '@schema/blog';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 
 type CategoryModelType = InstanceType<typeof BlogModels.CategoryModel>;
 type CategoryModelModifyParameters = Parameters<CategoryModelType['modify']>;
@@ -11,7 +11,7 @@ type CategoryModelModifyParameters = Parameters<CategoryModelType['modify']>;
 export function useViewModel() {
   const {
     idToCategoryCache,
-    setIdToCategoryCache,
+    updateIdToCategoryCache,
     loading: idToCategoryLoading,
     error: idToCategoryLoadError,
   } = useIdToCategoryCache();
@@ -30,18 +30,24 @@ export function useViewModel() {
     handleCategoryModificationSubmit,
   } = useSubmitCategoryModification((id, modifiedParts) => {
     // Modify local record instead of request again.
-    assert(idToCategoryCache);
-    const modifiedCategory = idToCategoryCache.get(id);
-    assert(modifiedCategory);
-    Object.assign(modifiedCategory, modifiedParts);
-    setIdToCategoryCache(new Map(idToCategoryCache));
+    updateIdToCategoryCache((prev) => {
+      assert(prev);
+      const modifiedCategory = prev.get(id);
+      assert(modifiedCategory);
+      const next = new Map(prev);
+      next.set(id, {...modifiedCategory, ...modifiedParts});
+      return next;
+    });
   });
 
   const {submitting: categoryDeletionSubmitting, handleCategoryDeletion} =
     useSubmitCategoryDeletion((id) => {
-      assert(idToCategoryCache);
-      idToCategoryCache.delete(id);
-      setIdToCategoryCache(new Map(idToCategoryCache));
+      updateIdToCategoryCache((prev) => {
+        assert(prev);
+        const next = new Map(prev);
+        next.delete(id);
+        return next;
+      });
       deleteCategoryArticleAmount(id);
     }, setCategoryArticleAmount);
 
@@ -63,19 +69,43 @@ export function useViewModel() {
 function useIdToCategoryCache() {
   const {idToCategory, loading, error} =
     BlogModelHooks.CategoryModelHooks.useIdToCategory();
-  const [idToCategoryCache, setIdToCategoryCache] = useState<
-    typeof idToCategory | null
-  >(null);
+  const [overriddenState, setOverriddenState] = useState<{
+    source: Map<Category['id'], Category> | null;
+    value: Map<Category['id'], Category> | null;
+  } | null>(null);
 
-  useEffect(() => {
-    if (!loading && !error) {
-      setIdToCategoryCache(idToCategory);
-    }
-  }, [error, idToCategory, loading]);
+  const idToCategoryCache =
+    overriddenState !== null && overriddenState.source === idToCategory
+      ? overriddenState.value
+      : error
+        ? null
+        : idToCategory;
+
+  const updateIdToCategoryCache = useCallback(
+    (
+      updater: (
+        prev: Map<Category['id'], Category> | null,
+      ) => Map<Category['id'], Category> | null,
+    ) => {
+      setOverriddenState((prevOverride) => {
+        const current =
+          prevOverride !== null && prevOverride.source === idToCategory
+            ? prevOverride.value
+            : error
+              ? null
+              : idToCategory;
+        return {
+          source: idToCategory,
+          value: updater(current),
+        };
+      });
+    },
+    [error, idToCategory],
+  );
 
   return {
     idToCategoryCache,
-    setIdToCategoryCache,
+    updateIdToCategoryCache,
     loading,
     error,
   };
@@ -85,19 +115,43 @@ function useIdToArticleAmountCache() {
   const categoryModel = useMemo(() => new BlogModels.CategoryModel(), []);
   const {idToArticleAmount, loading, error} =
     BlogModelHooks.CategoryModelHooks.useIdToArticleAmount();
-  const [idToArticleAmountCache, setIdToArticleAmountCache] = useState<
-    typeof idToArticleAmount | null
-  >(null);
+  const [overriddenState, setOverriddenState] = useState<{
+    source: Map<Category['id'], number> | null;
+    value: Map<Category['id'], number> | null;
+  } | null>(null);
 
-  useEffect(() => {
-    if (!loading && !error) {
-      setIdToArticleAmountCache(idToArticleAmount);
-    }
-  }, [error, idToArticleAmount, loading]);
+  const idToArticleAmountCache =
+    overriddenState !== null && overriddenState.source === idToArticleAmount
+      ? overriddenState.value
+      : error
+        ? null
+        : idToArticleAmount;
+
+  const updateIdToArticleAmountCache = useCallback(
+    (
+      updater: (
+        prev: Map<Category['id'], number> | null,
+      ) => Map<Category['id'], number> | null,
+    ) => {
+      setOverriddenState((prevOverride) => {
+        const current =
+          prevOverride !== null && prevOverride.source === idToArticleAmount
+            ? prevOverride.value
+            : error
+              ? null
+              : idToArticleAmount;
+        return {
+          source: idToArticleAmount,
+          value: updater(current),
+        };
+      });
+    },
+    [error, idToArticleAmount],
+  );
 
   const setCategoryArticleAmount = useCallback(
     (id: Category['id'], articleAmount: number) => {
-      setIdToArticleAmountCache((prev) => {
+      updateIdToArticleAmountCache((prev) => {
         if (!prev) {
           return prev;
         }
@@ -106,19 +160,22 @@ function useIdToArticleAmountCache() {
         return next;
       });
     },
-    [],
+    [updateIdToArticleAmountCache],
   );
 
-  const deleteCategoryArticleAmount = useCallback((id: Category['id']) => {
-    setIdToArticleAmountCache((prev) => {
-      if (!prev) {
-        return prev;
-      }
-      const next = new Map(prev);
-      next.delete(id);
-      return next;
-    });
-  }, []);
+  const deleteCategoryArticleAmount = useCallback(
+    (id: Category['id']) => {
+      updateIdToArticleAmountCache((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        const next = new Map(prev);
+        next.delete(id);
+        return next;
+      });
+    },
+    [updateIdToArticleAmountCache],
+  );
 
   const refreshCategoryArticleAmount = useCallback(
     (id: Category['id']) => {

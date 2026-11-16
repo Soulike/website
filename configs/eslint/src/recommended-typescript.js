@@ -17,6 +17,7 @@ export default [
     },
     rules: {
       '@typescript-eslint/no-extraneous-class': 'off',
+      '@typescript-eslint/no-unsafe-type-assertion': 'error',
       '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/strict-boolean-expressions': 'error',
       '@typescript-eslint/switch-exhaustiveness-check': [

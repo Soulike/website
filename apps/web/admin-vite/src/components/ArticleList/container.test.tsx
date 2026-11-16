@@ -1,5 +1,5 @@
 import {type Article} from '@schema/blog';
-import {cleanup, render, screen} from '@testing-library/react';
+import {act, cleanup, render, screen} from '@testing-library/react';
 import {userEvent} from '@testing-library/user-event';
 import {ConfigProvider} from 'antd';
 import enUS from 'antd/locale/en_US.js';
@@ -7,6 +7,7 @@ import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
 const hookMocks = vi.hoisted(() => ({
   idToArticle: new Map<number, Article>(),
+  pendingDeletions: new Map<number, () => void>(),
 }));
 
 function mockUseIdToArticle() {
@@ -34,6 +35,16 @@ function MockArticleListItem({
         }}
       >
         Delete Article {id}
+      </button>
+      <button
+        type='button'
+        onClick={() => {
+          hookMocks.pendingDeletions.set(id, () => {
+            onDeleteArticleSuccess(id);
+          });
+        }}
+      >
+        Start Delete Article {id}
       </button>
     </div>
   );
@@ -111,6 +122,7 @@ describe('Admin ArticleList pagination', () => {
       },
     });
     hookMocks.idToArticle = createArticlesMap(11);
+    hookMocks.pendingDeletions.clear();
   });
 
   afterEach(() => {
@@ -192,5 +204,42 @@ describe('Admin ArticleList pagination', () => {
     expect(
       screen.getByRole('button', {name: 'Page 2'}).getAttribute('aria-current'),
     ).toBe('page');
+  });
+
+  it('retains both removals when two overlapping deletions capture the initial callback and settle sequentially', async () => {
+    const user = userEvent.setup();
+    render(
+      <ConfigProvider locale={enUS}>
+        <ArticleList />
+      </ConfigProvider>,
+    );
+
+    expect(await screen.findByText('Article 1')).toBeTruthy();
+    expect(screen.getByText('Article 2')).toBeTruthy();
+
+    await user.click(
+      screen.getByRole('button', {name: 'Start Delete Article 1'}),
+    );
+    await user.click(
+      screen.getByRole('button', {name: 'Start Delete Article 2'}),
+    );
+
+    const resolveFirst = hookMocks.pendingDeletions.get(1);
+    const resolveSecond = hookMocks.pendingDeletions.get(2);
+    expect(resolveFirst).toBeDefined();
+    expect(resolveSecond).toBeDefined();
+
+    act(() => {
+      resolveFirst?.();
+    });
+    expect(screen.queryByText('Article 1')).toBeNull();
+    expect(screen.getByText('Article 2')).toBeTruthy();
+
+    act(() => {
+      resolveSecond?.();
+    });
+    expect(screen.queryByText('Article 1')).toBeNull();
+    expect(screen.queryByText('Article 2')).toBeNull();
+    expect(screen.getByText('Article 11')).toBeTruthy();
   });
 });

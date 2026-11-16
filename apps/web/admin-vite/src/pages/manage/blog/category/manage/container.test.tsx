@@ -1,7 +1,8 @@
 import {type Category} from '@schema/blog';
+import {cleanup, render, screen} from '@testing-library/react';
+import {userEvent} from '@testing-library/user-event';
 import {message} from 'antd';
-import {act, type ComponentProps} from 'react';
-import {createRoot, type Root} from 'react-dom/client';
+import {type ComponentProps} from 'react';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
 const categoryModelMocks = vi.hoisted(() => ({
@@ -55,13 +56,41 @@ vi.mock('@module/model/react/admin', () => ({
   },
 }));
 
+function MockManageView(
+  props: ComponentProps<typeof import('./view.js').ManageView>,
+) {
+  capturedViewProps.current = props;
+  return (
+    <div>
+      {Array.from(props.idToCategory?.values() ?? []).map((category) => (
+        <div key={category.id}>
+          <span
+            role='button'
+            tabIndex={0}
+            onClick={props.onArticleAmountTagClick(category.id)}
+          >
+            Article Amount {category.id}
+          </span>
+          <button
+            type='button'
+            onClick={props.onDeleteCategoryButtonClick(category.id)}
+          >
+            Delete {category.id}
+          </button>
+        </div>
+      ))}
+      <button type='button' onClick={props.onDeleteCategoryConfirm}>
+        Confirm Delete
+      </button>
+      <button type='button' onClick={props.onArticleDeletedInModal}>
+        Article Deleted
+      </button>
+    </div>
+  );
+}
+
 vi.mock('./view.js', () => ({
-  ManageView: (
-    props: ComponentProps<typeof import('./view.js').ManageView>,
-  ) => {
-    capturedViewProps.current = props;
-    return null;
-  },
+  ManageView: MockManageView,
 }));
 
 import {Manage} from './container.js';
@@ -73,15 +102,17 @@ function getLatestViewProps() {
   return capturedViewProps.current;
 }
 
+function createNoopMessageHandle(): ReturnType<typeof message.warning> {
+  const settled = Promise.resolve(true);
+  return Object.assign(() => undefined, {
+    then: settled.then.bind(settled),
+  });
+}
+
 describe('Category Manage container', () => {
-  let containerElement: HTMLDivElement;
-  let root: Root;
   let originalNavigatorLanguage: string;
 
   beforeEach(() => {
-    (
-      globalThis as {IS_REACT_ACT_ENVIRONMENT?: boolean}
-    ).IS_REACT_ACT_ENVIRONMENT = true;
     originalNavigatorLanguage = navigator.language;
     Object.defineProperty(navigator, 'language', {
       get: () => 'en',
@@ -101,18 +132,10 @@ describe('Category Manage container', () => {
     categoryModelMocks.deleteById.mockReset().mockResolvedValue(undefined);
     categoryModelMocks.modify.mockReset().mockResolvedValue(undefined);
     capturedViewProps.current = null;
-
-    containerElement = document.createElement('div');
-    document.body.appendChild(containerElement);
-    root = createRoot(containerElement);
   });
 
-  afterEach(async () => {
-    await act(async () => {
-      root.unmount();
-      await Promise.resolve();
-    });
-    containerElement.remove();
+  afterEach(() => {
+    cleanup();
     Object.defineProperty(navigator, 'language', {
       get: () => originalNavigatorLanguage,
       configurable: true,
@@ -120,45 +143,23 @@ describe('Category Manage container', () => {
     vi.restoreAllMocks();
   });
 
-  async function renderManage() {
-    await act(async () => {
-      root.render(<Manage />);
-      await Promise.resolve();
-    });
-    return getLatestViewProps();
-  }
-
   it('refreshes count after deleting the last article in modal and allows deleting the now-empty category', async () => {
-    let viewProps = await renderManage();
-    expect(viewProps.categoryToArticleNumberMap?.get(1)).toBe(1);
+    const user = userEvent.setup();
+    render(<Manage />);
+    expect(getLatestViewProps().categoryToArticleNumberMap?.get(1)).toBe(1);
 
     // Open modal for category 1 and simulate deleting its last article.
-    await act(async () => {
-      viewProps.onArticleAmountTagClick(1)?.({
-        preventDefault: () => undefined,
-      } as never);
-      await Promise.resolve();
-    });
+    await user.click(screen.getByRole('button', {name: 'Article Amount 1'}));
     categoryModelMocks.getArticleAmountById.mockResolvedValueOnce(0);
-    await act(async () => {
-      getLatestViewProps().onArticleDeletedInModal?.();
-      await Promise.resolve();
-    });
+    await user.click(screen.getByRole('button', {name: 'Article Deleted'}));
 
-    viewProps = getLatestViewProps();
     expect(categoryModelMocks.getArticleAmountById).toHaveBeenCalledWith(1);
-    expect(viewProps.categoryToArticleNumberMap?.get(1)).toBe(0);
+    expect(getLatestViewProps().categoryToArticleNumberMap?.get(1)).toBe(0);
 
     // Confirm deleting category 1; live check sees 0 and proceeds to deleteById(1).
     categoryModelMocks.getArticleAmountById.mockResolvedValueOnce(0);
-    await act(async () => {
-      viewProps.onDeleteCategoryButtonClick(1)?.({} as never);
-      await Promise.resolve();
-    });
-    await act(async () => {
-      getLatestViewProps().onDeleteCategoryConfirm?.();
-      await Promise.resolve();
-    });
+    await user.click(screen.getByRole('button', {name: 'Delete 1'}));
+    await user.click(screen.getByRole('button', {name: 'Confirm Delete'}));
 
     expect(categoryModelMocks.deleteById).toHaveBeenCalledExactlyOnceWith(1);
     expect(getLatestViewProps().idToCategory?.has(1)).toBe(false);
@@ -166,18 +167,13 @@ describe('Category Manage container', () => {
   });
 
   it('allows deleting a category whose stale cached count was 1 once backend count is 0', async () => {
-    const viewProps = await renderManage();
-    expect(viewProps.categoryToArticleNumberMap?.get(1)).toBe(1);
+    const user = userEvent.setup();
+    render(<Manage />);
+    expect(getLatestViewProps().categoryToArticleNumberMap?.get(1)).toBe(1);
 
     categoryModelMocks.getArticleAmountById.mockResolvedValueOnce(0);
-    await act(async () => {
-      viewProps.onDeleteCategoryButtonClick(1)?.({} as never);
-      await Promise.resolve();
-    });
-    await act(async () => {
-      getLatestViewProps().onDeleteCategoryConfirm?.();
-      await Promise.resolve();
-    });
+    await user.click(screen.getByRole('button', {name: 'Delete 1'}));
+    await user.click(screen.getByRole('button', {name: 'Confirm Delete'}));
 
     expect(categoryModelMocks.getArticleAmountById).toHaveBeenCalledWith(1);
     expect(categoryModelMocks.deleteById).toHaveBeenCalledExactlyOnceWith(1);
@@ -186,18 +182,13 @@ describe('Category Manage container', () => {
   it('blocks deleting a non-empty category with localized CATEGORY_IN_USE warning and updates cached count', async () => {
     const warningSpy = vi
       .spyOn(message, 'warning')
-      .mockImplementation(() => undefined as never);
-    const viewProps = await renderManage();
+      .mockImplementation(createNoopMessageHandle);
+    const user = userEvent.setup();
+    render(<Manage />);
 
     categoryModelMocks.getArticleAmountById.mockResolvedValueOnce(3);
-    await act(async () => {
-      viewProps.onDeleteCategoryButtonClick(2)?.({} as never);
-      await Promise.resolve();
-    });
-    await act(async () => {
-      getLatestViewProps().onDeleteCategoryConfirm?.();
-      await Promise.resolve();
-    });
+    await user.click(screen.getByRole('button', {name: 'Delete 2'}));
+    await user.click(screen.getByRole('button', {name: 'Confirm Delete'}));
 
     expect(categoryModelMocks.deleteById).not.toHaveBeenCalled();
     expect(getLatestViewProps().categoryToArticleNumberMap?.get(2)).toBe(3);

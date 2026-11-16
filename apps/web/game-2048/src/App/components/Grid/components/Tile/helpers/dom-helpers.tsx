@@ -1,8 +1,9 @@
-export function createInPlaceCloneElement<T extends HTMLElement>(
-  element: T,
-): T {
+export function createInPlaceCloneElement(element: HTMLElement): HTMLElement {
   const rect = element.getBoundingClientRect();
-  const clone = element.cloneNode(true) as T;
+  const clone = element.cloneNode(true);
+  if (!(clone instanceof HTMLElement)) {
+    throw new TypeError('Expected cloned node to be an HTMLElement');
+  }
   Object.assign(clone.style, {
     position: 'absolute',
     left: `${(rect.left + window.scrollX).toString()}px`,

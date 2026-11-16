@@ -25,24 +25,19 @@ export class AccountModel {
   }
 
   public async login(username: string, password: string): Promise<void> {
-    const response = await Request.JSONToJSON.post<unknown>(
-      AccountModel.PATH.LOGIN,
-      {
-        body: {username, password},
-      },
-    );
+    const response = await Request.JSONToJSON.post(AccountModel.PATH.LOGIN, {
+      body: {username, password},
+    });
     parseVoidServerResponse(response);
   }
 
   public async logout(): Promise<void> {
-    const response = await Request.JSONToJSON.post<unknown>(
-      AccountModel.PATH.LOGOUT,
-    );
+    const response = await Request.JSONToJSON.post(AccountModel.PATH.LOGOUT);
     parseVoidServerResponse(response);
   }
 
   public async isLoggedIn(): Promise<boolean> {
-    const response = await Request.JSONToJSON.get<unknown>(
+    const response = await Request.JSONToJSON.get(
       AccountModel.PATH.CHECK_SESSION,
     );
     return parseServerResponse(SessionCheckDataSchema, response).isInSession;

@@ -1,8 +1,6 @@
-import assert from 'node:assert';
-
 import {RejectCallback, ResolveCallback, usePromise} from '@library/hooks';
 import {type Category, type CategoryIdToArticleAmount} from '@schema/blog';
-import {useEffect, useMemo, useState} from 'react';
+import {useMemo} from 'react';
 
 import {CategoryModel} from '../../../models/admin/blog/category-model.js';
 
@@ -53,36 +51,31 @@ function useCategoryById(
   };
 }
 
+function buildIdToCategoryMap(
+  categories: readonly Category[],
+): Map<Category['id'], Category> {
+  const idToCategory = new Map<Category['id'], Category>();
+  for (const category of categories) {
+    idToCategory.set(category.id, category);
+  }
+  return idToCategory;
+}
+
 function useIdToCategory(
   onSuccess?: ResolveCallback<Map<Category['id'], Category>>,
   onReject?: RejectCallback,
 ) {
-  const {loading, error, categories} = useAllCategories();
-  const [idToCategory, setIdToCategory] = useState<Map<
-    Category['id'],
-    Category
-  > | null>(null);
+  const {loading, error, categories} = useAllCategories(
+    onSuccess
+      ? (loadedCategories) => onSuccess(buildIdToCategoryMap(loadedCategories))
+      : undefined,
+    onReject,
+  );
 
-  useEffect(() => {
-    if (loading) {
-      return;
-    }
-
-    if (error) {
-      if (onReject) {
-        void onReject(error);
-      }
-      return;
-    }
-
-    assert(categories);
-    const idToCategory = new Map<Category['id'], Category>();
-    for (const category of categories) {
-      idToCategory.set(category.id, category);
-    }
-    setIdToCategory(idToCategory);
-    void onSuccess?.(idToCategory);
-  }, [loading, error, onReject, categories]);
+  const idToCategory = useMemo(
+    () => (categories ? buildIdToCategoryMap(categories) : null),
+    [categories],
+  );
 
   return {
     loading,

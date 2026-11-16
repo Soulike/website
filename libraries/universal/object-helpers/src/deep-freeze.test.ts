@@ -143,9 +143,9 @@ describe('deepFreeze', () => {
     expect(Object.isFrozen(frozenObj)).toBe(true);
     expect(Object.isFrozen(frozenObj.nested)).toBe(true);
 
-    // Functions should still be callable - use type assertions to fix the call signature issue
-    expect((frozenObj.fn as () => number)()).toBe(42);
-    expect((frozenObj.nested.method as () => string)()).toBe('hello');
+    // Functions should still be callable
+    expect(frozenObj.fn()).toBe(42);
+    expect(frozenObj.nested.method()).toBe('hello');
 
     // We can't modify the function references
     expect(() => {

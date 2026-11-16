@@ -1,23 +1,27 @@
 import {BlogModelHooks} from '@module/model/react/admin';
 import {type Article} from '@schema/blog';
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 
 export function useViewModel(category?: Article['category']) {
   const {
     idToArticleCache,
     idToArticleLoading,
     idToArticleError,
-    setIdToArticleCache,
+    updateIdToArticleCache,
   } = useIdToArticleCache(category);
 
   const handleDeleteArticleSuccess = useCallback(
     (id: Article['id']) => {
-      if (idToArticleCache) {
-        idToArticleCache.delete(id);
-        setIdToArticleCache(new Map(idToArticleCache));
-      }
+      updateIdToArticleCache((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        const next = new Map(prev);
+        next.delete(id);
+        return next;
+      });
     },
-    [idToArticleCache, setIdToArticleCache],
+    [updateIdToArticleCache],
   );
 
   return {
@@ -29,25 +33,48 @@ export function useViewModel(category?: Article['category']) {
 }
 
 function useIdToArticleCache(category?: Article['category']) {
-  // Maintain a cached version for quick refresh
-  const [idToArticleCache, setIdToArticleCache] = useState<Map<
-    Article['id'],
-    Article
-  > | null>(null);
   const {
     loading: idToArticleLoading,
     idToArticle,
     error: idToArticleError,
   } = BlogModelHooks.ArticleModelHooks.useIdToArticle(category);
-  useEffect(() => {
-    if (!idToArticleLoading && !idToArticleError) {
-      setIdToArticleCache(idToArticle);
-    }
-  }, [idToArticle, idToArticleError, idToArticleLoading]);
+  const [overriddenState, setOverriddenState] = useState<{
+    source: Map<Article['id'], Article> | null;
+    value: Map<Article['id'], Article> | null;
+  } | null>(null);
+
+  const idToArticleCache =
+    overriddenState !== null && overriddenState.source === idToArticle
+      ? overriddenState.value
+      : idToArticleError
+        ? null
+        : idToArticle;
+
+  const updateIdToArticleCache = useCallback(
+    (
+      updater: (
+        prev: Map<Article['id'], Article> | null,
+      ) => Map<Article['id'], Article> | null,
+    ) => {
+      setOverriddenState((prevOverride) => {
+        const current =
+          prevOverride !== null && prevOverride.source === idToArticle
+            ? prevOverride.value
+            : idToArticleError
+              ? null
+              : idToArticle;
+        return {
+          source: idToArticle,
+          value: updater(current),
+        };
+      });
+    },
+    [idToArticle, idToArticleError],
+  );
 
   return {
     idToArticleCache,
-    setIdToArticleCache,
+    updateIdToArticleCache,
     idToArticleLoading,
     idToArticleError,
   };

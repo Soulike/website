@@ -3,13 +3,20 @@ import {RequestParameters} from './types.js';
 export function generateRequestUrl(parameters: RequestParameters): URL {
   const url = new URL('https://v1.hitokoto.cn/');
 
-  const sanitizedParameters = sanitizeRequestParameters(parameters);
-  const sanitizedParametersEntries = Object.entries(sanitizedParameters) as [
+  const parameterEntries: readonly [
     keyof RequestParameters,
     RequestParameters[keyof RequestParameters],
-  ][];
+  ][] = [
+    ['c', parameters.c],
+    ['encode', parameters.encode],
+    ['charset', parameters.charset],
+    ['callback', parameters.callback],
+    ['select', parameters.select],
+    ['min_length', parameters.min_length],
+    ['max_length', parameters.max_length],
+  ];
   const searchParams = url.searchParams;
-  for (const [key, value] of sanitizedParametersEntries) {
+  for (const [key, value] of parameterEntries) {
     if (value === undefined) {
       continue;
     }
@@ -25,20 +32,4 @@ export function generateRequestUrl(parameters: RequestParameters): URL {
   }
 
   return url;
-}
-
-function sanitizeRequestParameters(
-  parameters: RequestParameters,
-): RequestParameters {
-  const {c, encode, charset, callback, select, min_length, max_length} =
-    parameters;
-  return {
-    c,
-    encode,
-    charset,
-    callback,
-    select,
-    min_length,
-    max_length,
-  };
 }

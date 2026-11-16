@@ -5,9 +5,9 @@ import {articleModel, categoryModel, optionModel} from './blog/index.js';
 import {ModelAccessDeniedError} from './model-access-error.js';
 
 function stubFetchJson(payload: unknown) {
-  const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
-    json: () => Promise.resolve(payload),
-  } as Response);
+  const fetchMock = vi
+    .fn<typeof fetch>()
+    .mockResolvedValue(Response.json(payload));
   vi.stubGlobal('fetch', fetchMock);
   return fetchMock;
 }

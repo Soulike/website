@@ -25,14 +25,17 @@ import {I18nEventType} from './types.js';
  * });
  * ```
  */
+type ListenerMap<KeyToString> = {
+  [K in I18nEventType]: Set<
+    I18nEventListener<EventTypeToPayload<KeyToString>[K]>
+  >;
+};
+
 export class I18nCore<
   StringKey extends PropertyKey,
   KeyToString extends Record<StringKey, string>,
 > {
-  private eventTypeToListeners: Map<
-    I18nEventType,
-    Set<I18nEventListener<unknown>>
-  >;
+  private eventTypeToListeners: ListenerMap<KeyToString>;
   private currentLanguageCode: string;
   private keyToString: KeyToString | null;
   private loadingPromise: Promise<void> | null;
@@ -45,7 +48,9 @@ export class I18nCore<
   private readonly placeholderMark: string;
 
   constructor(config: I18nConfig<StringKey, KeyToString>) {
-    this.eventTypeToListeners = new Map();
+    this.eventTypeToListeners = {
+      [I18nEventType.LANGUAGE_CHANGE]: new Set(),
+    };
     this.currentLanguageCode = navigator.language.toLowerCase();
     this.keyToString = null;
     this.loadingPromise = null;
@@ -137,14 +142,11 @@ export class I18nCore<
    * @param type - Event type to listen for
    * @param callback - Callback function to invoke when event occurs
    */
-  public addEventListener(
-    type: I18nEventType,
-    callback: I18nEventListener<EventTypeToPayload<KeyToString>[typeof type]>,
+  public addEventListener<K extends I18nEventType>(
+    type: K,
+    callback: I18nEventListener<EventTypeToPayload<KeyToString>[K]>,
   ): void {
-    let listeners = this.eventTypeToListeners.get(type);
-    listeners ??= new Set();
-    listeners.add(callback as I18nEventListener<unknown>);
-    this.eventTypeToListeners.set(type, listeners);
+    this.eventTypeToListeners[type].add(callback);
   }
 
   /**
@@ -153,27 +155,18 @@ export class I18nCore<
    * @param type - Event type to stop listening for
    * @param callback - Callback function to remove
    */
-  public removeEventListener(
-    type: I18nEventType,
-    callback: I18nEventListener<EventTypeToPayload<KeyToString>[typeof type]>,
+  public removeEventListener<K extends I18nEventType>(
+    type: K,
+    callback: I18nEventListener<EventTypeToPayload<KeyToString>[K]>,
   ): void {
-    const listeners = this.eventTypeToListeners.get(type);
-    if (!listeners) {
-      return;
-    }
-    listeners.delete(callback as I18nEventListener<unknown>);
-    this.eventTypeToListeners.set(type, listeners);
+    this.eventTypeToListeners[type].delete(callback);
   }
 
-  private dispatchEvent(
-    type: I18nEventType,
-    payload: EventTypeToPayload<KeyToString>[typeof type],
+  private dispatchEvent<K extends I18nEventType>(
+    type: K,
+    payload: EventTypeToPayload<KeyToString>[K],
   ): void {
-    const listeners = this.eventTypeToListeners.get(type);
-    if (!listeners) {
-      return;
-    }
-    for (const listener of listeners) {
+    for (const listener of this.eventTypeToListeners[type]) {
       listener(payload);
     }
   }

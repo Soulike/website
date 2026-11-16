@@ -1,25 +1,50 @@
 import {act, renderHook} from '@testing-library/react';
-import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
 import {useMediaQuery} from './useMediaQuery.js';
 
+type MinimalMediaQueryList = Pick<
+  MediaQueryList,
+  'matches' | 'addEventListener' | 'removeEventListener'
+>;
+
 describe('useMediaQuery', () => {
   // Setup mocks
-  const addEventListener = vi.fn();
-  const removeEventListener = vi.fn();
+  const addEventListener = vi.fn<MediaQueryList['addEventListener']>();
+  const removeEventListener = vi.fn<MediaQueryList['removeEventListener']>();
+  let originalMatchMediaDescriptor: PropertyDescriptor | undefined;
+  let matchMediaMock: ReturnType<
+    typeof vi.fn<(query: string) => MinimalMediaQueryList>
+  >;
+
+  const createMediaQueryList = (matches: boolean): MinimalMediaQueryList => ({
+    matches,
+    addEventListener,
+    removeEventListener,
+  });
 
   beforeEach(() => {
-    // Create a mock MediaQueryList
-    const mediaQueryList = {
-      matches: false,
-      addEventListener,
-      removeEventListener,
-    };
-
-    window.matchMedia = vi.fn().mockReturnValue(mediaQueryList);
+    originalMatchMediaDescriptor = Object.getOwnPropertyDescriptor(
+      window,
+      'matchMedia',
+    );
+    matchMediaMock = vi.fn(() => createMediaQueryList(false));
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      writable: true,
+      value: matchMediaMock,
+    });
 
     // Reset mocks between tests
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    if (originalMatchMediaDescriptor) {
+      Object.defineProperty(window, 'matchMedia', originalMatchMediaDescriptor);
+    } else {
+      Reflect.deleteProperty(window, 'matchMedia');
+    }
   });
 
   it('returns correct match state', () => {
@@ -30,14 +55,7 @@ describe('useMediaQuery', () => {
     expect(resultNotMatching.current).toBe(false);
 
     // Change match state to true
-    const matchingMediaQueryList = {
-      matches: true,
-      addEventListener,
-      removeEventListener,
-    };
-    (window.matchMedia as ReturnType<typeof vi.fn>).mockReturnValue(
-      matchingMediaQueryList,
-    );
+    matchMediaMock.mockReturnValue(createMediaQueryList(true));
 
     // Test with matching state
     const {result: resultMatching} = renderHook(() =>
@@ -52,15 +70,16 @@ describe('useMediaQuery', () => {
     expect(result.current).toBe(false);
 
     // Get the registered event handler
-    const firstCall = addEventListener.mock.calls[0];
-    if (firstCall === undefined) {
-      throw new Error('Expected addEventListener to be called');
+    const handler = addEventListener.mock.calls[0]?.[1];
+    expect(typeof handler).toBe('function');
+    if (typeof handler !== 'function') {
+      throw new TypeError('Expected change event listener to be a function');
     }
-    const handler = firstCall[1] as EventListener;
 
     // Simulate media query change
+    matchMediaMock.mockReturnValue(createMediaQueryList(true));
     act(() => {
-      handler({matches: true} as MediaQueryListEvent);
+      handler(Object.assign(new Event('change'), {matches: true}));
     });
 
     // Verify state updated
@@ -82,11 +101,10 @@ describe('useMediaQuery', () => {
     unmount();
 
     // Verify cleanup
-    const firstCall = addEventListener.mock.calls[0];
-    if (firstCall === undefined) {
-      throw new Error('Expected addEventListener to be called');
-    }
     expect(removeEventListener).toHaveBeenCalledOnce();
-    expect(removeEventListener).toHaveBeenCalledWith('change', firstCall[1]);
+    expect(removeEventListener).toHaveBeenCalledWith(
+      'change',
+      addEventListener.mock.calls[0]?.[1],
+    );
   });
 });

@@ -1,10 +1,10 @@
 import {useLazyPromise} from '@library/hooks';
 import {articleModel, categoryModel} from '@module/model/blog';
 import {type Article, type Category} from '@schema/blog';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router';
 
-import {getDiffInDays} from '@/helpers/date-helpers.js';
+import {getDiffInDays, parseToDate} from '@/helpers/date-helpers.js';
 import {STRING_KEY, useI18nString} from '@/i18n/index.js';
 import {
   ArticlePathParams,
@@ -26,8 +26,12 @@ export function useViewModel() {
     category,
   } = useLoadCategory();
 
-  const shouldShowOutdatedMessage = shouldShowOutdatedWarningMessage(article);
-  const outdatedWarningMessage = useOutdatedWarningMessage(article);
+  const [now] = useState(() => new Date());
+  const shouldShowOutdatedMessage = shouldShowOutdatedWarningMessage(
+    article,
+    now,
+  );
+  const outdatedWarningMessage = useOutdatedWarningMessage(article, now);
 
   const loadingString = useI18nString(STRING_KEY.UI_LABEL_LOADING);
   const pageTitle = useI18nString(
@@ -97,22 +101,19 @@ function useLoadCategory() {
   };
 }
 
-function useOutdatedWarningMessage(article: Article | null): string {
+function useOutdatedWarningMessage(article: Article | null, now: Date): string {
   return useI18nString(
     STRING_KEY.UI_MESSAGE_ARTICLE_MAYBE_OUTDATED,
     article
-      ? getDiffInDays(new Date(), new Date(article.publicationTime)).toString()
+      ? getDiffInDays(now, parseToDate(article.publicationTime)).toString()
       : '-1',
   );
 }
 
-function shouldShowOutdatedWarningMessage(article: Article | null) {
+function shouldShowOutdatedWarningMessage(article: Article | null, now: Date) {
   if (!article) {
     return false;
   }
-  const diffInDays = getDiffInDays(
-    new Date(),
-    new Date(article.publicationTime),
-  );
+  const diffInDays = getDiffInDays(now, parseToDate(article.publicationTime));
   return diffInDays > 30;
 }

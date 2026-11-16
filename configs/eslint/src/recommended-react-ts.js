@@ -5,4 +5,9 @@ import recommendedTypeScript from './recommended-typescript.js';
 export default [
   ...recommendedTypeScript,
   eslintReact.configs['recommended-typescript'],
+  {
+    rules: {
+      '@eslint-react/exhaustive-deps': 'error',
+    },
+  },
 ];
