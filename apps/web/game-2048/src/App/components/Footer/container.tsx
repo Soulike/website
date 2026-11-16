@@ -1,8 +1,9 @@
+import {useState} from 'react';
+
 import {View} from './view.js';
 
 export function Footer() {
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear().toString();
+  const [currentYear] = useState(() => new Date().getFullYear().toString());
 
   return <View currentYear={currentYear} />;
 }

@@ -30,26 +30,23 @@ class ArticleModel {
   }
 
   public async getAllWithAbstract(): Promise<ArticleAbstract[]> {
-    const response = await Request.JSONToJSON.get<unknown>(
+    const response = await Request.JSONToJSON.get(
       ArticleModel.PATH.GET_ALL_WITH_ABSTRACT,
     );
     return parseServerResponse(ArticleAbstractListSchema, response);
   }
 
   public async getById(id: Article['id']): Promise<Article> {
-    const response = await Request.JSONToJSON.get<unknown>(
-      ArticleModel.PATH.GET_BY_ID,
-      {
-        searchParams: new URLSearchParams({json: JSON.stringify({id})}),
-      },
-    );
+    const response = await Request.JSONToJSON.get(ArticleModel.PATH.GET_BY_ID, {
+      searchParams: new URLSearchParams({json: JSON.stringify({id})}),
+    });
     return parseServerResponse(ArticleSchema, response);
   }
 
   public async getByCategoryWithAbstract(
     category: Article['category'],
   ): Promise<ArticleAbstract[]> {
-    const response = await Request.JSONToJSON.get<unknown>(
+    const response = await Request.JSONToJSON.get(
       ArticleModel.PATH.GET_BY_CATEGORY_WITH_ABSTRACT,
       {
         searchParams: new URLSearchParams({

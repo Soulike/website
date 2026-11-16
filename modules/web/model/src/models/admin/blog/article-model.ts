@@ -32,26 +32,21 @@ export class ArticleModel {
   }
 
   public async getById(id: Article['id']): Promise<Article> {
-    const response = await Request.JSONToJSON.get<unknown>(
-      ArticleModel.PATH.GET_BY_ID,
-      {
-        searchParams: new URLSearchParams({json: JSON.stringify({id})}),
-      },
-    );
+    const response = await Request.JSONToJSON.get(ArticleModel.PATH.GET_BY_ID, {
+      searchParams: new URLSearchParams({json: JSON.stringify({id})}),
+    });
     return parseServerResponse(ArticleSchema, response);
   }
 
   public async getAll(): Promise<Article[]> {
-    const response = await Request.JSONToJSON.get<unknown>(
-      ArticleModel.PATH.GET_ALL,
-    );
+    const response = await Request.JSONToJSON.get(ArticleModel.PATH.GET_ALL);
     return parseServerResponse(ArticleListSchema, response);
   }
 
   public async getByCategory(
     category: Article['category'],
   ): Promise<Article[]> {
-    const response = await Request.JSONToJSON.get<unknown>(
+    const response = await Request.JSONToJSON.get(
       ArticleModel.PATH.GET_BY_CATEGORY,
       {
         searchParams: new URLSearchParams({
@@ -63,17 +58,14 @@ export class ArticleModel {
   }
 
   public async add(article: ArticleDraft): Promise<void> {
-    const response = await Request.JSONToJSON.post<unknown>(
-      ArticleModel.PATH.ADD,
-      {
-        body: article,
-      },
-    );
+    const response = await Request.JSONToJSON.post(ArticleModel.PATH.ADD, {
+      body: article,
+    });
     parseVoidServerResponse(response);
   }
 
   public async deleteById(id: Article['id']): Promise<void> {
-    const response = await Request.JSONToJSON.post<unknown>(
+    const response = await Request.JSONToJSON.post(
       ArticleModel.PATH.DELETE_BY_ID,
       {
         body: {id},
@@ -86,12 +78,9 @@ export class ArticleModel {
     id: UpdateArticle['id'],
     modifiedParts: Omit<UpdateArticle, 'id'>,
   ): Promise<void> {
-    const response = await Request.JSONToJSON.post<unknown>(
-      ArticleModel.PATH.MODIFY,
-      {
-        body: {id, ...modifiedParts},
-      },
-    );
+    const response = await Request.JSONToJSON.post(ArticleModel.PATH.MODIFY, {
+      body: {id, ...modifiedParts},
+    });
     parseVoidServerResponse(response);
   }
 }

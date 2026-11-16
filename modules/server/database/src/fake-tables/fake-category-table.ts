@@ -12,7 +12,20 @@ import {
 } from '@schema/database';
 
 import {FakeArticleTable} from './fake-article-table.js';
-import {sortEntities} from './fake-table-helpers.js';
+import {createEntityKeyMap, sortEntities} from './fake-table-helpers.js';
+
+const CATEGORY_KEYS = CategoryRowSchema.keyof().options;
+const CATEGORY_KEY_MAP = createEntityKeyMap<CategoryRow>(CATEGORY_KEYS);
+
+function matchesCategoryFilter(
+  row: CategoryRow,
+  filter: Partial<CategoryRow>,
+): boolean {
+  return Object.entries(filter).every(([key, value]) => {
+    const typedKey = CATEGORY_KEY_MAP.get(key);
+    return typedKey !== undefined && row[typedKey] === value;
+  });
+}
 
 export class FakeCategoryTable {
   private static categories: CategoryRow[] = [];
@@ -72,11 +85,9 @@ export class FakeCategoryTable {
       return this.sortCategories([...this.categories], orderConfig);
     }
 
-    const filteredCategories = this.categories.filter((c) => {
-      return Object.entries(category).every(([key, value]) => {
-        return c[key as keyof CategoryRow] === value;
-      });
-    });
+    const filteredCategories = this.categories.filter((c) =>
+      matchesCategoryFilter(c, category),
+    );
 
     await Promise.resolve();
     return this.sortCategories(filteredCategories, orderConfig);
@@ -92,11 +103,9 @@ export class FakeCategoryTable {
       return this.countAll();
     }
 
-    const filteredCategories = this.categories.filter((c) => {
-      return Object.entries(category).every(([key, value]) => {
-        return c[key as keyof CategoryRow] === value;
-      });
-    });
+    const filteredCategories = this.categories.filter((c) =>
+      matchesCategoryFilter(c, category),
+    );
 
     return filteredCategories.length;
   }
@@ -113,7 +122,11 @@ export class FakeCategoryTable {
     categories: CategoryRow[],
     orderConfig: OrderConfig<CategoryRow>,
   ): CategoryRow[] {
-    const sortedCategories = sortEntities(categories, orderConfig);
+    const sortedCategories = sortEntities(
+      categories,
+      orderConfig,
+      CATEGORY_KEYS,
+    );
     return sortedCategories.map((category) =>
       CategoryRowSchema.parse(category),
     );

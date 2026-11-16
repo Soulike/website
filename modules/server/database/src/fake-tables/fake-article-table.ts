@@ -11,14 +11,21 @@ import {
   type OrderConfig,
 } from '@schema/database';
 
-import {sortEntities} from './fake-table-helpers.js';
+import {createEntityKeyMap, sortEntities} from './fake-table-helpers.js';
+
+const ARTICLE_KEYS = ArticleRowSchema.keyof().options;
+const ARTICLE_KEY_MAP = createEntityKeyMap<ArticleRow>(ARTICLE_KEYS);
 
 function matchesArticleFilter(
   row: ArticleRow,
   filter: Partial<ArticleRow>,
 ): boolean {
   return Object.entries(filter).every(([key, value]) => {
-    const rowValue = row[key as keyof ArticleRow];
+    const typedKey = ARTICLE_KEY_MAP.get(key);
+    if (typedKey === undefined) {
+      return false;
+    }
+    const rowValue = row[typedKey];
     if (rowValue instanceof Date && value instanceof Date) {
       return rowValue.getTime() === value.getTime();
     }
@@ -139,7 +146,7 @@ export class FakeArticleTable {
     articles: ArticleRow[],
     orderConfig: OrderConfig<ArticleRow>,
   ): ArticleRow[] {
-    const sortedArticles = sortEntities(articles, orderConfig);
+    const sortedArticles = sortEntities(articles, orderConfig, ARTICLE_KEYS);
     return sortedArticles.map((article) =>
       cloneArticleRow(ArticleRowSchema.parse(article)),
     );

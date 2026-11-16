@@ -350,8 +350,9 @@ describe('I18nCore', () => {
       const customLoaders = {
         en: async () =>
           Promise.resolve({
+            ...createMockStrings('en'),
             [TestStringKey.GREETING]: 'Hello, {{}}!',
-          } as TestStrings),
+          }),
       };
 
       const core = new I18nCore<TestStringKey, TestStrings>({

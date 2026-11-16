@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import {describe, expect, it, vi} from 'vitest';
 
 import {SyncTask} from '../../tasks/sync-task.js';
@@ -182,7 +184,8 @@ describe('SyncTaskRunner', () => {
       expect(result.error).toBeInstanceOf(Error);
       expect(result.error?.message).toBe('Error during task execution.');
       expect(result.error?.cause).toBeInstanceOf(Error);
-      expect((result.error?.cause as Error).message).toBe(thrownValue);
+      assert(result.error?.cause instanceof Error);
+      expect(result.error.cause.message).toBe(thrownValue);
       expect(result.result).toBe(null);
     });
   });

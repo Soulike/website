@@ -31,8 +31,7 @@ export function useSwipeGestures(
     null,
   );
 
-  const handleTouchStart = useCallback((event: Event) => {
-    const touchEvent = event as TouchEvent;
+  const handleTouchStart = useCallback((touchEvent: TouchEvent) => {
     // Prevent scrolling and other default behaviors
     touchEvent.preventDefault();
 
@@ -44,15 +43,13 @@ export function useSwipeGestures(
     };
   }, []);
 
-  const handleTouchMove = useCallback((event: Event) => {
-    const touchEvent = event as TouchEvent;
+  const handleTouchMove = useCallback((touchEvent: TouchEvent) => {
     // Prevent scrolling during touch move
     touchEvent.preventDefault();
   }, []);
 
   const handleTouchEnd = useCallback(
-    (event: Event) => {
-      const touchEvent = event as TouchEvent;
+    (touchEvent: TouchEvent) => {
       const touchEnd = touchEvent.changedTouches[0];
       const touchStart = touchStartRef.current;
 
@@ -107,22 +104,33 @@ export function useSwipeGestures(
   }, []);
 
   useEffect(() => {
-    // Use the provided element or fallback to window
-    const targetElement = element ?? window;
-
     // Use passive: false to allow preventDefault()
     const options = {passive: false};
 
-    targetElement.addEventListener('touchstart', handleTouchStart, options);
-    targetElement.addEventListener('touchmove', handleTouchMove, options);
-    targetElement.addEventListener('touchend', handleTouchEnd, options);
-    targetElement.addEventListener('touchcancel', handleTouchCancel, options);
+    if (element) {
+      element.addEventListener('touchstart', handleTouchStart, options);
+      element.addEventListener('touchmove', handleTouchMove, options);
+      element.addEventListener('touchend', handleTouchEnd, options);
+      element.addEventListener('touchcancel', handleTouchCancel, options);
+
+      return () => {
+        element.removeEventListener('touchstart', handleTouchStart);
+        element.removeEventListener('touchmove', handleTouchMove);
+        element.removeEventListener('touchend', handleTouchEnd);
+        element.removeEventListener('touchcancel', handleTouchCancel);
+      };
+    }
+
+    window.addEventListener('touchstart', handleTouchStart, options);
+    window.addEventListener('touchmove', handleTouchMove, options);
+    window.addEventListener('touchend', handleTouchEnd, options);
+    window.addEventListener('touchcancel', handleTouchCancel, options);
 
     return () => {
-      targetElement.removeEventListener('touchstart', handleTouchStart);
-      targetElement.removeEventListener('touchmove', handleTouchMove);
-      targetElement.removeEventListener('touchend', handleTouchEnd);
-      targetElement.removeEventListener('touchcancel', handleTouchCancel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchcancel', handleTouchCancel);
     };
   }, [
     handleTouchStart,

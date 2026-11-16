@@ -25,9 +25,7 @@ class CategoryModel {
   }
 
   public async getAll(): Promise<Category[]> {
-    const response = await Request.JSONToJSON.get<unknown>(
-      CategoryModel.PATH.GET_ALL,
-    );
+    const response = await Request.JSONToJSON.get(CategoryModel.PATH.GET_ALL);
     return parseServerResponse(CategoryListSchema, response);
   }
 
@@ -44,7 +42,7 @@ class CategoryModel {
   }
 
   public async getById(id: Category['id']): Promise<Category> {
-    const response = await Request.JSONToJSON.get<unknown>(
+    const response = await Request.JSONToJSON.get(
       CategoryModel.PATH.GET_BY_ID,
       {
         searchParams: new URLSearchParams({

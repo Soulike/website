@@ -1,3 +1,7 @@
+export function parseToDate(value: string | number): Date {
+  return new Date(value);
+}
+
 /**
  * 将日期转换为指定格式的字符串
  * @param date 日期对象

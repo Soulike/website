@@ -2,6 +2,7 @@ import {type Article} from '@schema/blog';
 import {notification, PopconfirmProps} from 'antd';
 import {useCallback, useMemo} from 'react';
 
+import {parseToDate} from '@/helpers/date-helper.js';
 import {showErrorNotification} from '@/helpers/error-notification-helper.js';
 
 import {ArticleListItemView} from './view.js';
@@ -56,6 +57,15 @@ export function ArticleListItem(props: ArticleListItemProps) {
       );
     }, [deleteArticle, id, onDeleteArticleSuccess]);
 
+  const publicationTime = useMemo(
+    () => parseToDate(article?.publicationTime ?? 0),
+    [article?.publicationTime],
+  );
+  const modificationTime = useMemo(
+    () => parseToDate(article?.modificationTime ?? 0),
+    [article?.modificationTime],
+  );
+
   return (
     <>
       <ArticleListItemView
@@ -63,8 +73,8 @@ export function ArticleListItem(props: ArticleListItemProps) {
         locked={locked}
         id={id}
         title={article?.title ?? '...'}
-        publicationTime={new Date(article?.publicationTime ?? 0)}
-        modificationTime={new Date(article?.modificationTime ?? 0)}
+        publicationTime={publicationTime}
+        modificationTime={modificationTime}
         categoryName={category?.name ?? '...'}
         onTitleClick={handleTitleClick}
         isVisibleSwitchChecked={isVisibleChecked}

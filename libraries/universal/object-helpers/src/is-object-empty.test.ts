@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import {expect, test} from 'vitest';
 
 import {isObjectEmpty} from './is-object-empty.js';
@@ -22,7 +24,9 @@ test('returns false for objects with non-enumerable properties', () => {
 });
 
 test('returns true for empty object created with Object.create(null)', () => {
-  expect(isObjectEmpty(Object.create(null) as object)).toBe(true);
+  const emptyObj: unknown = Object.create(null);
+  assert(typeof emptyObj === 'object' && emptyObj !== null);
+  expect(isObjectEmpty(emptyObj)).toBe(true);
 });
 
 test('returns false for objects with symbol keys', () => {
@@ -32,7 +36,8 @@ test('returns false for objects with symbol keys', () => {
 
 test('returns true for objects with only inherited properties', () => {
   const parent = {inherited: true};
-  const child = Object.create(parent) as object;
+  const child: unknown = Object.create(parent);
+  assert(typeof child === 'object' && child !== null);
   expect(isObjectEmpty(child)).toBe(true);
 });
 

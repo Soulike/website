@@ -11,7 +11,20 @@ import {
   type OrderConfig,
 } from '@schema/database';
 
-import {sortEntities} from './fake-table-helpers.js';
+import {createEntityKeyMap, sortEntities} from './fake-table-helpers.js';
+
+const ACCOUNT_KEYS = AccountRowSchema.keyof().options;
+const ACCOUNT_KEY_MAP = createEntityKeyMap<AccountRow>(ACCOUNT_KEYS);
+
+function matchesAccountFilter(
+  row: AccountRow,
+  filter: Partial<AccountRow>,
+): boolean {
+  return Object.entries(filter).every(([key, value]) => {
+    const typedKey = ACCOUNT_KEY_MAP.get(key);
+    return typedKey !== undefined && row[typedKey] === value;
+  });
+}
 
 export class FakeUserTable {
   private static accounts: AccountRow[] = [];
@@ -73,11 +86,9 @@ export class FakeUserTable {
       return this.sortAccounts([...this.accounts], orderConfig);
     }
 
-    const filteredAccounts = this.accounts.filter((a) => {
-      return Object.entries(account).every(([key, value]) => {
-        return a[key as keyof AccountRow] === value;
-      });
-    });
+    const filteredAccounts = this.accounts.filter((a) =>
+      matchesAccountFilter(a, account),
+    );
 
     await Promise.resolve();
     return this.sortAccounts(filteredAccounts, orderConfig);
@@ -93,11 +104,9 @@ export class FakeUserTable {
       return this.countAll();
     }
 
-    const filteredAccounts = this.accounts.filter((a) => {
-      return Object.entries(account).every(([key, value]) => {
-        return a[key as keyof AccountRow] === value;
-      });
-    });
+    const filteredAccounts = this.accounts.filter((a) =>
+      matchesAccountFilter(a, account),
+    );
 
     return filteredAccounts.length;
   }
@@ -106,7 +115,7 @@ export class FakeUserTable {
     accounts: AccountRow[],
     orderConfig: OrderConfig<AccountRow>,
   ): AccountRow[] {
-    const sortedAccounts = sortEntities(accounts, orderConfig);
+    const sortedAccounts = sortEntities(accounts, orderConfig, ACCOUNT_KEYS);
     return sortedAccounts.map((account) => AccountRowSchema.parse(account));
   }
 }

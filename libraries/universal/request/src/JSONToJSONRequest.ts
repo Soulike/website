@@ -8,10 +8,10 @@ export interface JSONRequestPostOptions extends RequestOptions {
 }
 
 export class JSONToJSONRequest {
-  public static async get<ResT>(
+  public static async get(
     pathOrUrl: string | URL,
     options: JSONRequestGetOptions = {},
-  ): Promise<ResT> {
+  ): Promise<unknown> {
     const {headers, searchParams} = options;
     if (searchParams) {
       if (pathOrUrl instanceof URL) {
@@ -28,13 +28,14 @@ export class JSONToJSONRequest {
       method: 'get',
       headers,
     });
-    return response.json() as Promise<ResT>;
+    const data: unknown = await response.json();
+    return data;
   }
 
-  public static async post<ResT>(
+  public static async post(
     pathOrUrl: string | URL,
     options: JSONRequestPostOptions = {},
-  ): Promise<ResT> {
+  ): Promise<unknown> {
     const {headers, searchParams, body} = options;
 
     const finalHeaders = new Headers(headers);
@@ -56,6 +57,7 @@ export class JSONToJSONRequest {
       headers: finalHeaders,
       body: JSON.stringify(body),
     });
-    return response.json() as Promise<ResT>;
+    const data: unknown = await response.json();
+    return data;
   }
 }

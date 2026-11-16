@@ -16,9 +16,7 @@ class OptionModel {
   }
 
   public async getAbout(): Promise<SiteOption['about']> {
-    const response = await Request.JSONToJSON.get<unknown>(
-      OptionModel.PATH.GET_ABOUT,
-    );
+    const response = await Request.JSONToJSON.get(OptionModel.PATH.GET_ABOUT);
     return parseServerResponse(SiteOptionSchema, response).about;
   }
 }

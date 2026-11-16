@@ -1,5 +1,3 @@
-import {useEffect, useState} from 'react';
-
 import {useMediaQuery} from './useMediaQuery.js';
 
 export enum ColorScheme {
@@ -8,17 +6,11 @@ export enum ColorScheme {
 }
 
 export function useColorScheme(override?: ColorScheme) {
-  const [colorScheme, setColorScheme] = useState(ColorScheme.LIGHT);
   const isDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-  useEffect(() => {
-    if (override !== undefined) {
-      setColorScheme(override);
-      return;
-    }
+  if (override !== undefined) {
+    return override;
+  }
 
-    setColorScheme(isDarkMode ? ColorScheme.DARK : ColorScheme.LIGHT);
-  }, [isDarkMode, override]);
-
-  return colorScheme;
+  return isDarkMode ? ColorScheme.DARK : ColorScheme.LIGHT;
 }
