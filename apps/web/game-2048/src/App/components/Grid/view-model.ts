@@ -117,7 +117,10 @@ function useIsTileNewlyCreated() {
       for (const {
         coordinate: {row, col},
       } of creations) {
-        isTileNewlyCreated[row][col] = true;
+        const targetRow = isTileNewlyCreated[row];
+        if (targetRow !== undefined) {
+          targetRow[col] = true;
+        }
       }
       setIsTileNewlyCreated(isTileNewlyCreated);
     },
@@ -154,7 +157,10 @@ function useIsTileMergeDestination() {
       const isTileMergeDestination = createIsTileMergeDestination();
 
       for (const {to} of movements.mergeMovements) {
-        isTileMergeDestination[to.row][to.col] = true;
+        const targetRow = isTileMergeDestination[to.row];
+        if (targetRow !== undefined) {
+          targetRow[to.col] = true;
+        }
       }
       setIsTileMergeDestination(isTileMergeDestination);
     },
@@ -191,7 +197,10 @@ function useIsTileMovementDestination() {
       const isTileMovementDestination = createIsTileMovementDestination();
 
       for (const movement of movements.compactMovements) {
-        isTileMovementDestination[movement.to.row][movement.to.col] = true;
+        const targetRow = isTileMovementDestination[movement.to.row];
+        if (targetRow !== undefined) {
+          targetRow[movement.to.col] = true;
+        }
       }
 
       setIsTileMovementDestination(isTileMovementDestination);
@@ -229,11 +238,17 @@ function useTileMovements() {
       const tileMovements = createTileMovements();
 
       for (const movement of movements.mergeMovements) {
-        tileMovements[movement.from.row][movement.from.col] = movement;
+        const targetRow = tileMovements[movement.from.row];
+        if (targetRow !== undefined) {
+          targetRow[movement.from.col] = movement;
+        }
       }
 
       for (const movement of movements.compactMovements) {
-        tileMovements[movement.from.row][movement.from.col] = movement;
+        const targetRow = tileMovements[movement.from.row];
+        if (targetRow !== undefined) {
+          targetRow[movement.from.col] = movement;
+        }
       }
 
       setTileMovements(tileMovements);

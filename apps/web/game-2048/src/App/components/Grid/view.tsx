@@ -39,7 +39,7 @@ export function GridView(props: GridViewProps) {
     viewDomRef,
   } = props;
   assert(grid.length === GRID_SIDE_LENGTH);
-  assert(grid[0].length === GRID_SIDE_LENGTH);
+  assert(grid[0]?.length === GRID_SIDE_LENGTH);
 
   const gridSize = useResponsiveGridSize();
   const borderRadius = useResponsiveBorderRadius();
@@ -56,26 +56,33 @@ export function GridView(props: GridViewProps) {
   const tileComponents = useMemo(() => {
     const tiles: ReactElement[] = [];
     for (let i = 0; i < GRID_SIDE_LENGTH; i++) {
+      const gridRow = grid[i];
+      assert(gridRow !== undefined);
       for (let j = 0; j < GRID_SIDE_LENGTH; j++) {
-        const movement = tileMovements[i][j];
+        const tileValue = gridRow[j];
+        if (tileValue === undefined) {
+          assert.fail(`Invalid tile coordinate: (${String(i)}, ${String(j)})`);
+        }
+
+        const movement = tileMovements[i]?.[j];
         const movementAnimate = movement
           ? generateTileAnimateForMovement(movement, gapSize)
           : null;
 
-        const isMergeDestination = isTileMergeDestination[i][j];
+        const isMergeDestination = isTileMergeDestination[i]?.[j] ?? false;
         const mergeAnimate = isMergeDestination ? mergedAnimate : null;
 
-        const isNewlyCreated = isTileNewlyCreated[i][j];
+        const isNewlyCreated = isTileNewlyCreated[i]?.[j] ?? false;
         const creationAnimate = isNewlyCreated ? newlyCreatedAnimate : null;
 
         tiles.push(
           <Tile
             key={`${String(i)}-${String(j)}`}
-            value={grid[i][j]}
+            value={tileValue}
             movementAnimate={movementAnimate}
             mergeAnimate={mergeAnimate}
             creationAnimate={creationAnimate}
-            isMovementDestination={isTileMovementDestination[i][j]}
+            isMovementDestination={isTileMovementDestination[i]?.[j] ?? false}
             updatedAtTimestamp={Date.now()}
           />,
         );

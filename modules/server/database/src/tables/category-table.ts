@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import {isObjectEmpty} from '@library/object-helpers';
 import {
   type CategoryInsertRow,
@@ -68,7 +70,9 @@ export class CategoryTable {
        ${whereClause}`,
       values,
     );
-    return Number.parseInt(rows[0].c);
+    const [row] = rows;
+    assert(row !== undefined);
+    return Number.parseInt(row.c);
   }
 
   static async selectAll(
@@ -102,6 +106,8 @@ export class CategoryTable {
        WHERE "c"."id" = $1`,
       [id],
     );
-    return Number.parseInt(rows[0].count);
+    const [row] = rows;
+    assert(row !== undefined);
+    return Number.parseInt(row.count);
   }
 }

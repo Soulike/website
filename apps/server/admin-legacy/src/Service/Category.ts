@@ -15,11 +15,11 @@ export async function getById(
   if (!serverResponse.isSuccessful) {
     return failResponse(serverResponse.error);
   }
-  const {data: categories} = serverResponse;
-  if (categories.length === 0) {
+  const [category] = serverResponse.data;
+  if (category === undefined) {
     return failResponse({code: 'CATEGORY_NOT_FOUND'});
   }
-  return successResponse(categories[0]);
+  return successResponse(category);
 }
 
 export async function getAll(): Promise<ServerResponse<Category[]>> {
@@ -43,11 +43,9 @@ export async function getAllArticleAmountById(): Promise<
     }),
   );
 
-  const ids = Object.keys(idToResponse);
   const idToArticleAmount: CategoryIdToArticleAmount = {};
 
-  for (const id of ids) {
-    const categoryIdServerResponse = idToResponse[id];
+  for (const [id, categoryIdServerResponse] of Object.entries(idToResponse)) {
     if (!categoryIdServerResponse.isSuccessful) {
       return failResponse(categoryIdServerResponse.error);
     }

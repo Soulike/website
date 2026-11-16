@@ -58,10 +58,10 @@ export class FakeCategoryTable {
       return;
     }
 
-    const index = this.categories.findIndex((c) => c.id === id);
-    if (index !== -1) {
+    const existingCategory = this.categories.find((c) => c.id === id);
+    if (existingCategory !== undefined) {
       await Promise.resolve();
-      Object.assign(this.categories[index], filteredCategory);
+      Object.assign(existingCategory, filteredCategory);
     }
   }
 

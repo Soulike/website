@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import {isObjectEmpty} from '@library/object-helpers';
 import {
   type AccountInsertRow,
@@ -98,6 +100,8 @@ export class UserTable {
        FROM "users" ${whereClause}`,
       values,
     );
-    return Number.parseInt(rows[0].c);
+    const [row] = rows;
+    assert(row !== undefined);
+    return Number.parseInt(row.c);
   }
 }

@@ -29,7 +29,9 @@ export class GridOperationManagerImpl implements GridOperationManager {
   }
 
   public compactRow(row: number, toLeft: boolean): CompactMovement[] {
-    const rowLength = this.grid[0].length;
+    const firstRow = this.grid[0];
+    assert(firstRow !== undefined);
+    const rowLength = firstRow.length;
     const colStart = toLeft ? 0 : rowLength - 1;
     const colEnd = toLeft ? rowLength : -1;
     const colMoveStep = toLeft ? 1 : -1;
@@ -38,9 +40,10 @@ export class GridOperationManagerImpl implements GridOperationManager {
 
     let writeCol = colStart;
     for (let readCol = colStart; readCol !== colEnd; readCol += colMoveStep) {
-      if (this.grid[row][readCol] !== EMPTY_TILE_VALUE) {
+      const value = this.gridManager.getTileValue({row, col: readCol});
+      if (value !== EMPTY_TILE_VALUE) {
         if (writeCol !== readCol) {
-          this.setTileValue({row: row, col: writeCol}, this.grid[row][readCol]);
+          this.setTileValue({row: row, col: writeCol}, value);
           this.setTileValue({row: row, col: readCol}, EMPTY_TILE_VALUE);
 
           movements.push({
@@ -66,9 +69,10 @@ export class GridOperationManagerImpl implements GridOperationManager {
 
     let writeRow = rowStart;
     for (let readRow = rowStart; readRow !== rowEnd; readRow += rowMoveStep) {
-      if (this.grid[readRow][col] !== EMPTY_TILE_VALUE) {
+      const value = this.gridManager.getTileValue({row: readRow, col});
+      if (value !== EMPTY_TILE_VALUE) {
         if (writeRow !== readRow) {
-          this.setTileValue({row: writeRow, col: col}, this.grid[readRow][col]);
+          this.setTileValue({row: writeRow, col: col}, value);
           this.setTileValue({row: readRow, col: col}, EMPTY_TILE_VALUE);
 
           movements.push({
@@ -85,7 +89,9 @@ export class GridOperationManagerImpl implements GridOperationManager {
   }
 
   public mergeRow(row: number, toLeft: boolean): MergeMovement[] {
-    const rowLength = this.grid[0].length;
+    const firstRow = this.grid[0];
+    assert(firstRow !== undefined);
+    const rowLength = firstRow.length;
     const colStart = toLeft ? 0 : rowLength - 1;
     const colEnd = toLeft ? rowLength : -1;
     const colMoveStep = toLeft ? 1 : -1;
@@ -93,7 +99,8 @@ export class GridOperationManagerImpl implements GridOperationManager {
     const movements: MergeMovement[] = [];
 
     for (let col = colStart; col !== colEnd; col += colMoveStep) {
-      if (this.grid[row][col] === EMPTY_TILE_VALUE) {
+      const currentValue = this.gridManager.getTileValue({row, col});
+      if (currentValue === EMPTY_TILE_VALUE) {
         continue;
       }
 
@@ -102,12 +109,13 @@ export class GridOperationManagerImpl implements GridOperationManager {
         nextCol !== colEnd;
         nextCol += colMoveStep
       ) {
-        if (this.grid[row][nextCol] === EMPTY_TILE_VALUE) {
+        const nextValue = this.gridManager.getTileValue({row, col: nextCol});
+        if (nextValue === EMPTY_TILE_VALUE) {
           continue;
         }
-        if (this.grid[row][nextCol] === this.grid[row][col]) {
+        if (nextValue === currentValue) {
           this.setTileValue({row: row, col: nextCol}, EMPTY_TILE_VALUE);
-          const newValue = this.grid[row][col] * 2;
+          const newValue = currentValue * 2;
           this.setTileValue({row: row, col}, newValue);
 
           movements.push({
@@ -135,7 +143,8 @@ export class GridOperationManagerImpl implements GridOperationManager {
     const movements: MergeMovement[] = [];
 
     for (let row = rowStart; row !== rowEnd; row += rowMoveStep) {
-      if (this.grid[row][col] === EMPTY_TILE_VALUE) {
+      const currentValue = this.gridManager.getTileValue({row, col});
+      if (currentValue === EMPTY_TILE_VALUE) {
         continue;
       }
 
@@ -144,12 +153,13 @@ export class GridOperationManagerImpl implements GridOperationManager {
         nextRow !== rowEnd;
         nextRow += rowMoveStep
       ) {
-        if (this.grid[nextRow][col] === EMPTY_TILE_VALUE) {
+        const nextValue = this.gridManager.getTileValue({row: nextRow, col});
+        if (nextValue === EMPTY_TILE_VALUE) {
           continue;
         }
-        if (this.grid[nextRow][col] === this.grid[row][col]) {
+        if (nextValue === currentValue) {
           this.setTileValue({row: nextRow, col: col}, EMPTY_TILE_VALUE);
-          const newValue = this.grid[row][col] * 2;
+          const newValue = currentValue * 2;
           this.setTileValue({row, col: col}, newValue);
 
           movements.push({
@@ -174,8 +184,9 @@ export class GridOperationManagerImpl implements GridOperationManager {
     assert(emptyTiles?.length === count, 'No enough empty tiles');
     const creations: TileCreation[] = [];
     for (const {row, col} of emptyTiles) {
-      this.setTileValue({row, col}, this.getRandomNewTileValue());
-      creations.push({coordinate: {row, col}, value: this.grid[row][col]});
+      const newValue = this.getRandomNewTileValue();
+      this.setTileValue({row, col}, newValue);
+      creations.push({coordinate: {row, col}, value: newValue});
     }
     return creations;
   }
@@ -193,8 +204,10 @@ export class GridOperationManagerImpl implements GridOperationManager {
 
     // First pass: use reservoir sampling to select count empty tiles
     for (let row = 0; row < this.grid.length; row++) {
-      for (let col = 0; col < this.grid[row].length; col++) {
-        if (this.grid[row][col] === EMPTY_TILE_VALUE) {
+      const gridRow = this.grid[row];
+      assert(gridRow !== undefined);
+      for (let col = 0; col < gridRow.length; col++) {
+        if (gridRow[col] === EMPTY_TILE_VALUE) {
           totalEmptyTileCount++;
 
           if (reservoir.length < count) {

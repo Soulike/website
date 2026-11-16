@@ -42,7 +42,11 @@ describe('GameManagerImpl', () => {
         GRID_SIDE_LENGTH * GRID_SIDE_LENGTH - 2,
       );
 
-      const [, , tileCreations] = gridChangeListener.mock.calls[0];
+      const firstCall = gridChangeListener.mock.calls[0];
+      if (firstCall === undefined) {
+        throw new Error('Expected gridChange listener to be called');
+      }
+      const [, , tileCreations] = firstCall;
       expect(tileCreations).toHaveLength(2);
     });
   });
@@ -64,7 +68,7 @@ describe('GameManagerImpl', () => {
       );
 
       expect(movements.mergeMovements).toHaveLength(1);
-      expect(movements.mergeMovements[0].scoreChange).toBe(4);
+      expect(movements.mergeMovements[0]?.scoreChange).toBe(4);
       expect(movements.compactMovements).toHaveLength(2);
       expect(gridManager.getGrid()[0]).toStrictEqual([4, 2, 0, 0]);
     });
@@ -85,7 +89,7 @@ describe('GameManagerImpl', () => {
       );
 
       expect(movements.mergeMovements).toHaveLength(1);
-      expect(movements.mergeMovements[0].scoreChange).toBe(4);
+      expect(movements.mergeMovements[0]?.scoreChange).toBe(4);
       expect(movements.compactMovements).toHaveLength(2);
       expect(gridManager.getGrid()[0]).toStrictEqual([0, 0, 2, 4]);
     });
@@ -106,7 +110,7 @@ describe('GameManagerImpl', () => {
       );
 
       expect(movements.mergeMovements).toHaveLength(1);
-      expect(movements.mergeMovements[0].scoreChange).toBe(4);
+      expect(movements.mergeMovements[0]?.scoreChange).toBe(4);
       expect(movements.compactMovements).toHaveLength(2);
       expect(gridManager.getGrid().map((row) => row[0])).toStrictEqual([
         4, 2, 0, 0,
@@ -129,7 +133,7 @@ describe('GameManagerImpl', () => {
       );
 
       expect(movements.mergeMovements).toHaveLength(1);
-      expect(movements.mergeMovements[0].scoreChange).toBe(4);
+      expect(movements.mergeMovements[0]?.scoreChange).toBe(4);
       expect(movements.compactMovements).toHaveLength(2);
       expect(gridManager.getGrid().map((row) => row[0])).toStrictEqual([
         0, 0, 2, 4,
@@ -151,7 +155,11 @@ describe('GameManagerImpl', () => {
       gameManager.move(MoveDirection.LEFT);
 
       expect(gridChangeListener).toHaveBeenCalledTimes(1);
-      const [, , tileCreations] = gridChangeListener.mock.calls[0];
+      const firstCall = gridChangeListener.mock.calls[0];
+      if (firstCall === undefined) {
+        throw new Error('Expected gridChange listener to be called');
+      }
+      const [, , tileCreations] = firstCall;
       expect(tileCreations).toHaveLength(1);
     });
 

@@ -20,5 +20,8 @@ export function pickRandomElement<T>(elements: readonly T[]): T {
   const begin = 0;
   const end = elements.length;
   const randomIndex = getRandomInteger(begin, end);
-  return elements[randomIndex];
+  for (const element of elements.slice(randomIndex, randomIndex + 1)) {
+    return element;
+  }
+  assert.fail('randomIndex must be within elements bounds');
 }

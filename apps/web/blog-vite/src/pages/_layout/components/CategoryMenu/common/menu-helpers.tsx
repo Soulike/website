@@ -19,7 +19,7 @@ export interface MenuItemLabels {
 
 export interface BuildMenuItemsOptions {
   categories: Category[];
-  iconClassName: string;
+  iconClassName?: string | undefined;
   itemLabels: MenuItemLabels;
 }
 

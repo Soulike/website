@@ -30,15 +30,15 @@ export async function getById(
   if (!serverResponse.isSuccessful) {
     return failResponse(serverResponse.error);
   }
-  const {data} = serverResponse;
-  if (data.length === 0) {
+  const [article] = serverResponse.data;
+  if (article === undefined) {
     return failResponse({code: 'ARTICLE_NOT_FOUND'});
   }
   const addPageViewResponse = await ArticleTable.addPageView(id);
   if (!addPageViewResponse.isSuccessful) {
     return failResponse(addPageViewResponse.error);
   }
-  return successResponse(data[0]);
+  return successResponse(article);
 }
 
 export async function getByCategoryWithAbstract(

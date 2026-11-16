@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import {isObjectEmpty} from '@library/object-helpers';
 import {
   type ArticleInsertRow,
@@ -81,7 +83,9 @@ export class ArticleTable {
   static async countAll(): Promise<number> {
     const {rows} = await query<{c: string}>(`SELECT count("id") AS "c"
                                              FROM "articles"`);
-    return Number.parseInt(rows[0].c);
+    const [row] = rows;
+    assert(row !== undefined);
+    return Number.parseInt(row.c);
   }
 
   static async count(article: Partial<ArticleRow>): Promise<number> {
@@ -95,6 +99,8 @@ export class ArticleTable {
        ${whereClause}`,
       values,
     );
-    return Number.parseInt(rows[0].c);
+    const [row] = rows;
+    assert(row !== undefined);
+    return Number.parseInt(row.c);
   }
 }

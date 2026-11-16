@@ -137,6 +137,9 @@ describe('pickRandomElement', () => {
     const result = pickRandomElement(elements);
 
     expect(elements).toContain(result);
+
+    const onlyUndefined: readonly (string | undefined)[] = [undefined];
+    expect(pickRandomElement(onlyUndefined)).toBeUndefined();
   });
 
   it('should maintain proper typing for generic arrays', () => {

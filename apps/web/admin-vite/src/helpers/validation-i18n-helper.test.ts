@@ -46,6 +46,9 @@ describe('validation-i18n-helper', () => {
     }
     const firstIssue = parsed.error.issues[0];
     expect(firstIssue).toBeDefined();
+    if (firstIssue === undefined) {
+      throw new Error('Expected at least one validation issue');
+    }
     return getValidationErrorMessage(
       firstIssue,
       LOGIN_CREDENTIALS_FIELD_LABELS,
@@ -211,6 +214,20 @@ describe('validation-i18n-helper', () => {
     await expect(
       getValidationErrorMessage(issue, LOGIN_CREDENTIALS_FIELD_LABELS),
     ).resolves.toBe('输入格式无效');
+
+    const prototypeKeyIssue: z.core.$ZodIssue = {
+      code: 'custom',
+      path: ['toString'],
+      message: 'Invalid',
+    };
+
+    mockNavigatorLanguage = 'en';
+    await expect(
+      getValidationErrorMessage(
+        prototypeKeyIssue,
+        LOGIN_CREDENTIALS_FIELD_LABELS,
+      ),
+    ).resolves.toBe('Invalid input');
   });
 
   async function validateSchemaAndFormat(
@@ -223,7 +240,11 @@ describe('validation-i18n-helper', () => {
     if (parsed.success) {
       throw new Error('Expected validation to fail');
     }
-    return getValidationErrorMessage(parsed.error.issues[0], fieldLabels);
+    const [firstIssue] = parsed.error.issues;
+    if (firstIssue === undefined) {
+      throw new Error('Expected at least one validation issue');
+    }
+    return getValidationErrorMessage(firstIssue, fieldLabels);
   }
 
   it.each([

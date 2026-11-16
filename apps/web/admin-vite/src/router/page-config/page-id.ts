@@ -1,4 +1,8 @@
-export type PageIdType = string;
+type LeafValues<T> = T extends string
+  ? T
+  : T extends Record<string, unknown>
+    ? LeafValues<T[keyof T]>
+    : never;
 
 export const PAGE_ID = Object.freeze({
   INDEX: 'INDEX',
@@ -24,4 +28,6 @@ export const PAGE_ID = Object.freeze({
       }),
     }),
   }),
-});
+} as const);
+
+export type PageIdType = LeafValues<typeof PAGE_ID>;

@@ -14,12 +14,9 @@ import {
   CATEGORY_PATH_PARAM_NAME_ID,
   PAGE_ID,
   PAGE_ID_TO_PATH,
-  type PageIdType,
 } from './page-config/index.js';
 
-const routeConfig: Record<PageIdType, Readonly<RouteObject>> = {};
-
-routeConfig[PAGE_ID.ARTICLE] = {
+const articleRoute: Readonly<RouteObject> = {
   path: path.join(
     path.basename(PAGE_ID_TO_PATH[PAGE_ID.ARTICLE]),
     `:${ARTICLE_PATH_PARAM_NAME_ID}`,
@@ -27,12 +24,12 @@ routeConfig[PAGE_ID.ARTICLE] = {
   element: <Article />,
 };
 
-routeConfig[PAGE_ID.ABOUT] = {
+const aboutRoute: Readonly<RouteObject> = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.ABOUT]),
   element: <About />,
 };
 
-routeConfig[PAGE_ID.CATEGORY] = {
+const categoryRoute: Readonly<RouteObject> = {
   path: path.join(
     path.basename(PAGE_ID_TO_PATH[PAGE_ID.CATEGORY]),
     `:${CATEGORY_PATH_PARAM_NAME_ID}`,
@@ -40,7 +37,7 @@ routeConfig[PAGE_ID.CATEGORY] = {
   element: <Category />,
 };
 
-routeConfig[PAGE_ID.INDEX] = {
+const indexRoute: Readonly<RouteObject> = {
   path: path.basename(PAGE_ID_TO_PATH[PAGE_ID.INDEX]),
   element: <RootLayout />,
   children: [
@@ -48,14 +45,14 @@ routeConfig[PAGE_ID.INDEX] = {
       index: true,
       element: <Index />,
     },
-    routeConfig[PAGE_ID.ARTICLE],
-    routeConfig[PAGE_ID.CATEGORY],
-    routeConfig[PAGE_ID.ABOUT],
+    articleRoute,
+    categoryRoute,
+    aboutRoute,
   ],
 };
 
 export const CONFIG: Readonly<RouteObject>[] = [
-  routeConfig[PAGE_ID.INDEX],
+  indexRoute,
   {
     path: '*',
     element: <NotFound />,

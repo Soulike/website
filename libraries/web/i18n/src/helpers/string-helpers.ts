@@ -18,8 +18,17 @@ export function format(
 
   const resultParts: string[] = [];
   for (let i = 0; i < args.length; i++) {
-    resultParts.push(templateParts[i], args[i]);
+    const templatePart = templateParts[i];
+    const arg = args[i];
+    if (templatePart === undefined || arg === undefined) {
+      throw new Error('The numbers of placeholders and args do not match');
+    }
+    resultParts.push(templatePart, arg);
   }
-  resultParts.push(templateParts[templateParts.length - 1]);
+  const lastPart = templateParts[templateParts.length - 1];
+  if (lastPart === undefined) {
+    throw new Error('The numbers of placeholders and args do not match');
+  }
+  resultParts.push(lastPart);
   return resultParts.join('');
 }

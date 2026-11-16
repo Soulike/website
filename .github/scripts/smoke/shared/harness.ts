@@ -39,7 +39,9 @@ interface ApplicationHttpOptions {
 
 export function requiredImageArgument(argv = process.argv): string {
   const image = argv[2];
-  if (!image) throw new Error('Image tag is required.');
+  if (image === undefined || image === '') {
+    throw new Error('Image tag is required.');
+  }
   return image;
 }
 

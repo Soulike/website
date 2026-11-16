@@ -302,11 +302,11 @@ describe('GridOperationManagerImpl', () => {
       const creations = operationManager.createNewTile(1);
 
       expect(creations).toHaveLength(1);
-      expect(creations[0].coordinate).toEqual({
+      expect(creations[0]?.coordinate).toEqual({
         row: GRID_SIDE_LENGTH - 1,
         col: GRID_SIDE_LENGTH - 1,
       });
-      expect([2, 4]).toContain(creations[0].value);
+      expect([2, 4]).toContain(creations[0]?.value);
 
       Math.random = originalRandom;
     });
@@ -319,7 +319,11 @@ describe('GridOperationManagerImpl', () => {
       const creations = operationManager.createNewTile(2);
 
       expect(creations).toHaveLength(2);
-      expect(creations[0].coordinate).not.toEqual(creations[1].coordinate);
+      const [firstCreation, secondCreation] = creations;
+      if (firstCreation === undefined || secondCreation === undefined) {
+        throw new Error('Expected two tile creations');
+      }
+      expect(firstCreation.coordinate).not.toEqual(secondCreation.coordinate);
       creations.forEach((creation) => {
         expect([2, 4]).toContain(creation.value);
       });

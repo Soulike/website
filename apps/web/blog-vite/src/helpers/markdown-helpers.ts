@@ -5,5 +5,5 @@
  */
 export function getMarkdownAbstract(markdown: string): string {
   // TODO: Use AI to generate abstract
-  return markdown.split('\n')[0];
+  return markdown.split('\n')[0] ?? '';
 }

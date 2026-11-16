@@ -103,7 +103,9 @@ export class GameManagerImpl
     const mergeMovements: MergeMovement[] = [];
     const compactMovements: CompactMovement[] = [];
 
-    for (let col = 0; col < this.grid[0].length; col++) {
+    const firstRow = this.grid[0];
+    assert(firstRow !== undefined);
+    for (let col = 0; col < firstRow.length; col++) {
       mergeMovements.push(...this.gridOperationManager.mergeCol(col, true));
       compactMovements.push(...this.gridOperationManager.compactCol(col, true));
     }
@@ -119,7 +121,9 @@ export class GameManagerImpl
     const mergeMovements: MergeMovement[] = [];
     const compactMovements: CompactMovement[] = [];
 
-    for (let col = 0; col < this.grid[0].length; col++) {
+    const firstRow = this.grid[0];
+    assert(firstRow !== undefined);
+    for (let col = 0; col < firstRow.length; col++) {
       mergeMovements.push(...this.gridOperationManager.mergeCol(col, false));
       compactMovements.push(
         ...this.gridOperationManager.compactCol(col, false),
