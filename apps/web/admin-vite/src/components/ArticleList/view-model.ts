@@ -7,18 +7,21 @@ export function useViewModel(category?: Article['category']) {
     idToArticleCache,
     idToArticleLoading,
     idToArticleError,
-    setIdToArticleCache,
+    updateIdToArticleCache,
   } = useIdToArticleCache(category);
 
   const handleDeleteArticleSuccess = useCallback(
     (id: Article['id']) => {
-      if (idToArticleCache) {
-        const next = new Map(idToArticleCache);
+      updateIdToArticleCache((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        const next = new Map(prev);
         next.delete(id);
-        setIdToArticleCache(next);
-      }
+        return next;
+      });
     },
-    [idToArticleCache, setIdToArticleCache],
+    [updateIdToArticleCache],
   );
 
   return {
@@ -47,16 +50,31 @@ function useIdToArticleCache(category?: Article['category']) {
         ? null
         : idToArticle;
 
-  const setIdToArticleCache = useCallback(
-    (value: Map<Article['id'], Article> | null) => {
-      setOverriddenState({source: idToArticle, value});
+  const updateIdToArticleCache = useCallback(
+    (
+      updater: (
+        prev: Map<Article['id'], Article> | null,
+      ) => Map<Article['id'], Article> | null,
+    ) => {
+      setOverriddenState((prevOverride) => {
+        const current =
+          prevOverride !== null && prevOverride.source === idToArticle
+            ? prevOverride.value
+            : idToArticleError
+              ? null
+              : idToArticle;
+        return {
+          source: idToArticle,
+          value: updater(current),
+        };
+      });
     },
-    [idToArticle],
+    [idToArticle, idToArticleError],
   );
 
   return {
     idToArticleCache,
-    setIdToArticleCache,
+    updateIdToArticleCache,
     idToArticleLoading,
     idToArticleError,
   };

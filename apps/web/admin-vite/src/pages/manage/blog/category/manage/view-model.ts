@@ -11,7 +11,7 @@ type CategoryModelModifyParameters = Parameters<CategoryModelType['modify']>;
 export function useViewModel() {
   const {
     idToCategoryCache,
-    setIdToCategoryCache,
+    updateIdToCategoryCache,
     loading: idToCategoryLoading,
     error: idToCategoryLoadError,
   } = useIdToCategoryCache();
@@ -30,20 +30,24 @@ export function useViewModel() {
     handleCategoryModificationSubmit,
   } = useSubmitCategoryModification((id, modifiedParts) => {
     // Modify local record instead of request again.
-    assert(idToCategoryCache);
-    const modifiedCategory = idToCategoryCache.get(id);
-    assert(modifiedCategory);
-    const next = new Map(idToCategoryCache);
-    next.set(id, {...modifiedCategory, ...modifiedParts});
-    setIdToCategoryCache(next);
+    updateIdToCategoryCache((prev) => {
+      assert(prev);
+      const modifiedCategory = prev.get(id);
+      assert(modifiedCategory);
+      const next = new Map(prev);
+      next.set(id, {...modifiedCategory, ...modifiedParts});
+      return next;
+    });
   });
 
   const {submitting: categoryDeletionSubmitting, handleCategoryDeletion} =
     useSubmitCategoryDeletion((id) => {
-      assert(idToCategoryCache);
-      const next = new Map(idToCategoryCache);
-      next.delete(id);
-      setIdToCategoryCache(next);
+      updateIdToCategoryCache((prev) => {
+        assert(prev);
+        const next = new Map(prev);
+        next.delete(id);
+        return next;
+      });
       deleteCategoryArticleAmount(id);
     }, setCategoryArticleAmount);
 
@@ -77,16 +81,31 @@ function useIdToCategoryCache() {
         ? null
         : idToCategory;
 
-  const setIdToCategoryCache = useCallback(
-    (value: Map<Category['id'], Category> | null) => {
-      setOverriddenState({source: idToCategory, value});
+  const updateIdToCategoryCache = useCallback(
+    (
+      updater: (
+        prev: Map<Category['id'], Category> | null,
+      ) => Map<Category['id'], Category> | null,
+    ) => {
+      setOverriddenState((prevOverride) => {
+        const current =
+          prevOverride !== null && prevOverride.source === idToCategory
+            ? prevOverride.value
+            : error
+              ? null
+              : idToCategory;
+        return {
+          source: idToCategory,
+          value: updater(current),
+        };
+      });
     },
-    [idToCategory],
+    [error, idToCategory],
   );
 
   return {
     idToCategoryCache,
-    setIdToCategoryCache,
+    updateIdToCategoryCache,
     loading,
     error,
   };
